@@ -21,8 +21,9 @@
     <!-- Cabeçalho -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Logótipo Horizontal protegido contra salvamento -->
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
-                <img src="logo4.png" alt="Ísis Holística" class="h-14 md:h-20 w-auto object-contain">
+                <img src="logo4.png" alt="Ísis Holística" class="h-14 md:h-20 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
             </div>
             
             <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center">
@@ -130,8 +131,9 @@
     <!-- ABA 2: QUEM SOMOS (AMPLIADA E DETALHADA) -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <!-- Logótipo Circular protegido contra salvamento -->
             <div class="flex justify-center items-center">
-                <img src="logo.png" alt="Ísis Holística" class="w-full max-w-xs md:max-w-md h-auto object-contain rounded-2xl shadow-xl border border-[#C5A880]/30 p-6 bg-gray-50">
+                <img src="logo.png" alt="Ísis Holística" class="w-full max-w-xs md:max-w-md h-auto object-contain rounded-2xl shadow-xl border border-[#C5A880]/30 p-6 bg-gray-50 pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
             </div>
             <div class="text-left">
                 <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Nossa Essência</span>
