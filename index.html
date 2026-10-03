@@ -129,7 +129,7 @@
             </div>
         </div>
 
-        <!-- Produtos em Destaque na Página Inicial (Futuramente gerenciados pelo painel admin) -->
+        <!-- Produtos em Destaque na Página Inicial -->
         <div class="max-w-7xl mx-auto px-4 py-12">
             <div class="flex justify-between items-center mb-8">
                 <div>
@@ -197,20 +197,27 @@
         </div>
     </section>
 
-    <!-- ABA 2: QUEM SOMOS -->
+    <!-- ABA 2: QUEM SOMOS (Com logo.png grande na lateral) -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
-        <div class="max-w-4xl mx-auto text-center">
-            <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Nossa Essência</span>
-            <h3 class="text-3xl font-bold mt-2 mb-6 text-gray-900">Quem Somos</h3>
-            <p class="text-gray-700 leading-relaxed text-base md:text-lg mb-6">
-                A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual. Mais do que uma loja esotérica, somos um espaço acolhedor dedicado à elevação da vibração através de elementos naturais, aromaterapia, cristais e acessórios com significado.
-            </p>
-            <p class="text-gray-700 leading-relaxed text-base md:text-lg mb-8">
-                Fundada com amor e dedicação em São Leopoldo - RS, unimos o comércio consciente de produtos esotéricos ao suporte terapêutico especializado para guiar a sua jornada de autoconhecimento.
-            </p>
-            <button onclick="mudarAba('view-produtos')" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition">
-                Conhecer Nossos Produtos
-            </button>
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <!-- Coluna do Logótipo (logo.png) -->
+            <div class="flex justify-center items-center">
+                <img src="logo.png" alt="Ísis Holística" class="w-full max-w-xs md:max-w-md h-auto object-contain rounded-2xl shadow-xl border border-[#C5A880]/30 p-6 bg-gray-50">
+            </div>
+            <!-- Coluna do Texto -->
+            <div class="text-left">
+                <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Nossa Essência</span>
+                <h3 class="text-3xl md:text-4xl font-bold mt-2 mb-6 text-gray-900">Quem Somos</h3>
+                <p class="text-gray-700 leading-relaxed text-base md:text-lg mb-6">
+                    A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual. Mais do que uma loja esotérica, somos um espaço acolhedor dedicado à elevação da vibração através de elementos naturais, aromaterapia, cristais e acessórios com significado.
+                </p>
+                <p class="text-gray-700 leading-relaxed text-base md:text-lg mb-8">
+                    Fundada com amor e dedicação em São Leopoldo - RS, unimos o comércio consciente de produtos esotéricos ao suporte terapêutico especializado para guiar a sua jornada de autoconhecimento.
+                </p>
+                <button onclick="mudarAba('view-produtos')" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition">
+                    Conhecer Nossos Produtos
+                </button>
+            </div>
         </div>
     </section>
 
