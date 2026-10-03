@@ -266,6 +266,8 @@
 
     <!-- Scripts da Loja -->
     <script>
+        let currentSlide = 0;
+
         let listaProdutos = JSON.parse(localStorage.getItem('isis_produtos')) || [
             { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética.", destaque: true },
             { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação e harmonia.", destaque: true },
@@ -281,7 +283,6 @@
         renderizarProdutosLoja('todos');
         inicializarCarrossel();
 
-        let currentSlide = 0;
         function inicializarCarrossel() {
             if (slides.length > 0) atualizarSlideUI();
         }
