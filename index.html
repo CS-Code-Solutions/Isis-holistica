@@ -21,17 +21,14 @@
     <!-- Cabeçalho -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <!-- Logótipo Horizontal (logo4.png) -->
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
                 <img src="logo4.png" alt="Ísis Holística" class="h-14 md:h-20 w-auto object-contain">
             </div>
             
-            <!-- Menu Desktop -->
             <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center">
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
                 <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Quem Somos</button>
                 
-                <!-- Menu Dropdown de Produtos no Desktop -->
                 <div class="relative group py-2">
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] flex items-center gap-1 transition">Produtos ▾</button>
                     <div class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-xl py-2 hidden group-hover:block border border-gray-100">
@@ -47,27 +44,20 @@
             </nav>
 
             <div class="flex items-center gap-2">
-                <!-- Botão do Carrinho -->
                 <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 transition">
                     🛒
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                 </button>
-                <!-- Botão Instagram -->
-                <a href="https://www.instagram.com/isiseholistica?stkn=MWdhbGZwcmcydHlhNg==" target="_blank" rel="noreferrer" class="hidden sm:flex bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white px-3 py-2 rounded-full text-xs md:text-sm font-bold shadow hover:opacity-90 transition items-center gap-1">
+                <a href="https://www.instagram.com/isiseholistica" target="_blank" rel="noreferrer" class="hidden sm:flex bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white px-3 py-2 rounded-full text-xs md:text-sm font-bold shadow hover:opacity-90 transition items-center gap-1">
                     📸 Instagram
                 </a>
-                <!-- Botão WhatsApp -->
                 <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="hidden sm:flex bg-[#25D366] text-white px-3 py-2 rounded-full text-xs md:text-sm font-bold shadow hover:bg-opacity-90 transition items-center gap-1">
                     💬 WhatsApp
                 </a>
-                <!-- Botão Hamburguer Mobile -->
-                <button onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg text-gray-700 font-bold">
-                    ☰
-                </button>
+                <button onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg text-gray-700 font-bold">☰</button>
             </div>
         </div>
 
-        <!-- Menu Mobile Oculto (Gaveta) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
             <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Quem Somos</button>
@@ -79,40 +69,27 @@
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🪷 Decoração</button>
             <div class="border-t pt-2"></div>
             <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
-            <a href="https://www.instagram.com/isiseholistica?stkn=MWdhbGZwcmcydHlhNg==" target="_blank" rel="noreferrer" class="block text-center bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white font-bold py-2.5 rounded-xl mt-2">
-                📸 Ver Instagram
-            </a>
-            <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-2.5 rounded-xl mt-2">
-                💬 Falar no WhatsApp
-            </a>
+            <a href="https://www.instagram.com/isiseholistica" target="_blank" rel="noreferrer" class="block text-center bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white font-bold py-2.5 rounded-xl mt-2">📸 Ver Instagram</a>
+            <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-2.5 rounded-xl mt-2">💬 Falar no WhatsApp</a>
         </div>
     </header>
 
-    <!-- CONTEÚDO DINÂMICO (ABAS) -->
-
-    <!-- ABA 1: INÍCIO (HOME / CARROSSEL + DESTAQUES) -->
+    <!-- ABA 1: INÍCIO (CARROSSEL DINÂMICO + DESTAQUES) -->
     <section id="view-home" class="app-view flex-grow">
-        <!-- Carrossel Automático -->
-        <div class="relative bg-[#11999E] text-white py-20 px-6 text-center overflow-hidden">
-            <div class="max-w-3xl mx-auto relative z-10 transition-all duration-500" id="carousel-container">
-                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow">
-                    🌸 Destaque da Semana
-                </span>
-                <h2 id="carousel-title" class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight">
-                    Incensos Premium & Semijoias Esotéricas
-                </h2>
-                <p id="carousel-desc" class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-                    100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.
-                </p>
-                <button onclick="mudarAba('view-produtos')" class="bg-white text-[#0E8685] font-bold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition inline-block">
-                    Ver Loja Completa
-                </button>
+        <!-- Carrossel Dinâmico -->
+        <div id="carousel-wrapper" class="relative bg-[#11999E] text-white py-24 px-6 text-center overflow-hidden bg-cover bg-center transition-all duration-700">
+            <div class="absolute inset-0 bg-black/40"></div>
+            <div class="max-w-3xl mx-auto relative z-10" id="carousel-container">
+                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3.5 py-1.5 rounded-full tracking-wider shadow"></span>
+                <h2 id="carousel-title" class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight"></h2>
+                <p id="carousel-desc" class="text-lg opacity-95 mb-8 max-w-2xl mx-auto"></p>
+                <button onclick="mudarAba('view-produtos')" class="bg-white text-[#0E8685] font-bold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition inline-block">Ver Loja Completa</button>
             </div>
-            <button onclick="mudarSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full">❮</button>
-            <button onclick="mudarSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full">❯</button>
+            <button onclick="mudarSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❮</button>
+            <button onclick="mudarSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❯</button>
         </div>
 
-        <!-- Atalhos rápidos nas Categorias -->
+        <!-- Categorias -->
         <div class="max-w-7xl mx-auto px-4 pt-12 pb-6">
             <div class="text-center mb-8">
                 <h3 class="text-2xl font-bold text-[#0E8685]">Explore Nossas Categorias</h3>
@@ -137,7 +114,7 @@
             </div>
         </div>
 
-        <!-- Produtos em Destaque na Página Inicial (Gerenciados dinamicamente) -->
+        <!-- Destaques -->
         <div class="max-w-7xl mx-auto px-4 py-12">
             <div class="flex justify-between items-center mb-8">
                 <div>
@@ -146,88 +123,65 @@
                 </div>
                 <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="text-sm font-bold text-[#0E8685] hover:underline">Ver Todos ➔</button>
             </div>
-
-            <!-- Grid preenchido via JS (Destaques) -->
-            <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <!-- Carregado dinamicamente -->
-            </div>
+            <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
         </div>
     </section>
 
     <!-- ABA 2: QUEM SOMOS -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <!-- Coluna do Logótipo (logo.png) -->
             <div class="flex justify-center items-center">
                 <img src="logo.png" alt="Ísis Holística" class="w-full max-w-xs md:max-w-md h-auto object-contain rounded-2xl shadow-xl border border-[#C5A880]/30 p-6 bg-gray-50">
             </div>
-            <!-- Coluna do Texto -->
             <div class="text-left">
                 <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Nossa Essência</span>
                 <h3 class="text-3xl md:text-4xl font-bold mt-2 mb-6 text-gray-900">Quem Somos</h3>
                 <p class="text-gray-700 leading-relaxed text-base md:text-lg mb-6">
-                    A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual. Mais do que uma loja esotérica, somos um espaço acolhedor dedicado à elevação da vibração através de elementos naturais, aromaterapia, cristais e acessórios com significado.
+                    A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual através de elementos naturais, aromaterapia e cristais.
                 </p>
-                <p class="text-gray-700 leading-relaxed text-base md:text-lg mb-8">
-                    Fundada com amor e dedicação em São Leopoldo - RS, unimos o comércio consciente de produtos esotéricos ao suporte terapêutico especializado para guiar a sua jornada de autoconhecimento.
-                </p>
-                <button onclick="mudarAba('view-produtos')" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition">
-                    Conhecer Nossos Produtos
-                </button>
+                <button onclick="mudarAba('view-produtos')" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition">Conhecer Nossos Produtos</button>
             </div>
         </div>
     </section>
 
-    <!-- ABA 3: PRODUTOS (VITRINE E FILTROS) -->
+    <!-- ABA 3: PRODUTOS -->
     <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
         <div class="text-center mb-8">
             <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
-            <p class="text-gray-600 mt-2">Selecione uma categoria ou clique no produto para ver detalhes.</p>
+            <p class="text-gray-600 mt-2">Selecione uma categoria ou clique no produto para ver detalhes e descrição.</p>
             
-            <!-- Botões de Filtro por Categoria -->
             <div class="flex flex-wrap justify-center gap-2 mt-6">
-                <button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
+                <button onclick="filtrarProdutos('todos')" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
                 <button onclick="filtrarProdutos('Incensos')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌿 Incensos</button>
                 <button onclick="filtrarProdutos('Pedras')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
                 <button onclick="filtrarProdutos('Semijoias')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">✨ Semijoias</button>
                 <button onclick="filtrarProdutos('Decoracao')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🪷 Decoração</button>
             </div>
         </div>
-
-        <!-- Grid preenchido via JS (Todos os produtos) -->
-        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <!-- Carregado dinamicamente -->
-        </div>
+        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
     </section>
 
-    <!-- ABA 4: ESPAÇO TERAPÊUTICO -->
+    <!-- ABA 4: TERAPIAS -->
     <section id="view-terapias" class="app-view hidden flex-grow bg-[#EFECE6] py-16 px-4">
         <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Atendimento Especializado</span>
                 <h3 class="text-3xl font-bold mt-2 mb-4 text-gray-900">Espaço Terapêutico Ísis Holística</h3>
                 <p class="text-gray-700 leading-relaxed mb-6">
-                    Por <strong>Fernanda Kristine e Rogério Soares</strong>. Oferecemos suporte completo para o seu autoconhecimento e cura energética através da Humanoterapia, Psicanálise e Radiestesia.
+                    Por <strong>Fernanda Kristine e Rogério Soares</strong>. Humanoterapia, Psicanálise e Radiestesia para o seu autoconhecimento.
                 </p>
-                <ul class="space-y-3 mb-8 text-gray-700 font-medium">
-                    <li class="flex items-center gap-2">🌿 Humanoterapia para limpeza de bloqueios</li>
-                    <li class="flex items-center gap-2">🧠 Psicanálise clínica e integrativa</li>
-                    <li class="flex items-center gap-2">🔮 Radiestesia e Radiônica aplicada</li>
-                </ul>
-                <a href="https://wa.me/555195508826?text=Olá! Gostaria de agendar uma sessão terapêutica." target="_blank" rel="noreferrer" class="bg-[#C5A880] text-white font-bold px-6 py-3 rounded-lg shadow hover:bg-opacity-90 transition inline-block">
-                    Agendar Atendimento
-                </a>
+                <a href="https://wa.me/555195508826?text=Olá! Gostaria de agendar uma sessão terapêutica." target="_blank" rel="noreferrer" class="bg-[#C5A880] text-white font-bold px-6 py-3 rounded-lg shadow hover:bg-opacity-90 transition inline-block">Agendar Atendimento</a>
             </div>
             <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 text-center">
                 <div class="text-5xl mb-4">🪷</div>
                 <h4 class="text-xl font-bold text-gray-800 mb-2">Transforme sua energia</h4>
-                <p class="text-gray-600 text-sm mb-6">Entre em contato para tirar dúvidas sobre os atendimentos presenciais em São Leopoldo ou online.</p>
-                <span class="block text-xs text-gray-400">Av. Feitoria, 2.300 - Lj 08 - Pinheiro, São Leopoldo - RS</span>
+                <p class="text-gray-600 text-sm mb-6">Atendimentos presenciais em São Leopoldo ou online.</p>
+                <span class="block text-xs text-gray-400">Av. Feitoria, 2.300 - Lj 08 - São Leopoldo - RS</span>
             </div>
         </div>
     </section>
 
-    <!-- Modal / Janela Flutuante de Detalhes do Produto -->
+    <!-- Modal de Detalhes do Produto com Descrição -->
     <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl relative">
             <button onclick="fecharModal()" class="absolute top-3 right-3 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center">✕</button>
@@ -239,12 +193,12 @@
                 <h3 id="modal-title" class="text-xl font-bold text-gray-800 mt-1"></h3>
                 <p id="modal-price" class="text-2xl font-extrabold text-[#C5A880] mt-2"></p>
                 
-                <!-- Aviso de Pedra Natural (Condicional) -->
+                <p id="modal-desc" class="text-gray-600 text-sm mt-3 leading-relaxed bg-gray-50 p-3 rounded-xl border"></p>
+
                 <div id="modal-natural-notice" class="hidden mt-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-lg">
-                    ⚠️ <strong>Atenção:</strong> Por se tratar de uma pedra/cristal natural, o formato, a cor e a tonalidade podem variar ligeiramente de uma peça para outra.
+                    ⚠️ <strong>Atenção:</strong> Por se tratar de uma pedra/cristal natural, o formato e tonalidade podem variar.
                 </div>
 
-                <!-- Seletor de Quantidade -->
                 <div class="flex items-center justify-between mt-6">
                     <span class="text-sm font-semibold text-gray-700">Quantidade:</span>
                     <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
@@ -254,34 +208,26 @@
                     </div>
                 </div>
 
-                <button onclick="adicionarAoCarrinho()" class="mt-6 w-full bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">
-                    Adicionar ao Carrinho
-                </button>
+                <button onclick="adicionarAoCarrinho()" class="mt-6 w-full bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">Adicionar ao Carrinho</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal do Carrinho -->
+    <!-- Carrinho -->
     <div id="cart-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex justify-end">
         <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl p-6">
             <div class="flex justify-between items-center border-b pb-4">
                 <h3 class="text-xl font-bold text-[#0E8685]">Seu Carrinho</h3>
                 <button onclick="toggleCartModal()" class="text-gray-500 font-bold">✕ Fechar</button>
             </div>
-            <div id="cart-items" class="flex-grow overflow-y-auto py-4 space-y-4">
-                <!-- Itens carregados via JavaScript -->
-            </div>
+            <div id="cart-items" class="flex-grow overflow-y-auto py-4 space-y-4"></div>
             <div class="border-t pt-4 space-y-2">
                 <div class="flex justify-between font-bold text-lg mb-2">
                     <span>Total:</span>
                     <span id="cart-total" class="text-[#C5A880]">R$ 0,00</span>
                 </div>
-                <a id="whatsapp-checkout" href="#" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow">
-                    Finalizar Pedido no WhatsApp
-                </a>
-                <button onclick="toggleCartModal()" class="w-full text-center bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl hover:bg-gray-200 transition">
-                    Continuar Comprando
-                </button>
+                <a id="whatsapp-checkout" href="#" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow">Finalizar Pedido no WhatsApp</a>
+                <button onclick="toggleCartModal()" class="w-full text-center bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl hover:bg-gray-200 transition">Continuar Comprando</button>
             </div>
         </div>
     </div>
@@ -291,7 +237,7 @@
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
             <div>
                 <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Ísis Holística</h5>
-                <p class="text-gray-400">Loja Esotérica & Espaço Terapêutico dedicados ao seu bem-estar, equilíbrio e evolução espiritual.</p>
+                <p class="text-gray-400">Loja Esotérica & Espaço Terapêutico dedicados ao seu bem-estar.</p>
             </div>
             <div>
                 <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Endereço</h5>
@@ -300,56 +246,74 @@
             </div>
             <div>
                 <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Contacto & Redes</h5>
-                <p class="text-gray-400 mb-3 text-xs">Atendimento direto via WhatsApp e Instagram.</p>
                 <div class="flex flex-col space-y-2.5">
-                    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow hover:bg-opacity-90 transition">
-                        💬 WhatsApp: (51) 9550-8826
-                    </a>
-                    <a href="https://www.instagram.com/isiseholistica?stkn=MWdhbGZwcmcydHlhNg==" target="_blank" rel="noreferrer" class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow hover:opacity-90 transition">
-                        📸 Instagram: @isiseholistica
-                    </a>
+                    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow">💬 WhatsApp: (51) 9550-8826</a>
+                    <a href="https://www.instagram.com/isiseholistica" target="_blank" rel="noreferrer" class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow">📸 Instagram: @isiseholistica</a>
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">
-            © 2026 Ísis Holística. Todos os direitos reservados.
-        </div>
+        <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">© 2026 Ísis Holística. Todos os direitos reservados.</div>
     </footer>
 
-    <!-- Script de Interatividade e Gestão Dinâmica -->
+    <!-- Scripts da Loja -->
     <script>
-        // Carregamento de Produtos do LocalStorage (Sincronizado com o admin.html)
-        const produtosIniciais = [
-            { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", destaque: true },
-            { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", destaque: true },
-            { id: 3, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", destaque: true }
+        let listaProdutos = JSON.parse(localStorage.getItem('isis_produtos')) || [
+            { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética.", destaque: true },
+            { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação e harmonia.", destaque: true },
+            { id: 3, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde.", destaque: true }
         ];
 
-        let listaProdutos = JSON.parse(localStorage.getItem('isis_produtos'));
-        if (!listaProdutos) {
-            listaProdutos = produtosIniciais;
-            localStorage.setItem('isis_produtos', JSON.stringify(listaProdutos));
-        }
+        let slides = JSON.parse(localStorage.getItem('isis_slides')) || [
+            { badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração.", imagem: "" },
+            { badge: "🔮 Espaço Terapêutico", titulo: "Humanoterapia & Psicanálise", desc: "Agende sua sessão de atendimento presencial ou online com Fernanda e Rogério.", imagem: "" }
+        ];
 
-        // Renderizar vitrines ao carregar a página
         renderizarDestaquesHome();
         renderizarProdutosLoja('todos');
+        inicializarCarrossel();
+
+        // Carrossel Dinâmico
+        let currentSlide = 0;
+        function inicializarCarrossel() {
+            if (slides.length > 0) atualizarSlideUI();
+        }
+
+        function atualizarSlideUI() {
+            const s = slides[currentSlide];
+            document.getElementById('carousel-badge').innerText = s.badge;
+            document.getElementById('carousel-title').innerText = s.titulo;
+            document.getElementById('carousel-desc').innerText = s.desc;
+            
+            const wrapper = document.getElementById('carousel-wrapper');
+            if (s.imagem) {
+                wrapper.style.backgroundImage = `url('${s.imagem}')`;
+            } else {
+                wrapper.style.backgroundImage = 'none';
+            }
+        }
+
+        function mudarSlide(direcao) {
+            currentSlide = (currentSlide + direcao + slides.length) % slides.length;
+            atualizarSlideUI();
+        }
+
+        setInterval(() => {
+            if (slides.length > 1) mudarSlide(1);
+        }, 10000);
 
         function renderizarDestaquesHome() {
             const container = document.getElementById('home-destaques-grid');
             if (!container) return;
             container.innerHTML = '';
-
             const destaques = listaProdutos.filter(p => p.destaque);
             if (destaques.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 text-center col-span-3 py-6">Nenhum produto em destaque no momento. Visite o painel admin para configurar.</p>';
+                container.innerHTML = '<p class="text-gray-500 text-center col-span-3 py-6">Nenhum produto em destaque no momento.</p>';
                 return;
             }
-
             destaques.forEach(p => {
                 const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
-                    <div data-categoria="${p.categoria}" onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural})" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
+                    <div onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural}, '${(p.descricao || '').replace(/'/g, "\\'")}')" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
                         <div>
                             <div class="relative h-64 bg-gray-100">
                                 <img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover">
@@ -361,9 +325,7 @@
                                 <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
                             </div>
                         </div>
-                        <div class="p-5 pt-0">
-                            <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
-                        </div>
+                        <div class="p-5 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span></div>
                     </div>
                 `;
             });
@@ -373,18 +335,15 @@
             const container = document.getElementById('grid-produtos');
             if (!container) return;
             container.innerHTML = '';
-
             const filtrados = listaProdutos.filter(p => categoriaFiltro === 'todos' || p.categoria === categoriaFiltro);
-
             if (filtrados.length === 0) {
                 container.innerHTML = '<p class="text-gray-500 text-center col-span-3 py-8">Nenhum produto encontrado nesta categoria.</p>';
                 return;
             }
-
             filtrados.forEach(p => {
                 const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
-                    <div data-categoria="${p.categoria}" onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural})" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
+                    <div onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural}, '${(p.descricao || '').replace(/'/g, "\\'")}')" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
                         <div>
                             <div class="relative h-64 bg-gray-100">
                                 <img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover">
@@ -396,76 +355,45 @@
                                 <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
                             </div>
                         </div>
-                        <div class="p-5 pt-0">
-                            <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
-                        </div>
+                        <div class="p-5 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span></div>
                     </div>
                 `;
             });
         }
 
-        // Função para Alternar entre as Abas
         function mudarAba(idAba) {
-            const views = document.querySelectorAll('.app-view');
-            views.forEach(view => view.classList.add('hidden'));
-            
-            const abaAlvo = document.getElementById(idAba);
-            if (abaAlvo) {
-                abaAlvo.classList.remove('hidden');
-            }
-
+            document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
+            const alvo = document.getElementById(idAba);
+            if (alvo) alvo.classList.remove('hidden');
             document.getElementById('mobile-menu').classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Abrir/Fechar Menu Mobile
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         }
 
-        // Carrossel da Home com Troca Automática a cada 10 segundos
-        const slides = [
-            { badge: "🌸 Destaque da Semana", title: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração." },
-            { badge: "🔮 Espaço Terapêutico", title: "Humanoterapia & Psicanálise", desc: "Agende sua sessão de atendimento presencial ou online com Fernanda e Rogério." }
-        ];
-        let currentSlide = 0;
-        function mudarSlide(direcao) {
-            currentSlide = (currentSlide + direcao + slides.length) % slides.length;
-            document.getElementById('carousel-badge').innerText = slides[currentSlide].badge;
-            document.getElementById('carousel-title').innerText = slides[currentSlide].title;
-            document.getElementById('carousel-desc').innerText = slides[currentSlide].desc;
+        function filtrarProdutos(cat) {
+            renderizarProdutosLoja(cat);
         }
 
-        setInterval(() => {
-            mudarSlide(1);
-        }, 10000);
-
-        // Filtro de Produtos por Categoria
-        function filtrarProdutos(categoria) {
-            renderizarProdutosLoja(categoria);
-        }
-
-        // Modal de Detalhes
         let produtoAtual = {};
         let quantidadeSelecionada = 1;
 
-        function abrirModal(nome, preco, imagem, categoria, ehNatural) {
-            produtoAtual = { nome, preco, imagem, categoria, ehNatural };
+        function abrirModal(nome, preco, imagem, categoria, ehNatural, descricao) {
+            produtoAtual = { nome, preco, imagem, categoria, descricao, ehNatural };
             quantidadeSelecionada = 1;
             
             document.getElementById('modal-title').innerText = nome;
             document.getElementById('modal-price').innerText = `R$ ${preco.toFixed(2).replace('.', ',')}`;
             document.getElementById('modal-img').src = imagem;
             document.getElementById('modal-category').innerText = categoria;
+            document.getElementById('modal-desc').innerText = descricao || 'Sem descrição detalhada.';
             document.getElementById('modal-qty').innerText = quantidadeSelecionada;
 
             const avisoNatural = document.getElementById('modal-natural-notice');
-            if (ehNatural) {
-                avisoNatural.classList.remove('hidden');
-            } else {
-                avisoNatural.classList.add('hidden');
-            }
+            if (ehNatural) avisoNatural.classList.remove('hidden');
+            else avisoNatural.classList.add('hidden');
 
             document.getElementById('product-modal').classList.remove('hidden');
         }
@@ -474,30 +402,26 @@
             document.getElementById('product-modal').classList.add('hidden');
         }
 
-        function alterarQtd(valor) {
-            quantidadeSelecionada += valor;
+        function alterarQtd(val) {
+            quantidadeSelecionada += val;
             if (quantidadeSelecionada < 1) quantidadeSelecionada = 1;
             document.getElementById('modal-qty').innerText = quantidadeSelecionada;
         }
 
-        // Carrinho
         let carrinho = JSON.parse(localStorage.getItem('isis_carrinho')) || [];
         atualizarCarrinhoUI();
 
         function adicionarAoCarrinho() {
-            const itemExistente = carrinho.find(item => item.nome === produtoAtual.nome);
-            if (itemExistente) {
-                itemExistente.qtd += quantidadeSelecionada;
-            } else {
-                carrinho.push({ ...produtoAtual, qtd: quantidadeSelecionada });
-            }
+            const itemExistente = carrinho.find(i => i.nome === produtoAtual.nome);
+            if (itemExistente) itemExistente.qtd += quantidadeSelecionada;
+            else carrinho.push({ ...produtoAtual, qtd: quantidadeSelecionada });
             salvarEAtualizar();
             fecharModal();
             toggleCartModal();
         }
 
-        function removerDoCarrinho(index) {
-            carrinho.splice(index, 1);
+        function removerDoCarrinho(idx) {
+            carrinho.splice(idx, 1);
             salvarEAtualizar();
         }
 
@@ -510,9 +434,7 @@
             const cartCount = document.getElementById('cart-count');
             const cartItems = document.getElementById('cart-items');
             const cartTotal = document.getElementById('cart-total');
-            
-            let totalItens = 0;
-            let valorTotal = 0;
+            let totalItens = 0, valorTotal = 0;
             cartItems.innerHTML = '';
 
             if (carrinho.length === 0) {
@@ -548,8 +470,7 @@
         }
 
         function toggleCartModal() {
-            const modal = document.getElementById('cart-modal');
-            modal.classList.toggle('hidden');
+            document.getElementById('cart-modal').classList.toggle('hidden');
         }
     </script>
 </body>
