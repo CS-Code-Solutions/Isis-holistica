@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ísis Holística | Loja Esotérica e Espaço Terapêutico</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Barra de Aviso Superior -->
+    <div class="bg-[#0E8685] text-white text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
+        ✨ Mais aroma, mais energia para o seu dia! Visite nossa loja na Av. Feitoria, 2300 - São Leopoldo.
+    </div>
+
+    <!-- Cabeçalho -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full overflow-hidden bg-[#0E8685] flex items-center justify-center shadow-md border border-[#C5A880]">
+                    <img src="Logo.isis.png" alt="Ísis Holística" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-[#0E8685]">ÍSIS HOLÍSTICA</h1>
+                    <p class="text-xs text-gray-500">Energia • Equilíbrio • Bem-estar</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
+                <a href="#home" class="hover:text-[#0E8685]">Início</a>
+                <a href="#produtos" class="hover:text-[#0E8685]">Loja Esotérica</a>
+                <a href="#terapias" class="hover:text-[#0E8685]">Espaço Terapêutico</a>
+            </nav>
+            <div>
+                <a href="https://wa.me/message/QL40TUQTW52IA1" target="_blank" rel="noreferrer" class="bg-[#25D366] text-white px-4 py-2 rounded-full text-sm font-bold shadow hover:bg-opacity-90 transition flex items-center gap-2">
+                    💬 WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Principal (Hero) -->
+    <section id="home" class="relative bg-[#11999E] text-white py-20 px-6 text-center overflow-hidden">
+        <div class="max-w-3xl mx-auto relative z-10">
+            <span class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow">
+                🌸 Espaço de Luz e Energia
+            </span>
+            <h2 class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight">
+                Incensos Premium & Semijoias Esotéricas
+            </h2>
+            <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+                100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.
+            </p>
+            <a href="#produtos" class="bg-white text-[#0E8685] font-bold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition inline-block">
+                Ver Produtos em Destaque
+            </a>
+        </div>
+    </section>
+
+    <!-- Categorias -->
+    <div class="max-w-7xl mx-auto px-4 -mt-8 relative z-20 mb-12">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
+                <span class="text-3xl">🌿</span>
+                <h4 class="font-bold text-sm text-[#0E8685] mt-2">Incensos</h4>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
+                <span class="text-3xl">✨</span>
+                <h4 class="font-bold text-sm text-[#0E8685] mt-2">Semijoias</h4>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
+                <span class="text-3xl">🪷</span>
+                <h4 class="font-bold text-sm text-[#0E8685] mt-2">Decoração</h4>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
+                <span class="text-3xl">🍃</span>
+                <h4 class="font-bold text-sm text-[#0E8685] mt-2">Ervas e Banhos</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vitrine de Produtos -->
+    <section id="produtos" class="max-w-7xl mx-auto px-4 py-8 flex-grow">
+        <div class="text-center mb-12">
+            <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Nossos Produtos</h3>
+            <p class="text-gray-600 mt-2">Navegue pelas categorias e fortaleça sua fé e energia.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <!-- Produto 1 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100">
+                <div>
+                    <div class="relative h-64 bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60" alt="Incenso" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Mais Vendido</span>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Incensos</span>
+                        <h4 class="font-bold text-lg mt-1 text-gray-800">Incenso Natural Artesanal de Alecrim e Arruda</h4>
+                        <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 18,90</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0">
+                    <a href="https://wa.me/message/QL40TUQTW52IA1?text=Olá! Tenho interesse em adquirir o produto: Incenso Natural Artesanal de Alecrim e Arruda" target="_blank" rel="noreferrer" class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg hover:bg-opacity-90 transition">
+                        Comprar pelo WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <!-- Produto 2 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100">
+                <div>
+                    <div class="relative h-64 bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60" alt="Semijoia" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Lançamento</span>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Semijoias</span>
+                        <h4 class="font-bold text-lg mt-1 text-gray-800">Semijoia Quartzo Verde - Coração</h4>
+                        <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 89,90</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0">
+                    <a href="https://wa.me/message/QL40TUQTW52IA1?text=Olá! Tenho interesse em adquirir o produto: Semijoia Quartzo Verde - Coração" target="_blank" rel="noreferrer" class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg hover:bg-opacity-90 transition">
+                        Comprar pelo WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <!-- Produto 3 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100">
+                <div>
+                    <div class="relative h-64 bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60" alt="Vela" class="w-full h-full object-cover">
+                        <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Relaxante</span>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Decoração</span>
+                        <h4 class="font-bold text-lg mt-1 text-gray-800">Vela Terapêutica de Lavanda</h4>
+                        <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 45,00</p>
+                    </div>
+                </div>
+                <div class="p-5 pt-0">
+                    <a href="https://wa.me/message/QL40TUQTW52IA1?text=Olá! Tenho interesse em adquirir o produto: Vela Terapêutica de Lavanda" target="_blank" rel="noreferrer" class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg hover:bg-opacity-90 transition">
+                        Comprar pelo WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Terapias -->
+    <section id="terapias" class="bg-[#EFECE6] py-16 px-4 mt-12">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Atendimento Especializado</span>
+                <h3 class="text-3xl font-bold mt-2 mb-4 text-gray-900">Espaço Terapêutico Ísis Holística</h3>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    Por <strong>Fernanda Kristine e Rogério Soares</strong>. Oferecemos suporte completo para o seu autoconhecimento e cura energética através da Humanoterapia, Psicanálise e Radiestesia.
+                </p>
+                <ul class="space-y-3 mb-8 text-gray-700 font-medium">
+                    <li class="flex items-center gap-2">🌿 Humanoterapia para limpeza de bloqueios</li>
+                    <li class="flex items-center gap-2">🧠 Psicanálise clínica e integrativa</li>
+                    <li class="flex items-center gap-2">🔮 Radiestesia e Radiônica aplicada</li>
+                </ul>
+                <a href="https://wa.me/message/QL40TUQTW52IA1?text=Olá! Gostaria de agendar uma sessão terapêutica." target="_blank" rel="noreferrer" class="bg-[#C5A880] text-white font-bold px-6 py-3 rounded-lg shadow hover:bg-opacity-90 transition inline-block">
+                    Agendar Atendimento
+                </a>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 text-center">
+                <div class="text-5xl mb-4">🪷</div>
+                <h4 class="text-xl font-bold text-gray-800 mb-2">Transforme sua energia</h4>
+                <p class="text-gray-600 text-sm mb-6">Entre em contato para tirar dúvidas sobre os atendimentos presenciais em São Leopoldo ou online.</p>
+                <span class="block text-xs text-gray-400">Av. Feitoria, 2.300 - Loja 08, São Leopoldo - RS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-[#1C2833] text-white py-12 px-4">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+            <div>
+                <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Ísis Holística</h5>
+                <p class="text-gray-400">Loja Esotérica & Espaço Terapêutico dedicados ao seu bem-estar, equilíbrio e evolução espiritual.</p>
+            </div>
+            <div>
+                <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Endereço</h5>
+                <p class="text-gray-400">Av. Feitoria 2.300, loja 08</p>
+                <p class="text-gray-400">São Leopoldo - RS, 93042-252</p>
+            </div>
+            <div>
+                <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Contato</h5>
+                <p class="text-gray-400 mb-2">Atendimento direto via WhatsApp para toda a região.</p>
+                <a href="https://wa.me/message/QL40TUQTW52IA1" target="_blank" rel="noreferrer" class="text-[#C5A880] underline font-semibold">Falar com Atendente</a>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">
+            © 2026 Ísis Holística. Todos os direitos reservados.
+        </div>
+    </footer>
+
+</body>
+</html>
