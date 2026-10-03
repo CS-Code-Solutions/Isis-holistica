@@ -29,12 +29,13 @@
     <!-- Conteúdo Principal -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <!-- Coluna 1: Formulário para Adicionar/Editar Produto -->
+        <!-- Coluna 1: Formulário para Adicionar / Editar Produto -->
         <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100 h-fit">
-            <h2 class="text-xl font-bold text-[#0E8685] mb-4 flex items-center gap-2">
+            <h2 id="form-title" class="text-xl font-bold text-[#0E8685] mb-4 flex items-center gap-2">
                 <span>📦</span> Adicionar Novo Produto
             </h2>
             <form id="product-form" onsubmit="salvarProduto(event)" class="space-y-4">
+                <input type="hidden" id="prod-id">
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
                     <input type="text" id="prod-nome" required class="w-full px-4 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incenso de Alfazema">
@@ -53,16 +54,22 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Link da Imagem (URL ou Cloudinary)</label>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Link da Imagem (URL)</label>
                     <input type="url" id="prod-imagem" required class="w-full px-4 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="https://exemplo.com/foto.jpg">
                 </div>
                 <div class="flex items-center gap-2 pt-2">
                     <input type="checkbox" id="prod-destaque" class="w-4 h-4 text-[#0E8685] rounded focus:ring-[#0E8685]">
                     <label for="prod-destaque" class="text-sm font-semibold text-gray-700">Deixar em destaque na Página Inicial</label>
                 </div>
-                <button type="submit" class="w-full bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg mt-2">
-                    Cadastrar Produto
-                </button>
+                
+                <div class="flex gap-2">
+                    <button type="submit" id="btn-submit" class="flex-grow bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg mt-2">
+                        Cadastrar Produto
+                    </button>
+                    <button type="button" id="btn-cancel" onclick="cancelarEdicao()" class="hidden bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-xl hover:bg-gray-300 transition mt-2">
+                        Cancelar
+                    </button>
+                </div>
             </form>
         </div>
 
@@ -100,9 +107,8 @@
         © 2026 Ísis Holística — Painel Administrativo Seguro.
     </footer>
 
-    <!-- Script de Gestão do Admin -->
+    <!-- Script de Gestão do Admin com Edição -->
     <script>
-        // Lista padrão inicial caso o localStorage esteja vazio
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
             { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", destaque: true },
             { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", destaque: true },
@@ -114,26 +120,70 @@
         function salvarProduto(event) {
             event.preventDefault();
             
-            const novoProd = {
-                id: Date.now(),
-                nome: document.getElementById('prod-nome').value,
-                preco: parseFloat(document.getElementById('prod-preco').value),
-                categoria: document.getElementById('prod-categoria').value,
-                imagem: document.getElementById('prod-imagem').value,
-                destaque: document.getElementById('prod-destaque').checked
-            };
+            const idProd = document.getElementById('prod-id').value;
+            const nome = document.getElementById('prod-nome').value;
+            const preco = parseFloat(document.getElementById('prod-preco').value);
+            const categoria = document.getElementById('prod-categoria').value;
+            const imagem = document.getElementById('prod-imagem').value;
+            const destaque = document.getElementById('prod-destaque').checked;
 
-            produtosAdmin.push(novoProd);
+            if (idProd) {
+                // Atualizar produto existente
+                produtosAdmin = produtosAdmin.map(p => {
+                    if (p.id == idProd) {
+                        return { ...p, nome, preco, categoria, imagem, destaque };
+                    }
+                    return p;
+                });
+                alert('Produto atualizado com sucesso!');
+            } else {
+                // Criar novo produto
+                const novoProd = {
+                    id: Date.now(),
+                    nome,
+                    preco,
+                    categoria,
+                    imagem,
+                    destaque
+                };
+                produtosAdmin.push(novoProd);
+                alert('Produto cadastrado com sucesso!');
+            }
+
             localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
-            
-            document.getElementById('product-form').reset();
+            cancelarEdicao();
             renderizarAdmin();
-            alert('Produto cadastrado com sucesso!');
+        }
+
+        function carregarParaEdicao(id) {
+            const produto = produtosAdmin.find(p => p.id == id);
+            if (!produto) return;
+
+            document.getElementById('prod-id').value = produto.id;
+            document.getElementById('prod-nome').value = produto.nome;
+            document.getElementById('prod-preco').value = produto.preco;
+            document.getElementById('prod-categoria').value = produto.categoria;
+            document.getElementById('prod-imagem').value = produto.imagem;
+            document.getElementById('prod-destaque').checked = produto.destaque;
+
+            document.getElementById('form-title').innerHTML = '<span>✏️</span> Editar Produto';
+            document.getElementById('btn-submit').innerText = 'Atualizar Produto';
+            document.getElementById('btn-cancel').classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelarEdicao() {
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-id').value = '';
+            document.getElementById('form-title').innerHTML = '<span>📦</span> Adicionar Novo Produto';
+            document.getElementById('btn-submit').innerText = 'Cadastrar Produto';
+            document.getElementById('btn-cancel').classList.add('hidden');
         }
 
         function excluirProduto(id) {
             if (confirm('Tem certeza que deseja remover este produto?')) {
-                produtosAdmin = produtosAdmin.filter(p => p.id !== id);
+                produtosAdmin = produtosAdmin.filter(p => p.id != id);
                 localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
                 renderizarAdmin();
             }
@@ -164,7 +214,8 @@
                                 ${p.destaque ? 'Sim' : 'Não'}
                             </span>
                         </td>
-                        <td class="py-3 px-2 text-right">
+                        <td class="py-3 px-2 text-right space-x-1">
+                            <button onclick="carregarParaEdicao(${p.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
                             <button onclick="excluirProduto(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Excluir</button>
                         </td>
                     </tr>
