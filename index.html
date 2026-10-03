@@ -137,7 +137,7 @@
             </div>
         </div>
 
-        <!-- Produtos em Destaque na Página Inicial -->
+        <!-- Produtos em Destaque na Página Inicial (Gerenciados dinamicamente) -->
         <div class="max-w-7xl mx-auto px-4 py-12">
             <div class="flex justify-between items-center mb-8">
                 <div>
@@ -147,60 +147,9 @@
                 <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="text-sm font-bold text-[#0E8685] hover:underline">Ver Todos ➔</button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <!-- Produto 1: Incenso -->
-                <div data-categoria="Incensos" onclick="abrirModal('Incenso Natural Artesanal de Alecrim e Arruda', 18.90, 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60', 'Incensos', false)" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
-                    <div>
-                        <div class="relative h-64 bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60" alt="Incenso" class="w-full h-full object-cover">
-                            <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Mais Vendido</span>
-                        </div>
-                        <div class="p-5">
-                            <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Incensos</span>
-                            <h4 class="font-bold text-lg mt-1 text-gray-800">Incenso Natural Artesanal de Alecrim e Arruda</h4>
-                            <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 18,90</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
-                    </div>
-                </div>
-
-                <!-- Produto 2: Pedra -->
-                <div data-categoria="Pedras" onclick="abrirModal('Bruto de Ametista Energizada', 42.00, 'https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60', 'Pedras', true)" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
-                    <div>
-                        <div class="relative h-64 bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60" alt="Pedra Ametista" class="w-full h-full object-cover">
-                            <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Cristal Natural</span>
-                        </div>
-                        <div class="p-5">
-                            <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Pedras e Cristais</span>
-                            <h4 class="font-bold text-lg mt-1 text-gray-800">Bruto de Ametista Energizada</h4>
-                            <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 42,00</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
-                    </div>
-                </div>
-
-                <!-- Produto 3: Semijoia -->
-                <div data-categoria="Semijoias" onclick="abrirModal('Semijoia Quartzo Verde - Coração', 89.90, 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60', 'Semijoias', true)" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
-                    <div>
-                        <div class="relative h-64 bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60" alt="Semijoia" class="w-full h-full object-cover">
-                            <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Lançamento</span>
-                        </div>
-                        <div class="p-5">
-                            <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Semijoias</span>
-                            <h4 class="font-bold text-lg mt-1 text-gray-800">Semijoia Quartzo Verde - Coração</h4>
-                            <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 89,90</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
-                    </div>
-                </div>
+            <!-- Grid preenchido via JS (Destaques) -->
+            <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                <!-- Carregado dinamicamente -->
             </div>
         </div>
     </section>
@@ -245,60 +194,9 @@
             </div>
         </div>
 
+        <!-- Grid preenchido via JS (Todos os produtos) -->
         <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <!-- Produto 1: Incenso -->
-            <div data-categoria="Incensos" onclick="abrirModal('Incenso Natural Artesanal de Alecrim e Arruda', 18.90, 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60', 'Incensos', false)" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
-                <div>
-                    <div class="relative h-64 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60" alt="Incenso" class="w-full h-full object-cover">
-                        <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Mais Vendido</span>
-                    </div>
-                    <div class="p-5">
-                        <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Incensos</span>
-                        <h4 class="font-bold text-lg mt-1 text-gray-800">Incenso Natural Artesanal de Alecrim e Arruda</h4>
-                        <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 18,90</p>
-                    </div>
-                </div>
-                <div class="p-5 pt-0">
-                    <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
-                </div>
-            </div>
-
-            <!-- Produto 2: Pedra (Com aviso de pedra natural) -->
-            <div data-categoria="Pedras" onclick="abrirModal('Bruto de Ametista Energizada', 42.00, 'https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60', 'Pedras', true)" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
-                <div>
-                    <div class="relative h-64 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60" alt="Pedra Ametista" class="w-full h-full object-cover">
-                        <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Cristal Natural</span>
-                    </div>
-                    <div class="p-5">
-                        <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Pedras e Cristais</span>
-                        <h4 class="font-bold text-lg mt-1 text-gray-800">Bruto de Ametista Energizada</h4>
-                        <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 42,00</p>
-                    </div>
-                </div>
-                <div class="p-5 pt-0">
-                    <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
-                </div>
-            </div>
-
-            <!-- Produto 3: Semijoia -->
-            <div data-categoria="Semijoias" onclick="abrirModal('Semijoia Quartzo Verde - Coração', 89.90, 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60', 'Semijoias', true)" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
-                <div>
-                    <div class="relative h-64 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60" alt="Semijoia" class="w-full h-full object-cover">
-                        <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Lançamento</span>
-                    </div>
-                    <div class="p-5">
-                        <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Semijoias</span>
-                        <h4 class="font-bold text-lg mt-1 text-gray-800">Semijoia Quartzo Verde - Coração</h4>
-                        <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 89,90</p>
-                    </div>
-                </div>
-                <div class="p-5 pt-0">
-                    <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
-                </div>
-            </div>
+            <!-- Carregado dinamicamente -->
         </div>
     </section>
 
@@ -418,9 +316,95 @@
         </div>
     </footer>
 
-    <!-- Script de Interatividade e Gestão de Abas -->
+    <!-- Script de Interatividade e Gestão Dinâmica -->
     <script>
-        // Função para Alternar entre as Abas (Oculta todas e mostra apenas a selecionada)
+        // Carregamento de Produtos do LocalStorage (Sincronizado com o admin.html)
+        const produtosIniciais = [
+            { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", destaque: true },
+            { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", destaque: true },
+            { id: 3, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", destaque: true }
+        ];
+
+        let listaProdutos = JSON.parse(localStorage.getItem('isis_produtos'));
+        if (!listaProdutos) {
+            listaProdutos = produtosIniciais;
+            localStorage.setItem('isis_produtos', JSON.stringify(listaProdutos));
+        }
+
+        // Renderizar vitrines ao carregar a página
+        renderizarDestaquesHome();
+        renderizarProdutosLoja('todos');
+
+        function renderizarDestaquesHome() {
+            const container = document.getElementById('home-destaques-grid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const destaques = listaProdutos.filter(p => p.destaque);
+            if (destaques.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center col-span-3 py-6">Nenhum produto em destaque no momento. Visite o painel admin para configurar.</p>';
+                return;
+            }
+
+            destaques.forEach(p => {
+                const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
+                container.innerHTML += `
+                    <div data-categoria="${p.categoria}" onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural})" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
+                        <div>
+                            <div class="relative h-64 bg-gray-100">
+                                <img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover">
+                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Destaque</span>
+                            </div>
+                            <div class="p-5">
+                                <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
+                                <h4 class="font-bold text-lg mt-1 text-gray-800">${p.nome}</h4>
+                                <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                        <div class="p-5 pt-0">
+                            <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderizarProdutosLoja(categoriaFiltro) {
+            const container = document.getElementById('grid-produtos');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const filtrados = listaProdutos.filter(p => categoriaFiltro === 'todos' || p.categoria === categoriaFiltro);
+
+            if (filtrados.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center col-span-3 py-8">Nenhum produto encontrado nesta categoria.</p>';
+                return;
+            }
+
+            filtrados.forEach(p => {
+                const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
+                container.innerHTML += `
+                    <div data-categoria="${p.categoria}" onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural})" class="produto-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
+                        <div>
+                            <div class="relative h-64 bg-gray-100">
+                                <img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover">
+                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">${p.categoria}</span>
+                            </div>
+                            <div class="p-5">
+                                <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
+                                <h4 class="font-bold text-lg mt-1 text-gray-800">${p.nome}</h4>
+                                <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                        <div class="p-5 pt-0">
+                            <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Função para Alternar entre as Abas
         function mudarAba(idAba) {
             const views = document.querySelectorAll('.app-view');
             views.forEach(view => view.classList.add('hidden'));
@@ -430,10 +414,7 @@
                 abaAlvo.classList.remove('hidden');
             }
 
-            // Fecha o menu mobile caso esteja aberto
             document.getElementById('mobile-menu').classList.add('hidden');
-
-            // Rola suavemente para o topo ao trocar de aba
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -456,22 +437,13 @@
             document.getElementById('carousel-desc').innerText = slides[currentSlide].desc;
         }
 
-        // Intervalo automático de 10 segundos (10000ms)
         setInterval(() => {
             mudarSlide(1);
         }, 10000);
 
         // Filtro de Produtos por Categoria
         function filtrarProdutos(categoria) {
-            const cards = document.querySelectorAll('.produto-card');
-            cards.forEach(card => {
-                const catCard = card.getAttribute('data-categoria');
-                if (categoria === 'todos' || catCard === categoria) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            renderizarProdutosLoja(categoria);
         }
 
         // Modal de Detalhes
