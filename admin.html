@@ -26,98 +26,177 @@
         </div>
     </header>
 
+    <!-- Navegação de Abas do Painel -->
+    <div class="bg-white border-b shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 flex gap-6">
+            <button onclick="mudarAbaAdmin('produtos')" id="tab-btn-produtos" class="py-4 font-bold text-sm border-b-2 border-[#0E8685] text-[#0E8685] transition">
+                📦 Gestão de Produtos
+            </button>
+            <button onclick="mudarAbaAdmin('banners')" id="tab-btn-banners" class="py-4 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#0E8685] transition">
+                🖼️ Banners do Carrossel
+            </button>
+        </div>
+    </div>
+
     <!-- Conteúdo Principal -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full space-y-8">
         
-        <!-- Barra de Ações Rápidas -->
-        <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-md border border-gray-100 gap-4">
-            <div>
-                <h2 class="text-xl font-bold text-[#0E8685]">Gestão de Inventário</h2>
-                <p class="text-gray-500 text-sm">Adicione, edite ou remova produtos da vitrine da loja de forma simples.</p>
+        <!-- SEÇÃO 1: PRODUTOS -->
+        <div id="admin-section-produtos" class="space-y-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-md border border-gray-100 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos</h2>
+                    <p class="text-gray-500 text-sm">Adicione, edite preços, descrições e remova itens da vitrine.</p>
+                </div>
+                <button onclick="toggleFormularioProduto()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                    <span>➕</span> <span>Cadastrar Novo Produto</span>
+                </button>
             </div>
-            <button onclick="toggleFormulario()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                <span>➕</span> <span>Cadastrar Novo Produto</span>
-            </button>
+
+            <!-- Formulário de Produto (Oculto por padrão) -->
+            <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Novo Produto</h3>
+                    <button onclick="toggleFormularioProduto()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                </div>
+
+                <form id="product-form" onsubmit="salvarProduto(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="hidden" id="prod-id">
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
+                        <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incenso de Alfazema">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
+                        <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 25.00">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
+                        <select id="prod-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            <option value="Incensos">Incensos</option>
+                            <option value="Pedras">Pedras e Cristais</option>
+                            <option value="Semijoias">Semijoias</option>
+                            <option value="Decoracao">Decoração</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fotografia do Produto</label>
+                        <input type="file" id="prod-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição do Produto</label>
+                        <textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Escreva os detalhes, benefícios ou propriedades energéticas do produto..."></textarea>
+                    </div>
+                    
+                    <div class="md:col-span-2 flex items-center gap-2 pt-2">
+                        <input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded focus:ring-[#0E8685]">
+                        <label for="prod-destaque" class="text-sm font-semibold text-gray-700">Deixar em destaque na Página Inicial da loja</label>
+                    </div>
+                    
+                    <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+                        <button type="submit" id="btn-submit-prod" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">Guardar Produto</button>
+                        <button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabela de Produtos -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos Cadastrados</h3>
+                    <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                <th class="py-3 px-3">Produto</th>
+                                <th class="py-3 px-3">Categoria</th>
+                                <th class="py-3 px-3">Preço</th>
+                                <th class="py-3 px-3 text-center">Destaque Home</th>
+                                <th class="py-3 px-3 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-product-list" class="text-sm divide-y"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <!-- Formulário de Cadastro / Edição (Oculto por padrão) -->
-        <div id="form-container" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 transition-all">
-            <div class="flex justify-between items-center mb-6 border-b pb-4">
-                <h3 id="form-title" class="text-xl font-bold text-[#0E8685] flex items-center gap-2">
-                    <span>📦</span> Novo Produto
-                </h3>
-                <button onclick="toggleFormulario()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+        <!-- SEÇÃO 2: BANNERS DO CARROSSEL -->
+        <div id="admin-section-banners" class="space-y-8 hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-md border border-gray-100 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-[#0E8685]">Banners da Página Inicial (Carrossel)</h2>
+                    <p class="text-gray-500 text-sm">Gerencie as imagens rotativas e os textos exibidos no topo do site.</p>
+                </div>
+                <button onclick="toggleFormularioBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                    <span>➕</span> <span>Adicionar Novo Banner</span>
+                </button>
             </div>
 
-            <form id="product-form" onsubmit="salvarProduto(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input type="hidden" id="prod-id">
-                
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
-                    <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incenso de Alfazema">
+            <!-- Formulário de Banner (Oculto por padrão) -->
+            <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo Banner</h3>
+                    <button onclick="toggleFormularioBanner()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                 </div>
-                
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
-                    <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 25.00">
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
-                    <select id="prod-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                        <option value="Incensos">Incensos</option>
-                        <option value="Pedras">Pedras e Cristais</option>
-                        <option value="Semijoias">Semijoias</option>
-                        <option value="Decoracao">Decoração</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fotografia do Produto</label>
-                    <input type="file" id="prod-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
-                    <p class="text-xs text-gray-400 mt-1">Selecione direto da galeria do telemóvel ou computador.</p>
-                </div>
-                
-                <div class="md:col-span-2 flex items-center gap-2 pt-2">
-                    <input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded focus:ring-[#0E8685]">
-                    <label for="prod-destaque" class="text-sm font-semibold text-gray-700">Deixar em destaque na Página Inicial da loja</label>
-                </div>
-                
-                <div class="md:col-span-2 flex gap-3 pt-4 border-t">
-                    <button type="submit" id="btn-submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">
-                        Guardar Produto
-                    </button>
-                    <button type="button" onclick="toggleFormulario()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
 
-        <!-- Tabela de Inventário -->
-        <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-[#0E8685] flex items-center gap-2">
-                    <span>📋</span> Produtos Cadastrados
-                </h3>
-                <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
+                <form id="banner-form" onsubmit="salvarBanner(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="hidden" id="banner-id">
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selo / Categoria do Topo (Badge)</label>
+                        <input type="text" id="banner-badge" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 🌸 Destaque da Semana">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título Principal do Banner</label>
+                        <input type="text" id="banner-titulo" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incensos Premium & Semijoias">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Exibida no Banner</label>
+                        <textarea id="banner-desc" rows="2" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 100% naturais, sem carvão e com essências que transformam a vibração."></textarea>
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Imagem de Fundo do Banner</label>
+                        <input type="file" id="banner-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <p class="text-xs text-gray-400 mt-1">Selecione uma imagem com boa resolução para o carrossel.</p>
+                    </div>
+                    
+                    <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+                        <button type="submit" id="btn-submit-banner" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">Guardar Banner</button>
+                        <button type="button" onclick="toggleFormularioBanner()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                    </div>
+                </form>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                            <th class="py-3 px-3">Produto</th>
-                            <th class="py-3 px-3">Categoria</th>
-                            <th class="py-3 px-3">Preço</th>
-                            <th class="py-3 px-3 text-center">Destaque Home</th>
-                            <th class="py-3 px-3 text-right">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-product-list" class="text-sm divide-y">
-                        <!-- Carregado via JavaScript -->
-                    </tbody>
-                </table>
+            <!-- Tabela de Banners -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-[#0E8685]">📋 Banners Ativos no Carrossel</h3>
+                    <span id="total-banners" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 banners</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                <th class="py-3 px-3">Banner / Título</th>
+                                <th class="py-3 px-3">Selo</th>
+                                <th class="py-3 px-3">Descrição</th>
+                                <th class="py-3 px-3 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-banner-list" class="text-sm divide-y"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -128,120 +207,122 @@
         © 2026 Ísis Holística — Painel Administrativo Seguro.
     </footer>
 
-    <!-- Script de Gestão do Admin com Upload Direto -->
+    <!-- Script de Gestão Admin -->
     <script>
+        // Dados padrão iniciais
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
-            { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", destaque: true },
-            { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", destaque: true },
-            { id: 3, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", destaque: true }
+            { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética e purificação do ambiente.", destaque: true },
+            { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação e harmonia espiritual.", destaque: true },
+            { id: 3, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde em formato de coração.", destaque: true }
         ];
 
-        renderizarAdmin();
+        let bannersAdmin = JSON.parse(localStorage.getItem('isis_slides')) || [
+            { id: 1, badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.", imagem: "" },
+            { id: 2, badge: "🔮 Espaço Terapêutico", titulo: "Humanoterapia & Psicanálise", desc: "Agende sua sessão de atendimento presencial ou online com Fernanda e Rogério.", imagem: "" }
+        ];
 
-        function toggleFormulario() {
-            const container = document.getElementById('form-container');
-            const isHidden = container.classList.contains('hidden');
-            
-            if (isHidden) {
-                container.classList.remove('hidden');
+        renderizarAdminProdutos();
+        renderizarAdminBanners();
+
+        // Alternar Abas do Painel
+        function mudarAbaAdmin(aba) {
+            const secProd = document.getElementById('admin-section-produtos');
+            const secBan = document.getElementById('admin-section-banners');
+            const btnProd = document.getElementById('tab-btn-produtos');
+            const btnBan = document.getElementById('tab-btn-banners');
+
+            if (aba === 'produtos') {
+                secProd.classList.remove('hidden');
+                secBan.classList.add('hidden');
+                btnProd.className = "py-4 font-bold text-sm border-b-2 border-[#0E8685] text-[#0E8685] transition";
+                btnBan.className = "py-4 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#0E8685] transition";
+            } else {
+                secProd.classList.add('hidden');
+                secBan.classList.remove('hidden');
+                btnBan.className = "py-4 font-bold text-sm border-b-2 border-[#0E8685] text-[#0E8685] transition";
+                btnProd.className = "py-4 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#0E8685] transition";
+            }
+        }
+
+        // --- GESTÃO DE PRODUTOS ---
+        function toggleFormularioProduto() {
+            const container = document.getElementById('form-container-produto');
+            container.classList.toggle('hidden');
+            if (!container.classList.contains('hidden')) {
                 window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
             } else {
-                container.classList.add('hidden');
-                limparFormulario();
+                document.getElementById('product-form').reset();
+                document.getElementById('prod-id').value = '';
+                document.getElementById('form-produto-title').innerText = '📦 Novo Produto';
+                document.getElementById('btn-submit-prod').innerText = 'Guardar Produto';
             }
         }
 
         function salvarProduto(event) {
             event.preventDefault();
-            
             const idProd = document.getElementById('prod-id').value;
             const nome = document.getElementById('prod-nome').value;
             const preco = parseFloat(document.getElementById('prod-preco').value);
             const categoria = document.getElementById('prod-categoria').value;
+            const descricao = document.getElementById('prod-descricao').value;
             const destaque = document.getElementById('prod-destaque').checked;
             const fileInput = document.getElementById('prod-imagem-file');
 
             function gravar(imagemUrl) {
                 if (idProd) {
-                    produtosAdmin = produtosAdmin.map(p => {
-                        if (p.id == idProd) {
-                            return { 
-                                ...p, 
-                                nome, 
-                                preco, 
-                                categoria, 
-                                imagem: imagemUrl || p.imagem, // Mantém a antiga se não escolheu nova
-                                destaque 
-                            };
-                        }
-                        return p;
-                    });
+                    produtosAdmin = produtosAdmin.map(p => p.id == idProd ? { ...p, nome, preco, categoria, descricao, imagem: imagemUrl || p.imagem, destaque } : p);
                     alert('Produto atualizado com sucesso!');
                 } else {
-                    const novoProd = {
+                    produtosAdmin.push({
                         id: Date.now(),
                         nome,
                         preco,
                         categoria,
+                        descricao,
                         imagem: imagemUrl || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500',
                         destaque
-                    };
-                    produtosAdmin.push(novoProd);
+                    });
                     alert('Produto cadastrado com sucesso!');
                 }
-
                 localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
-                toggleFormulario();
-                renderizarAdmin();
+                toggleFormularioProduto();
+                renderizarAdminProdutos();
             }
 
-            // Lê o ficheiro de imagem selecionado convertendo para Base64 local
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    gravar(e.target.result);
-                };
+                reader.onload = e => gravar(e.target.result);
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
                 gravar(null);
             }
         }
 
-        function carregarParaEdicao(id) {
-            const produto = produtosAdmin.find(p => p.id == id);
-            if (!produto) return;
+        function carregarParaEdicaoProduto(id) {
+            const p = produtosAdmin.find(item => item.id == id);
+            if (!p) return;
+            document.getElementById('prod-id').value = p.id;
+            document.getElementById('prod-nome').value = p.nome;
+            document.getElementById('prod-preco').value = p.preco;
+            document.getElementById('prod-categoria').value = p.categoria;
+            document.getElementById('prod-descricao').value = p.descricao || '';
+            document.getElementById('prod-destaque').checked = p.destaque;
 
-            document.getElementById('prod-id').value = produto.id;
-            document.getElementById('prod-nome').value = produto.nome;
-            document.getElementById('prod-preco').value = produto.preco;
-            document.getElementById('prod-categoria').value = produto.categoria;
-            document.getElementById('prod-destaque').checked = produto.destaque;
-            // Nota: o input file fica limpo intencionalmente na edição para permitir manter a foto atual.
-
-            document.getElementById('form-title').innerHTML = '<span>✏️</span> Editar Produto';
-            document.getElementById('btn-submit').innerText = 'Atualizar Produto';
-
-            const container = document.getElementById('form-container');
-            container.classList.remove('hidden');
-            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-        }
-
-        function limparFormulario() {
-            document.getElementById('product-form').reset();
-            document.getElementById('prod-id').value = '';
-            document.getElementById('form-title').innerHTML = '<span>📦</span> Novo Produto';
-            document.getElementById('btn-submit').innerText = 'Guardar Produto';
+            document.getElementById('form-produto-title').innerText = '✏️ Editar Produto';
+            document.getElementById('btn-submit-prod').innerText = 'Atualizar Produto';
+            document.getElementById('form-container-produto').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function excluirProduto(id) {
             if (confirm('Tem certeza que deseja remover este produto?')) {
                 produtosAdmin = produtosAdmin.filter(p => p.id != id);
                 localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
-                renderizarAdmin();
+                renderizarAdminProdutos();
             }
         }
 
-        function renderizarAdmin() {
+        function renderizarAdminProdutos() {
             const tbody = document.getElementById('admin-product-list');
             const counter = document.getElementById('total-produtos');
             tbody.innerHTML = '';
@@ -255,20 +336,126 @@
             produtosAdmin.forEach(p => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50 transition">
-                        <td class="py-3.5 px-3 flex items-center gap-3">
+                        <td class="py-3 px-3 flex items-center gap-3">
                             <img src="${p.imagem}" class="w-10 h-10 object-cover rounded-lg border shadow-sm">
-                            <span class="font-semibold text-gray-800">${p.nome}</span>
+                            <div>
+                                <span class="font-semibold text-gray-800 block">${p.nome}</span>
+                                <span class="text-xs text-gray-400 truncate max-w-xs block">${p.descricao || 'Sem descrição'}</span>
+                            </div>
                         </td>
-                        <td class="py-3.5 px-3 text-gray-600">${p.categoria}</td>
-                        <td class="py-3.5 px-3 font-bold text-[#C5A880]">R$ ${p.preco.toFixed(2).replace('.', ',')}</td>
-                        <td class="py-3.5 px-3 text-center">
+                        <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
+                        <td class="py-3 px-3 font-bold text-[#C5A880]">R$ ${p.preco.toFixed(2).replace('.', ',')}</td>
+                        <td class="py-3 px-3 text-center">
                             <span class="px-2.5 py-1 rounded-full text-xs font-bold ${p.destaque ? 'bg-teal-100 text-[#0E8685]' : 'bg-gray-100 text-gray-500'}">
                                 ${p.destaque ? 'Sim' : 'Não'}
                             </span>
                         </td>
-                        <td class="py-3.5 px-3 text-right space-x-2">
-                            <button onclick="carregarParaEdicao(${p.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">Editar</button>
-                            <button onclick="excluirProduto(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">Excluir</button>
+                        <td class="py-3 px-3 text-right space-x-2">
+                            <button onclick="carregarParaEdicaoProduto(${p.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
+                            <button onclick="excluirProduto(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // --- GESTÃO DE BANNERS ---
+        function toggleFormularioBanner() {
+            const container = document.getElementById('form-container-banner');
+            container.classList.toggle('hidden');
+            if (!container.classList.contains('hidden')) {
+                window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
+            } else {
+                document.getElementById('banner-form').reset();
+                document.getElementById('banner-id').value = '';
+                document.getElementById('form-banner-title').innerText = '🖼️ Novo Banner';
+                document.getElementById('btn-submit-banner').innerText = 'Guardar Banner';
+            }
+        }
+
+        function salvarBanner(event) {
+            event.preventDefault();
+            const idBanner = document.getElementById('banner-id').value;
+            const badge = document.getElementById('banner-badge').value;
+            const titulo = document.getElementById('banner-titulo').value;
+            const desc = document.getElementById('banner-desc').value;
+            const fileInput = document.getElementById('banner-imagem-file');
+
+            function gravarBanner(imagemUrl) {
+                if (idBanner) {
+                    bannersAdmin = bannersAdmin.map(b => b.id == idBanner ? { ...b, badge, titulo, desc, imagem: imagemUrl || b.imagem } : b);
+                    alert('Banner atualizado com sucesso!');
+                } else {
+                    bannersAdmin.push({
+                        id: Date.now(),
+                        badge,
+                        titulo,
+                        desc,
+                        imagem: imagemUrl || ''
+                    });
+                    alert('Banner cadastrado com sucesso!');
+                }
+                localStorage.setItem('isis_slides', JSON.stringify(bannersAdmin));
+                toggleFormularioBanner();
+                renderizarAdminBanners();
+            }
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => gravarBanner(e.target.result);
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                gravarBanner(null);
+            }
+        }
+
+        function carregarParaEdicaoBanner(id) {
+            const b = bannersAdmin.find(item => item.id == id);
+            if (!b) return;
+            document.getElementById('banner-id').value = b.id;
+            document.getElementById('banner-badge').value = b.badge;
+            document.getElementById('banner-titulo').value = b.titulo;
+            document.getElementById('banner-desc').value = b.desc;
+
+            document.getElementById('form-banner-title').innerText = '✏️ Editar Banner';
+            document.getElementById('btn-submit-banner').innerText = 'Atualizar Banner';
+            document.getElementById('form-container-banner').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function excluirBanner(id) {
+            if (confirm('Tem certeza que deseja remover este banner?')) {
+                bannersAdmin = bannersAdmin.filter(b => b.id != id);
+                localStorage.setItem('isis_slides', JSON.stringify(bannersAdmin));
+                renderizarAdminBanners();
+            }
+        }
+
+        function renderizarAdminBanners() {
+            const tbody = document.getElementById('admin-banner-list');
+            const counter = document.getElementById('total-banners');
+            tbody.innerHTML = '';
+            counter.innerText = `${bannersAdmin.length} banner(s)`;
+
+            if (bannersAdmin.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-gray-400">Nenhum banner cadastrado.</td></tr>`;
+                return;
+            }
+
+            bannersAdmin.forEach(b => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="py-3 px-3 flex items-center gap-3">
+                            <div class="w-12 h-8 bg-gray-100 rounded border overflow-hidden flex items-center justify-center">
+                                ${b.imagem ? `<img src="${b.imagem}" class="w-full h-full object-cover">` : '<span class="text-xs text-gray-400">Padrão</span>'}
+                            </div>
+                            <span class="font-semibold text-gray-800">${b.titulo}</span>
+                        </td>
+                        <td class="py-3 px-3 text-xs font-bold text-[#0E8685]">${b.badge}</td>
+                        <td class="py-3 px-3 text-gray-600 truncate max-w-xs">${b.desc}</td>
+                        <td class="py-3 px-3 text-right space-x-2">
+                            <button onclick="carregarParaEdicaoBanner(${b.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
+                            <button onclick="excluirBanner(${b.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Excluir</button>
                         </td>
                     </tr>
                 `;
