@@ -33,10 +33,10 @@
         <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-md border border-gray-100 gap-4">
             <div>
                 <h2 class="text-xl font-bold text-[#0E8685]">Gestão de Inventário</h2>
-                <p class="text-gray-500 text-sm">Adicione, edite ou remova produtos da vitrine da loja.</p>
+                <p class="text-gray-500 text-sm">Adicione, edite ou remova produtos da vitrine da loja de forma simples.</p>
             </div>
             <button onclick="toggleFormulario()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                <span id="btn-toggle-icon">➕</span> <span id="btn-toggle-text">Cadastrar Novo Produto</span>
+                <span>➕</span> <span>Cadastrar Novo Produto</span>
             </button>
         </div>
 
@@ -73,8 +73,9 @@
                 </div>
                 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Link da Imagem (URL)</label>
-                    <input type="url" id="prod-imagem" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="https://exemplo.com/foto.jpg">
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fotografia do Produto</label>
+                    <input type="file" id="prod-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                    <p class="text-xs text-gray-400 mt-1">Selecione direto da galeria do telemóvel ou computador.</p>
                 </div>
                 
                 <div class="md:col-span-2 flex items-center gap-2 pt-2">
@@ -127,7 +128,7 @@
         © 2026 Ísis Holística — Painel Administrativo Seguro.
     </footer>
 
-    <!-- Script de Gestão do Admin -->
+    <!-- Script de Gestão do Admin com Upload Direto -->
     <script>
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
             { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", destaque: true },
@@ -157,33 +158,53 @@
             const nome = document.getElementById('prod-nome').value;
             const preco = parseFloat(document.getElementById('prod-preco').value);
             const categoria = document.getElementById('prod-categoria').value;
-            const imagem = document.getElementById('prod-imagem').value;
             const destaque = document.getElementById('prod-destaque').checked;
+            const fileInput = document.getElementById('prod-imagem-file');
 
-            if (idProd) {
-                produtosAdmin = produtosAdmin.map(p => {
-                    if (p.id == idProd) {
-                        return { ...p, nome, preco, categoria, imagem, destaque };
-                    }
-                    return p;
-                });
-                alert('Produto atualizado com sucesso!');
-            } else {
-                const novoProd = {
-                    id: Date.now(),
-                    nome,
-                    preco,
-                    categoria,
-                    imagem,
-                    destaque
-                };
-                produtosAdmin.push(novoProd);
-                alert('Produto cadastrado com sucesso!');
+            function gravar(imagemUrl) {
+                if (idProd) {
+                    produtosAdmin = produtosAdmin.map(p => {
+                        if (p.id == idProd) {
+                            return { 
+                                ...p, 
+                                nome, 
+                                preco, 
+                                categoria, 
+                                imagem: imagemUrl || p.imagem, // Mantém a antiga se não escolheu nova
+                                destaque 
+                            };
+                        }
+                        return p;
+                    });
+                    alert('Produto atualizado com sucesso!');
+                } else {
+                    const novoProd = {
+                        id: Date.now(),
+                        nome,
+                        preco,
+                        categoria,
+                        imagem: imagemUrl || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500',
+                        destaque
+                    };
+                    produtosAdmin.push(novoProd);
+                    alert('Produto cadastrado com sucesso!');
+                }
+
+                localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
+                toggleFormulario();
+                renderizarAdmin();
             }
 
-            localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
-            toggleFormulario();
-            renderizarAdmin();
+            // Lê o ficheiro de imagem selecionado convertendo para Base64 local
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    gravar(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                gravar(null);
+            }
         }
 
         function carregarParaEdicao(id) {
@@ -194,13 +215,12 @@
             document.getElementById('prod-nome').value = produto.nome;
             document.getElementById('prod-preco').value = produto.preco;
             document.getElementById('prod-categoria').value = produto.categoria;
-            document.getElementById('prod-imagem').value = produto.imagem;
             document.getElementById('prod-destaque').checked = produto.destaque;
+            // Nota: o input file fica limpo intencionalmente na edição para permitir manter a foto atual.
 
             document.getElementById('form-title').innerHTML = '<span>✏️</span> Editar Produto';
             document.getElementById('btn-submit').innerText = 'Atualizar Produto';
 
-            // Abre o formulário se estiver fechado
             const container = document.getElementById('form-container');
             container.classList.remove('hidden');
             window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
