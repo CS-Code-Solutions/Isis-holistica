@@ -35,7 +35,12 @@
                 <a href="#produtos" class="hover:text-[#0E8685]">Loja Esotérica</a>
                 <a href="#terapias" class="hover:text-[#0E8685]">Espaço Terapêutico</a>
             </nav>
-            <div>
+            <div class="flex items-center gap-3">
+                <!-- Botão do Carrinho -->
+                <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 transition">
+                    🛒
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
                 <a href="https://wa.me/message/QL40TUQTW52IA1" target="_blank" rel="noreferrer" class="bg-[#25D366] text-white px-4 py-2 rounded-full text-sm font-bold shadow hover:bg-opacity-90 transition flex items-center gap-2">
                     💬 WhatsApp
                 </a>
@@ -43,56 +48,37 @@
         </div>
     </header>
 
-    <!-- Banner Principal (Hero) -->
-    <section id="home" class="relative bg-[#11999E] text-white py-20 px-6 text-center overflow-hidden">
-        <div class="max-w-3xl mx-auto relative z-10">
-            <span class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow">
-                🌸 Espaço de Luz e Energia
+    <!-- Carrossel / Banner Rotativo -->
+    <section id="home" class="relative bg-[#11999E] text-white py-16 px-6 text-center overflow-hidden">
+        <div class="max-w-3xl mx-auto relative z-10 transition-all duration-500" id="carousel-container">
+            <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow">
+                🌸 Destaque da Semana
             </span>
-            <h2 class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight">
+            <h2 id="carousel-title" class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight">
                 Incensos Premium & Semijoias Esotéricas
             </h2>
-            <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+            <p id="carousel-desc" class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
                 100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.
             </p>
             <a href="#produtos" class="bg-white text-[#0E8685] font-bold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition inline-block">
-                Ver Produtos em Destaque
+                Ver Produtos
             </a>
         </div>
+        <!-- Setas do Carrossel -->
+        <button onclick="mudarSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full">❮</button>
+        <button onclick="mudarSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full">❯</button>
     </section>
 
-    <!-- Categorias -->
-    <div class="max-w-7xl mx-auto px-4 -mt-8 relative z-20 mb-12">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
-                <span class="text-3xl">🌿</span>
-                <h4 class="font-bold text-sm text-[#0E8685] mt-2">Incensos</h4>
-            </div>
-            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
-                <span class="text-3xl">✨</span>
-                <h4 class="font-bold text-sm text-[#0E8685] mt-2">Semijoias</h4>
-            </div>
-            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
-                <span class="text-3xl">🪷</span>
-                <h4 class="font-bold text-sm text-[#0E8685] mt-2">Decoração</h4>
-            </div>
-            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center hover:shadow-lg transition">
-                <span class="text-3xl">🍃</span>
-                <h4 class="font-bold text-sm text-[#0E8685] mt-2">Ervas e Banhos</h4>
-            </div>
-        </div>
-    </div>
-
     <!-- Vitrine de Produtos -->
-    <section id="produtos" class="max-w-7xl mx-auto px-4 py-8 flex-grow">
-        <div class="text-center mb-12">
+    <section id="produtos" class="max-w-7xl mx-auto px-4 py-12 flex-grow">
+        <div class="text-center mb-8">
             <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Nossos Produtos</h3>
-            <p class="text-gray-600 mt-2">Navegue pelas categorias e fortaleça sua fé e energia.</p>
+            <p class="text-gray-600 mt-2">Clique num produto para ver os detalhes e opções.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             <!-- Produto 1 -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100">
+            <div onclick="abrirModal('Incenso Natural Artesanal de Alecrim e Arruda', 18.90, 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60', 'Incensos', false)" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
                 <div>
                     <div class="relative h-64 bg-gray-100">
                         <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60" alt="Incenso" class="w-full h-full object-cover">
@@ -105,14 +91,12 @@
                     </div>
                 </div>
                 <div class="p-5 pt-0">
-                    <a href="https://wa.me/message/QL40TUQTW52IA1?text=Olá! Tenho interesse em adquirir o produto: Incenso Natural Artesanal de Alecrim e Arruda" target="_blank" rel="noreferrer" class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg hover:bg-opacity-90 transition">
-                        Comprar pelo WhatsApp
-                    </a>
+                    <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg">Ver Detalhes</span>
                 </div>
             </div>
 
-            <!-- Produto 2 -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100">
+            <!-- Produto 2 (Exemplo com Pedra Natural) -->
+            <div onclick="abrirModal('Semijoia Quartzo Verde - Coração', 89.90, 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60', 'Semijoias', true)" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
                 <div>
                     <div class="relative h-64 bg-gray-100">
                         <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60" alt="Semijoia" class="w-full h-full object-cover">
@@ -125,83 +109,189 @@
                     </div>
                 </div>
                 <div class="p-5 pt-0">
-                    <a href="https://wa.me/message/QL40TUQTW52IA1?text=Olá! Tenho interesse em adquirir o produto: Semijoia Quartzo Verde - Coração" target="_blank" rel="noreferrer" class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg hover:bg-opacity-90 transition">
-                        Comprar pelo WhatsApp
-                    </a>
-                </div>
-            </div>
-
-            <!-- Produto 3 -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100">
-                <div>
-                    <div class="relative h-64 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60" alt="Vela" class="w-full h-full object-cover">
-                        <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Relaxante</span>
-                    </div>
-                    <div class="p-5">
-                        <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">Decoração</span>
-                        <h4 class="font-bold text-lg mt-1 text-gray-800">Vela Terapêutica de Lavanda</h4>
-                        <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ 45,00</p>
-                    </div>
-                </div>
-                <div class="p-5 pt-0">
-                    <a href="https://wa.me/message/QL40TUQTW52IA1?text=Olá! Tenho interesse em adquirir o produto: Vela Terapêutica de Lavanda" target="_blank" rel="noreferrer" class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg hover:bg-opacity-90 transition">
-                        Comprar pelo WhatsApp
-                    </a>
+                    <span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg">Ver Detalhes</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Seção de Terapias -->
-    <section id="terapias" class="bg-[#EFECE6] py-16 px-4 mt-12">
-        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-                <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Atendimento Especializado</span>
-                <h3 class="text-3xl font-bold mt-2 mb-4 text-gray-900">Espaço Terapêutico Ísis Holística</h3>
-                <p class="text-gray-700 leading-relaxed mb-6">
-                    Por <strong>Fernanda Kristine e Rogério Soares</strong>. Oferecemos suporte completo para o seu autoconhecimento e cura energética através da Humanoterapia, Psicanálise e Radiestesia.
-                </p>
-                <ul class="space-y-3 mb-8 text-gray-700 font-medium">
-                    <li class="flex items-center gap-2">🌿 Humanoterapia para limpeza de bloqueios</li>
-                    <li class="flex items-center gap-2">🧠 Psicanálise clínica e integrativa</li>
-                    <li class="flex items-center gap-2">🔮 Radiestesia e Radiônica aplicada</li>
-                </ul>
-                <a href="https://wa.me/message/QL40TUQTW52IA1?text=Olá! Gostaria de agendar uma sessão terapêutica." target="_blank" rel="noreferrer" class="bg-[#C5A880] text-white font-bold px-6 py-3 rounded-lg shadow hover:bg-opacity-90 transition inline-block">
-                    Agendar Atendimento
+    <!-- Modal / Janela Flutuante de Detalhes do Produto -->
+    <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl relative animate-fadeIn">
+            <button onclick="fecharModal()" class="absolute top-3 right-3 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center">✕</button>
+            <div class="h-56 bg-gray-100">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+                <span id="modal-category" class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider"></span>
+                <h3 id="modal-title" class="text-xl font-bold text-gray-800 mt-1"></h3>
+                <p id="modal-price" class="text-2xl font-extrabold text-[#C5A880] mt-2"></p>
+                
+                <!-- Aviso de Pedra Natural (Condicional) -->
+                <div id="modal-natural-notice" class="hidden mt-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-lg">
+                    ⚠️ <strong>Atenção:</strong> Por se tratar de uma pedra natural, o formato, a cor e a tonalidade podem variar ligeiramente de uma peça para outra.
+                </div>
+
+                <!-- Seletor de Quantidade -->
+                <div class="flex items-center justify-between mt-6">
+                    <span class="text-sm font-semibold text-gray-700">Quantidade:</span>
+                    <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                        <button onclick="alterarQtd(-1)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 font-bold">-</button>
+                        <span id="modal-qty" class="px-4 py-1 font-bold">1</span>
+                        <button onclick="alterarQtd(1)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 font-bold">+</button>
+                    </div>
+                </div>
+
+                <button onclick="adicionarAoCarrinho()" class="mt-6 w-full bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal do Carrinho -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex justify-end">
+        <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl p-6">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h3 class="text-xl font-bold text-[#0E8685]">Seu Carrinho</h3>
+                <button onclick="toggleCartModal()" class="text-gray-500 font-bold">✕ Fechar</button>
+            </div>
+            <div id="cart-items" class="flex-grow overflow-y-auto py-4 space-y-4">
+                <!-- Itens carregados via JavaScript -->
+            </div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total" class="text-[#C5A880]">R$ 0,00</span>
+                </div>
+                <a id="whatsapp-checkout" href="#" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow">
+                    Finalizar Pedido no WhatsApp
                 </a>
             </div>
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 text-center">
-                <div class="text-5xl mb-4">🪷</div>
-                <h4 class="text-xl font-bold text-gray-800 mb-2">Transforme sua energia</h4>
-                <p class="text-gray-600 text-sm mb-6">Entre em contato para tirar dúvidas sobre os atendimentos presenciais em São Leopoldo ou online.</p>
-                <span class="block text-xs text-gray-400">Av. Feitoria, 2.300 - Loja 08, São Leopoldo - RS</span>
-            </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Rodapé -->
-    <footer class="bg-[#1C2833] text-white py-12 px-4">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-            <div>
-                <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Ísis Holística</h5>
-                <p class="text-gray-400">Loja Esotérica & Espaço Terapêutico dedicados ao seu bem-estar, equilíbrio e evolução espiritual.</p>
-            </div>
-            <div>
-                <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Endereço</h5>
-                <p class="text-gray-400">Av. Feitoria 2.300, loja 08</p>
-                <p class="text-gray-400">São Leopoldo - RS, 93042-252</p>
-            </div>
-            <div>
-                <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Contato</h5>
-                <p class="text-gray-400 mb-2">Atendimento direto via WhatsApp para toda a região.</p>
-                <a href="https://wa.me/message/QL40TUQTW52IA1" target="_blank" rel="noreferrer" class="text-[#C5A880] underline font-semibold">Falar com Atendente</a>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">
-            © 2026 Ísis Holística. Todos os direitos reservados.
-        </div>
-    </footer>
+    <!-- Script de Interatividade e Carrinho Persistente -->
+    <script>
+        // Dados do Carrossel
+        const slides = [
+            { badge: "🌸 Destaque da Semana", title: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração." },
+            { badge: "🔮 Espaço Terapêutico", title: "Humanoterapia & Psicanálise", desc: "Agende sua sessão de atendimento presencial ou online com Fernanda e Rogério." }
+        ];
+        let currentSlide = 0;
+        function mudarSlide(direcao) {
+            currentSlide = (currentSlide + direccion + slides.length) % slides.length;
+            document.getElementById('carousel-badge').innerText = slides[currentSlide].badge;
+            document.getElementById('carousel-title').innerText = slides[currentSlide].title;
+            document.getElementById('carousel-desc').innerText = slides[currentSlide].desc;
+        }
 
+        // Gestão do Produto Selecionado no Modal
+        let produtoAtual = {};
+        let quantidadeSelecionada = 1;
+
+        function abrirModal(nome, preco, imagem, categoria, ehNatural) {
+            produtoAtual = { nome, preco, imagem, categoria, ehNatural };
+            quantidadeSelecionada = 1;
+            
+            document.getElementById('modal-title').innerText = nome;
+            document.getElementById('modal-price').innerText = `R$ ${preco.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-img').src = imagem;
+            document.getElementById('modal-category').innerText = categoria;
+            document.getElementById('modal-qty').innerText = quantidadeSelecionada;
+
+            const avisoNatural = document.getElementById('modal-natural-notice');
+            if (ehNatural) {
+                avisoNatural.classList.remove('hidden');
+            } else {
+                avisoNatural.classList.add('hidden');
+            }
+
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function fecharModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function alterarQtd(valor) {
+            quantidadeSelecionada += valor;
+            if (quantidadeSelecionada < 1) quantidadeSelecionada = 1;
+            document.getElementById('modal-qty').innerText = quantidadeSelecionada;
+        }
+
+        // Carrinho com localStorage (Persistente)
+        let carrinho = JSON.parse(localStorage.getItem('isis_carrinho')) || [];
+        atualizarCarrinhoUI();
+
+        function adicionarAoCarrinho() {
+            const itemExistente = carrinho.find(item => item.nome === produtoAtual.nome);
+            if (itemExistente) {
+                itemExistente.qtd += quantidadeSelecionada;
+            } else {
+                carrinho.push({ ...produtoAtual, qtd: quantidadeSelecionada });
+            }
+            salvarEAtualizar();
+            fecharModal();
+            toggleCartModal();
+        }
+
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            salvarEAtualizar();
+        }
+
+        function salvarEAtualizar() {
+            localStorage.setItem('isis_carrinho', JSON.stringify(carrinho));
+            atualizarCarrinhoUI();
+        }
+
+        function atualizarCarrinhoUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            let totalItens = 0;
+            let valorTotal = 0;
+            cartItems.innerHTML = '';
+
+            if (carrinho.length === 0) {
+                cartItems.innerHTML = '<p class="text-gray-500 text-center py-8">O seu carrinho está vazio.</p>';
+            } else {
+                carrinho.forEach((item, index) => {
+                    totalItens += item.qtd;
+                    valorTotal += item.preco * item.qtd;
+                    cartItems.innerHTML += `
+                        <div class="flex items-center justify-between border-b pb-3">
+                            <div class="flex items-center gap-3">
+                                <img src="${item.imagem}" class="w-12 h-12 object-cover rounded-lg">
+                                <div>
+                                    <h4 class="font-bold text-sm">${item.nome}</h4>
+                                    <p class="text-xs text-gray-500">Qtd: ${item.qtd} x R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+                                </div>
+                            </div>
+                            <button onclick="removerDoCarrinho(${index})" class="text-red-500 text-xs font-bold">Remover</button>
+                        </div>
+                    `;
+                });
+            }
+
+            cartCount.innerText = totalItens;
+            cartTotal.innerText = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+
+            // Gerar link do WhatsApp com os itens do carrinho
+            let msg = "Olá! Gostaria de fazer o pedido:%0A";
+            carrinho.forEach(item => {
+                msg += `- ${item.qtd}x ${item.nome} (R$ ${(item.preco * item.qtd).toFixed(2)})%0A`;
+            });
+            msg += `%0ATotal: R$ ${valorTotal.toFixed(2)}`;
+            document.getElementById('whatsapp-checkout').href = `https://wa.me/message/QL40TUQTW52IA1?text=${msg}`;
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>
