@@ -21,7 +21,7 @@
     <!-- Cabeçalho -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <!-- Logótipo Horizontal Ajustado (logo4.png) -->
+            <!-- Logótipo Horizontal (logo4.png) -->
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
                 <img src="logo4.png" alt="Ísis Holística" class="h-14 md:h-20 w-auto object-contain">
             </div>
@@ -353,7 +353,7 @@
             menu.classList.toggle('hidden');
         }
 
-        // Carrossel da Home
+        // Carrossel da Home com Troca Automática a cada 10 segundos
         const slides = [
             { badge: "🌸 Destaque da Semana", title: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração." },
             { badge: "🔮 Espaço Terapêutico", title: "Humanoterapia & Psicanálise", desc: "Agende sua sessão de atendimento presencial ou online com Fernanda e Rogério." }
@@ -365,6 +365,11 @@
             document.getElementById('carousel-title').innerText = slides[currentSlide].title;
             document.getElementById('carousel-desc').innerText = slides[currentSlide].desc;
         }
+
+        // Intervalo automático de 10 segundos (10000ms)
+        setInterval(() => {
+            mudarSlide(1);
+        }, 10000);
 
         // Filtro de Produtos por Categoria
         function filtrarProdutos(categoria) {
