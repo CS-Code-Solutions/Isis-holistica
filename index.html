@@ -21,90 +21,145 @@
     <!-- Cabeçalho -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="mudarAba('view-home')">
                 <div class="w-12 h-12 rounded-full overflow-hidden bg-[#0E8685] flex items-center justify-center shadow-md border border-[#C5A880]">
                     <img src="logo.png" alt="Ísis Holística" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold tracking-tight text-[#0E8685]">ÍSIS HOLÍSTICA</h1>
+                    <h1 class="text-lg md:text-xl font-bold tracking-tight text-[#0E8685]">ÍSIS HOLÍSTICA</h1>
                     <p class="text-xs text-gray-500">Energia • Equilíbrio • Bem-estar</p>
                 </div>
             </div>
             
-            <!-- Menu de Navegação -->
+            <!-- Menu Desktop -->
             <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center">
-                <a href="#home" class="hover:text-[#0E8685]">Início</a>
-                <a href="#quem-somos" class="hover:text-[#0E8685]">Quem Somos</a>
-                <!-- Menu Dropdown de Produtos -->
+                <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
+                <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Quem Somos</button>
+                
+                <!-- Menu Dropdown de Produtos no Desktop -->
                 <div class="relative group py-2">
-                    <a href="#produtos" class="hover:text-[#0E8685] flex items-center gap-1">Produtos ▾</a>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] flex items-center gap-1 transition">Produtos ▾</button>
                     <div class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-xl py-2 hidden group-hover:block border border-gray-100">
-                        <a href="#produtos" onclick="filtrarProdutos('todos')" class="block px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">Todos os Produtos</a>
-                        <a href="#produtos" onclick="filtrarProdutos('Incensos')" class="block px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🌿 Incensos</a>
-                        <a href="#produtos" onclick="filtrarProdutos('Pedras')" class="block px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🔮 Pedras e Cristais</a>
-                        <a href="#produtos" onclick="filtrarProdutos('Semijoias')" class="block px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">✨ Semijoias</a>
-                        <a href="#produtos" onclick="filtrarProdutos('Decoracao')" class="block px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🪷 Decoração</a>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">Todos os Produtos</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🌿 Incensos</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🔮 Pedras e Cristais</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">✨ Semijoias</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🪷 Decoração</button>
                     </div>
                 </div>
-                <a href="#terapias" class="hover:text-[#0E8685]">Espaço Terapêutico</a>
+
+                <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685] transition">Espaço Terapêutico</button>
             </nav>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
                 <!-- Botão do Carrinho -->
                 <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 transition">
                     🛒
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                 </button>
-                <a href="https://wa.me/message/QL40TUQTW52IA1" target="_blank" rel="noreferrer" class="hidden sm:flex bg-[#25D366] text-white px-4 py-2 rounded-full text-sm font-bold shadow hover:bg-opacity-90 transition items-center gap-2">
+                <a href="https://wa.me/message/QL40TUQTW52IA1" target="_blank" rel="noreferrer" class="hidden sm:flex bg-[#25D366] text-white px-3 py-2 rounded-full text-xs md:text-sm font-bold shadow hover:bg-opacity-90 transition items-center gap-1">
                     💬 WhatsApp
                 </a>
+                <!-- Botão Hamburguer Mobile -->
+                <button onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg text-gray-700 font-bold">
+                    ☰
+                </button>
             </div>
+        </div>
+
+        <!-- Menu Mobile Oculto (Gaveta) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
+            <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
+            <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Quem Somos</button>
+            <div class="border-t pt-2 pb-1 text-xs font-bold text-[#0E8685] uppercase">Categorias de Produtos</div>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">📦 Todos os Produtos</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🌿 Incensos</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🔮 Pedras e Cristais</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">✨ Semijoias</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🪷 Decoração</button>
+            <div class="border-t pt-2"></div>
+            <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
+            <a href="https://wa.me/message/QL40TUQTW52IA1" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-2.5 rounded-xl mt-2">
+                💬 Falar no WhatsApp
+            </a>
         </div>
     </header>
 
-    <!-- Carrossel / Banner Rotativo -->
-    <section id="home" class="relative bg-[#11999E] text-white py-16 px-6 text-center overflow-hidden">
-        <div class="max-w-3xl mx-auto relative z-10 transition-all duration-500" id="carousel-container">
-            <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow">
-                🌸 Destaque da Semana
-            </span>
-            <h2 id="carousel-title" class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight">
-                Incensos Premium & Semijoias Esotéricas
-            </h2>
-            <p id="carousel-desc" class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-                100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.
-            </p>
-            <a href="#produtos" class="bg-white text-[#0E8685] font-bold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition inline-block">
-                Ver Produtos
-            </a>
+    <!-- CONTEÚDO DINÂMICO (ABAS) -->
+
+    <!-- ABA 1: INÍCIO (HOME / CARROSSEL) -->
+    <section id="view-home" class="app-view flex-grow">
+        <div class="relative bg-[#11999E] text-white py-20 px-6 text-center overflow-hidden">
+            <div class="max-w-3xl mx-auto relative z-10 transition-all duration-500" id="carousel-container">
+                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow">
+                    🌸 Destaque da Semana
+                </span>
+                <h2 id="carousel-title" class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight">
+                    Incensos Premium & Semijoias Esotéricas
+                </h2>
+                <p id="carousel-desc" class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+                    100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.
+                </p>
+                <button onclick="mudarAba('view-produtos')" class="bg-white text-[#0E8685] font-bold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition inline-block">
+                    Ver Loja de Produtos
+                </button>
+            </div>
+            <button onclick="mudarSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full">❮</button>
+            <button onclick="mudarSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full">❯</button>
         </div>
-        <button onclick="mudarSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full">❮</button>
-        <button onclick="mudarSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full">❯</button>
+
+        <!-- Atalhos rápidos na Home -->
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-[#0E8685]">Explore Nossas Categorias</h3>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
+                    <span class="text-3xl">🌿</span>
+                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Incensos</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
+                    <span class="text-3xl">🔮</span>
+                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Pedras e Cristais</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
+                    <span class="text-3xl">✨</span>
+                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Semijoias</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
+                    <span class="text-3xl">🪷</span>
+                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Decoração</h4>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- Seção Quem Somos -->
-    <section id="quem-somos" class="py-16 px-4 bg-white">
+    <!-- ABA 2: QUEM SOMOS -->
+    <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-4xl mx-auto text-center">
             <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Nossa Essência</span>
             <h3 class="text-3xl font-bold mt-2 mb-6 text-gray-900">Quem Somos</h3>
             <p class="text-gray-700 leading-relaxed text-base md:text-lg mb-6">
                 A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual. Mais do que uma loja esotérica, somos um espaço acolhedor dedicado à elevação da vibração através de elementos naturais, aromaterapia, cristais e acessórios com significado.
             </p>
-            <p class="text-gray-700 leading-relaxed text-base md:text-lg">
+            <p class="text-gray-700 leading-relaxed text-base md:text-lg mb-8">
                 Fundada com amor e dedicação em São Leopoldo - RS, unimos o comércio consciente de produtos esotéricos ao suporte terapêutico especializado para guiar a sua jornada de autoconhecimento.
             </p>
+            <button onclick="mudarAba('view-produtos')" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition">
+                Conhecer Nossos Produtos
+            </button>
         </div>
     </section>
 
-    <!-- Vitrine de Produtos -->
-    <section id="produtos" class="max-w-7xl mx-auto px-4 py-12 flex-grow">
+    <!-- ABA 3: PRODUTOS (VITRINE E FILTROS) -->
+    <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
         <div class="text-center mb-8">
-            <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Nossos Produtos</h3>
-            <p class="text-gray-600 mt-2">Filtre por categoria ou clique num produto para ver os detalhes.</p>
+            <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
+            <p class="text-gray-600 mt-2">Selecione uma categoria ou clique no produto para ver detalhes.</p>
             
             <!-- Botões de Filtro por Categoria -->
             <div class="flex flex-wrap justify-center gap-2 mt-6">
-                <button onclick="filtrarProdutos('todos')" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
+                <button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
                 <button onclick="filtrarProdutos('Incensos')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌿 Incensos</button>
                 <button onclick="filtrarProdutos('Pedras')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
                 <button onclick="filtrarProdutos('Semijoias')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">✨ Semijoias</button>
@@ -169,8 +224,8 @@
         </div>
     </section>
 
-    <!-- Seção de Terapias -->
-    <section id="terapias" class="bg-[#EFECE6] py-16 px-4 mt-12">
+    <!-- ABA 4: ESPAÇO TERAPÊUTICO -->
+    <section id="view-terapias" class="app-view hidden flex-grow bg-[#EFECE6] py-16 px-4">
         <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Atendimento Especializado</span>
@@ -275,9 +330,32 @@
         </div>
     </footer>
 
-    <!-- Script de Interatividade -->
+    <!-- Script de Interatividade e Gestão de Abas -->
     <script>
-        // Carrossel
+        // Função para Alternar entre as Abas (Oculta todas e mostra apenas a selecionada)
+        function mudarAba(idAba) {
+            const views = document.querySelectorAll('.app-view');
+            views.forEach(view => view.classList.add('hidden'));
+            
+            const abaAlvo = document.getElementById(idAba);
+            if (abaAlvo) {
+                abaAlvo.classList.remove('hidden');
+            }
+
+            // Fecha o menu mobile caso esteja aberto
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Rola suavemente para o topo ao trocar de aba
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Abrir/Fechar Menu Mobile
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Carrossel da Home
         const slides = [
             { badge: "🌸 Destaque da Semana", title: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração." },
             { badge: "🔮 Espaço Terapêutico", title: "Humanoterapia & Psicanálise", desc: "Agende sua sessão de atendimento presencial ou online com Fernanda e Rogério." }
