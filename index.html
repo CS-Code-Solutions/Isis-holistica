@@ -295,14 +295,17 @@
             <div id="cart-items" class="flex-grow overflow-y-auto py-4 space-y-4">
                 <!-- Itens carregados via JavaScript -->
             </div>
-            <div class="border-t pt-4">
-                <div class="flex justify-between font-bold text-lg mb-4">
+            <div class="border-t pt-4 space-y-2">
+                <div class="flex justify-between font-bold text-lg mb-2">
                     <span>Total:</span>
                     <span id="cart-total" class="text-[#C5A880]">R$ 0,00</span>
                 </div>
                 <a id="whatsapp-checkout" href="#" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow">
                     Finalizar Pedido no WhatsApp
                 </a>
+                <button onclick="toggleCartModal()" class="w-full text-center bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl hover:bg-gray-200 transition">
+                    Continuar Comprando
+                </button>
             </div>
         </div>
     </div>
