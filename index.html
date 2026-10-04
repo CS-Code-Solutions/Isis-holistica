@@ -285,7 +285,7 @@
         </div>
     </section>
 
-    <!-- Modal de Detalhes -->
+    <!-- Modal de Detalhes do Produto -->
     <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl relative">
             <button onclick="fecharModal()" class="absolute top-3 right-3 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center">✕</button>
@@ -316,7 +316,7 @@
         </div>
     </div>
 
-    <!-- Carrinho -->
+    <!-- Carrinho Lateral -->
     <div id="cart-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex justify-end">
         <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl p-6">
             <div class="flex justify-between items-center border-b pb-4">
@@ -329,9 +329,60 @@
                     <span>Total:</span>
                     <span id="cart-total" class="text-[#C5A880]">R$ 0,00</span>
                 </div>
-                <a id="whatsapp-checkout" href="#" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow">Finalizar Pedido no WhatsApp</a>
+                <!-- Botão alterado para abrir o formulário de cadastro antes do WhatsApp -->
+                <button onclick="abrirFormularioCheckout()" class="w-full text-center bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow">Avançar para Dados de Entrega</button>
                 <button onclick="toggleCartModal()" class="w-full text-center bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl hover:bg-gray-200 transition">Continuar Comprando</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro / Checkout (Novo) -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="fecharFormularioCheckout()" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center">✕</button>
+            
+            <h3 class="text-xl font-bold text-[#0E8685] mb-1">Finalizar Pedido</h3>
+            <p class="text-xs text-gray-500 mb-6">Preencha seus dados para entrega e cálculo de frete.</p>
+            
+            <form id="form-checkout" onsubmit="enviarPedidoWhatsApp(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome Completo</label>
+                    <input type="text" id="cli-nome" required placeholder="Ex: Maria da Silva" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685]">
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">CEP</label>
+                        <input type="text" id="cli-cep" required placeholder="Ex: 93042-252" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">CPF</label>
+                        <input type="text" id="cli-cpf" required placeholder="Ex: 000.000.000-00" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685]">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Endereço Completo (Rua, Nº, Bairro, Cidade)</label>
+                    <textarea id="cli-endereco" rows="2" required placeholder="Ex: Av. Feitoria, 2300 - Pinheiro, São Leopoldo - RS" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Forma de Pagamento Desejada</label>
+                    <select id="cli-pagamento" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685] bg-white">
+                        <option value="Pix">Pix</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Dinheiro (Retirada na Loja)">Dinheiro (Retirada na Loja)</option>
+                    </select>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-800 leading-relaxed">
+                    💡 <strong>Atenção:</strong> Ao avançar, seu pedido será gerado e enviado para análise. Aguarde o nosso retorno pelo WhatsApp com os custos e prazos de entrega/retirada.
+                </div>
+
+                <button type="submit" class="w-full bg-[#25D366] text-white font-bold py-3.5 rounded-xl hover:bg-opacity-95 transition shadow-lg flex items-center justify-center gap-2">
+                    💬 Enviar Pedido para Análise no WhatsApp
+                </button>
+            </form>
         </div>
     </div>
 
@@ -554,17 +605,56 @@
 
             cartCount.innerText = totalItens;
             cartTotal.innerText = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
-
-            let msg = "Olá! Gostaria de fazer o pedido:%0A";
-            carrinho.forEach(item => {
-                msg += `- ${item.qtd}x ${item.nome} (R$ ${(item.preco * item.qtd).toFixed(2)})%0A`;
-            });
-            msg += `%0ATotal: R$ ${valorTotal.toFixed(2)}`;
-            document.getElementById('whatsapp-checkout').href = `https://wa.me/555195508826?text=${msg}`;
         }
 
         function toggleCartModal() {
             document.getElementById('cart-modal').classList.toggle('hidden');
+        }
+
+        function abrirFormularioCheckout() {
+            if (carrinho.length === 0) {
+                alert("O seu carrinho está vazio!");
+                return;
+            }
+            toggleCartModal(); // Fecha o carrinho
+            document.getElementById('checkout-modal').classList.remove('hidden'); // Abre o formulário
+        }
+
+        function fecharFormularioCheckout() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function enviarPedidoWhatsApp(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('cli-nome').value;
+            const cep = document.getElementById('cli-cep').value;
+            const cpf = document.getElementById('cli-cpf').value;
+            const endereco = document.getElementById('cli-endereco').value;
+            const pagamento = document.getElementById('cli-pagamento').value;
+
+            let valorTotal = 0;
+            let msg = `✨ *NOVO PEDIDO - ÍSIS HOLÍSTICA* ✨%0A%0A`;
+            msg += `👤 *Cliente:* ${nome}%0A`;
+            msg += `📄 *CPF:* ${cpf}%0A`;
+            msg += `📍 *CEP:* ${cep}%0A`;
+            msg += `🏠 *Endereço:* ${endereco}%0A`;
+            msg += `💳 *Forma de Pagamento:* ${pagamento}%0A%0A`;
+            msg += `📦 *ITENS DO PEDIDO:*%0A`;
+
+            carrinho.forEach(item => {
+                const subtotal = item.preco * item.qtd;
+                valorTotal += subtotal;
+                msg += `- ${item.qtd}x ${item.nome} (R$ ${subtotal.toFixed(2)})%0A`;
+            });
+
+            msg += `%0A💰 *Subtotal Produtos:* R$ ${valorTotal.toFixed(2)}%0A`;
+            msg += `*(Aguardando análise de custo/forma de entrega pela loja)*`;
+
+            fecharFormularioCheckout();
+            
+            // Abre o WhatsApp com a mensagem estruturada
+            window.open(`https://wa.me/555195508826?text=${msg}`, '_blank');
         }
     </script>
 </body>
