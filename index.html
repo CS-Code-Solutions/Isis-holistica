@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ísis Holística | Loja Esotérica e Espaço Terapêutico</title>
+    <!-- Ícone da Página (Favicon) -->
+    <link rel="icon" type="image/png" href="ico.png">
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -80,13 +82,16 @@
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🔮 Pedras e Cristais</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">✨ Semijoias</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🪷 Decoração</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🕯️️ Velas</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🕯️ Velas</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🗿 Imagens (Esculturas)</button>
                     </div>
                 </div>
 
-                <!-- Botão Destacado no Menu -->
-                <button onclick="mudarAba('view-terapias')" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-4 py-2 rounded-xl transition flex items-center gap-1.5 font-bold border border-teal-200">🪷 Espaço Terapêutico</button>
+                <!-- Botão Destacado com SVG Seguro -->
+                <button onclick="mudarAba('view-terapias')" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-4 py-2 rounded-xl transition flex items-center gap-2 font-bold border border-teal-200 shadow-sm">
+                    <svg class="w-4 h-4 text-[#0E8685]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9.5 6 6 8.5 6 12c0 3.3 2.7 6 6 6s6-2.7 6-6c0-3.5-3.5-6-6-10zm0 14c-2.2 0-4-1.8-4-4 0-2.2 4-5.5 4-5.5s4 3.3 4 5.5c0 2.2-1.8 4-4 4z"/></svg>
+                    Espaço Terapêutico
+                </button>
             </nav>
 
             <div class="flex items-center gap-2">
@@ -98,7 +103,7 @@
             </div>
         </div>
 
-        <!-- Menu Mobile Limpo -->
+        <!-- Menu Mobile -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
             <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Quem Somos</button>
@@ -114,9 +119,9 @@
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🗿 Imagens (Esculturas)</button>
             
             <div class="border-t pt-2"></div>
-            <!-- Botão de Espaço Terapêutico Destacado no Mobile -->
             <button onclick="mudarAba('view-terapias')" class="w-full text-center bg-teal-50 text-[#0E8685] border border-teal-200 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-                🪷 Espaço Terapêutico
+                <svg class="w-4 h-4 text-[#0E8685]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9.5 6 6 8.5 6 12c0 3.3 2.7 6 6 6s6-2.7 6-6c0-3.5-3.5-6-6-10zm0 14c-2.2 0-4-1.8-4-4 0-2.2 4-5.5 4-5.5s4 3.3 4 5.5c0 2.2-1.8 4-4 4z"/></svg>
+                Espaço Terapêutico
             </button>
         </div>
     </header>
@@ -337,8 +342,10 @@
                 </p>
                 <a href="https://wa.me/555195508826?text=Olá! Gostaria de agendar uma sessão terapêutica." target="_blank" rel="noreferrer" class="bg-[#C5A880] text-white font-bold px-6 py-3 rounded-lg shadow hover:bg-opacity-90 transition inline-block">Agendar Atendimento</a>
             </div>
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 text-center">
-                <div class="text-5xl mb-4">🪷</div>
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 text-center flex flex-col items-center justify-center">
+                <div class="w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center text-[#0E8685] mb-4 shadow-sm border border-teal-100">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9.5 6 6 8.5 6 12c0 3.3 2.7 6 6 6s6-2.7 6-6c0-3.5-3.5-6-6-10zm0 14c-2.2 0-4-1.8-4-4 0-2.2 4-5.5 4-5.5s4 3.3 4 5.5c0 2.2-1.8 4-4 4z"/></svg>
+                </div>
                 <h4 class="text-xl font-bold text-gray-800 mb-2">Transforme sua energia</h4>
                 <p class="text-gray-600 text-sm mb-6">Atendimentos presenciais na nossa loja física em São Leopoldo ou online.</p>
                 <span class="block text-xs text-gray-400">Av. Feitoria, nº 2.300 - Lj 08 - Pinheiro, São Leopoldo - RS</span>
@@ -369,7 +376,7 @@
                 </div>
 
                 <div id="modal-natural-notice" class="hidden mt-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-xl">
-                    ⚠️️ <strong>Atenção:</strong> Por se tratar de um produto natural, o formato, tamanho e tonalidade podem variar por serem únicos.
+                    ⚠️ <strong>Atenção:</strong> Por se tratar de um produto natural, o formato, tamanho e tonalidade podem variar por serem únicos.
                 </div>
 
                 <div class="flex items-center justify-between mt-6">
@@ -473,7 +480,7 @@
         </div>
         <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500 flex flex-col sm:flex-row justify-between items-center gap-2">
             <span>© 2026 Ísis Holística. Todos os direitos reservados.</span>
-            <span class="text-gray-400 font-medium">Desenvolvido por <strong class="text-[#C5A880]">CS Code Solutions</strong></span>
+            <span>Powered by <strong class="text-[#C5A880]">CS Code Solutions</strong></span>
         </div>
     </footer>
 
