@@ -58,11 +58,11 @@
         ✨ Mais que produtos, energia para o seu dia a dia! Conheça nossa curadoria esotérica e terapias holísticas.
     </div>
 
-    <!-- Cabeçalho -->
+    <!-- Cabeçalho (Com logo2.png) -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
-                <img src="logo.png" alt="Ísis Holística" class="h-16 md:h-24 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
+                <img src="logo2.png" alt="Ísis Holística" class="h-16 md:h-24 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
             </div>
             
             <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center">
@@ -176,7 +176,7 @@
         </div>
     </section>
 
-    <!-- ABA 2: QUEM SOMOS -->
+    <!-- ABA 2: QUEM SOMOS (Com logo.png) -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-5xl mx-auto">
             <div class="flex flex-col md:flex-row items-center gap-8 mb-12 bg-[#F8F9FA] p-6 md:p-12 rounded-3xl border border-gray-100 shadow-sm">
@@ -329,14 +329,13 @@
                     <span>Total:</span>
                     <span id="cart-total" class="text-[#C5A880]">R$ 0,00</span>
                 </div>
-                <!-- Botão alterado para abrir o formulário de cadastro antes do WhatsApp -->
                 <button onclick="abrirFormularioCheckout()" class="w-full text-center bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow">Avançar para Dados de Entrega</button>
                 <button onclick="toggleCartModal()" class="w-full text-center bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl hover:bg-gray-200 transition">Continuar Comprando</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Cadastro / Checkout (Novo) -->
+    <!-- Modal de Cadastro / Checkout -->
     <div id="checkout-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button onclick="fecharFormularioCheckout()" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center">✕</button>
@@ -616,8 +615,8 @@
                 alert("O seu carrinho está vazio!");
                 return;
             }
-            toggleCartModal(); // Fecha o carrinho
-            document.getElementById('checkout-modal').classList.remove('hidden'); // Abre o formulário
+            toggleCartModal();
+            document.getElementById('checkout-modal').classList.remove('hidden');
         }
 
         function fecharFormularioCheckout() {
@@ -652,8 +651,6 @@
             msg += `*(Aguardando análise de custo/forma de entrega pela loja)*`;
 
             fecharFormularioCheckout();
-            
-            // Abre o WhatsApp com a mensagem estruturada
             window.open(`https://wa.me/555195508826?text=${msg}`, '_blank');
         }
     </script>
