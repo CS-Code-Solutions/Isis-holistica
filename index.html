@@ -141,7 +141,7 @@
             <button onclick="mudarSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20 carousel-content">❯</button>
         </div>
 
-        <!-- Categorias na Home (Compactas e Proporcionais) -->
+        <!-- Categorias na Home -->
         <div class="max-w-7xl mx-auto px-4 pt-8 pb-4">
             <div class="text-center mb-6">
                 <h3 class="text-xl md:text-2xl font-bold text-[#0E8685]">Explore Nossas Categorias</h3>
@@ -183,25 +183,63 @@
         </div>
     </section>
 
-    <!-- ABA 2: QUEM SOMOS -->
+    <!-- ABA 2: QUEM SOMOS (ATUALIZADA CONFORME A APRESENTAÇÃO OFICIAL) -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div class="flex justify-center items-center">
-                <img src="logo.png" alt="Ísis Holística" class="w-full max-w-xs md:max-w-md h-auto object-contain rounded-2xl shadow-xl border border-[#C5A880]/30 p-6 bg-gray-50 pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
-            </div>
-            <div class="text-left">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-12">
                 <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Nossa Essência</span>
-                <h3 class="text-3xl md:text-4xl font-bold mt-2 mb-6 text-gray-900">Quem Somos</h3>
-                <p class="text-gray-700 leading-relaxed text-base mb-4">
-                    A <strong>Ísis Holística</strong> é uma loja física situada na <strong>Av. Feitoria, 2300 - Lj 08 - Pinheiro, São Leopoldo - RS</strong>, fundada com o propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual.
+                <h3 class="text-3xl md:text-4xl font-bold mt-2 mb-4 text-gray-900">Ísis Holística</h3>
+                <p class="text-gray-700 leading-relaxed text-base">
+                    Conheça a Ísis, mais que uma loja, um espaço de acolhimento e encontro. Localizada na <strong>Av. Feitoria nº 2300, Loja 08, Bairro Pinheiro, São Leopoldo - RS</strong>.
                 </p>
-                <p class="text-gray-700 leading-relaxed text-base mb-4">
-                    Contamos com uma curadoria completa de produtos esotéricos para harmonizar o seu corpo, mente e espírito, incluindo: incensos, ervas, defumações, banhos, perfumes, aromatizadores de ambiente, cristais e pedras, oráculos e tarôs, velas e óleos essenciais, artigos religiosos, tabacaria e itens de decoração e presentes.
-                </p>
-                <p class="text-gray-700 leading-relaxed text-base mb-6">
-                    Além da loja física, oferecemos um <strong>Espaço Terapêutico</strong> especializado conduzido por Fernanda Kristine e Rogério Soares, com Humanoterapia, Psicanálise e Radiestesia para guiar a sua jornada de autoconhecimento.
-                </p>
-                <button onclick="mudarAba('view-produtos')" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition">Conhecer Nossos Produtos</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Caixa da Loja -->
+                <div class="bg-[#F8F9FA] p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="text-3xl mb-3">🛍️</div>
+                    <h4 class="text-xl font-bold text-[#0E8685] mb-4">Loja de Produtos Esotéricos</h4>
+                    <p class="text-xs font-bold text-gray-500 uppercase mb-3">Nossa curadoria de produtos inclui:</p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center gap-2"><span>•</span> Incensos, Ervas, Defumações, Banhos, Perfumes</li>
+                        <li class="flex items-center gap-2"><span>•</span> Aromatizadores de ambiente</li>
+                        <li class="flex items-center gap-2"><span>•</span> Cristais e Pedras</li>
+                        <li class="flex items-center gap-2"><span>•</span> Oráculos e Tarôs</li>
+                        <li class="flex items-center gap-2"><span>•</span> Velas e Óleos Essenciais</li>
+                        <li class="flex items-center gap-2"><span>•</span> Artigos religiosos</li>
+                        <li class="flex items-center gap-2"><span>•</span> Tabacaria</li>
+                        <li class="flex items-center gap-2"><span>•</span> Itens de Decoração e Presentes</li>
+                    </ul>
+                </div>
+
+                <!-- Caixa das Terapias -->
+                <div class="bg-[#F8F9FA] p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="text-3xl mb-3">🪷</div>
+                    <h4 class="text-xl font-bold text-[#0E8685] mb-4">Terapias Holísticas</h4>
+                    <div class="space-y-4 text-sm text-gray-700">
+                        <div>
+                            <strong class="text-gray-900 block mb-0.5">Humanoterapia:</strong>
+                            <p class="text-xs text-gray-600 leading-relaxed">Tratamento energético e espiritual para limpar bloqueios profundos, além de trazer a reconexão pessoal. Utiliza técnicas como humanometria, mesa quantiônica, TDR, regressão, táquions tok e baralho terapêutico.</p>
+                        </div>
+                        <div>
+                            <strong class="text-gray-900 block mb-0.5">Psicanálise:</strong>
+                            <p class="text-xs text-gray-600 leading-relaxed">Tratamento terapêutico com uma visão mais ampla sobre a consciência e o propósito de vida. Investigação do inconsciente, promovendo o autoconhecimento e saúde mental.</p>
+                        </div>
+                        <div>
+                            <strong class="text-gray-900 block mb-0.5">Radiestesia e Radiónica:</strong>
+                            <p class="text-xs text-gray-600 leading-relaxed">Alinhamento energético e harmonização.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rodapé de Agendamento -->
+            <div class="bg-[#0E8685] text-white p-8 rounded-2xl text-center shadow-lg flex flex-col sm:flex-row justify-between items-center gap-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-200 block mb-1">Para Terapias Agende o Seu Horário</span>
+                    <a href="https://wa.me/555195508826?text=Olá! Gostaria de agendar uma sessão terapêutica." target="_blank" rel="noreferrer" class="text-xl sm:text-2xl font-extrabold hover:underline">💬 (51) 9550-8826</a>
+                </div>
+                <button onclick="mudarAba('view-produtos')" class="bg-white text-[#0E8685] font-bold px-6 py-3 rounded-xl shadow hover:bg-gray-100 transition">Ver Loja Virtual</button>
             </div>
         </div>
     </section>
@@ -239,7 +277,7 @@
                 <div class="text-5xl mb-4">🪷</div>
                 <h4 class="text-xl font-bold text-gray-800 mb-2">Transforme sua energia</h4>
                 <p class="text-gray-600 text-sm mb-6">Atendimentos presenciais na nossa loja física em São Leopoldo ou online.</p>
-                <span class="block text-xs text-gray-400">Av. Feitoria, 2.300 - Lj 08 - Pinheiro, São Leopoldo - RS</span>
+                <span class="block text-xs text-gray-400">Av. Feitoria, nº 2.300 - Lj 08 - Pinheiro, São Leopoldo - RS</span>
             </div>
         </div>
     </section>
@@ -303,8 +341,8 @@
             </div>
             <div>
                 <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Loja Física & Endereço</h5>
-                <p class="text-gray-400 font-semibold">Av. Feitoria, 2.300 - Lj 08 - Pinheiro</p>
-                <p class="text-gray-400">São Leopoldo - RS, 93042-252</p>
+                <p class="text-gray-400 font-semibold">Av. Feitoria, nº 2.300 - Lj 08 - Pinheiro</p>
+                <p class="text-gray-400">São Leopoldo - RS</p>
                 <p class="text-gray-500 text-xs mt-2">Visite o nosso espaço físico e sinta a energia de perto!</p>
             </div>
             <div>
