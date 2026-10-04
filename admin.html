@@ -115,8 +115,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Upload da Fotografia do Produto</label>
-                        <input type="file" id="prod-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Imagem do Produto (URL ou Ficheiro)</label>
+                        <input type="text" id="prod-imagem" placeholder="Link da imagem ou selecione o ficheiro abaixo" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                        <input type="file" id="prod-imagem-file" accept="image/*" onchange="converterImagemParaBase64(this, 'prod-imagem')" class="w-full text-xs text-gray-500">
                     </div>
 
                     <div class="md:col-span-2">
@@ -130,7 +131,7 @@
                     </div>
                     
                     <div class="md:col-span-2 flex gap-3 pt-4 border-t">
-                        <button type="submit" id="btn-submit-prod" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Produto</button>
+                        <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Produto</button>
                         <button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
                     </div>
                 </form>
@@ -213,8 +214,9 @@
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Upload da Fotografia do Depósito</label>
-                        <input type="file" id="dep-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Imagem do Depósito (URL ou Ficheiro)</label>
+                        <input type="text" id="dep-imagem" placeholder="Link da imagem ou selecione o ficheiro abaixo" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                        <input type="file" id="dep-imagem-file" accept="image/*" onchange="converterImagemParaBase64(this, 'dep-imagem')" class="w-full text-xs text-gray-500">
                     </div>
 
                     <div class="md:col-span-2">
@@ -289,34 +291,52 @@
                     </div>
                     
                     <div>
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️️ Imagem para PC (Computador)</label>
-                        <input type="file" id="banner-imagem-pc-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (URL ou Ficheiro)</label>
+                        <input type="text" id="banner-imgpc" placeholder="Link da imagem PC" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                        <input type="file" accept="image/*" onchange="converterImagemParaBase64(this, 'banner-imgpc')" class="w-full text-xs text-gray-500">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem para Mobile (Telemóvel)</label>
-                        <input type="file" id="banner-imagem-mob-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem para Mobile (URL ou Ficheiro)</label>
+                        <input type="text" id="banner-imgmob" placeholder="Link da imagem Mobile" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                        <input type="file" accept="image/*" onchange="converterImagemParaBase64(this, 'banner-imgmob')" class="w-full text-xs text-gray-500">
                     </div>
-                    
+
+                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Destino ao Clicar no Banner</label>
+                            <select id="banner-linktipo" onchange="alternarDestinoBannerAdmin(this.value)" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white">
+                                <option value="produtos">Loja / Produtos</option>
+                                <option value="terapias">Espaço Terapêutico</option>
+                                <option value="produto">Produto Específico</option>
+                            </select>
+                        </div>
+                        <div id="banner-linkalvo-container" class="hidden">
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selecione o Produto Alvo</label>
+                            <select id="banner-linkalvo-prod" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white"></select>
+                        </div>
+                    </div>
+
                     <div class="md:col-span-2 flex gap-3 pt-4 border-t">
-                        <button type="submit" id="btn-submit-banner" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Banner</button>
+                        <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Banner</button>
                         <button type="button" onclick="toggleFormularioBanner()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
                     </div>
                 </form>
             </div>
 
+            <!-- Tabela dos Banners -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-[#0E8685]">📋 Banners Ativos no Carrossel</h3>
+                    <h3 class="text-lg font-bold text-[#0E8685]">🖼️ Banners Registrados</h3>
                     <span id="total-banners" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 banners</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                                <th class="py-3 px-3">Banner / Miniaturas</th>
-                                <th class="py-3 px-3">Selo</th>
-                                <th class="py-3 px-3">Descrição</th>
+                                <th class="py-3 px-3">Banner / Título</th>
+                                <th class="py-3 px-3">Badge</th>
+                                <th class="py-3 px-3">Destino do Clique</th>
                                 <th class="py-3 px-3 text-right">Ações</th>
                             </tr>
                         </thead>
@@ -328,71 +348,195 @@
 
     </main>
 
-    <!-- Script de Gestão Admin -->
+    <!-- SCRIPT DE GESTÃO DO ADMIN -->
     <script>
-        let depositoAdmin = JSON.parse(localStorage.getItem('isis_deposito')) || [
-            { id: 101, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", fragrancia: "Alecrim e Arruda", marca: "Artesanal", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética.", quantidade: 15 },
-            { id: 102, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", subvariacao: "Cristal Bruto", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação.", quantidade: 8 },
-            { id: 103, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", subvariacao: "Folheado a Ouro com Pedra Bruta", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde.", quantidade: 5 },
-            { id: 104, nome: "Vela Aromática de Lavanda Calmante", preco: 29.90, categoria: "Velas", aroma: "Lavanda Calmante", imagem: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60", descricao: "Vela 100% vegetal com essência calmante de lavanda.", quantidade: 12 },
-            { id: 105, nome: "Escultura de Oxalá", preco: 79.90, categoria: "Imagens (Esculturas)", subvariacao: "Axé", imagem: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&auto=format&fit=crop&q=60", descricao: "Imagem artesanal de Oxalá em resina de alta qualidade.", quantidade: 6 }
-        ];
+        // Dados locais sincronizados com localStorage
+        let listaProdutos = JSON.parse(localStorage.getItem('isis_produtos')) || [];
+        let listaDeposito = JSON.parse(localStorage.getItem('isis_deposito')) || [];
+        let listaBanners = JSON.parse(localStorage.getItem('isis_slides')) || [];
 
-        let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
-            { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética e purificação do ambiente.", destaque: true },
-            { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação e harmonia espiritual.", destaque: true },
-            { id: 3, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde em formato de coração.", destaque: true }
-        ];
+        // Inicialização ao carregar a página
+        document.addEventListener("DOMContentLoaded", () => {
+            renderizarTabelaProdutos();
+            renderizarTabelaDeposito();
+            renderizarTabelaBanners();
+            atualizarSelectDeposito();
+            atualizarSubCamposDeposito();
+            atualizarSelectProdutosBanner();
+        });
 
-        let bannersAdmin = JSON.parse(localStorage.getItem('isis_slides')) || [
-            { id: 1, badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.", imagemPc: "", imagemMobile: "" },
-            { id: 2, badge: "🔮 Espaço Terapêutico", titulo: "Jornada para o Equilíbrio", desc: "Humanoterapia & Psicanálise: Uma abordagem integrativa para mente, corpo e espírito.", imagemPc: "watermarked_img_16767091141142337326.jpg", imagemMobile: "watermarked_img_4253682499609492167.jpg" }
-        ];
+        // Alternar Abas do Painel
+        function mudarAbaAdmin(aba) {
+            document.getElementById('admin-section-inventario').classList.add('hidden');
+            document.getElementById('admin-section-deposito').classList.add('hidden');
+            document.getElementById('admin-section-banners').classList.add('hidden');
 
-        renderizarAdminProdutos();
-        renderizarAdminDeposito();
-        renderizarAdminBanners();
-        atualizarSubCamposDeposito();
+            document.getElementById('nav-inventario').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+            document.getElementById('nav-deposito').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+            document.getElementById('nav-banners').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+
+            if (aba === 'inventario') {
+                document.getElementById('admin-section-inventario').classList.remove('hidden');
+                document.getElementById('nav-inventario').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
+            } else if (aba === 'deposito') {
+                document.getElementById('admin-section-deposito').classList.remove('hidden');
+                document.getElementById('nav-deposito').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
+            } else if (aba === 'banners') {
+                document.getElementById('admin-section-banners').classList.remove('hidden');
+                document.getElementById('nav-banners').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
+            }
+        }
 
         function toggleAdminMobileMenu() {
             const sidebar = document.getElementById('admin-sidebar');
             sidebar.classList.toggle('hidden');
         }
 
-        function mudarAbaAdmin(aba) {
-            const secInv = document.getElementById('admin-section-inventario');
-            const secDep = document.getElementById('admin-section-deposito');
-            const secBan = document.getElementById('admin-section-banners');
-            
-            const navInv = document.getElementById('nav-inventario');
-            const navDep = document.getElementById('nav-deposito');
-            const navBan = document.getElementById('nav-banners');
-
-            secInv.classList.add('hidden');
-            secDep.classList.add('hidden');
-            secBan.classList.add('hidden');
-
-            navInv.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
-            navDep.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
-            navBan.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
-
-            if (aba === 'inventario') {
-                secInv.classList.remove('hidden');
-                navInv.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
-            } else if (aba === 'deposito') {
-                secDep.classList.remove('hidden');
-                navDep.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
-            } else if (aba === 'banners') {
-                secBan.classList.remove('hidden');
-                navBan.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
-            }
-
-            if (window.innerWidth < 768) {
-                document.getElementById('admin-sidebar').classList.add('hidden');
+        // Conversor de imagem para Base64
+        function converterImagemParaBase64(input, targetId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(targetId).value = e.target.result;
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // --- SUB-CAMPOS DINÂMICOS NO DEPÓSITO ---
+        // ================= GESTÃO DE PRODUTOS / INVENTÁRIO =================
+        function toggleFormularioProduto() {
+            document.getElementById('form-container-produto').classList.toggle('hidden');
+        }
+
+        function abrirNovoProduto() {
+            document.getElementById('prod-id').value = '';
+            document.getElementById('product-form').reset();
+            document.getElementById('form-produto-title').innerText = "📦 Adicionar Produto do Depósito";
+            atualizarSelectDeposito();
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+
+        function atualizarSelectDeposito() {
+            const filtroCat = document.getElementById('prod-filtro-cat').value;
+            const selectDep = document.getElementById('prod-deposito-select');
+            selectDep.innerHTML = '';
+            
+            const filtrados = listaDeposito.filter(d => d.categoria === filtroCat);
+            if (filtrados.length === 0) {
+                selectDep.innerHTML = '<option value="">Nenhum item disponível no depósito para esta categoria</option>';
+                return;
+            }
+
+            filtrados.forEach((item, idx) => {
+                selectDep.innerHTML += `<option value="${idx}">${item.nome} (Estoque: ${item.qtd}) - R$ ${item.preco}</option>`;
+            });
+            preencherDoDeposito();
+        }
+
+        function preencherDoDeposito() {
+            const filtroCat = document.getElementById('prod-filtro-cat').value;
+            const idx = document.getElementById('prod-deposito-select').value;
+            const filtrados = listaDeposito.filter(d => d.categoria === filtroCat);
+            const item = filtrados[idx];
+
+            if (item) {
+                document.getElementById('prod-nome').value = item.nome;
+                document.getElementById('prod-preco').value = item.preco;
+                document.getElementById('prod-categoria').value = item.categoria;
+                document.getElementById('prod-imagem').value = item.imagem || '';
+                document.getElementById('prod-descricao').value = item.descricao || '';
+            }
+        }
+
+        function salvarProduto(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value;
+            const nome = document.getElementById('prod-nome').value;
+            const preco = parseFloat(document.getElementById('prod-preco').value);
+            const categoria = document.getElementById('prod-filtro-cat').value;
+            const imagem = document.getElementById('prod-imagem').value;
+            const descricao = document.getElementById('prod-descricao').value;
+            const destaque = document.getElementById('prod-destaque').checked;
+
+            if (id !== '') {
+                listaProdutos[id] = { id: Number(id), nome, preco, categoria, imagem, descricao, destaque };
+            } else {
+                listaProdutos.push({ id: Date.now(), nome, preco, categoria, imagem, descricao, destaque });
+            }
+
+            localStorage.setItem('isis_produtos', JSON.stringify(listaProdutos));
+            renderizarTabelaProdutos();
+            toggleFormularioProduto();
+        }
+
+        function renderizarTabelaProdutos() {
+            const tbody = document.getElementById('admin-product-list');
+            const counter = document.getElementById('total-produtos');
+            tbody.innerHTML = '';
+            counter.innerText = `${listaProdutos.length} produtos`;
+
+            if (listaProdutos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum produto cadastrado na vitrine.</td></tr>`;
+                return;
+            }
+
+            listaProdutos.forEach((p, idx) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3 px-3 flex items-center gap-3">
+                            <img src="${p.imagem || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border">
+                            <span class="font-bold text-gray-800">${p.nome}</span>
+                        </td>
+                        <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
+                        <td class="py-3 px-3 font-extrabold text-[#C5A880]">R$ ${p.preco.toFixed(2)}</td>
+                        <td class="py-3 px-3 text-center">${p.destaque ? '<span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold">Sim</span>' : '<span class="text-gray-400 text-xs">Não</span>'}</td>
+                        <td class="py-3 px-3 text-right space-x-2">
+                            <button onclick="editarProduto(${idx})" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
+                            <button onclick="removerProduto(${idx})" class="text-red-500 hover:underline font-bold text-xs">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function editarProduto(idx) {
+            const p = listaProdutos[idx];
+            document.getElementById('prod-id').value = idx;
+            document.getElementById('prod-filtro-cat').value = p.categoria;
+            atualizarSelectDeposito();
+            document.getElementById('prod-nome').value = p.nome;
+            document.getElementById('prod-preco').value = p.preco;
+            document.getElementById('prod-categoria').value = p.categoria;
+            document.getElementById('prod-imagem').value = p.imagem || '';
+            document.getElementById('prod-descricao').value = p.descricao || '';
+            document.getElementById('prod-destaque').checked = p.destaque || false;
+            document.getElementById('form-produto-title').innerText = "📦 Editar Produto na Loja";
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+
+        function removerProduto(idx) {
+            if (confirm("Tem certeza que deseja remover este produto da vitrine?")) {
+                listaProdutos.splice(idx, 1);
+                localStorage.setItem('isis_produtos', JSON.stringify(listaProdutos));
+                renderizarTabelaProdutos();
+            }
+        }
+
+
+        // ================= GESTÃO DE DEPÓSITO / ESTOQUE =================
+        function toggleFormularioDeposito() {
+            document.getElementById('form-container-deposito').classList.toggle('hidden');
+        }
+
+        function abrirNovoDeposito() {
+            document.getElementById('dep-id').value = '';
+            document.getElementById('deposito-form').reset();
+            document.getElementById('form-deposito-title').innerText = "🏢 Novo Item no Depósito";
+            atualizarSubCamposDeposito();
+            document.getElementById('form-container-deposito').classList.remove('hidden');
+        }
+
         function atualizarSubCamposDeposito() {
             const cat = document.getElementById('dep-categoria').value;
             const container = document.getElementById('sub-campos-container');
@@ -402,481 +546,269 @@
                 container.innerHTML = `
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fragrância</label>
-                        <input type="text" id="dep-fragrancia" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Lavanda, Alecrim">
+                        <input type="text" id="sub-fragrancia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white" placeholder="Ex: Lavanda">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Marca</label>
-                        <input type="text" id="dep-marca" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Fênix, Sagrada Madre">
+                        <input type="text" id="sub-marca" class="w-full px-3 py-2 border rounded-lg text-sm bg-white" placeholder="Ex: Incensário X">
+                    </div>
+                `;
+            } else if (cat === 'Pedras' || cat === 'Semijoias') {
+                container.innerHTML = `
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-variação (Bruto, Polido, etc.)</label>
+                        <input type="text" id="sub-variacao" class="w-full px-3 py-2 border rounded-lg text-sm bg-white" placeholder="Ex: Bruto / Rolado">
                     </div>
                 `;
             } else if (cat === 'Velas') {
                 container.innerHTML = `
-                    <div class="md:col-span-2">
+                    <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Aroma da Vela</label>
-                        <input type="text" id="dep-aroma" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Baunilha, Canela, Capim-limão">
-                    </div>
-                `;
-            } else if (cat === 'Pedras') {
-                container.innerHTML = `
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-variação (Ex: Bruto, Polido, Rolado)</label>
-                        <input type="text" id="dep-subvariacao" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Bruto, Polido, Ponta de Cristal">
-                    </div>
-                `;
-            } else if (cat === 'Semijoias') {
-                container.innerHTML = `
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Acabamento / Sub-tipo (Ex: Folheado a Ouro, Pedra Bruta)</label>
-                        <input type="text" id="dep-subvariacao" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Folheado a Ouro, Prata, Com Pedra Bruta">
+                        <input type="text" id="sub-aroma" class="w-full px-3 py-2 border rounded-lg text-sm bg-white" placeholder="Ex: Canela e Mel">
                     </div>
                 `;
             } else if (cat === 'Imagens (Esculturas)') {
                 container.innerHTML = `
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Subcategoria da Imagem</label>
-                        <select id="dep-subvariacao" class="w-full px-4 py-2 border rounded-xl text-sm bg-white">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-categoria</label>
+                        <select id="sub-categoria-img" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
                             <option value="Católica">Católica</option>
                             <option value="Zen">Zen</option>
                             <option value="Axé">Axé</option>
                         </select>
                     </div>
                 `;
-            } else {
-                container.innerHTML = `
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Detalhes Adicionais</label>
-                        <input type="text" id="dep-subvariacao" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Especificações do item">
-                    </div>
-                `;
             }
         }
 
-        // --- GESTÃO DE DEPÓSITO ---
-        function abrirNovoDeposito() {
-            document.getElementById('deposito-form').reset();
-            document.getElementById('dep-id').value = '';
-            atualizarSubCamposDeposito();
-            const container = document.getElementById('form-container-deposito');
-            container.classList.remove('hidden');
-            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-        }
-
-        function toggleFormularioDeposito() {
-            document.getElementById('form-container-deposito').classList.toggle('hidden');
-        }
-
-        function editarDeposito(id) {
-            const item = depositoAdmin.find(d => d.id == id);
-            if (!item) return;
-
-            const container = document.getElementById('form-container-deposito');
-            container.classList.remove('hidden');
-
-            document.getElementById('dep-id').value = item.id;
-            document.getElementById('dep-nome').value = item.nome;
-            document.getElementById('dep-categoria').value = item.categoria;
-            document.getElementById('dep-preco').value = item.preco;
-            document.getElementById('dep-qtd').value = item.quantidade;
-            document.getElementById('dep-descricao').value = item.descricao || '';
-
-            atualizarSubCamposDeposito();
-
-            if (document.getElementById('dep-fragrancia')) document.getElementById('dep-fragrancia').value = item.fragrancia || '';
-            if (document.getElementById('dep-marca')) document.getElementById('dep-marca').value = item.marca || '';
-            if (document.getElementById('dep-aroma')) document.getElementById('dep-aroma').value = item.aroma || '';
-            if (document.getElementById('dep-subvariacao')) document.getElementById('dep-subvariacao').value = item.subvariacao || '';
-
-            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-        }
-
-        function salvarItemDeposito(event) {
-            event.preventDefault();
-            const id = document.getElementById('dep-id').value || Date.now();
+        function salvarItemDeposito(e) {
+            e.preventDefault();
+            const id = document.getElementById('dep-id').value;
             const nome = document.getElementById('dep-nome').value;
             const categoria = document.getElementById('dep-categoria').value;
             const preco = parseFloat(document.getElementById('dep-preco').value);
-            const quantidade = parseInt(document.getElementById('dep-qtd').value) || 0;
+            const qtd = parseInt(document.getElementById('dep-qtd').value);
+            const imagem = document.getElementById('dep-imagem').value;
             const descricao = document.getElementById('dep-descricao').value;
-            const fileInput = document.getElementById('dep-imagem-file');
 
-            const fragrancia = document.getElementById('dep-fragrancia') ? document.getElementById('dep-fragrancia').value : '';
-            const marca = document.getElementById('dep-marca') ? document.getElementById('dep-marca').value : '';
-            const aroma = document.getElementById('dep-aroma') ? document.getElementById('dep-aroma').value : '';
-            const subvariacao = document.getElementById('dep-subvariacao') ? document.getElementById('dep-subvariacao').value : '';
-
-            const itemExistente = depositoAdmin.find(d => d.id == id);
-            const imagemAtual = itemExistente ? itemExistente.imagem : 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500';
-
-            function gravar(imagemUrl) {
-                const item = { 
-                    id: Number(id), 
-                    nome, 
-                    categoria, 
-                    preco, 
-                    quantidade,
-                    fragrancia,
-                    marca,
-                    aroma,
-                    subvariacao,
-                    imagem: imagemUrl || imagemAtual, 
-                    descricao 
-                };
-                
-                const idx = depositoAdmin.findIndex(d => d.id == id);
-                if (idx >= 0) {
-                    depositoAdmin[idx] = item;
-                    alert('Item atualizado no depósito com sucesso!');
-                } else {
-                    depositoAdmin.push(item);
-                    alert('Item cadastrado no depósito com sucesso!');
-                }
-
-                localStorage.setItem('isis_deposito', JSON.stringify(depositoAdmin));
-                toggleFormularioDeposito();
-                renderizarAdminDeposito();
+            // Recolher sub-campos
+            let subDetalhes = {};
+            if (categoria === 'Incensos') {
+                subDetalhes.fragrancia = document.getElementById('sub-fragrancia')?.value || '';
+                subDetalhes.marca = document.getElementById('sub-marca')?.value || '';
+            } else if (categoria === 'Pedras' || categoria === 'Semijoias') {
+                subDetalhes.variacao = document.getElementById('sub-variacao')?.value || '';
+            } else if (categoria === 'Velas') {
+                subDetalhes.aroma = document.getElementById('sub-aroma')?.value || '';
+            } else if (categoria === 'Imagens (Esculturas)') {
+                subDetalhes.subCategoriaImg = document.getElementById('sub-categoria-img')?.value || '';
             }
 
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => gravar(e.target.result);
-                reader.readAsDataURL(fileInput.files[0]);
+            const itemData = { id: id !== '' ? Number(id) : Date.now(), nome, categoria, preco, qtd, imagem, descricao, subDetalhes };
+
+            if (id !== '') {
+                listaDeposito[id] = itemData;
             } else {
-                gravar(null);
+                listaDeposito.push(itemData);
             }
+
+            localStorage.setItem('isis_deposito', JSON.stringify(listaDeposito));
+            renderizarTabelaDeposito();
+            atualizarSelectDeposito();
+            toggleFormularioDeposito();
         }
 
-        function renderizarAdminDeposito() {
+        function renderizarTabelaDeposito() {
             const tbody = document.getElementById('admin-deposito-list');
             const counter = document.getElementById('total-deposito');
             tbody.innerHTML = '';
-            counter.innerText = `${depositoAdmin.length} item(ns)`;
+            counter.innerText = `${listaDeposito.length} itens`;
 
-            if (depositoAdmin.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">Nenhum item no depósito.</td></tr>`;
+            if (listaDeposito.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum item registrado no depósito.</td></tr>`;
                 return;
             }
 
-            depositoAdmin.forEach(d => {
-                let detalheExtra = '';
-                if (d.fragrancia) detalheExtra += `Fragrância: ${d.fragrancia} `;
-                if (d.marca) detalheExtra += `| Marca: ${d.marca} `;
-                if (d.aroma) detalheExtra += `Aroma: ${d.aroma} `;
-                if (d.subvariacao) detalheExtra += `Sub: ${d.subvariacao} `;
+            listaDeposito.forEach((d, idx) => {
+                let infoExtra = '';
+                if (d.subDetalhes) {
+                    if (d.subDetalhes.fragrancia) infoExtra += `Fragrância: ${d.subDetalhes.fragrancia} | `;
+                    if (d.subDetalhes.marca) infoExtra += `Marca: ${d.subDetalhes.marca} | `;
+                    if (d.subDetalhes.variacao) infoExtra += `Tipo: ${d.subDetalhes.variacao} | `;
+                    if (d.subDetalhes.aroma) infoExtra += `Aroma: ${d.subDetalhes.aroma} | `;
+                    if (d.subDetalhes.subCategoriaImg) infoExtra += `Sub: ${d.subDetalhes.subCategoriaImg} | `;
+                }
 
                 tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 transition">
+                    <tr class="hover:bg-gray-50">
                         <td class="py-3 px-3 flex items-center gap-3">
-                            <img src="${d.imagem}" class="w-10 h-10 object-cover rounded-lg border shadow-sm">
+                            <img src="${d.imagem || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border">
                             <div>
-                                <span class="font-semibold text-gray-800 block">${d.nome}</span>
-                                <span class="text-xs text-teal-700 block">${detalheExtra}</span>
+                                <span class="font-bold text-gray-800 block">${d.nome}</span>
+                                <span class="text-xs text-gray-400">${infoExtra}</span>
                             </div>
                         </td>
                         <td class="py-3 px-3 text-gray-600">${d.categoria}</td>
-                        <td class="py-3 px-3 font-bold text-[#C5A880]">R$ ${d.preco.toFixed(2).replace('.', ',')}</td>
-                        <td class="py-3 px-3 text-center">
-                            <span class="px-3 py-1 rounded-full text-xs font-bold ${d.quantidade > 3 ? 'bg-teal-50 text-[#0E8685]' : 'bg-red-50 text-red-600'}">
-                                ${d.quantidade ?? 0} un.
-                            </span>
-                        </td>
-                        <td class="py-3 px-3 text-right">
-                            <div class="flex items-center justify-end gap-2">
-                                <button onclick="editarDeposito(${d.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
-                                <button onclick="removerDeposito(${d.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
-                            </div>
+                        <td class="py-3 px-3 font-extrabold text-[#C5A880]">R$ ${d.preco.toFixed(2)}</td>
+                        <td class="py-3 px-3 text-center"><span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs">${d.qtd} un.</span></td>
+                        <td class="py-3 px-3 text-right space-x-2">
+                            <button onclick="editarDeposito(${idx})" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
+                            <button onclick="removerDeposito(${idx})" class="text-red-500 hover:underline font-bold text-xs">Excluir</button>
                         </td>
                     </tr>
                 `;
             });
         }
 
-        function removerDeposito(id) {
-            if (confirm('Tem certeza que deseja remover este item do depósito?')) {
-                depositoAdmin = depositoAdmin.filter(d => d.id != id);
-                localStorage.setItem('isis_deposito', JSON.stringify(depositoAdmin));
-                renderizarAdminDeposito();
-            }
-        }
-
-        // --- GESTÃO DE PRODUTOS (LOJA) ---
-        function abrirNovoProduto() {
-            document.getElementById('product-form').reset();
-            document.getElementById('prod-id').value = '';
-            atualizarSelectDeposito();
-            const container = document.getElementById('form-container-produto');
-            container.classList.remove('hidden');
-            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-        }
-
-        function toggleFormularioProduto() {
-            document.getElementById('form-container-produto').classList.toggle('hidden');
-        }
-
-        function editarProduto(id) {
-            const p = produtosAdmin.find(prod => prod.id == id);
-            if (!p) return;
-
-            const container = document.getElementById('form-container-produto');
-            container.classList.remove('hidden');
-
-            document.getElementById('prod-id').value = p.id;
-            document.getElementById('prod-filtro-cat').value = p.categoria;
-            atualizarSelectDeposito();
-
-            document.getElementById('prod-nome').value = p.nome;
-            document.getElementById('prod-preco').value = p.preco;
-            document.getElementById('prod-categoria').value = p.categoria;
-            document.getElementById('prod-descricao').value = p.descricao || '';
-            document.getElementById('prod-destaque').checked = !!p.destaque;
-
-            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-        }
-
-        function atualizarSelectDeposito() {
-            const catFiltro = document.getElementById('prod-filtro-cat').value;
-            const selectDep = document.getElementById('prod-deposito-select');
-            selectDep.innerHTML = '';
-
-            const filtrados = depositoAdmin.filter(d => d.categoria === catFiltro);
-
-            if (filtrados.length === 0) {
-                selectDep.innerHTML = `<option value="">Nenhum item nesta categoria no depósito</option>`;
-                document.getElementById('prod-nome').value = '';
-                document.getElementById('prod-preco').value = '';
-                document.getElementById('prod-categoria').value = catFiltro;
-                document.getElementById('prod-descricao').value = '';
-                return;
-            }
-
-            filtrados.forEach(item => {
-                selectDep.innerHTML += `<option value="${item.id}">${item.nome} (Estoque: ${item.quantidade ?? 0} | R$ ${item.preco.toFixed(2)})</option>`;
-            });
-
-            preencherDoDeposito();
-        }
-
-        function preencherDoDeposito() {
-            const selectDep = document.getElementById('prod-deposito-select');
-            const itemId = selectDep.value;
-            const item = depositoAdmin.find(d => d.id == itemId);
-
-            if (item) {
-                document.getElementById('prod-nome').value = item.nome;
-                document.getElementById('prod-preco').value = item.preco;
-                document.getElementById('prod-categoria').value = item.categoria;
-                document.getElementById('prod-descricao').value = item.descricao || '';
-            }
-        }
-
-        function salvarProduto(event) {
-            event.preventDefault();
-            const idProd = document.getElementById('prod-id').value;
-            const nome = document.getElementById('prod-nome').value;
-            const preco = parseFloat(document.getElementById('prod-preco').value);
-            const categoria = document.getElementById('prod-filtro-cat').value;
-            const descricao = document.getElementById('prod-descricao').value;
-            const destaque = document.getElementById('prod-destaque').checked;
-            const fileInput = document.getElementById('prod-imagem-file');
-            const selectDep = depositoAdmin.find(d => d.id == document.getElementById('prod-deposito-select').value);
-            const imagemPadrao = selectDep ? selectDep.imagem : 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500';
-
-            function gravar(imagemUrl) {
-                if (idProd) {
-                    produtosAdmin = produtosAdmin.map(p => p.id == idProd ? { ...p, nome, preco, categoria, descricao, imagem: imagemUrl || p.imagem, destaque } : p);
-                    alert('Produto atualizado na loja com sucesso!');
-                } else {
-                    produtosAdmin.push({
-                        id: Date.now(),
-                        nome,
-                        preco,
-                        categoria,
-                        descricao,
-                        imagem: imagemUrl || imagemPadrao,
-                        destaque,
-                        fragrancia: selectDep ? selectDep.fragrancia : '',
-                        marca: selectDep ? selectDep.marca : '',
-                        aroma: selectDep ? selectDep.aroma : '',
-                        subvariacao: selectDep ? selectDep.subvariacao : ''
-                    });
-                    alert('Produto cadastrado na loja com sucesso!');
+        function editarDeposito(idx) {
+            const d = listaDeposito[idx];
+            document.getElementById('dep-id').value = idx;
+            document.getElementById('dep-nome').value = d.nome;
+            document.getElementById('dep-categoria').value = d.categoria;
+            document.getElementById('dep-preco').value = d.preco;
+            document.getElementById('dep-qtd').value = d.qtd;
+            document.getElementById('dep-imagem').value = d.imagem || '';
+            document.getElementById('dep-descricao').value = d.descricao || '';
+            
+            atualizarSubCamposDeposito();
+            
+            // Preencher sub-campos se existirem
+            setTimeout(() => {
+                if (d.subDetalhes) {
+                    if (document.getElementById('sub-fragrancia')) document.getElementById('sub-fragrancia').value = d.subDetalhes.fragrancia || '';
+                    if (document.getElementById('sub-marca')) document.getElementById('sub-marca').value = d.subDetalhes.marca || '';
+                    if (document.getElementById('sub-variacao')) document.getElementById('sub-variacao').value = d.subDetalhes.variacao || '';
+                    if (document.getElementById('sub-aroma')) document.getElementById('sub-aroma').value = d.subDetalhes.aroma || '';
+                    if (document.getElementById('sub-categoria-img')) document.getElementById('sub-categoria-img').value = d.subDetalhes.subCategoriaImg || '';
                 }
-                localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
-                toggleFormularioProduto();
-                renderizarAdminProdutos();
-            }
+            }, 50);
 
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => gravar(e.target.result);
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                gravar(null);
-            }
+            document.getElementById('form-deposito-title').innerText = "🏢 Editar Item no Depósito";
+            document.getElementById('form-container-deposito').classList.remove('hidden');
         }
 
-        function renderizarAdminProdutos() {
-            const tbody = document.getElementById('admin-product-list');
-            const counter = document.getElementById('total-produtos');
-            tbody.innerHTML = '';
-            counter.innerText = `${produtosAdmin.length} produto(s)`;
-
-            if (produtosAdmin.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">Nenhum produto cadastrado na vitrine.</td></tr>`;
-                return;
-            }
-
-            produtosAdmin.forEach(p => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="py-3 px-3 flex items-center gap-3">
-                            <img src="${p.imagem}" class="w-10 h-10 object-cover rounded-lg border shadow-sm">
-                            <div>
-                                <span class="font-semibold text-gray-800 block">${p.nome}</span>
-                                <span class="text-xs text-gray-400 truncate max-w-xs block">${p.descricao || ''}</span>
-                            </div>
-                        </td>
-                        <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
-                        <td class="py-3 px-3 font-bold text-[#C5A880]">R$ ${p.preco.toFixed(2).replace('.', ',')}</td>
-                        <td class="py-3 px-3 text-center">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${p.destaque ? 'bg-teal-100 text-[#0E8685]' : 'bg-gray-100 text-gray-500'}">
-                                ${p.destaque ? 'Sim' : 'Não'}
-                            </span>
-                        </td>
-                        <td class="py-3 px-3 text-right">
-                            <div class="flex items-center justify-end gap-2">
-                                <button onclick="editarProduto(${p.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
-                                <button onclick="excluirProduto(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function excluirProduto(id) {
-            if (confirm('Tem certeza que deseja remover este produto da vitrine?')) {
-                produtosAdmin = produtosAdmin.filter(p => p.id != id);
-                localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
-                renderizarAdminProdutos();
+        function removerDeposito(idx) {
+            if (confirm("Tem certeza que deseja apagar este item do depósito?")) {
+                listaDeposito.splice(idx, 1);
+                localStorage.setItem('isis_deposito', JSON.stringify(listaDeposito));
+                renderizarTabelaDeposito();
+                atualizarSelectDeposito();
             }
         }
 
-        // --- GESTÃO DE BANNERS ---
-        function abrirNovoBanner() {
-            document.getElementById('banner-form').reset();
-            document.getElementById('banner-id').value = '';
-            const container = document.getElementById('form-container-banner');
-            container.classList.remove('hidden');
-            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-        }
 
+        // ================= GESTÃO DE BANNERS DO CARROSSEL =================
         function toggleFormularioBanner() {
             document.getElementById('form-container-banner').classList.toggle('hidden');
         }
 
-        function editarBanner(id) {
-            const b = bannersAdmin.find(banner => banner.id == id);
-            if (!b) return;
-
-            const container = document.getElementById('form-container-banner');
-            container.classList.remove('hidden');
-
-            document.getElementById('banner-id').value = b.id;
-            document.getElementById('banner-badge').value = b.badge;
-            document.getElementById('banner-titulo').value = b.titulo;
-            document.getElementById('banner-desc').value = b.desc;
-
-            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
+        function abrirNovoBanner() {
+            document.getElementById('banner-id').value = '';
+            document.getElementById('banner-form').reset();
+            document.getElementById('form-banner-title').innerText = "🖼️ Adicionar Novo Banner Responsivo";
+            alternarDestinoBannerAdmin('produtos');
+            document.getElementById('form-container-banner').classList.remove('hidden');
         }
 
-        function salvarBanner(event) {
-            event.preventDefault();
-            const idBanner = document.getElementById('banner-id').value;
+        function atualizarSelectProdutosBanner() {
+            const sel = document.getElementById('banner-linkalvo-prod');
+            sel.innerHTML = '';
+            listaProdutos.forEach(p => {
+                sel.innerHTML += `<option value="${p.nome}">${p.nome}</option>`;
+            });
+        }
+
+        function alternarDestinoBannerAdmin(val) {
+            const container = document.getElementById('banner-linkalvo-container');
+            if (val === 'produto') {
+                container.classList.remove('hidden');
+                atualizarSelectProdutosBanner();
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        function salvarBanner(e) {
+            e.preventDefault();
+            const id = document.getElementById('banner-id').value;
             const badge = document.getElementById('banner-badge').value;
             const titulo = document.getElementById('banner-titulo').value;
             const desc = document.getElementById('banner-desc').value;
-            const filePc = document.getElementById('banner-imagem-pc-file');
-            const fileMob = document.getElementById('banner-imagem-mob-file');
+            const imagemPc = document.getElementById('banner-imgpc').value;
+            const imagemMobile = document.getElementById('banner-imgmob').value;
+            const linkTipo = document.getElementById('banner-linktipo').value;
+            const linkAlvo = linkTipo === 'produto' ? document.getElementById('banner-linkalvo-prod').value : '';
 
-            function processarImagens(urlPc, urlMob) {
-                const bannerExistente = idBanner ? bannersAdmin.find(b => b.id == idBanner) : null;
-                const finalPc = urlPc || (bannerExistente ? bannerExistente.imagemPc : '');
-                const finalMob = urlMob || (bannerExistente ? bannerExistente.imagemMobile : '');
+            const bannerData = { id: id !== '' ? Number(id) : Date.now(), badge, titulo, desc, imagemPc, imagemMobile, linkTipo, linkAlvo };
 
-                if (idBanner) {
-                    bannersAdmin = bannersAdmin.map(b => b.id == idBanner ? { ...b, badge, titulo, desc, imagemPc: finalPc, imagemMobile: finalMob } : b);
-                    alert('Banner atualizado com sucesso!');
-                } else {
-                    bannersAdmin.push({ id: Date.now(), badge, titulo, desc, imagemPc: finalPc, imagemMobile: finalMob });
-                    alert('Banner cadastrado com sucesso!');
-                }
-                localStorage.setItem('isis_slides', JSON.stringify(bannersAdmin));
-                toggleFormularioBanner();
-                renderizarAdminBanners();
+            if (id !== '') {
+                listaBanners[id] = bannerData;
+            } else {
+                listaBanners.push(bannerData);
             }
 
-            let resultadoPc = null;
-            let resultadoMob = null;
-            let pendentes = 0;
-
-            if (filePc.files && filePc.files[0]) {
-                pendentes++;
-                const reader = new FileReader();
-                reader.onload = e => { resultadoPc = e.target.result; pendentes--; if (pendentes === 0) processarImagens(resultadoPc, resultadoMob); };
-                reader.readAsDataURL(filePc.files[0]);
-            }
-            if (fileMob.files && fileMob.files[0]) {
-                pendentes++;
-                const reader = new FileReader();
-                reader.onload = e => { resultadoMob = e.target.result; pendentes--; if (pendentes === 0) processarImagens(resultadoPc, resultadoMob); };
-                reader.readAsDataURL(fileMob.files[0]);
-            }
-            if (pendentes === 0) processarImagens(null, null);
+            localStorage.setItem('isis_slides', JSON.stringify(listaBanners));
+            renderizarTabelaBanners();
+            toggleFormularioBanner();
         }
 
-        function renderizarAdminBanners() {
+        function renderizarTabelaBanners() {
             const tbody = document.getElementById('admin-banner-list');
             const counter = document.getElementById('total-banners');
             tbody.innerHTML = '';
-            counter.innerText = `${bannersAdmin.length} banner(s)`;
+            counter.innerText = `${listaBanners.length} banners`;
 
-            if (bannersAdmin.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-gray-400">Nenhum banner cadastrado.</td></tr>`;
+            if (listaBanners.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">Nenhum banner cadastrado.</td></tr>`;
                 return;
             }
 
-            bannersAdmin.forEach(b => {
+            listaBanners.forEach((b, idx) => {
+                let destinoStr = b.linkTipo === 'terapias' ? 'Espaço Terapêutico' : (b.linkTipo === 'produto' ? `Produto: ${b.linkAlvo}` : 'Loja / Produtos');
+
                 tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="py-3 px-3 flex items-center gap-3">
-                            <div class="flex gap-1">
-                                <div class="w-12 h-8 bg-gray-100 rounded border overflow-hidden flex items-center justify-center" title="Imagem PC">
-                                    ${b.imagemPc ? `<img src="${b.imagemPc}" class="w-full h-full object-cover">` : '<span class="text-[9px] text-gray-400">PC</span>'}
-                                </div>
-                                <div class="w-8 h-8 bg-gray-100 rounded border overflow-hidden flex items-center justify-center" title="Imagem Mobile">
-                                    ${b.imagemMobile ? `<img src="${b.imagemMobile}" class="w-full h-full object-cover">` : '<span class="text-[9px] text-gray-400">Mob</span>'}
-                                </div>
-                            </div>
-                            <span class="font-semibold text-gray-800">${b.titulo}</span>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3 px-3">
+                            <span class="font-bold text-gray-800 block">${b.titulo}</span>
+                            <span class="text-xs text-gray-400">${b.desc}</span>
                         </td>
-                        <td class="py-3 px-3 text-xs font-bold text-[#0E8685]">${b.badge}</td>
-                        <td class="py-3 px-3 text-gray-600 truncate max-w-xs text-xs">${b.desc}</td>
-                        <td class="py-3 px-3 text-right">
-                            <div class="flex items-center justify-end gap-2">
-                                <button onclick="editarBanner(${b.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
-                                <button onclick="removerBanner(${b.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
-                            </div>
+                        <td class="py-3 px-3"><span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs">${b.badge}</span></td>
+                        <td class="py-3 px-3 text-gray-600 text-xs font-semibold">${destinoStr}</td>
+                        <td class="py-3 px-3 text-right space-x-2">
+                            <button onclick="editarBanner(${idx})" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
+                            <button onclick="removerBanner(${idx})" class="text-red-500 hover:underline font-bold text-xs">Excluir</button>
                         </td>
                     </tr>
                 `;
             });
         }
 
-        function removerBanner(id) {
-            if (confirm('Tem certeza que deseja remover este banner?')) {
-                bannersAdmin = bannersAdmin.filter(b => b.id != id);
-                localStorage.setItem('isis_slides', JSON.stringify(bannersAdmin));
-                renderizarAdminBanners();
+        function editarBanner(idx) {
+            const b = listaBanners[idx];
+            document.getElementById('banner-id').value = idx;
+            document.getElementById('banner-badge').value = b.badge;
+            document.getElementById('banner-titulo').value = b.titulo;
+            document.getElementById('banner-desc').value = b.desc;
+            document.getElementById('banner-imgpc').value = b.imagemPc || '';
+            document.getElementById('banner-imgmob').value = b.imagemMobile || '';
+            document.getElementById('banner-linktipo').value = b.linkTipo || 'produtos';
+            alternarDestinoBannerAdmin(b.linkTipo || 'produtos');
+            
+            if (b.linkTipo === 'produto') {
+                setTimeout(() => {
+                    document.getElementById('banner-linkalvo-prod').value = b.linkAlvo || '';
+                }, 50);
+            }
+
+            document.getElementById('form-banner-title').innerText = "🖼️️ Editar Banner Responsivo";
+            document.getElementById('form-container-banner').classList.remove('hidden');
+        }
+
+        function removerBanner(idx) {
+            if (confirm("Tem certeza que deseja apagar este banner?")) {
+                listaBanners.splice(idx, 1);
+                localStorage.setItem('isis_slides', JSON.stringify(listaBanners));
+                renderizarTabelaBanners();
             }
         }
     </script>
