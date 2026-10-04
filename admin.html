@@ -44,7 +44,7 @@
                     <span>🏢</span> Depósito / Estoque Base
                 </button>
                 <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
-                    <span>🖼️</span> Banners do Carrossel
+                    <span>🖼️️</span> Banners do Carrossel
                 </button>
             </nav>
         </div>
@@ -163,7 +163,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
-                    <p class="text-gray-500 text-sm">Controle de quantidades, preços e imagens dos itens em estoque.</p>
+                    <p class="text-gray-500 text-sm">Controle de quantidades, preços, imagens e sub-variações por categoria.</p>
                 </div>
                 <button onclick="toggleFormularioDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                     <span>➕</span> <span>Cadastrar Item no Depósito</span>
@@ -182,12 +182,12 @@
                     
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Item no Depósito</label>
-                        <input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incenso Premium Alecrim">
+                        <input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incenso Natural Alecrim">
                     </div>
                     
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
-                        <select id="dep-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                        <select id="dep-categoria" onchange="atualizarSubCamposDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
                             <option value="Incensos">Incensos</option>
                             <option value="Pedras">Pedras e Cristais</option>
                             <option value="Semijoias">Semijoias</option>
@@ -204,6 +204,11 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantidade em Estoque</label>
                         <input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 20">
+                    </div>
+
+                    <!-- SUB-CAMPOS DINÂMICOS CONFORME A CATEGORIA -->
+                    <div id="sub-campos-container" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-xl border border-teal-100">
+                        <!-- Preenchido via JavaScript -->
                     </div>
 
                     <div class="md:col-span-2">
@@ -233,10 +238,10 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                                <th class="py-3 px-3">Item / Descrição</th>
+                                <th class="py-3 px-3">Item / Detalhes</th>
                                 <th class="py-3 px-3">Categoria</th>
                                 <th class="py-3 px-3">Preço</th>
-                                <th class="py-3 px-3 text-center">Quantidade Estoque</th>
+                                <th class="py-3 px-3 text-center">Estoque</th>
                                 <th class="py-3 px-3 text-right">Ações</th>
                             </tr>
                         </thead>
@@ -283,7 +288,7 @@
                     </div>
                     
                     <div>
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (Computador)</label>
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️️ Imagem para PC (Computador)</label>
                         <input type="file" id="banner-imagem-pc-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
                     </div>
 
@@ -325,10 +330,10 @@
     <!-- Script de Gestão Admin -->
     <script>
         let depositoAdmin = JSON.parse(localStorage.getItem('isis_deposito')) || [
-            { id: 101, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética.", quantidade: 15 },
-            { id: 102, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação.", quantidade: 8 },
-            { id: 103, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde.", quantidade: 5 },
-            { id: 104, nome: "Vela Aromática de Lavanda Calmante", preco: 29.90, categoria: "Velas", imagem: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60", descricao: "Vela 100% vegetal com essência calmante de lavanda.", quantidade: 12 }
+            { id: 101, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", fragrancia: "Alecrim e Arruda", marca: "Artesanal", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética.", quantidade: 15 },
+            { id: 102, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", subvariacao: "Cristal Bruto", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação.", quantidade: 8 },
+            { id: 103, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", subvariacao: "Folheado a Ouro com Pedra Bruta", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde.", quantidade: 5 },
+            { id: 104, nome: "Vela Aromática de Lavanda Calmante", preco: 29.90, categoria: "Velas", aroma: "Lavanda Calmante", imagem: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60", descricao: "Vela 100% vegetal com essência calmante de lavanda.", quantidade: 12 }
         ];
 
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
@@ -345,6 +350,7 @@
         renderizarAdminProdutos();
         renderizarAdminDeposito();
         renderizarAdminBanners();
+        atualizarSubCamposDeposito();
 
         function toggleAdminMobileMenu() {
             const sidebar = document.getElementById('admin-sidebar');
@@ -384,11 +390,60 @@
             }
         }
 
-        // --- GESTÃO DE DEPÓSITO COM QUANTIDADE E UPLOAD ---
+        // --- SUB-CAMPOS DINÂMICOS NO DEPÓSITO ---
+        function atualizarSubCamposDeposito() {
+            const cat = document.getElementById('dep-categoria').value;
+            const container = document.getElementById('sub-campos-container');
+            container.innerHTML = '';
+
+            if (cat === 'Incensos') {
+                container.innerHTML = `
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fragrância</label>
+                        <input type="text" id="dep-fragrancia" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Lavanda, Alecrim">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Marca</label>
+                        <input type="text" id="dep-marca" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Fênix, Sagrada Madre">
+                    </div>
+                `;
+            } else if (cat === 'Velas') {
+                container.innerHTML = `
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Aroma da Vela</label>
+                        <input type="text" id="dep-aroma" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Baunilha, Canela, Capim-limão">
+                    </div>
+                `;
+            } else if (cat === 'Pedras') {
+                container.innerHTML = `
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-variação (Ex: Bruto, Polido, Rolado)</label>
+                        <input type="text" id="dep-subvariacao" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Bruto, Polido, Ponta de Cristal">
+                    </div>
+                `;
+            } else if (cat === 'Semijoias') {
+                container.innerHTML = `
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Acabamento / Sub-tipo (Ex: Folheado a Ouro, Pedra Bruta)</label>
+                        <input type="text" id="dep-subvariacao" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Ex: Folheado a Ouro, Prata, Com Pedra Bruta">
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Detalhes Adicionais</label>
+                        <input type="text" id="dep-subvariacao" class="w-full px-4 py-2 border rounded-xl text-sm bg-white" placeholder="Especificações do item">
+                    </div>
+                `;
+            }
+        }
+
+        // --- GESTÃO DE DEPÓSITO ---
         function toggleFormularioDeposito() {
             const container = document.getElementById('form-container-deposito');
             container.classList.toggle('hidden');
             if (!container.classList.contains('hidden')) {
+                atualizarSubCamposDeposito();
                 window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
             } else {
                 document.getElementById('deposito-form').reset();
@@ -406,6 +461,11 @@
             const descricao = document.getElementById('dep-descricao').value;
             const fileInput = document.getElementById('dep-imagem-file');
 
+            const fragrancia = document.getElementById('dep-fragrancia') ? document.getElementById('dep-fragrancia').value : '';
+            const marca = document.getElementById('dep-marca') ? document.getElementById('dep-marca').value : '';
+            const aroma = document.getElementById('dep-aroma') ? document.getElementById('dep-aroma').value : '';
+            const subvariacao = document.getElementById('dep-subvariacao') ? document.getElementById('dep-subvariacao').value : '';
+
             const itemExistente = depositoAdmin.find(d => d.id == id);
             const imagemAtual = itemExistente ? itemExistente.imagem : 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500';
 
@@ -416,6 +476,10 @@
                     categoria, 
                     preco, 
                     quantidade,
+                    fragrancia,
+                    marca,
+                    aroma,
+                    subvariacao,
                     imagem: imagemUrl || imagemAtual, 
                     descricao 
                 };
@@ -455,13 +519,19 @@
             }
 
             depositoAdmin.forEach(d => {
+                let detalheExtra = '';
+                if (d.fragrancia) detalheExtra += `Fragrância: ${d.fragrancia} `;
+                if (d.marca) detalheExtra += `| Marca: ${d.marca} `;
+                if (d.aroma) detalheExtra += `Aroma: ${d.aroma} `;
+                if (d.subvariacao) detalheExtra += `Sub: ${d.subvariacao} `;
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50 transition">
                         <td class="py-3 px-3 flex items-center gap-3">
                             <img src="${d.imagem}" class="w-10 h-10 object-cover rounded-lg border shadow-sm">
                             <div>
                                 <span class="font-semibold text-gray-800 block">${d.nome}</span>
-                                <span class="text-xs text-gray-400 truncate max-w-xs block">${d.descricao || ''}</span>
+                                <span class="text-xs text-teal-700 block">${detalheExtra}</span>
                             </div>
                         </td>
                         <td class="py-3 px-3 text-gray-600">${d.categoria}</td>
@@ -560,7 +630,11 @@
                         categoria,
                         descricao,
                         imagem: imagemUrl || imagemPadrao,
-                        destaque
+                        destaque,
+                        fragrancia: selectDep ? selectDep.fragrancia : '',
+                        marca: selectDep ? selectDep.marca : '',
+                        aroma: selectDep ? selectDep.aroma : '',
+                        subvariacao: selectDep ? selectDep.subvariacao : ''
                     });
                     alert('Produto cadastrado na loja com sucesso!');
                 }
