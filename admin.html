@@ -11,71 +11,71 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+<body class="bg-gray-50 text-gray-800 flex flex-col md:flex-row min-h-screen">
 
-    <!-- Cabeçalho do Admin -->
-    <header class="bg-[#0E8685] text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">⚙️</span>
-                <h1 class="text-lg md:text-xl font-bold">Painel Gestor | Ísis Holística</h1>
+    <!-- MENU LATERAL (SIDEBAR) -->
+    <aside class="w-full md:w-64 bg-[#0E8685] text-white flex flex-col justify-between shadow-xl z-20">
+        <div>
+            <!-- Topo do Menu -->
+            <div class="p-6 border-b border-teal-700/50 flex items-center gap-3">
+                <span class="text-3xl">⚙️</span>
+                <div>
+                    <h1 class="font-bold text-base leading-tight">Painel Gestor</h1>
+                    <span class="text-xs text-teal-200">Ísis Holística</span>
+                </div>
             </div>
-            <a href="index.html" class="bg-white text-[#0E8685] font-bold px-4 py-2 rounded-xl text-xs md:text-sm shadow hover:bg-gray-100 transition">
-                Ver Loja ao Vivo ➔
+
+            <!-- Links de Navegação -->
+            <nav class="p-4 space-y-2">
+                <button onclick="mudarAbaAdmin('inventario')" id="nav-inventario" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left">
+                    <span>📦</span> Inventário da Loja
+                </button>
+                <button onclick="mudarAbaAdmin('deposito')" id="nav-deposito" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
+                    <span>🏢</span> Depósito / Estoque Base
+                </button>
+                <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
+                    <span>🖼️</span> Banners do Carrossel
+                </button>
+            </nav>
+        </div>
+
+        <!-- Rodapé da Sidebar -->
+        <div class="p-4 border-t border-teal-700/50">
+            <a href="index.html" class="w-full flex items-center justify-center gap-2 bg-white text-[#0E8685] font-bold py-3 px-4 rounded-xl text-xs shadow hover:bg-teal-50 transition">
+                <span>Ver Loja ao Vivo</span> ➔
             </a>
         </div>
-    </header>
+    </aside>
 
-    <!-- Navegação de Abas do Painel -->
-    <div class="bg-white border-b shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 flex gap-6">
-            <button onclick="mudarAbaAdmin('produtos')" id="tab-btn-produtos" class="py-4 font-bold text-sm border-b-2 border-[#0E8685] text-[#0E8685] transition">
-                📦 Gestão de Produtos
-            </button>
-            <button onclick="mudarAbaAdmin('banners')" id="tab-btn-banners" class="py-4 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#0E8685] transition">
-                🖼️ Banners do Carrossel
-            </button>
-        </div>
-    </div>
-
-    <!-- Conteúdo Principal -->
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full space-y-8">
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
         
-        <!-- SEÇÃO 1: PRODUTOS -->
-        <div id="admin-section-produtos" class="space-y-8">
-            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-md border border-gray-100 gap-4">
+        <!-- ================= SEÇÃO 1: INVENTÁRIO DA LOJA ================= -->
+        <div id="admin-section-inventario" class="space-y-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos</h2>
-                    <p class="text-gray-500 text-sm">Adicione, edite preços, descrições e remova itens da vitrine.</p>
+                    <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos</h2>
+                    <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual da loja.</p>
                 </div>
-                <button onclick="toggleFormularioProduto()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                    <span>➕</span> <span>Cadastrar Novo Produto</span>
+                <button onclick="toggleFormularioProduto()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                    <span>➕</span> <span>Adicionar Produto do Depósito</span>
                 </button>
             </div>
 
-            <!-- Formulário de Produto -->
+            <!-- Formulário de Produto (Vinculado ao Depósito) -->
             <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
                 <div class="flex justify-between items-center mb-6 border-b pb-4">
-                    <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Novo Produto</h3>
+                    <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Cadastrar Produto na Loja</h3>
                     <button onclick="toggleFormularioProduto()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                 </div>
 
                 <form id="product-form" onsubmit="salvarProduto(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input type="hidden" id="prod-id">
                     
+                    <!-- 1. Filtrar Categoria -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
-                        <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incenso de Alfazema">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
-                        <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 25.00">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
-                        <select id="prod-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">1. Filtrar por Categoria</label>
+                        <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
                             <option value="Incensos">Incensos</option>
                             <option value="Pedras">Pedras e Cristais</option>
                             <option value="Semijoias">Semijoias</option>
@@ -84,14 +84,37 @@
                         </select>
                     </div>
                     
+                    <!-- 2. Selecionar Produto do Depósito -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fotografia do Produto</label>
-                        <input type="file" id="prod-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
+                        <select id="prod-deposito-select" onchange="preencherDoDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            <!-- Preenchido via JavaScript -->
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
+                        <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
+                        <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria Final</label>
+                        <input type="text" id="prod-categoria" readonly class="w-full px-4 py-2.5 border bg-gray-100 rounded-xl text-sm text-gray-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Upload da Fotografia do Produto</label>
+                        <input type="file" id="prod-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição do Produto</label>
-                        <textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Escreva os detalhes, benefícios ou propriedades energéticas do produto..."></textarea>
+                        <textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
                     </div>
                     
                     <div class="md:col-span-2 flex items-center gap-2 pt-2">
@@ -100,16 +123,16 @@
                     </div>
                     
                     <div class="md:col-span-2 flex gap-3 pt-4 border-t">
-                        <button type="submit" id="btn-submit-prod" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">Guardar Produto</button>
+                        <button type="submit" id="btn-submit-prod" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Produto</button>
                         <button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
                     </div>
                 </form>
             </div>
 
-            <!-- Tabela de Produtos -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+            <!-- Tabela do Inventário -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos Cadastrados</h3>
+                    <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos na Vitrine</h3>
                     <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
                 </div>
                 <div class="overflow-x-auto">
@@ -129,14 +152,96 @@
             </div>
         </div>
 
-        <!-- SEÇÃO 2: BANNERS DO CARROSSEL -->
+        <!-- ================= SEÇÃO 2: DEPÓSITO / ESTOQUE BASE ================= -->
+        <div id="admin-section-deposito" class="space-y-8 hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
+                    <p class="text-gray-500 text-sm">Cadastre os produtos padrão de fábrica com nome, valores e descrição para usar na loja.</p>
+                </div>
+                <button onclick="toggleFormularioDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                    <span>➕</span> <span>Cadastrar Item no Depósito</span>
+                </button>
+            </div>
+
+            <!-- Formulário de Depósito -->
+            <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <h3 id="form-deposito-title" class="text-xl font-bold text-[#0E8685]">🏢 Novo Item no Depósito</h3>
+                    <button onclick="toggleFormularioDeposito()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                </div>
+
+                <form id="deposito-form" onsubmit="salvarItemDeposito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="hidden" id="dep-id">
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Item no Depósito</label>
+                        <input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incenso Premium Alecrim">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
+                        <select id="dep-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            <option value="Incensos">Incensos</option>
+                            <option value="Pedras">Pedras e Cristais</option>
+                            <option value="Semijoias">Semijoias</option>
+                            <option value="Decoracao">Decoração</option>
+                            <option value="Velas">Velas</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço Sugerido (R$)</label>
+                        <input type="number" step="0.01" id="dep-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 25.00">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Imagem Padrão (URL ou Opcional)</label>
+                        <input type="text" id="dep-imagem" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="https://...">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Padrão</label>
+                        <textarea id="dep-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Detalhes e propriedades energéticas do item..."></textarea>
+                    </div>
+                    
+                    <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+                        <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar no Depósito</button>
+                        <button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabela do Depósito -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-[#0E8685]">📦 Itens Registrados no Depósito</h3>
+                    <span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                <th class="py-3 px-3">Item / Descrição</th>
+                                <th class="py-3 px-3">Categoria</th>
+                                <th class="py-3 px-3">Preço Sugerido</th>
+                                <th class="py-3 px-3 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-deposito-list" class="text-sm divide-y"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SEÇÃO 3: BANNERS DO CARROSSEL ================= -->
         <div id="admin-section-banners" class="space-y-8 hidden">
-            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-md border border-gray-100 gap-4">
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-[#0E8685]">Banners da Página Inicial (Carrossel)</h2>
                     <p class="text-gray-500 text-sm">Gerencie os banners informando separadamente a imagem para PC e Telemóvel (Mobile).</p>
                 </div>
-                <button onclick="toggleFormularioBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                <button onclick="toggleFormularioBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                     <span>➕</span> <span>Adicionar Novo Banner</span>
                 </button>
             </div>
@@ -168,23 +273,23 @@
                     
                     <div>
                         <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (Computador)</label>
-                        <input type="file" id="banner-imagem-pc-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <input type="file" id="banner-imagem-pc-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem para Mobile (Telemóvel)</label>
-                        <input type="file" id="banner-imagem-mob-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <input type="file" id="banner-imagem-mob-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
                     </div>
                     
                     <div class="md:col-span-2 flex gap-3 pt-4 border-t">
-                        <button type="submit" id="btn-submit-banner" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">Guardar Banner</button>
+                        <button type="submit" id="btn-submit-banner" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Banner</button>
                         <button type="button" onclick="toggleFormularioBanner()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
                     </div>
                 </form>
             </div>
 
             <!-- Tabela de Banners -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold text-[#0E8685]">📋 Banners Ativos no Carrossel</h3>
                     <span id="total-banners" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 banners</span>
@@ -207,13 +312,17 @@
 
     </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-[#1C2833] text-white py-6 text-center text-xs text-gray-400 mt-auto">
-        © 2026 Ísis Holística — Painel Administrativo Seguro.
-    </footer>
-
-    <!-- Script -->
+    <!-- Script de Gestão Admin -->
     <script>
+        // Dados de Depósito (Estoque Base)
+        let depositoAdmin = JSON.parse(localStorage.getItem('isis_deposito')) || [
+            { id: 101, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética." },
+            { id: 102, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação." },
+            { id: 103, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde." },
+            { id: 104, nome: "Vela Aromática de Lavanda Calmante", preco: 29.90, categoria: "Velas", imagem: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60", descricao: "Vela 100% vegetal com essência calmante de lavanda." }
+        ];
+
+        // Produtos Ativos na Loja
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
             { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética e purificação do ambiente.", destaque: true },
             { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação e harmonia espiritual.", destaque: true },
@@ -222,41 +331,165 @@
 
         let bannersAdmin = JSON.parse(localStorage.getItem('isis_slides')) || [
             { id: 1, badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.", imagemPc: "", imagemMobile: "" },
-            { id: 2, badge: "🔮 Espaço Terapêutico", titulo: "Jornada para o Equilíbrio", desc: "Humanoterapia & Psicanálise: Uma abordagem integrativa para mente, corpo e espírito.", imagemPc: "watermarked_img_16767091141142337326.jpg", imagemMobile: "watermarked_img_10282907314731288989.jpg" }
+            { id: 2, badge: "🔮 Espaço Terapêutico", titulo: "Jornada para o Equilíbrio", desc: "Humanoterapia & Psicanálise: Uma abordagem integrativa para mente, corpo e espírito.", imagemPc: "watermarked_img_16767091141142337326.jpg", imagemMobile: "watermarked_img_4253682499609492167.jpg" }
         ];
 
         renderizarAdminProdutos();
+        renderizarAdminDeposito();
         renderizarAdminBanners();
 
+        // Navegação Lateral (Sidebar)
         function mudarAbaAdmin(aba) {
-            const secProd = document.getElementById('admin-section-produtos');
+            const secInv = document.getElementById('admin-section-inventario');
+            const secDep = document.getElementById('admin-section-deposito');
             const secBan = document.getElementById('admin-section-banners');
-            const btnProd = document.getElementById('tab-btn-produtos');
-            const btnBan = document.getElementById('tab-btn-banners');
+            
+            const navInv = document.getElementById('nav-inventario');
+            const navDep = document.getElementById('nav-deposito');
+            const navBan = document.getElementById('nav-banners');
 
-            if (aba === 'produtos') {
-                secProd.classList.remove('hidden');
-                secBan.classList.add('hidden');
-                btnProd.className = "py-4 font-bold text-sm border-b-2 border-[#0E8685] text-[#0E8685] transition";
-                btnBan.className = "py-4 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#0E8685] transition";
-            } else {
-                secProd.classList.add('hidden');
+            secInv.classList.add('hidden');
+            secDep.classList.add('hidden');
+            secBan.classList.add('hidden');
+
+            navInv.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+            navDep.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+            navBan.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+
+            if (aba === 'inventario') {
+                secInv.classList.remove('hidden');
+                navInv.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
+            } else if (aba === 'deposito') {
+                secDep.classList.remove('hidden');
+                navDep.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
+            } else if (aba === 'banners') {
                 secBan.classList.remove('hidden');
-                btnBan.className = "py-4 font-bold text-sm border-b-2 border-[#0E8685] text-[#0E8685] transition";
-                btnProd.className = "py-4 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#0E8685] transition";
+                navBan.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
             }
         }
 
-        function toggleFormularioProduto() {
-            const container = document.getElementById('form-container-produto');
+        // --- GESTÃO DE DEPÓSITO ---
+        function toggleFormularioDeposito() {
+            const container = document.getElementById('form-container-deposito');
             container.classList.toggle('hidden');
             if (!container.classList.contains('hidden')) {
                 window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
             } else {
+                document.getElementById('deposito-form').reset();
+                document.getElementById('dep-id').value = '';
+            }
+        }
+
+        function salvarItemDeposito(event) {
+            event.preventDefault();
+            const id = document.getElementById('dep-id').value || Date.now();
+            const nome = document.getElementById('dep-nome').value;
+            const categoria = document.getElementById('dep-categoria').value;
+            const preco = parseFloat(document.getElementById('dep-preco').value);
+            const imagem = document.getElementById('dep-imagem').value || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500';
+            const descricao = document.getElementById('dep-descricao').value;
+
+            const item = { id, nome, categoria, preco, imagem, descricao };
+            
+            const idx = depositoAdmin.findIndex(d => d.id == id);
+            if (idx >= 0) {
+                depositoAdmin[idx] = item;
+                alert('Item atualizado no depósito com sucesso!');
+            } else {
+                depositoAdmin.push(item);
+                alert('Item cadastrado no depósito com sucesso!');
+            }
+
+            localStorage.setItem('isis_deposito', JSON.stringify(depositoAdmin));
+            toggleFormularioDeposito();
+            renderizarAdminDeposito();
+        }
+
+        function renderizarAdminDeposito() {
+            const tbody = document.getElementById('admin-deposito-list');
+            const counter = document.getElementById('total-deposito');
+            tbody.innerHTML = '';
+            counter.innerText = `${depositoAdmin.length} item(ns)`;
+
+            if (depositoAdmin.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-gray-400">Nenhum item no depósito.</td></tr>`;
+                return;
+            }
+
+            depositoAdmin.forEach(d => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="py-3 px-3 flex items-center gap-3">
+                            <img src="${d.imagem}" class="w-10 h-10 object-cover rounded-lg border shadow-sm">
+                            <div>
+                                <span class="font-semibold text-gray-800 block">${d.nome}</span>
+                                <span class="text-xs text-gray-400 truncate max-w-xs block">${d.descricao || ''}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 px-3 text-gray-600">${d.categoria}</td>
+                        <td class="py-3 px-3 font-bold text-[#C5A880]">R$ ${d.preco.toFixed(2).replace('.', ',')}</td>
+                        <td class="py-3 px-3 text-right">
+                            <button onclick="removerDeposito(${d.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function removerDeposito(id) {
+            if (confirm('Tem certeza que deseja remover este item do depósito?')) {
+                depositoAdmin = depositoAdmin.filter(d => d.id != id);
+                localStorage.setItem('isis_deposito', JSON.stringify(depositoAdmin));
+                renderizarAdminDeposito();
+            }
+        }
+
+        // --- GESTÃO DE PRODUTOS (VINCULADO AO DEPÓSITO) ---
+        function toggleFormularioProduto() {
+            const container = document.getElementById('form-container-produto');
+            container.classList.toggle('hidden');
+            if (!container.classList.contains('hidden')) {
+                atualizarSelectDeposito();
+                window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
+            } else {
                 document.getElementById('product-form').reset();
                 document.getElementById('prod-id').value = '';
-                document.getElementById('form-produto-title').innerText = '📦 Novo Produto';
-                document.getElementById('btn-submit-prod').innerText = 'Guardar Produto';
+            }
+        }
+
+        function atualizarSelectDeposito() {
+            const catFiltro = document.getElementById('prod-filtro-cat').value;
+            const selectDep = document.getElementById('prod-deposito-select');
+            selectDep.innerHTML = '';
+
+            const filtrados = depositoAdmin.filter(d => d.categoria === catFiltro);
+
+            if (filtrados.length === 0) {
+                selectDep.innerHTML = `<option value="">Nenhum item nesta categoria no depósito</option>`;
+                document.getElementById('prod-nome').value = '';
+                document.getElementById('prod-preco').value = '';
+                document.getElementById('prod-categoria').value = catFiltro;
+                document.getElementById('prod-descricao').value = '';
+                return;
+            }
+
+            filtrados.forEach(item => {
+                selectDep.innerHTML += `<option value="${item.id}">${item.nome} (R$ ${item.preco.toFixed(2)})</option>`;
+            });
+
+            preencherDoDeposito();
+        }
+
+        function preencherDoDeposito() {
+            const selectDep = document.getElementById('prod-deposito-select');
+            const itemId = selectDep.value;
+            const item = depositoAdmin.find(d => d.id == itemId);
+
+            if (item) {
+                document.getElementById('prod-nome').value = item.nome;
+                document.getElementById('prod-preco').value = item.preco;
+                document.getElementById('prod-categoria').value = item.categoria;
+                document.getElementById('prod-descricao').value = item.descricao || '';
             }
         }
 
@@ -265,15 +498,17 @@
             const idProd = document.getElementById('prod-id').value;
             const nome = document.getElementById('prod-nome').value;
             const preco = parseFloat(document.getElementById('prod-preco').value);
-            const categoria = document.getElementById('prod-categoria').value;
+            const categoria = document.getElementById('prod-filtro-cat').value;
             const descricao = document.getElementById('prod-descricao').value;
             const destaque = document.getElementById('prod-destaque').checked;
             const fileInput = document.getElementById('prod-imagem-file');
+            const selectDep = depositoAdmin.find(d => d.id == document.getElementById('prod-deposito-select').value);
+            const imagemPadrao = selectDep ? selectDep.imagem : 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500';
 
             function gravar(imagemUrl) {
                 if (idProd) {
                     produtosAdmin = produtosAdmin.map(p => p.id == idProd ? { ...p, nome, preco, categoria, descricao, imagem: imagemUrl || p.imagem, destaque } : p);
-                    alert('Produto atualizado com sucesso!');
+                    alert('Produto atualizado na loja com sucesso!');
                 } else {
                     produtosAdmin.push({
                         id: Date.now(),
@@ -281,10 +516,10 @@
                         preco,
                         categoria,
                         descricao,
-                        imagem: imagemUrl || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500',
+                        imagem: imagemUrl || imagemPadrao,
                         destaque
                     });
-                    alert('Produto cadastrado com sucesso!');
+                    alert('Produto cadastrado na loja com sucesso!');
                 }
                 localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
                 toggleFormularioProduto();
@@ -300,30 +535,6 @@
             }
         }
 
-        function carregarParaEdicaoProduto(id) {
-            const p = produtosAdmin.find(item => item.id == id);
-            if (!p) return;
-            document.getElementById('prod-id').value = p.id;
-            document.getElementById('prod-nome').value = p.nome;
-            document.getElementById('prod-preco').value = p.preco;
-            document.getElementById('prod-categoria').value = p.categoria;
-            document.getElementById('prod-descricao').value = p.descricao || '';
-            document.getElementById('prod-destaque').checked = p.destaque;
-
-            document.getElementById('form-produto-title').innerText = '✏️ Editar Produto';
-            document.getElementById('btn-submit-prod').innerText = 'Atualizar Produto';
-            document.getElementById('form-container-produto').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function excluirProduto(id) {
-            if (confirm('Tem certeza que deseja remover este produto?')) {
-                produtosAdmin = produtosAdmin.filter(p => p.id != id);
-                localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
-                renderizarAdminProdutos();
-            }
-        }
-
         function renderizarAdminProdutos() {
             const tbody = document.getElementById('admin-product-list');
             const counter = document.getElementById('total-produtos');
@@ -331,7 +542,7 @@
             counter.innerText = `${produtosAdmin.length} produto(s)`;
 
             if (produtosAdmin.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">Nenhum produto cadastrado.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">Nenhum produto cadastrado na vitrine.</td></tr>`;
                 return;
             }
 
@@ -342,7 +553,7 @@
                             <img src="${p.imagem}" class="w-10 h-10 object-cover rounded-lg border shadow-sm">
                             <div>
                                 <span class="font-semibold text-gray-800 block">${p.nome}</span>
-                                <span class="text-xs text-gray-400 truncate max-w-xs block">${p.descricao || 'Sem descrição'}</span>
+                                <span class="text-xs text-gray-400 truncate max-w-xs block">${p.descricao || ''}</span>
                             </div>
                         </td>
                         <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
@@ -352,15 +563,23 @@
                                 ${p.destaque ? 'Sim' : 'Não'}
                             </span>
                         </td>
-                        <td class="py-3 px-3 text-right space-x-2">
-                            <button onclick="carregarParaEdicaoProduto(${p.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
-                            <button onclick="excluirProduto(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Excluir</button>
+                        <td class="py-3 px-3 text-right">
+                            <button onclick="excluirProduto(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
                         </td>
                     </tr>
                 `;
             });
         }
 
+        function excluirProduto(id) {
+            if (confirm('Tem certeza que deseja remover este produto da vitrine?')) {
+                produtosAdmin = produtosAdmin.filter(p => p.id != id);
+                localStorage.setItem('isis_produtos', JSON.stringify(produtosAdmin));
+                renderizarAdminProdutos();
+            }
+        }
+
+        // --- GESTÃO DE BANNERS ---
         function toggleFormularioBanner() {
             const container = document.getElementById('form-container-banner');
             container.classList.toggle('hidden');
@@ -369,8 +588,6 @@
             } else {
                 document.getElementById('banner-form').reset();
                 document.getElementById('banner-id').value = '';
-                document.getElementById('form-banner-title').innerText = '🖼️ Novo Banner Responsivo';
-                document.getElementById('btn-submit-banner').innerText = 'Guardar Banner';
             }
         }
 
@@ -419,27 +636,6 @@
             if (pendentes === 0) processarImagens(null, null);
         }
 
-        function carregarParaEdicaoBanner(id) {
-            const b = bannersAdmin.find(item => item.id == id);
-            if (!b) return;
-            document.getElementById('banner-id').value = b.id;
-            document.getElementById('banner-badge').value = b.badge;
-            document.getElementById('banner-titulo').value = b.titulo;
-            document.getElementById('banner-desc').value = b.desc;
-            document.getElementById('form-banner-title').innerText = '✏️ Editar Banner';
-            document.getElementById('btn-submit-banner').innerText = 'Atualizar Banner';
-            document.getElementById('form-container-banner').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function excluirBanner(id) {
-            if (confirm('Tem certeza que deseja remover este banner?')) {
-                bannersAdmin = bannersAdmin.filter(b => b.id != id);
-                localStorage.setItem('isis_slides', JSON.stringify(bannersAdmin));
-                renderizarAdminBanners();
-            }
-        }
-
         function renderizarAdminBanners() {
             const tbody = document.getElementById('admin-banner-list');
             const counter = document.getElementById('total-banners');
@@ -467,13 +663,20 @@
                         </td>
                         <td class="py-3 px-3 text-xs font-bold text-[#0E8685]">${b.badge}</td>
                         <td class="py-3 px-3 text-gray-600 truncate max-w-xs text-xs">${b.desc}</td>
-                        <td class="py-3 px-3 text-right space-x-2">
-                            <button onclick="carregarParaEdicaoBanner(${b.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
-                            <button onclick="excluirBanner(${b.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Excluir</button>
+                        <td class="py-3 px-3 text-right">
+                            <button onclick="removerBanner(${b.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
                         </td>
                     </tr>
                 `;
             });
+        }
+
+        function removerBanner(id) {
+            if (confirm('Tem certeza que deseja remover este banner?')) {
+                bannersAdmin = bannersAdmin.filter(b => b.id != id);
+                localStorage.setItem('isis_slides', JSON.stringify(bannersAdmin));
+                renderizarAdminBanners();
+            }
         }
     </script>
 </body>
