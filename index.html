@@ -49,11 +49,7 @@
         .carousel-content {
             position: relative;
             z-index: 2;
-            pointer-events: none; /* Permite clicar no banner inteiro */
-        }
-
-        .carousel-content button {
-            pointer-events: auto; /* Mantém botões internos clicáveis se houver */
+            pointer-events: none;
         }
     </style>
 </head>
@@ -84,12 +80,13 @@
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🔮 Pedras e Cristais</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">✨ Semijoias</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🪷 Decoração</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🕯️ Velas</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🕯️️ Velas</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🗿 Imagens (Esculturas)</button>
                     </div>
                 </div>
 
-                <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685] transition">Espaço Terapêutico</button>
+                <!-- Botão Destacado no Menu -->
+                <button onclick="mudarAba('view-terapias')" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-4 py-2 rounded-xl transition flex items-center gap-1.5 font-bold border border-teal-200">🪷 Espaço Terapêutico</button>
             </nav>
 
             <div class="flex items-center gap-2">
@@ -101,9 +98,11 @@
             </div>
         </div>
 
+        <!-- Menu Mobile Limpo -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
             <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Quem Somos</button>
+            
             <div class="border-t pt-2 pb-1 text-xs font-bold text-[#0E8685] uppercase">Categorias de Produtos</div>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">📦 Todos os Produtos</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="block w-full text-left py-1 text-sm text-amber-600 font-bold pl-2">🔥 Promoções</button>
@@ -113,16 +112,17 @@
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🪷 Decoração</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🕯️ Velas</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🗿 Imagens (Esculturas)</button>
+            
             <div class="border-t pt-2"></div>
-            <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
-            <a href="https://www.instagram.com/isiseholistica" target="_blank" rel="noreferrer" class="block text-center bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white font-bold py-2.5 rounded-xl mt-2">📸 Ver Instagram</a>
-            <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-2.5 rounded-xl mt-2">💬 Falar no WhatsApp</a>
+            <!-- Botão de Espaço Terapêutico Destacado no Mobile -->
+            <button onclick="mudarAba('view-terapias')" class="w-full text-center bg-teal-50 text-[#0E8685] border border-teal-200 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
+                🪷 Espaço Terapêutico
+            </button>
         </div>
     </header>
 
     <!-- ABA 1: INÍCIO -->
     <section id="view-home" class="app-view flex-grow">
-        <!-- Carrossel Interativo -->
         <div id="carousel-wrapper" onclick="clicarBannerAtual()" class="text-white py-24 px-6 text-center overflow-hidden transition-all duration-700">
             <div class="carousel-overlay"></div>
             
@@ -369,7 +369,7 @@
                 </div>
 
                 <div id="modal-natural-notice" class="hidden mt-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-xl">
-                    ⚠️ <strong>Atenção:</strong> Por se tratar de um produto natural, o formato, tamanho e tonalidade podem variar por serem únicos.
+                    ⚠️️ <strong>Atenção:</strong> Por se tratar de um produto natural, o formato, tamanho e tonalidade podem variar por serem únicos.
                 </div>
 
                 <div class="flex items-center justify-between mt-6">
@@ -416,25 +416,25 @@
             <form id="form-checkout" onsubmit="enviarPedidoWhatsApp(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome Completo</label>
-                    <input type="text" id="cli-nome" required placeholder="Ex: Maria da Silva" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685]">
+                    <input type="text" id="cli-nome" required placeholder="Ex: Maria da Silva" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">CEP</label>
-                        <input type="text" id="cli-cep" required placeholder="Ex: 93042-252" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685]">
+                        <input type="text" id="cli-cep" required placeholder="Ex: 93042-252" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">CPF</label>
-                        <input type="text" id="cli-cpf" required placeholder="Ex: 000.000.000-00" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685]">
+                        <input type="text" id="cli-cpf" required placeholder="Ex: 000.000.000-00" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Endereço Completo</label>
-                    <textarea id="cli-endereco" rows="2" required placeholder="Ex: Av. Feitoria, 2300 - Pinheiro, São Leopoldo - RS" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
+                    <textarea id="cli-endereco" rows="2" required placeholder="Ex: Av. Feitoria, 2300 - Pinheiro, São Leopoldo - RS" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Forma de Pagamento</label>
-                    <select id="cli-pagamento" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[#0E8685] bg-white">
+                    <select id="cli-pagamento" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white">
                         <option value="Pix">Pix</option>
                         <option value="Cartão de Crédito">Cartão de Crédito</option>
                         <option value="Dinheiro (Retirada na Loja)">Dinheiro (Retirada na Loja)</option>
@@ -447,84 +447,6 @@
                     💬 Enviar Pedido para Análise no WhatsApp
                 </button>
             </form>
-        </div>
-    </div>
-
-    <!-- PAINEL ADMINISTRATIVO MODAL -->
-    <div id="admin-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-3xl w-full p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center">✕</button>
-            
-            <h3 class="text-2xl font-bold text-[#0E8685] mb-4">⚙️ Painel Administrativo</h3>
-            
-            <!-- Abas do Admin -->
-            <div class="flex border-b mb-6 gap-4">
-                <button onclick="mudarAbaAdmin('tab-banners')" id="btn-tab-banners" class="pb-2 font-bold text-sm text-[#0E8685] border-b-2 border-[#0E8685]">Gerir Banners</button>
-                <button onclick="mudarAbaAdmin('tab-promocoes')" id="btn-tab-promocoes" class="pb-2 font-bold text-sm text-gray-500 hover:text-gray-800">Gerir Promoções</button>
-                <button onclick="mudarAbaAdmin('tab-produtos')" id="btn-tab-produtos" class="pb-2 font-bold text-sm text-gray-500 hover:text-gray-800">Gerir Produtos</button>
-            </div>
-
-            <!-- CONTEÚDO ABA 1: BANNERS -->
-            <div id="tab-banners" class="admin-tab space-y-6">
-                <h4 class="font-bold text-gray-700">Adicionar / Editar Slides do Carrossel</h4>
-                <div class="space-y-4 bg-gray-50 p-4 rounded-2xl border">
-                    <input type="text" id="adm-banner-badge" placeholder="Badge (Ex: 🌸 Destaque da Semana)" class="w-full px-3 py-2 border rounded-xl text-sm">
-                    <input type="text" id="adm-banner-titulo" placeholder="Título Principal" class="w-full px-3 py-2 border rounded-xl text-sm">
-                    <input type="text" id="adm-banner-desc" placeholder="Descrição curta" class="w-full px-3 py-2 border rounded-xl text-sm">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="text" id="adm-banner-imgpc" placeholder="URL Imagem PC" class="w-full px-3 py-2 border rounded-xl text-sm">
-                        <input type="text" id="adm-banner-imgmob" placeholder="URL Imagem Mobile" class="w-full px-3 py-2 border rounded-xl text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Destino ao Clicar no Banner:</label>
-                        <select id="adm-banner-destino" onchange="alternarDestinoBanner(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-white">
-                            <option value="nenhum">Nenhum (Apenas Banner)</option>
-                            <option value="terapias">Espaço Terapêutico</option>
-                            <option value="produto">Produto Específico</option>
-                        </select>
-                    </div>
-                    <div id="adm-banner-prod-container" class="hidden">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selecione o Produto de Destino:</label>
-                        <select id="adm-banner-prod-select" class="w-full px-3 py-2 border rounded-xl text-sm bg-white"></select>
-                    </div>
-                    <button onclick="salvarBannerAdmin()" class="bg-[#0E8685] text-white font-bold px-4 py-2.5 rounded-xl text-sm w-full">Salvar Novo Banner</button>
-                </div>
-                <div id="adm-lista-banners" class="space-y-2"></div>
-            </div>
-
-            <!-- CONTEÚDO ABA 2: PROMOÇÕES -->
-            <div id="tab-promocoes" class="admin-tab hidden space-y-6">
-                <h4 class="font-bold text-gray-700">Gerir Categoria de Promoções</h4>
-                <p class="text-xs text-gray-500">Selecione quais produtos do site fazem parte das promoções ativas:</p>
-                <div id="adm-lista-promocoes-check" class="space-y-3 max-h-96 overflow-y-auto p-2 border rounded-2xl"></div>
-            </div>
-
-            <!-- CONTEÚDO ABA 3: PRODUTOS -->
-            <div id="tab-produtos" class="admin-tab hidden space-y-6">
-                <h4 class="font-bold text-gray-700">Adicionar / Editar Produtos</h4>
-                <div class="space-y-3 bg-gray-50 p-4 rounded-2xl border">
-                    <input type="text" id="adm-prod-nome" placeholder="Nome do Produto" class="w-full px-3 py-2 border rounded-xl text-sm">
-                    <div class="grid grid-cols-2 gap-3">
-                        <input type="number" step="0.01" id="adm-prod-preco" placeholder="Preço (R$)" class="w-full px-3 py-2 border rounded-xl text-sm">
-                        <select id="adm-prod-cat" class="w-full px-3 py-2 border rounded-xl text-sm bg-white">
-                            <option value="Promoções">Promoções</option>
-                            <option value="Incensos">Incensos</option>
-                            <option value="Pedras">Pedras</option>
-                            <option value="Semijoias">Semijoias</option>
-                            <option value="Decoracao">Decoração</option>
-                            <option value="Velas">Velas</option>
-                            <option value="Imagens (Esculturas)">Imagens</option>
-                        </select>
-                    </div>
-                    <input type="text" id="adm-prod-img" placeholder="URL da Imagem" class="w-full px-3 py-2 border rounded-xl text-sm">
-                    <textarea id="adm-prod-desc" placeholder="Propriedade energética e propósito espiritual..." rows="2" class="w-full px-3 py-2 border rounded-xl text-sm"></textarea>
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" id="adm-prod-destaque">
-                        <label for="adm-prod-destaque" class="text-xs font-bold text-gray-700">Exibir nos Destaques da Página Inicial</label>
-                    </div>
-                    <button onclick="salvarProdutoAdmin()" class="bg-[#0E8685] text-white font-bold px-4 py-2.5 rounded-xl text-sm w-full">Salvar Produto</button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -542,20 +464,20 @@
                 <p class="text-gray-500 text-xs mt-2">Visite o nosso espaço físico e sinta a energia de perto!</p>
             </div>
             <div>
-                <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Contacto & Redes</h5>
+                <h5 class="font-bold text-lg mb-3 text-[#C5A880]">Redes Sociais & Dúvidas</h5>
                 <div class="flex flex-col space-y-2.5">
-                    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow">💬 WhatsApp: (51) 9550-8826</a>
-                    <a href="https://www.instagram.com/isiseholistica" target="_blank" rel="noreferrer" class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow">📸 Instagram: @isiseholistica</a>
+                    <a href="https://wa.me/555195508826?text=Olá! Tenho uma dúvida sobre a loja/produtos." target="_blank" rel="noreferrer" class="flex items-center gap-2 bg-[#25D366] text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow hover:bg-opacity-90 transition">💬 Dúvidas via WhatsApp: (51) 9550-8826</a>
+                    <a href="https://www.instagram.com/isiseholistica" target="_blank" rel="noreferrer" class="flex items-center gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow hover:opacity-90 transition">📸 Instagram: @isiseholistica</a>
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500 flex flex-col sm:flex-row justify-between items-center gap-2">
             <span>© 2026 Ísis Holística. Todos os direitos reservados.</span>
-            <button onclick="toggleAdminModal()" class="text-gray-500 hover:text-gray-300 text-xs underline">⚙️ Painel Admin</button>
+            <span class="text-gray-400 font-medium">Desenvolvido por <strong class="text-[#C5A880]">CS Code Solutions</strong></span>
         </div>
     </footer>
 
-    <!-- Script Principal -->
+    <!-- Script -->
     <script>
         let currentSlide = 0;
 
@@ -566,7 +488,7 @@
                 preco: 18.90, 
                 categoria: "Incensos", 
                 imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", 
-                descricao: "Desenvolvido com ervas naturais selecionadas, este incenso promove uma poderosa limpeza energética e purificação do ambiente. O alecrim traz vitalidade, clareza mental e foco, enquanto a arruda afasta energias densas.", 
+                descricao: "Desenvolvido com ervas naturais selecionadas, este incenso promove limpeza energética.", 
                 destaque: true 
             },
             { 
@@ -575,16 +497,7 @@
                 preco: 42.00, 
                 categoria: "Pedras", 
                 imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", 
-                descricao: "Cristal bruto 100% natural de alta vibração. A ametista é a pedra da espiritualidade, da intuição e da transformação.", 
-                destaque: true 
-            },
-            { 
-                id: 3, 
-                nome: "Semijoia Quartzo Verde - Coração", 
-                preco: 89.90, 
-                categoria: "Semijoias", 
-                imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", 
-                descricao: "Elegante colar em semijoia com pingente de quartzo verde em formato de coração. Pedra da saúde e cura emocional.", 
+                descricao: "Cristal bruto 100% natural de alta vibração para espiritualidade e intuição.", 
                 destaque: true 
             }
         ];
@@ -597,7 +510,6 @@
         renderizarDestaquesHome();
         renderizarProdutosLoja('todos');
         inicializarCarrossel();
-        atualizarSelectProdutosAdmin();
 
         function inicializarCarrossel() {
             if (slides.length > 0) atualizarSlideUI();
@@ -861,147 +773,6 @@
 
             fecharFormularioCheckout();
             window.open(`https://wa.me/555195508826?text=${msg}`, '_blank');
-        }
-
-        // Funções do Painel Administrativo
-        function toggleAdminModal() {
-            document.getElementById('admin-modal').classList.toggle('hidden');
-            renderizarAdminPromocoes();
-            renderizarAdminBanners();
-        }
-
-        function mudarAbaAdmin(tabId) {
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
-            document.getElementById(tabId).classList.remove('hidden');
-
-            document.getElementById('btn-tab-banners').className = "pb-2 font-bold text-sm text-gray-500 hover:text-gray-800 border-b-2 border-transparent";
-            document.getElementById('btn-tab-promocoes').className = "pb-2 font-bold text-sm text-gray-500 hover:text-gray-800 border-b-2 border-transparent";
-            document.getElementById('btn-tab-produtos').className = "pb-2 font-bold text-sm text-gray-500 hover:text-gray-800 border-b-2 border-transparent";
-
-            if (tabId === 'tab-banners') document.getElementById('btn-tab-banners').className = "pb-2 font-bold text-sm text-[#0E8685] border-b-2 border-[#0E8685]";
-            if (tabId === 'tab-promocoes') document.getElementById('btn-tab-promocoes').className = "pb-2 font-bold text-sm text-[#0E8685] border-b-2 border-[#0E8685]";
-            if (tabId === 'tab-produtos') document.getElementById('btn-tab-produtos').className = "pb-2 font-bold text-sm text-[#0E8685] border-b-2 border-[#0E8685]";
-        }
-
-        function alternarDestinoBanner(val) {
-            const container = document.getElementById('adm-banner-prod-container');
-            if (val === 'produto') container.classList.remove('hidden');
-            else container.classList.add('hidden');
-        }
-
-        function atualizarSelectProdutosAdmin() {
-            const sel = document.getElementById('adm-banner-prod-select');
-            if (!sel) return;
-            sel.innerHTML = '';
-            listaProdutos.forEach(p => {
-                sel.innerHTML += `<option value="${p.nome}">${p.nome}</option>`;
-            });
-        }
-
-        function salvarBannerAdmin() {
-            const badge = document.getElementById('adm-banner-badge').value;
-            const titulo = document.getElementById('adm-banner-titulo').value;
-            const desc = document.getElementById('adm-banner-desc').value;
-            const imgPc = document.getElementById('adm-banner-imgpc').value;
-            const imgMob = document.getElementById('adm-banner-imgmob').value;
-            const linkTipo = document.getElementById('adm-banner-destino').value;
-            const linkAlvo = linkTipo === 'produto' ? document.getElementById('adm-banner-prod-select').value : '';
-
-            if (!titulo) {
-                alert("Preencha ao menos o título do banner.");
-                return;
-            }
-
-            slides.push({ badge, titulo, desc, imagemPc: imgPc, imagemMobile: imgMob, linkTipo, linkAlvo });
-            localStorage.setItem('isis_slides', JSON.stringify(slides));
-            alert("Banner adicionado com sucesso!");
-            renderizarAdminBanners();
-            atualizarSlideUI();
-        }
-
-        function renderizarAdminBanners() {
-            const container = document.getElementById('adm-lista-banners');
-            if (!container) return;
-            container.innerHTML = '<h5 class="text-xs font-bold uppercase text-gray-500 mt-4 mb-2">Banners Ativos</h5>';
-            slides.forEach((s, idx) => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-xl border text-xs">
-                        <div><strong>${s.titulo}</strong> (${s.linkTipo})</div>
-                        <button onclick="removerBanner(${idx})" class="text-red-500 font-bold">Remover</button>
-                    </div>
-                `;
-            });
-        }
-
-        function removerBanner(idx) {
-            slides.splice(idx, 1);
-            localStorage.setItem('isis_slides', JSON.stringify(slides));
-            renderizarAdminBanners();
-            atualizarSlideUI();
-        }
-
-        function renderizarAdminPromocoes() {
-            const container = document.getElementById('adm-lista-promocoes-check');
-            if (!container) return;
-            container.innerHTML = '';
-            listaProdutos.forEach((p, idx) => {
-                const isPromo = p.categoria === 'Promoções';
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-2 border-b text-xs">
-                        <div class="flex items-center gap-2">
-                            <img src="${p.imagem}" class="w-10 h-10 object-cover rounded">
-                            <div>
-                                <strong class="block text-gray-800">${p.nome}</strong>
-                                <span class="text-gray-500">R$ ${p.preco.toFixed(2)} (${p.categoria})</span>
-                            </div>
-                        </div>
-                        <button onclick="toggleProdutoPromocao(${idx})" class="px-3 py-1.5 rounded-lg font-bold text-xs ${isPromo ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}">
-                            ${isPromo ? 'Remover Promoção' + ' 🔥' : 'Tornar Promoção' + ' ✨'}
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        function toggleProdutoPromocao(idx) {
-            if (listaProdutos[idx].categoria === 'Promoções') {
-                listaProdutos[idx].categoria = 'Incensos'; // Categoria padrão ao remover
-            } else {
-                listaProdutos[idx].categoria = 'Promoções';
-                listaProdutos[idx].destaque = true; // Joga pra destaque opcionalmente
-            }
-            localStorage.setItem('isis_produtos', JSON.stringify(listaProdutos));
-            renderizarAdminPromocoes();
-            renderizarDestaquesHome();
-            renderizarProdutosLoja('todos');
-        }
-
-        function salvarProdutoAdmin() {
-            const nome = document.getElementById('adm-prod-nome').value;
-            const preco = parseFloat(document.getElementById('adm-prod-preco').value);
-            const categoria = document.getElementById('adm-prod-cat').value;
-            const imagem = document.getElementById('adm-prod-img').value;
-            const descricao = document.getElementById('adm-prod-desc').value;
-            const destaque = document.getElementById('adm-prod-destaque').checked;
-
-            if (!nome || isNaN(preco)) {
-                alert("Preencha o nome e um preço válido para o produto.");
-                return;
-            }
-
-            listaProdutos.push({ id: Date.now(), nome, preco, categoria, imagem, descricao, destaque });
-            localStorage.setItem('isis_produtos', JSON.stringify(listaProdutos));
-            alert("Produto cadastrado com sucesso!");
-            
-            document.getElementById('adm-prod-nome').value = '';
-            document.getElementById('adm-prod-preco').value = '';
-            document.getElementById('adm-prod-img').value = '';
-            document.getElementById('adm-prod-desc').value = '';
-            document.getElementById('adm-prod-destaque').checked = false;
-
-            renderizarDestaquesHome();
-            renderizarProdutosLoja('todos');
-            atualizarSelectProdutosAdmin();
         }
     </script>
 </body>
