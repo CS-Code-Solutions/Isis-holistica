@@ -33,7 +33,7 @@
                 📦 Gestão de Produtos
             </button>
             <button onclick="mudarAbaAdmin('banners')" id="tab-btn-banners" class="py-4 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#0E8685] transition">
-                🖼️️ Banners do Carrossel
+                🖼️ Banners do Carrossel
             </button>
         </div>
     </div>
@@ -53,7 +53,7 @@
                 </button>
             </div>
 
-            <!-- Formulário de Produto (Oculto por padrão) -->
+            <!-- Formulário de Produto -->
             <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
                 <div class="flex justify-between items-center mb-6 border-b pb-4">
                     <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Novo Produto</h3>
@@ -80,6 +80,7 @@
                             <option value="Pedras">Pedras e Cristais</option>
                             <option value="Semijoias">Semijoias</option>
                             <option value="Decoracao">Decoração</option>
+                            <option value="Velas">Velas</option>
                         </select>
                     </div>
                     
@@ -128,7 +129,7 @@
             </div>
         </div>
 
-        <!-- SEÇÃO 2: BANNERS DO CARROSSEL (COM PC E MOBILE SEPARADOS) -->
+        <!-- SEÇÃO 2: BANNERS DO CARROSSEL -->
         <div id="admin-section-banners" class="space-y-8 hidden">
             <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-md border border-gray-100 gap-4">
                 <div>
@@ -165,18 +166,14 @@
                         <textarea id="banner-desc" rows="2" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Uma abordagem integrativa para mente, corpo e espírito."></textarea>
                     </div>
                     
-                    <!-- Campo Imagem PC -->
                     <div>
                         <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (Computador)</label>
                         <input type="file" id="banner-imagem-pc-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
-                        <p class="text-xs text-gray-400 mt-1">Formato horizontal / panorâmico.</p>
                     </div>
 
-                    <!-- Campo Imagem Mobile -->
                     <div>
                         <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem para Mobile (Telemóvel)</label>
                         <input type="file" id="banner-imagem-mob-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
-                        <p class="text-xs text-gray-400 mt-1">Formato vertical / quadrado.</p>
                     </div>
                     
                     <div class="md:col-span-2 flex gap-3 pt-4 border-t">
@@ -215,7 +212,7 @@
         © 2026 Ísis Holística — Painel Administrativo Seguro.
     </footer>
 
-    <!-- Script de Gestão Admin -->
+    <!-- Script -->
     <script>
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
             { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética e purificação do ambiente.", destaque: true },
@@ -250,7 +247,6 @@
             }
         }
 
-        // --- GESTÃO DE PRODUTOS ---
         function toggleFormularioProduto() {
             const container = document.getElementById('form-container-produto');
             container.classList.toggle('hidden');
@@ -314,7 +310,7 @@
             document.getElementById('prod-descricao').value = p.descricao || '';
             document.getElementById('prod-destaque').checked = p.destaque;
 
-            document.getElementById('form-produto-title').innerText = '✏️️ Editar Produto';
+            document.getElementById('form-produto-title').innerText = '✏️ Editar Produto';
             document.getElementById('btn-submit-prod').innerText = 'Atualizar Produto';
             document.getElementById('form-container-produto').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -365,7 +361,6 @@
             });
         }
 
-        // --- GESTÃO DE BANNERS (PC E MOBILE SEPARADOS) ---
         function toggleFormularioBanner() {
             const container = document.getElementById('form-container-banner');
             container.classList.toggle('hidden');
@@ -390,7 +385,6 @@
 
             function processarImagens(urlPc, urlMob) {
                 const bannerExistente = idBanner ? bannersAdmin.find(b => b.id == idBanner) : null;
-                
                 const finalPc = urlPc || (bannerExistente ? bannerExistente.imagemPc : '');
                 const finalMob = urlMob || (bannerExistente ? bannerExistente.imagemMobile : '');
 
@@ -398,14 +392,7 @@
                     bannersAdmin = bannersAdmin.map(b => b.id == idBanner ? { ...b, badge, titulo, desc, imagemPc: finalPc, imagemMobile: finalMob } : b);
                     alert('Banner atualizado com sucesso!');
                 } else {
-                    bannersAdmin.push({
-                        id: Date.now(),
-                        badge,
-                        titulo,
-                        desc,
-                        imagemPc: finalPc,
-                        imagemMobile: finalMob
-                    });
+                    bannersAdmin.push({ id: Date.now(), badge, titulo, desc, imagemPc: finalPc, imagemMobile: finalMob });
                     alert('Banner cadastrado com sucesso!');
                 }
                 localStorage.setItem('isis_slides', JSON.stringify(bannersAdmin));
@@ -420,28 +407,16 @@
             if (filePc.files && filePc.files[0]) {
                 pendentes++;
                 const reader = new FileReader();
-                reader.onload = e => {
-                    resultadoPc = e.target.result;
-                    pendentes--;
-                    if (pendentes === 0) processarImagens(resultadoPc, resultadoMob);
-                };
+                reader.onload = e => { resultadoPc = e.target.result; pendentes--; if (pendentes === 0) processarImagens(resultadoPc, resultadoMob); };
                 reader.readAsDataURL(filePc.files[0]);
             }
-
             if (fileMob.files && fileMob.files[0]) {
                 pendentes++;
                 const reader = new FileReader();
-                reader.onload = e => {
-                    resultadoMob = e.target.result;
-                    pendentes--;
-                    if (pendentes === 0) processarImagens(resultadoPc, resultadoMob);
-                };
+                reader.onload = e => { resultadoMob = e.target.result; pendentes--; if (pendentes === 0) processarImagens(resultadoPc, resultadoMob); };
                 reader.readAsDataURL(fileMob.files[0]);
             }
-
-            if (pendentes === 0) {
-                processarImagens(null, null);
-            }
+            if (pendentes === 0) processarImagens(null, null);
         }
 
         function carregarParaEdicaoBanner(id) {
@@ -451,7 +426,6 @@
             document.getElementById('banner-badge').value = b.badge;
             document.getElementById('banner-titulo').value = b.titulo;
             document.getElementById('banner-desc').value = b.desc;
-
             document.getElementById('form-banner-title').innerText = '✏️ Editar Banner';
             document.getElementById('btn-submit-banner').innerText = 'Atualizar Banner';
             document.getElementById('form-container-banner').classList.remove('hidden');
