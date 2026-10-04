@@ -33,7 +33,7 @@
                 📦 Gestão de Produtos
             </button>
             <button onclick="mudarAbaAdmin('banners')" id="tab-btn-banners" class="py-4 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-[#0E8685] transition">
-                🖼️ Banners do Carrossel
+                🖼️️ Banners do Carrossel
             </button>
         </div>
     </div>
@@ -128,22 +128,22 @@
             </div>
         </div>
 
-        <!-- SEÇÃO 2: BANNERS DO CARROSSEL -->
+        <!-- SEÇÃO 2: BANNERS DO CARROSSEL (COM PC E MOBILE SEPARADOS) -->
         <div id="admin-section-banners" class="space-y-8 hidden">
             <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-md border border-gray-100 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-[#0E8685]">Banners da Página Inicial (Carrossel)</h2>
-                    <p class="text-gray-500 text-sm">Gerencie as imagens rotativas e os textos exibidos no topo do site.</p>
+                    <p class="text-gray-500 text-sm">Gerencie os banners informando separadamente a imagem para PC e Telemóvel (Mobile).</p>
                 </div>
                 <button onclick="toggleFormularioBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                     <span>➕</span> <span>Adicionar Novo Banner</span>
                 </button>
             </div>
 
-            <!-- Formulário de Banner (Oculto por padrão) -->
+            <!-- Formulário de Banner -->
             <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
                 <div class="flex justify-between items-center mb-6 border-b pb-4">
-                    <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo Banner</h3>
+                    <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo Banner Responsivo</h3>
                     <button onclick="toggleFormularioBanner()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                 </div>
 
@@ -157,18 +157,26 @@
                     
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título Principal do Banner</label>
-                        <input type="text" id="banner-titulo" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incensos Premium & Semijoias">
+                        <input type="text" id="banner-titulo" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Jornada para o Equilíbrio">
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Exibida no Banner</label>
-                        <textarea id="banner-desc" rows="2" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 100% naturais, sem carvão e com essências que transformam a vibração."></textarea>
+                        <textarea id="banner-desc" rows="2" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Uma abordagem integrativa para mente, corpo e espírito."></textarea>
                     </div>
                     
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Imagem de Fundo do Banner</label>
-                        <input type="file" id="banner-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
-                        <p class="text-xs text-gray-400 mt-1">Selecione uma imagem com boa resolução para o carrossel.</p>
+                    <!-- Campo Imagem PC -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (Computador)</label>
+                        <input type="file" id="banner-imagem-pc-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <p class="text-xs text-gray-400 mt-1">Formato horizontal / panorâmico.</p>
+                    </div>
+
+                    <!-- Campo Imagem Mobile -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem para Mobile (Telemóvel)</label>
+                        <input type="file" id="banner-imagem-mob-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
+                        <p class="text-xs text-gray-400 mt-1">Formato vertical / quadrado.</p>
                     </div>
                     
                     <div class="md:col-span-2 flex gap-3 pt-4 border-t">
@@ -209,7 +217,6 @@
 
     <!-- Script de Gestão Admin -->
     <script>
-        // Dados padrão iniciais
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
             { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética e purificação do ambiente.", destaque: true },
             { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação e harmonia espiritual.", destaque: true },
@@ -217,14 +224,13 @@
         ];
 
         let bannersAdmin = JSON.parse(localStorage.getItem('isis_slides')) || [
-            { id: 1, badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.", imagem: "" },
-            { id: 2, badge: "🔮 Espaço Terapêutico", titulo: "Humanoterapia & Psicanálise", desc: "Agende sua sessão de atendimento presencial ou online com Fernanda e Rogério.", imagem: "" }
+            { id: 1, badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração do seu ambiente.", imagemPc: "", imagemMobile: "" },
+            { id: 2, badge: "🔮 Espaço Terapêutico", titulo: "Jornada para o Equilíbrio", desc: "Humanoterapia & Psicanálise: Uma abordagem integrativa para mente, corpo e espírito.", imagemPc: "watermarked_img_16767091141142337326.jpg", imagemMobile: "watermarked_img_10282907314731288989.jpg" }
         ];
 
         renderizarAdminProdutos();
         renderizarAdminBanners();
 
-        // Alternar Abas do Painel
         function mudarAbaAdmin(aba) {
             const secProd = document.getElementById('admin-section-produtos');
             const secBan = document.getElementById('admin-section-banners');
@@ -308,7 +314,7 @@
             document.getElementById('prod-descricao').value = p.descricao || '';
             document.getElementById('prod-destaque').checked = p.destaque;
 
-            document.getElementById('form-produto-title').innerText = '✏️ Editar Produto';
+            document.getElementById('form-produto-title').innerText = '✏️️ Editar Produto';
             document.getElementById('btn-submit-prod').innerText = 'Atualizar Produto';
             document.getElementById('form-container-produto').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -359,7 +365,7 @@
             });
         }
 
-        // --- GESTÃO DE BANNERS ---
+        // --- GESTÃO DE BANNERS (PC E MOBILE SEPARADOS) ---
         function toggleFormularioBanner() {
             const container = document.getElementById('form-container-banner');
             container.classList.toggle('hidden');
@@ -368,7 +374,7 @@
             } else {
                 document.getElementById('banner-form').reset();
                 document.getElementById('banner-id').value = '';
-                document.getElementById('form-banner-title').innerText = '🖼️ Novo Banner';
+                document.getElementById('form-banner-title').innerText = '🖼️ Novo Banner Responsivo';
                 document.getElementById('btn-submit-banner').innerText = 'Guardar Banner';
             }
         }
@@ -379,11 +385,17 @@
             const badge = document.getElementById('banner-badge').value;
             const titulo = document.getElementById('banner-titulo').value;
             const desc = document.getElementById('banner-desc').value;
-            const fileInput = document.getElementById('banner-imagem-file');
+            const filePc = document.getElementById('banner-imagem-pc-file');
+            const fileMob = document.getElementById('banner-imagem-mob-file');
 
-            function gravarBanner(imagemUrl) {
+            function processarImagens(urlPc, urlMob) {
+                const bannerExistente = idBanner ? bannersAdmin.find(b => b.id == idBanner) : null;
+                
+                const finalPc = urlPc || (bannerExistente ? bannerExistente.imagemPc : '');
+                const finalMob = urlMob || (bannerExistente ? bannerExistente.imagemMobile : '');
+
                 if (idBanner) {
-                    bannersAdmin = bannersAdmin.map(b => b.id == idBanner ? { ...b, badge, titulo, desc, imagem: imagemUrl || b.imagem } : b);
+                    bannersAdmin = bannersAdmin.map(b => b.id == idBanner ? { ...b, badge, titulo, desc, imagemPc: finalPc, imagemMobile: finalMob } : b);
                     alert('Banner atualizado com sucesso!');
                 } else {
                     bannersAdmin.push({
@@ -391,7 +403,8 @@
                         badge,
                         titulo,
                         desc,
-                        imagem: imagemUrl || ''
+                        imagemPc: finalPc,
+                        imagemMobile: finalMob
                     });
                     alert('Banner cadastrado com sucesso!');
                 }
@@ -400,12 +413,34 @@
                 renderizarAdminBanners();
             }
 
-            if (fileInput.files && fileInput.files[0]) {
+            let resultadoPc = null;
+            let resultadoMob = null;
+            let pendentes = 0;
+
+            if (filePc.files && filePc.files[0]) {
+                pendentes++;
                 const reader = new FileReader();
-                reader.onload = e => gravarBanner(e.target.result);
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                gravarBanner(null);
+                reader.onload = e => {
+                    resultadoPc = e.target.result;
+                    pendentes--;
+                    if (pendentes === 0) processarImagens(resultadoPc, resultadoMob);
+                };
+                reader.readAsDataURL(filePc.files[0]);
+            }
+
+            if (fileMob.files && fileMob.files[0]) {
+                pendentes++;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    resultadoMob = e.target.result;
+                    pendentes--;
+                    if (pendentes === 0) processarImagens(resultadoPc, resultadoMob);
+                };
+                reader.readAsDataURL(fileMob.files[0]);
+            }
+
+            if (pendentes === 0) {
+                processarImagens(null, null);
             }
         }
 
@@ -445,14 +480,12 @@
             bannersAdmin.forEach(b => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50 transition">
-                        <td class="py-3 px-3 flex items-center gap-3">
-                            <div class="w-12 h-8 bg-gray-100 rounded border overflow-hidden flex items-center justify-center">
-                                ${b.imagem ? `<img src="${b.imagem}" class="w-full h-full object-cover">` : '<span class="text-xs text-gray-400">Padrão</span>'}
-                            </div>
-                            <span class="font-semibold text-gray-800">${b.titulo}</span>
+                        <td class="py-3 px-3">
+                            <span class="font-semibold text-gray-800 block">${b.titulo}</span>
+                            <span class="text-xs text-gray-400 block">PC: ${b.imagemPc ? 'Definida' : 'Vazia'} | Mobile: ${b.imagemMobile ? 'Definida' : 'Vazia'}</span>
                         </td>
                         <td class="py-3 px-3 text-xs font-bold text-[#0E8685]">${b.badge}</td>
-                        <td class="py-3 px-3 text-gray-600 truncate max-w-xs">${b.desc}</td>
+                        <td class="py-3 px-3 text-gray-600 truncate max-w-xs text-xs">${b.desc}</td>
                         <td class="py-3 px-3 text-right space-x-2">
                             <button onclick="carregarParaEdicaoBanner(${b.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
                             <button onclick="excluirBanner(${b.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Excluir</button>
