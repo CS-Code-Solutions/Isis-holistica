@@ -13,7 +13,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col md:flex-row min-h-screen">
 
-    <!-- CABEÇALHO MOBILE (Visível apenas em Telemóveis) -->
+    <!-- CABEÇALHO MOBILE -->
     <header class="bg-[#0E8685] text-white shadow-md md:hidden flex justify-between items-center px-4 py-3 sticky top-0 z-30">
         <div class="flex items-center gap-2">
             <span class="text-xl">⚙️</span>
@@ -28,7 +28,6 @@
     <!-- MENU LATERAL (SIDEBAR) -->
     <aside id="admin-sidebar" class="hidden md:flex w-full md:w-64 bg-[#0E8685] text-white flex-col justify-between shadow-xl z-20 md:min-h-screen absolute md:relative top-[57px] md:top-0 left-0">
         <div>
-            <!-- Topo do Menu -->
             <div class="p-6 border-b border-teal-700/50 hidden md:flex items-center gap-3">
                 <span class="text-3xl">⚙️</span>
                 <div>
@@ -37,7 +36,6 @@
                 </div>
             </div>
 
-            <!-- Links de Navegação -->
             <nav class="p-4 space-y-2 bg-[#0E8685]">
                 <button onclick="mudarAbaAdmin('inventario')" id="nav-inventario" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left">
                     <span>📦</span> Inventário da Loja
@@ -51,7 +49,6 @@
             </nav>
         </div>
 
-        <!-- Rodapé da Sidebar -->
         <div class="p-4 border-t border-teal-700/50 bg-[#0E8685]">
             <a href="index.html" class="w-full flex items-center justify-center gap-2 bg-white text-[#0E8685] font-bold py-3 px-4 rounded-xl text-xs shadow hover:bg-teal-50 transition">
                 <span>Ver Loja ao Vivo</span> ➔
@@ -74,7 +71,7 @@
                 </button>
             </div>
 
-            <!-- Formulário de Produto (Vinculado ao Depósito) -->
+            <!-- Formulário de Produto -->
             <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
                 <div class="flex justify-between items-center mb-6 border-b pb-4">
                     <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Cadastrar Produto na Loja</h3>
@@ -98,7 +95,6 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
                         <select id="prod-deposito-select" onchange="preencherDoDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                            <!-- Preenchido via JavaScript -->
                         </select>
                     </div>
 
@@ -167,7 +163,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
-                    <p class="text-gray-500 text-sm">Cadastre os produtos padrão de fábrica com nome, valores, descrição e imagem por upload.</p>
+                    <p class="text-gray-500 text-sm">Controle de quantidades, preços e imagens dos itens em estoque.</p>
                 </div>
                 <button onclick="toggleFormularioDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                     <span>➕</span> <span>Cadastrar Item no Depósito</span>
@@ -206,6 +202,11 @@
                     </div>
 
                     <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantidade em Estoque</label>
+                        <input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 20">
+                    </div>
+
+                    <div class="md:col-span-2">
                         <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Upload da Fotografia do Depósito</label>
                         <input type="file" id="dep-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
                     </div>
@@ -234,7 +235,8 @@
                             <tr class="border-b text-xs font-bold text-gray-400 uppercase">
                                 <th class="py-3 px-3">Item / Descrição</th>
                                 <th class="py-3 px-3">Categoria</th>
-                                <th class="py-3 px-3">Preço Sugerido</th>
+                                <th class="py-3 px-3">Preço</th>
+                                <th class="py-3 px-3 text-center">Quantidade Estoque</th>
                                 <th class="py-3 px-3 text-right">Ações</th>
                             </tr>
                         </thead>
@@ -256,7 +258,6 @@
                 </button>
             </div>
 
-            <!-- Formulário de Banner -->
             <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
                 <div class="flex justify-between items-center mb-6 border-b pb-4">
                     <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo Banner Responsivo</h3>
@@ -298,7 +299,6 @@
                 </form>
             </div>
 
-            <!-- Tabela de Banners -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold text-[#0E8685]">📋 Banners Ativos no Carrossel</h3>
@@ -325,10 +325,10 @@
     <!-- Script de Gestão Admin -->
     <script>
         let depositoAdmin = JSON.parse(localStorage.getItem('isis_deposito')) || [
-            { id: 101, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética." },
-            { id: 102, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação." },
-            { id: 103, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde." },
-            { id: 104, nome: "Vela Aromática de Lavanda Calmante", preco: 29.90, categoria: "Velas", imagem: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60", descricao: "Vela 100% vegetal com essência calmante de lavanda." }
+            { id: 101, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética.", quantidade: 15 },
+            { id: 102, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação.", quantidade: 8 },
+            { id: 103, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde.", quantidade: 5 },
+            { id: 104, nome: "Vela Aromática de Lavanda Calmante", preco: 29.90, categoria: "Velas", imagem: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60", descricao: "Vela 100% vegetal com essência calmante de lavanda.", quantidade: 12 }
         ];
 
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
@@ -346,13 +346,11 @@
         renderizarAdminDeposito();
         renderizarAdminBanners();
 
-        // Controlar Menu Mobile
         function toggleAdminMobileMenu() {
             const sidebar = document.getElementById('admin-sidebar');
             sidebar.classList.toggle('hidden');
         }
 
-        // Navegação Lateral (Sidebar)
         function mudarAbaAdmin(aba) {
             const secInv = document.getElementById('admin-section-inventario');
             const secDep = document.getElementById('admin-section-deposito');
@@ -386,7 +384,7 @@
             }
         }
 
-        // --- GESTÃO DE DEPÓSITO COM UPLOAD DE IMAGEM ---
+        // --- GESTÃO DE DEPÓSITO COM QUANTIDADE E UPLOAD ---
         function toggleFormularioDeposito() {
             const container = document.getElementById('form-container-deposito');
             container.classList.toggle('hidden');
@@ -404,6 +402,7 @@
             const nome = document.getElementById('dep-nome').value;
             const categoria = document.getElementById('dep-categoria').value;
             const preco = parseFloat(document.getElementById('dep-preco').value);
+            const quantidade = parseInt(document.getElementById('dep-qtd').value) || 0;
             const descricao = document.getElementById('dep-descricao').value;
             const fileInput = document.getElementById('dep-imagem-file');
 
@@ -416,6 +415,7 @@
                     nome, 
                     categoria, 
                     preco, 
+                    quantidade,
                     imagem: imagemUrl || imagemAtual, 
                     descricao 
                 };
@@ -450,7 +450,7 @@
             counter.innerText = `${depositoAdmin.length} item(ns)`;
 
             if (depositoAdmin.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-gray-400">Nenhum item no depósito.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">Nenhum item no depósito.</td></tr>`;
                 return;
             }
 
@@ -466,6 +466,11 @@
                         </td>
                         <td class="py-3 px-3 text-gray-600">${d.categoria}</td>
                         <td class="py-3 px-3 font-bold text-[#C5A880]">R$ ${d.preco.toFixed(2).replace('.', ',')}</td>
+                        <td class="py-3 px-3 text-center">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold ${d.quantidade > 3 ? 'bg-teal-50 text-[#0E8685]' : 'bg-red-50 text-red-600'}">
+                                ${d.quantidade ?? 0} un.
+                            </span>
+                        </td>
                         <td class="py-3 px-3 text-right">
                             <button onclick="removerDeposito(${d.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
                         </td>
@@ -482,7 +487,7 @@
             }
         }
 
-        // --- GESTÃO DE PRODUTOS (VINCULADO AO DEPÓSITO) ---
+        // --- GESTÃO DE PRODUTOS ---
         function toggleFormularioProduto() {
             const container = document.getElementById('form-container-produto');
             container.classList.toggle('hidden');
@@ -512,7 +517,7 @@
             }
 
             filtrados.forEach(item => {
-                selectDep.innerHTML += `<option value="${item.id}">${item.nome} (R$ ${item.preco.toFixed(2)})</option>`;
+                selectDep.innerHTML += `<option value="${item.id}">${item.nome} (Estoque: ${item.quantidade ?? 0} | R$ ${item.preco.toFixed(2)})</option>`;
             });
 
             preencherDoDeposito();
