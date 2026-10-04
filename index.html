@@ -141,31 +141,31 @@
             <button onclick="mudarSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20 carousel-content">❯</button>
         </div>
 
-        <!-- Categorias na Home (5 colunas) -->
-        <div class="max-w-7xl mx-auto px-4 pt-12 pb-6">
-            <div class="text-center mb-8">
-                <h3 class="text-2xl font-bold text-[#0E8685]">Explore Nossas Categorias</h3>
+        <!-- Categorias na Home (Compactas e Proporcionais) -->
+        <div class="max-w-7xl mx-auto px-4 pt-8 pb-4">
+            <div class="text-center mb-6">
+                <h3 class="text-xl md:text-2xl font-bold text-[#0E8685]">Explore Nossas Categorias</h3>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
-                    <span class="text-3xl">🌿</span>
-                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Incensos</h4>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🌿</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Incensos</h4>
                 </div>
-                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
-                    <span class="text-3xl">🔮</span>
-                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Pedras e Cristais</h4>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🔮</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Pedras e Cristais</h4>
                 </div>
-                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
-                    <span class="text-3xl">✨</span>
-                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Semijoias</h4>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">✨</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Semijoias</h4>
                 </div>
-                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
-                    <span class="text-3xl">🪷</span>
-                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Decoração</h4>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🪷</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Decoração</h4>
                 </div>
-                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100 col-span-2 md:col-span-1">
-                    <span class="text-3xl">🕯️</span>
-                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Velas</h4>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4 col-span-2 sm:col-span-1">
+                    <span class="text-2xl sm:text-3xl">🕯️</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Velas</h4>
                 </div>
             </div>
         </div>
@@ -330,7 +330,7 @@
 
         let slides = JSON.parse(localStorage.getItem('isis_slides')) || [
             { badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração.", imagemPc: "", imagemMobile: "" },
-            { badge: "🔮 Espaço Terapêutico", titulo: "Jornada para o Equilíbrio", desc: "Humanoterapia & Psicanálise: Uma abordagem integrativa para mente, corpo e espírito.", imagemPc: "watermarked_img_16767091141142337326.jpg", imagemMobile: "watermarked_img_10282907314731288989.jpg" }
+            { badge: "🔮 Espaço Terapêutico", titulo: "Jornada para o Equilíbrio", desc: "Humanoterapia & Psicanálise: Uma abordagem integrativa para mente, corpo e espírito.", imagemPc: "watermarked_img_16767091141142337326.jpg", imagemMobile: "watermarked_img_4253682499609492167.jpg" }
         ];
 
         renderizarDestaquesHome();
