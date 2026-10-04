@@ -193,7 +193,7 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                                <th class="py-3 px-3">Banner / Título</th>
+                                <th class="py-3 px-3">Banner / Miniaturas</th>
                                 <th class="py-3 px-3">Selo</th>
                                 <th class="py-3 px-3">Descrição</th>
                                 <th class="py-3 px-3 text-right">Ações</th>
@@ -454,9 +454,16 @@
             bannersAdmin.forEach(b => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50 transition">
-                        <td class="py-3 px-3">
-                            <span class="font-semibold text-gray-800 block">${b.titulo}</span>
-                            <span class="text-xs text-gray-400 block">PC: ${b.imagemPc ? 'Definida' : 'Vazia'} | Mobile: ${b.imagemMobile ? 'Definida' : 'Vazia'}</span>
+                        <td class="py-3 px-3 flex items-center gap-3">
+                            <div class="flex gap-1">
+                                <div class="w-12 h-8 bg-gray-100 rounded border overflow-hidden flex items-center justify-center" title="Imagem PC">
+                                    ${b.imagemPc ? `<img src="${b.imagemPc}" class="w-full h-full object-cover">` : '<span class="text-[9px] text-gray-400">PC</span>'}
+                                </div>
+                                <div class="w-8 h-8 bg-gray-100 rounded border overflow-hidden flex items-center justify-center" title="Imagem Mobile">
+                                    ${b.imagemMobile ? `<img src="${b.imagemMobile}" class="w-full h-full object-cover">` : '<span class="text-[9px] text-gray-400">Mob</span>'}
+                                </div>
+                            </div>
+                            <span class="font-semibold text-gray-800">${b.titulo}</span>
                         </td>
                         <td class="py-3 px-3 text-xs font-bold text-[#0E8685]">${b.badge}</td>
                         <td class="py-3 px-3 text-gray-600 truncate max-w-xs text-xs">${b.desc}</td>
