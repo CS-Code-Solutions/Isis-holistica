@@ -29,23 +29,13 @@
             z-index: 0;
         }
 
-        .carousel-img-pc {
-            display: none;
-        }
-        .carousel-img-mobile {
-            display: block;
-        }
+        .carousel-img-pc { display: none; }
+        .carousel-img-mobile { display: block; }
 
         @media (min-width: 768px) {
-            .carousel-img-pc {
-                display: block;
-            }
-            .carousel-img-mobile {
-                display: none;
-            }
-            #carousel-wrapper {
-                min-height: 500px;
-            }
+            .carousel-img-pc { display: block; }
+            .carousel-img-mobile { display: none; }
+            #carousel-wrapper { min-height: 500px; }
         }
 
         .carousel-overlay {
@@ -75,19 +65,20 @@
                 <img src="logo4.png" alt="Ísis Holística" class="h-14 md:h-20 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
             </div>
             
-            <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center">
+            <nav class="hidden md:flex space-x-5 text-sm font-semibold items-center">
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
                 <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Quem Somos</button>
                 
                 <div class="relative group py-2">
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] flex items-center gap-1 transition">Produtos ▾</button>
-                    <div class="absolute top-full left-0 w-48 bg-white shadow-xl rounded-xl py-2 hidden group-hover:block border border-gray-100">
+                    <div class="absolute top-full left-0 w-52 bg-white shadow-xl rounded-xl py-2 hidden group-hover:block border border-gray-100">
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">Todos os Produtos</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🌿 Incensos</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🔮 Pedras e Cristais</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">✨ Semijoias</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🪷 Decoração</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🕯️ Velas</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🗿 Imagens (Esculturas)</button>
                     </div>
                 </div>
 
@@ -115,6 +106,7 @@
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">✨ Semijoias</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🪷 Decoração</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🕯️ Velas</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🗿 Imagens (Esculturas)</button>
             <div class="border-t pt-2"></div>
             <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
             <a href="admin.html" class="block w-full text-left py-2 font-semibold text-[#C5A880]">⚙️ Painel Admin</a>
@@ -146,7 +138,7 @@
             <div class="text-center mb-6">
                 <h3 class="text-xl md:text-2xl font-bold text-[#0E8685]">Explore Nossas Categorias</h3>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 <div onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
                     <span class="text-2xl sm:text-3xl">🌿</span>
                     <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Incensos</h4>
@@ -163,9 +155,13 @@
                     <span class="text-2xl sm:text-3xl">🪷</span>
                     <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Decoração</h4>
                 </div>
-                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4 col-span-2 sm:col-span-1">
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
                     <span class="text-2xl sm:text-3xl">🕯️</span>
                     <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Velas</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4 col-span-2 sm:col-span-1">
+                    <span class="text-2xl sm:text-3xl">🗿</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Imagens</h4>
                 </div>
             </div>
         </div>
@@ -183,7 +179,7 @@
         </div>
     </section>
 
-    <!-- ABA 2: QUEM SOMOS (ATUALIZADA CONFORME A APRESENTAÇÃO OFICIAL) -->
+    <!-- ABA 2: QUEM SOMOS -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-5xl mx-auto">
             <div class="text-center max-w-2xl mx-auto mb-12">
@@ -206,8 +202,8 @@
                         <li class="flex items-center gap-2"><span>•</span> Cristais e Pedras</li>
                         <li class="flex items-center gap-2"><span>•</span> Oráculos e Tarôs</li>
                         <li class="flex items-center gap-2"><span>•</span> Velas e Óleos Essenciais</li>
-                        <li class="flex items-center gap-2"><span>•</span> Artigos religiosos</li>
-                        <li class="flex items-center gap-2"><span>•</span> Tabacaria</li>
+                        <li class="flex items-center gap-2"><span>•</span> Imagens e Esculturas (Católica, Zen, Axé)</li>
+                        <li class="flex items-center gap-2"><span>•</span> Artigos religiosos e Tabacaria</li>
                         <li class="flex items-center gap-2"><span>•</span> Itens de Decoração e Presentes</li>
                     </ul>
                 </div>
@@ -257,6 +253,7 @@
                 <button onclick="filtrarProdutos('Semijoias')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">✨ Semijoias</button>
                 <button onclick="filtrarProdutos('Decoracao')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🪷 Decoração</button>
                 <button onclick="filtrarProdutos('Velas')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🕯️ Velas</button>
+                <button onclick="filtrarProdutos('Imagens (Esculturas)')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🗿 Imagens</button>
             </div>
         </div>
         <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
