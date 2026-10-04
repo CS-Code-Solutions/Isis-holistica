@@ -62,7 +62,7 @@
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
-                <img src="logo4.png" alt="Ísis Holística" class="h-14 md:h-20 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
+                <img src="logo4.png" alt="Ísis Holística" class="h-16 md:h-24 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
             </div>
             
             <nav class="hidden md:flex space-x-5 text-sm font-semibold items-center">
@@ -179,20 +179,24 @@
         </div>
     </section>
 
-    <!-- ABA 2: QUEM SOMOS (COM LOGÓTIPO NO TOPO EM MOBILE E NA LATERAL EM PC) -->
+    <!-- ABA 2: QUEM SOMOS -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-5xl mx-auto">
-            <!-- Cabeçalho com Logótipo Lateral (PC) / Topo (Mobile) -->
-            <div class="flex flex-col md:flex-row items-center gap-8 mb-12 bg-[#F8F9FA] p-6 md:p-10 rounded-3xl border border-gray-100 shadow-sm">
-                <div class="w-48 md:w-64 flex-shrink-0 flex justify-center">
+            <!-- Bloco Principal: Logótipo no início (mobile) / Esquerda (PC) -->
+            <div class="flex flex-col md:flex-row items-center gap-8 mb-12 bg-[#F8F9FA] p-6 md:p-12 rounded-3xl border border-gray-100 shadow-sm">
+                <div class="w-56 md:w-80 flex-shrink-0 flex justify-center">
                     <img src="logo4.png" alt="Ísis Holística" class="w-full h-auto object-contain pointer-events-none select-none drop-shadow-md" draggable="false" oncontextmenu="return false;">
                 </div>
                 <div class="text-center md:text-left">
-                    <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Nossa Essência</span>
-                    <h3 class="text-3xl md:text-4xl font-bold mt-2 mb-4 text-gray-900">Ísis Holística</h3>
-                    <p class="text-gray-700 leading-relaxed text-base">
-                        Conheça a Ísis, mais que uma loja, um espaço de acolhimento e encontro. Localizada na <strong>Av. Feitoria nº 2300, Loja 08, Bairro Pinheiro, São Leopoldo - RS</strong>, fundada com o propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual.
+                    <span class="text-[#0E8685] font-bold text-xs md:text-sm tracking-wider uppercase">Nossa Essência</span>
+                    <h3 class="text-2xl md:text-4xl font-bold mt-1 mb-4 text-gray-900">Quem Somos</h3>
+                    <p class="text-gray-700 leading-relaxed text-sm md:text-base mb-4">
+                        A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual. Mais do que uma loja esotérica, somos um espaço acolhedor dedicado à elevação da vibração através de elementos naturais, aromaterapia, cristais e acessórios com significado.
                     </p>
+                    <p class="text-gray-700 leading-relaxed text-sm md:text-base mb-6">
+                        Fundada com amor e dedicação em São Leopoldo - RS, unimos o comércio consciente de produtos esotéricos ao suporte terapêutico especializado para guiar a sua jornada de autoconhecimento.
+                    </p>
+                    <button onclick="mudarAba('view-produtos')" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition text-sm">Conhecer Nossos Produtos</button>
                 </div>
             </div>
 
