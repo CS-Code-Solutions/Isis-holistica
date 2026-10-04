@@ -41,7 +41,7 @@
                     <span>📦</span> Inventário da Loja
                 </button>
                 <button onclick="mudarAbaAdmin('deposito')" id="nav-deposito" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
-                    <span>🏢</span> Depósito / Estoque Base
+                    <span>🏢</span> Depósito / Estoque Geral
                 </button>
                 <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
                     <span>🖼️</span> Banners do Carrossel
@@ -63,10 +63,10 @@
         <div id="admin-section-inventario" class="space-y-8">
             <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos</h2>
+                    <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos (Loja)</h2>
                     <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual da loja.</p>
                 </div>
-                <button onclick="toggleFormularioProduto()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                <button onclick="abrirNovoProduto()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                     <span>➕</span> <span>Adicionar Produto do Depósito</span>
                 </button>
             </div>
@@ -74,7 +74,7 @@
             <!-- Formulário de Produto -->
             <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
                 <div class="flex justify-between items-center mb-6 border-b pb-4">
-                    <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Cadastrar Produto na Loja</h3>
+                    <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Cadastrar/Editar Produto na Loja</h3>
                     <button onclick="toggleFormularioProduto()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                 </div>
 
@@ -159,14 +159,14 @@
             </div>
         </div>
 
-        <!-- ================= SEÇÃO 2: DEPÓSITO / ESTOQUE BASE ================= -->
+        <!-- ================= SEÇÃO 2: DEPÓSITO / ESTOQUE GERAL ================= -->
         <div id="admin-section-deposito" class="space-y-8 hidden">
             <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
                     <p class="text-gray-500 text-sm">Controle de quantidades, preços, imagens e sub-variações por categoria.</p>
                 </div>
-                <button onclick="toggleFormularioDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                     <span>➕</span> <span>Cadastrar Item no Depósito</span>
                 </button>
             </div>
@@ -259,14 +259,14 @@
                     <h2 class="text-xl font-bold text-[#0E8685]">Banners da Página Inicial (Carrossel)</h2>
                     <p class="text-gray-500 text-sm">Gerencie os banners informando separadamente a imagem para PC e Telemóvel (Mobile).</p>
                 </div>
-                <button onclick="toggleFormularioBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                <button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                     <span>➕</span> <span>Adicionar Novo Banner</span>
                 </button>
             </div>
 
             <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
                 <div class="flex justify-between items-center mb-6 border-b pb-4">
-                    <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo Banner Responsivo</h3>
+                    <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo/Editar Banner Responsivo</h3>
                     <button onclick="toggleFormularioBanner()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                 </div>
 
@@ -289,7 +289,7 @@
                     </div>
                     
                     <div>
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (Computador)</label>
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️️ Imagem para PC (Computador)</label>
                         <input type="file" id="banner-imagem-pc-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
                     </div>
 
@@ -452,16 +452,41 @@
         }
 
         // --- GESTÃO DE DEPÓSITO ---
-        function toggleFormularioDeposito() {
+        function abrirNovoDeposito() {
+            document.getElementById('deposito-form').reset();
+            document.getElementById('dep-id').value = '';
+            atualizarSubCamposDeposito();
             const container = document.getElementById('form-container-deposito');
-            container.classList.toggle('hidden');
-            if (!container.classList.contains('hidden')) {
-                atualizarSubCamposDeposito();
-                window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-            } else {
-                document.getElementById('deposito-form').reset();
-                document.getElementById('dep-id').value = '';
-            }
+            container.classList.remove('hidden');
+            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function toggleFormularioDeposito() {
+            document.getElementById('form-container-deposito').classList.toggle('hidden');
+        }
+
+        function editarDeposito(id) {
+            const item = depositoAdmin.find(d => d.id == id);
+            if (!item) return;
+
+            const container = document.getElementById('form-container-deposito');
+            container.classList.remove('hidden');
+
+            document.getElementById('dep-id').value = item.id;
+            document.getElementById('dep-nome').value = item.nome;
+            document.getElementById('dep-categoria').value = item.categoria;
+            document.getElementById('dep-preco').value = item.preco;
+            document.getElementById('dep-qtd').value = item.quantidade;
+            document.getElementById('dep-descricao').value = item.descricao || '';
+
+            atualizarSubCamposDeposito();
+
+            if (document.getElementById('dep-fragrancia')) document.getElementById('dep-fragrancia').value = item.fragrancia || '';
+            if (document.getElementById('dep-marca')) document.getElementById('dep-marca').value = item.marca || '';
+            if (document.getElementById('dep-aroma')) document.getElementById('dep-aroma').value = item.aroma || '';
+            if (document.getElementById('dep-subvariacao')) document.getElementById('dep-subvariacao').value = item.subvariacao || '';
+
+            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
         }
 
         function salvarItemDeposito(event) {
@@ -555,7 +580,10 @@
                             </span>
                         </td>
                         <td class="py-3 px-3 text-right">
-                            <button onclick="removerDeposito(${d.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
+                            <div class="flex items-center justify-end gap-2">
+                                <button onclick="editarDeposito(${d.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
+                                <button onclick="removerDeposito(${d.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -570,17 +598,38 @@
             }
         }
 
-        // --- GESTÃO DE PRODUTOS ---
-        function toggleFormularioProduto() {
+        // --- GESTÃO DE PRODUTOS (LOJA) ---
+        function abrirNovoProduto() {
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-id').value = '';
+            atualizarSelectDeposito();
             const container = document.getElementById('form-container-produto');
-            container.classList.toggle('hidden');
-            if (!container.classList.contains('hidden')) {
-                atualizarSelectDeposito();
-                window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-            } else {
-                document.getElementById('product-form').reset();
-                document.getElementById('prod-id').value = '';
-            }
+            container.classList.remove('hidden');
+            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function toggleFormularioProduto() {
+            document.getElementById('form-container-produto').classList.toggle('hidden');
+        }
+
+        function editarProduto(id) {
+            const p = produtosAdmin.find(prod => prod.id == id);
+            if (!p) return;
+
+            const container = document.getElementById('form-container-produto');
+            container.classList.remove('hidden');
+
+            document.getElementById('prod-id').value = p.id;
+            document.getElementById('prod-filtro-cat').value = p.categoria;
+            atualizarSelectDeposito();
+
+            document.getElementById('prod-nome').value = p.nome;
+            document.getElementById('prod-preco').value = p.preco;
+            document.getElementById('prod-categoria').value = p.categoria;
+            document.getElementById('prod-descricao').value = p.descricao || '';
+            document.getElementById('prod-destaque').checked = !!p.destaque;
+
+            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
         }
 
         function atualizarSelectDeposito() {
@@ -694,7 +743,10 @@
                             </span>
                         </td>
                         <td class="py-3 px-3 text-right">
-                            <button onclick="excluirProduto(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
+                            <div class="flex items-center justify-end gap-2">
+                                <button onclick="editarProduto(${p.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
+                                <button onclick="excluirProduto(${p.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -710,15 +762,31 @@
         }
 
         // --- GESTÃO DE BANNERS ---
-        function toggleFormularioBanner() {
+        function abrirNovoBanner() {
+            document.getElementById('banner-form').reset();
+            document.getElementById('banner-id').value = '';
             const container = document.getElementById('form-container-banner');
-            container.classList.toggle('hidden');
-            if (!container.classList.contains('hidden')) {
-                window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
-            } else {
-                document.getElementById('banner-form').reset();
-                document.getElementById('banner-id').value = '';
-            }
+            container.classList.remove('hidden');
+            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function toggleFormularioBanner() {
+            document.getElementById('form-container-banner').classList.toggle('hidden');
+        }
+
+        function editarBanner(id) {
+            const b = bannersAdmin.find(banner => banner.id == id);
+            if (!b) return;
+
+            const container = document.getElementById('form-container-banner');
+            container.classList.remove('hidden');
+
+            document.getElementById('banner-id').value = b.id;
+            document.getElementById('banner-badge').value = b.badge;
+            document.getElementById('banner-titulo').value = b.titulo;
+            document.getElementById('banner-desc').value = b.desc;
+
+            window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
         }
 
         function salvarBanner(event) {
@@ -794,7 +862,10 @@
                         <td class="py-3 px-3 text-xs font-bold text-[#0E8685]">${b.badge}</td>
                         <td class="py-3 px-3 text-gray-600 truncate max-w-xs text-xs">${b.desc}</td>
                         <td class="py-3 px-3 text-right">
-                            <button onclick="removerBanner(${b.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
+                            <div class="flex items-center justify-end gap-2">
+                                <button onclick="editarBanner(${b.id})" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Editar</button>
+                                <button onclick="removerBanner(${b.id})" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition">Remover</button>
+                            </div>
                         </td>
                     </tr>
                 `;
