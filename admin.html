@@ -25,7 +25,7 @@
         </div>
     </header>
 
-    <!-- MENU LATERAL (SIDEBAR - Oculto no mobile por padrão, visível no desktop) -->
+    <!-- MENU LATERAL (SIDEBAR) -->
     <aside id="admin-sidebar" class="hidden md:flex w-full md:w-64 bg-[#0E8685] text-white flex-col justify-between shadow-xl z-20 md:min-h-screen absolute md:relative top-[57px] md:top-0 left-0">
         <div>
             <!-- Topo do Menu -->
@@ -167,7 +167,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
-                    <p class="text-gray-500 text-sm">Cadastre os produtos padrão de fábrica com nome, valores e descrição para usar na loja.</p>
+                    <p class="text-gray-500 text-sm">Cadastre os produtos padrão de fábrica com nome, valores, descrição e imagem por upload.</p>
                 </div>
                 <button onclick="toggleFormularioDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                     <span>➕</span> <span>Cadastrar Item no Depósito</span>
@@ -206,8 +206,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Imagem Padrão (URL ou Opcional)</label>
-                        <input type="text" id="dep-imagem" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="https://...">
+                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Upload da Fotografia do Depósito</label>
+                        <input type="file" id="dep-imagem-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100">
                     </div>
 
                     <div class="md:col-span-2">
@@ -381,13 +381,12 @@
                 navBan.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
             }
 
-            // Ocultar menu automaticamente no telemóvel ao clicar num link
             if (window.innerWidth < 768) {
                 document.getElementById('admin-sidebar').classList.add('hidden');
             }
         }
 
-        // --- GESTÃO DE DEPÓSITO ---
+        // --- GESTÃO DE DEPÓSITO COM UPLOAD DE IMAGEM ---
         function toggleFormularioDeposito() {
             const container = document.getElementById('form-container-deposito');
             container.classList.toggle('hidden');
@@ -405,23 +404,43 @@
             const nome = document.getElementById('dep-nome').value;
             const categoria = document.getElementById('dep-categoria').value;
             const preco = parseFloat(document.getElementById('dep-preco').value);
-            const imagem = document.getElementById('dep-imagem').value || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500';
             const descricao = document.getElementById('dep-descricao').value;
+            const fileInput = document.getElementById('dep-imagem-file');
 
-            const item = { id, nome, categoria, preco, imagem, descricao };
-            
-            const idx = depositoAdmin.findIndex(d => d.id == id);
-            if (idx >= 0) {
-                depositoAdmin[idx] = item;
-                alert('Item atualizado no depósito com sucesso!');
-            } else {
-                depositoAdmin.push(item);
-                alert('Item cadastrado no depósito com sucesso!');
+            const itemExistente = depositoAdmin.find(d => d.id == id);
+            const imagemAtual = itemExistente ? itemExistente.imagem : 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500';
+
+            function gravar(imagemUrl) {
+                const item = { 
+                    id: Number(id), 
+                    nome, 
+                    categoria, 
+                    preco, 
+                    imagem: imagemUrl || imagemAtual, 
+                    descricao 
+                };
+                
+                const idx = depositoAdmin.findIndex(d => d.id == id);
+                if (idx >= 0) {
+                    depositoAdmin[idx] = item;
+                    alert('Item atualizado no depósito com sucesso!');
+                } else {
+                    depositoAdmin.push(item);
+                    alert('Item cadastrado no depósito com sucesso!');
+                }
+
+                localStorage.setItem('isis_deposito', JSON.stringify(depositoAdmin));
+                toggleFormularioDeposito();
+                renderizarAdminDeposito();
             }
 
-            localStorage.setItem('isis_deposito', JSON.stringify(depositoAdmin));
-            toggleFormularioDeposito();
-            renderizarAdminDeposito();
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => gravar(e.target.result);
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                gravar(null);
+            }
         }
 
         function renderizarAdminDeposito() {
