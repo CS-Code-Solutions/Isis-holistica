@@ -13,11 +13,23 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col md:flex-row min-h-screen">
 
-    <!-- MENU LATERAL (SIDEBAR) -->
-    <aside class="w-full md:w-64 bg-[#0E8685] text-white flex flex-col justify-between shadow-xl z-20">
+    <!-- CABEÇALHO MOBILE (Visível apenas em Telemóveis) -->
+    <header class="bg-[#0E8685] text-white shadow-md md:hidden flex justify-between items-center px-4 py-3 sticky top-0 z-30">
+        <div class="flex items-center gap-2">
+            <span class="text-xl">⚙️</span>
+            <h1 class="font-bold text-sm">Painel Gestor | Ísis Holística</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="index.html" class="bg-white text-[#0E8685] text-xs font-bold px-3 py-1.5 rounded-lg shadow">Ver Loja ➔</a>
+            <button onclick="toggleAdminMobileMenu()" class="bg-teal-700 p-2 rounded-lg text-white font-bold text-base">☰</button>
+        </div>
+    </header>
+
+    <!-- MENU LATERAL (SIDEBAR - Oculto no mobile por padrão, visível no desktop) -->
+    <aside id="admin-sidebar" class="hidden md:flex w-full md:w-64 bg-[#0E8685] text-white flex-col justify-between shadow-xl z-20 md:min-h-screen absolute md:relative top-[57px] md:top-0 left-0">
         <div>
             <!-- Topo do Menu -->
-            <div class="p-6 border-b border-teal-700/50 flex items-center gap-3">
+            <div class="p-6 border-b border-teal-700/50 hidden md:flex items-center gap-3">
                 <span class="text-3xl">⚙️</span>
                 <div>
                     <h1 class="font-bold text-base leading-tight">Painel Gestor</h1>
@@ -26,7 +38,7 @@
             </div>
 
             <!-- Links de Navegação -->
-            <nav class="p-4 space-y-2">
+            <nav class="p-4 space-y-2 bg-[#0E8685]">
                 <button onclick="mudarAbaAdmin('inventario')" id="nav-inventario" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left">
                     <span>📦</span> Inventário da Loja
                 </button>
@@ -40,7 +52,7 @@
         </div>
 
         <!-- Rodapé da Sidebar -->
-        <div class="p-4 border-t border-teal-700/50">
+        <div class="p-4 border-t border-teal-700/50 bg-[#0E8685]">
             <a href="index.html" class="w-full flex items-center justify-center gap-2 bg-white text-[#0E8685] font-bold py-3 px-4 rounded-xl text-xs shadow hover:bg-teal-50 transition">
                 <span>Ver Loja ao Vivo</span> ➔
             </a>
@@ -72,7 +84,6 @@
                 <form id="product-form" onsubmit="salvarProduto(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input type="hidden" id="prod-id">
                     
-                    <!-- 1. Filtrar Categoria -->
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">1. Filtrar por Categoria</label>
                         <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
@@ -84,7 +95,6 @@
                         </select>
                     </div>
                     
-                    <!-- 2. Selecionar Produto do Depósito -->
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
                         <select id="prod-deposito-select" onchange="preencherDoDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
@@ -314,7 +324,6 @@
 
     <!-- Script de Gestão Admin -->
     <script>
-        // Dados de Depósito (Estoque Base)
         let depositoAdmin = JSON.parse(localStorage.getItem('isis_deposito')) || [
             { id: 101, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética." },
             { id: 102, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação." },
@@ -322,7 +331,6 @@
             { id: 104, nome: "Vela Aromática de Lavanda Calmante", preco: 29.90, categoria: "Velas", imagem: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&auto=format&fit=crop&q=60", descricao: "Vela 100% vegetal com essência calmante de lavanda." }
         ];
 
-        // Produtos Ativos na Loja
         let produtosAdmin = JSON.parse(localStorage.getItem('isis_produtos')) || [
             { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética e purificação do ambiente.", destaque: true },
             { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação e harmonia espiritual.", destaque: true },
@@ -337,6 +345,12 @@
         renderizarAdminProdutos();
         renderizarAdminDeposito();
         renderizarAdminBanners();
+
+        // Controlar Menu Mobile
+        function toggleAdminMobileMenu() {
+            const sidebar = document.getElementById('admin-sidebar');
+            sidebar.classList.toggle('hidden');
+        }
 
         // Navegação Lateral (Sidebar)
         function mudarAbaAdmin(aba) {
@@ -365,6 +379,11 @@
             } else if (aba === 'banners') {
                 secBan.classList.remove('hidden');
                 navBan.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
+            }
+
+            // Ocultar menu automaticamente no telemóvel ao clicar num link
+            if (window.innerWidth < 768) {
+                document.getElementById('admin-sidebar').classList.add('hidden');
             }
         }
 
