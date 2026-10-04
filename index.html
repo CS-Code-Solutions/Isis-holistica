@@ -250,7 +250,7 @@
     <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
         <div class="text-center mb-8">
             <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
-            <p class="text-gray-600 mt-2">Selecione uma categoria ou clique no produto para ver detalhes e descrição.</p>
+            <p class="text-gray-600 mt-2">Selecione uma categoria ou clique no produto para ver detalhes e propriedades energéticas.</p>
             
             <div class="flex flex-wrap justify-center gap-2 mt-6">
                 <button onclick="filtrarProdutos('todos')" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
@@ -287,31 +287,35 @@
 
     <!-- Modal de Detalhes do Produto -->
     <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl relative">
+        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
             <button onclick="fecharModal()" class="absolute top-3 right-3 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center">✕</button>
-            <div class="h-56 bg-gray-100">
+            <div class="h-60 bg-gray-100">
                 <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
             </div>
             <div class="p-6">
                 <span id="modal-category" class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider"></span>
                 <h3 id="modal-title" class="text-xl font-bold text-gray-800 mt-1"></h3>
                 <p id="modal-price" class="text-2xl font-extrabold text-[#C5A880] mt-2"></p>
-                <p id="modal-desc" class="text-gray-600 text-sm mt-3 leading-relaxed bg-gray-50 p-3 rounded-xl border"></p>
+                
+                <div class="mt-4">
+                    <span class="text-xs font-bold text-gray-700 uppercase block mb-1">Propriedade Energética & Propósito:</span>
+                    <p id="modal-desc" class="text-gray-600 text-sm leading-relaxed bg-gray-50 p-3.5 rounded-2xl border border-gray-100"></p>
+                </div>
 
-                <div id="modal-natural-notice" class="hidden mt-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-lg">
-                    ⚠️ <strong>Atenção:</strong> Por se tratar de uma pedra/cristal natural, o formato e tonalidade podem variar.
+                <div id="modal-natural-notice" class="hidden mt-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-xl">
+                    ⚠️ <strong>Atenção:</strong> Por se tratar de um produto natural, o formato, tamanho e tonalidade podem variar por serem únicos.
                 </div>
 
                 <div class="flex items-center justify-between mt-6">
                     <span class="text-sm font-semibold text-gray-700">Quantidade:</span>
-                    <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-                        <button onclick="alterarQtd(-1)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 font-bold">-</button>
-                        <span id="modal-qty" class="px-4 py-1 font-bold">1</span>
-                        <button onclick="alterarQtd(1)" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 font-bold">+</button>
+                    <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden shadow-sm">
+                        <button onclick="alterarQtd(-1)" class="px-3.5 py-1.5 bg-gray-100 hover:bg-gray-200 font-bold">-</button>
+                        <span id="modal-qty" class="px-4 py-1.5 font-bold">1</span>
+                        <button onclick="alterarQtd(1)" class="px-3.5 py-1.5 bg-gray-100 hover:bg-gray-200 font-bold">+</button>
                     </div>
                 </div>
 
-                <button onclick="adicionarAoCarrinho()" class="mt-6 w-full bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow-lg">Adicionar ao Carrinho</button>
+                <button onclick="adicionarAoCarrinho()" class="mt-6 w-full bg-[#0E8685] text-white font-bold py-3.5 rounded-2xl hover:bg-opacity-95 transition shadow-lg">Adicionar ao Carrinho</button>
             </div>
         </div>
     </div>
@@ -329,8 +333,8 @@
                     <span>Total:</span>
                     <span id="cart-total" class="text-[#C5A880]">R$ 0,00</span>
                 </div>
-                <button onclick="abrirFormularioCheckout()" class="w-full text-center bg-[#25D366] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow">Avançar para Dados de Entrega</button>
-                <button onclick="toggleCartModal()" class="w-full text-center bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl hover:bg-gray-200 transition">Continuar Comprando</button>
+                <button onclick="abrirFormularioCheckout()" class="w-full text-center bg-[#25D366] text-white font-bold py-3.5 rounded-2xl hover:bg-opacity-90 transition shadow">Avançar para Dados de Entrega</button>
+                <button onclick="toggleCartModal()" class="w-full text-center bg-gray-100 text-gray-700 font-bold py-3 rounded-2xl hover:bg-gray-200 transition">Continuar Comprando</button>
             </div>
         </div>
     </div>
@@ -378,7 +382,7 @@
                     💡 <strong>Atenção:</strong> Ao avançar, seu pedido será gerado e enviado para análise. Aguarde o nosso retorno pelo WhatsApp com os custos e prazos de entrega/retirada.
                 </div>
 
-                <button type="submit" class="w-full bg-[#25D366] text-white font-bold py-3.5 rounded-xl hover:bg-opacity-95 transition shadow-lg flex items-center justify-center gap-2">
+                <button type="submit" class="w-full bg-[#25D366] text-white font-bold py-3.5 rounded-2xl hover:bg-opacity-95 transition shadow-lg flex items-center justify-center gap-2">
                     💬 Enviar Pedido para Análise no WhatsApp
                 </button>
             </form>
@@ -414,9 +418,33 @@
         let currentSlide = 0;
 
         let listaProdutos = JSON.parse(localStorage.getItem('isis_produtos')) || [
-            { id: 1, nome: "Incenso Natural Artesanal de Alecrim e Arruda", preco: 18.90, categoria: "Incensos", imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", descricao: "Incenso artesanal de altíssima qualidade para limpeza energética.", destaque: true },
-            { id: 2, nome: "Bruto de Ametista Energizada", preco: 42.00, categoria: "Pedras", imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", descricao: "Cristal bruto natural de ametista ideal para meditação e harmonia.", destaque: true },
-            { id: 3, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde.", destaque: true }
+            { 
+                id: 1, 
+                nome: "Incenso Natural Artesanal de Alecrim e Arruda", 
+                preco: 18.90, 
+                categoria: "Incensos", 
+                imagem: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", 
+                descricao: "Desenvolvido com ervas naturais selecionadas, este incenso promove uma poderosa limpeza energética e purificação do ambiente. O alecrim traz vitalidade, clareza mental e foco, enquanto a arruda afasta energias densas e protege o campo espiritual. Ideal para momentos de renovação e harmonização do lar.", 
+                destaque: true 
+            },
+            { 
+                id: 2, 
+                nome: "Bruto de Ametista Energizada", 
+                preco: 42.00, 
+                categoria: "Pedras", 
+                imagem: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", 
+                descricao: "Cristal bruto 100% natural de alta vibração. A ametista é a pedra da espiritualidade, da intuição e da transformação. Ajuda a acalmar a mente, promove o equilíbrio emocional e eleva a conexão com o eu superior. Perfeita para meditação, quartos e para harmonizar energias densas do ambiente.", 
+                destaque: true 
+            },
+            { 
+                id: 3, 
+                nome: "Semijoia Quartzo Verde - Coração", 
+                preco: 89.90, 
+                categoria: "Semijoias", 
+                imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", 
+                descricao: "Elegante colar em semijoia com pingente de quartzo verde em formato de coração. O quartzo verde é conhecido como a pedra da saúde, da cura física e emocional, trazendo tranquilidade, esperança e o fortalecimento do chakra cardíaco. Acompanha corrente antialérgica de excelente acabamento.", 
+                destaque: true 
+            }
         ];
 
         let slides = JSON.parse(localStorage.getItem('isis_slides')) || [
@@ -465,19 +493,19 @@
             destaques.forEach(p => {
                 const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
-                    <div onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural}, '${(p.descricao || '').replace(/'/g, "\\'")}')" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
+                    <div onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural}, '${(p.descricao || '').replace(/'/g, "\\'")}')" class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
                         <div>
-                            <div class="relative h-64 bg-gray-100">
-                                <img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover">
-                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">Destaque</span>
+                            <div class="relative h-64 bg-gray-100 overflow-hidden">
+                                <img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">Destaque</span>
                             </div>
-                            <div class="p-5">
+                            <div class="p-6">
                                 <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
-                                <h4 class="font-bold text-lg mt-1 text-gray-800">${p.nome}</h4>
-                                <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
+                                <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
                             </div>
                         </div>
-                        <div class="p-5 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span></div>
+                        <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm hover:bg-opacity-95 transition">Ver Detalhes & Energia</span></div>
                     </div>
                 `;
             });
@@ -491,19 +519,19 @@
             filtrados.forEach(p => {
                 const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
-                    <div onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural}, '${(p.descricao || '').replace(/'/g, "\\'")}')" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col justify-between border border-gray-100 cursor-pointer">
+                    <div onclick="abrirModal('${p.nome.replace(/'/g, "\\'")}', ${p.preco}, '${p.imagem}', '${p.categoria}', ${ehNatural}, '${(p.descricao || '').replace(/'/g, "\\'")}')" class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
                         <div>
-                            <div class="relative h-64 bg-gray-100">
-                                <img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover">
-                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-2.5 py-1 rounded shadow">${p.categoria}</span>
+                            <div class="relative h-64 bg-gray-100 overflow-hidden">
+                                <img src="${p.imagem}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">${p.categoria}</span>
                             </div>
-                            <div class="p-5">
+                            <div class="p-6">
                                 <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
-                                <h4 class="font-bold text-lg mt-1 text-gray-800">${p.nome}</h4>
-                                <p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
+                                <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
                             </div>
                         </div>
-                        <div class="p-5 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-2.5 rounded-lg text-sm">Ver Detalhes</span></div>
+                        <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm hover:bg-opacity-95 transition">Ver Detalhes & Energia</span></div>
                     </div>
                 `;
             });
@@ -536,7 +564,7 @@
             document.getElementById('modal-price').innerText = `R$ ${preco.toFixed(2).replace('.', ',')}`;
             document.getElementById('modal-img').src = imagem;
             document.getElementById('modal-category').innerText = categoria;
-            document.getElementById('modal-desc').innerText = descricao || 'Sem descrição detalhada.';
+            document.getElementById('modal-desc').innerText = descricao || 'Produto selecionado com curadoria energética especial.';
             document.getElementById('modal-qty').innerText = quantidadeSelecionada;
 
             const avisoNatural = document.getElementById('modal-natural-notice');
@@ -591,13 +619,13 @@
                 cartItems.innerHTML += `
                     <div class="flex items-center justify-between border-b pb-3">
                         <div class="flex items-center gap-3">
-                            <img src="${item.imagem}" class="w-12 h-12 object-cover rounded-lg">
+                            <img src="${item.imagem}" class="w-12 h-12 object-cover rounded-xl">
                             <div>
-                                <h4 class="font-bold text-sm">${item.nome}</h4>
+                                <h4 class="font-bold text-sm text-gray-800">${item.nome}</h4>
                                 <p class="text-xs text-gray-500">Qtd: ${item.qtd} x R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
                             </div>
                         </div>
-                        <button onclick="removerDoCarrinho(${index})" class="text-red-500 text-xs font-bold">Remover</button>
+                        <button onclick="removerDoCarrinho(${index})" class="text-red-500 text-xs font-bold hover:underline">Remover</button>
                     </div>
                 `;
             });
