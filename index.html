@@ -10,7 +10,6 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         
-        /* Estilos do Carrossel Responsivo */
         #carousel-wrapper {
             position: relative;
             width: 100%;
@@ -30,7 +29,6 @@
             z-index: 0;
         }
 
-        /* Por padrão (Telemóvel), mostra a imagem mobile e oculta a de PC */
         .carousel-img-pc {
             display: none;
         }
@@ -38,7 +36,6 @@
             display: block;
         }
 
-        /* Em ecrãs médios/grandes (PC), mostra a imagem de PC e oculta a mobile */
         @media (min-width: 768px) {
             .carousel-img-pc {
                 display: block;
@@ -74,7 +71,6 @@
     <!-- Cabeçalho -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <!-- Logótipo Horizontal protegido contra salvamento -->
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
                 <img src="logo4.png" alt="Ísis Holística" class="h-14 md:h-20 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
             </div>
@@ -91,10 +87,12 @@
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🔮 Pedras e Cristais</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">✨ Semijoias</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🪷 Decoração</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🕯️ Velas</button>
                     </div>
                 </div>
 
                 <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685] transition">Espaço Terapêutico</button>
+                <a href="admin.html" class="text-[#C5A880] hover:text-[#0E8685] transition font-bold">⚙️ Painel Admin</a>
             </nav>
 
             <div class="flex items-center gap-2">
@@ -102,12 +100,7 @@
                     🛒
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                 </button>
-                <a href="https://www.instagram.com/isiseholistica" target="_blank" rel="noreferrer" class="hidden sm:flex bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white px-3 py-2 rounded-full text-xs md:text-sm font-bold shadow hover:opacity-90 transition items-center gap-1">
-                    📸 Instagram
-                </a>
-                <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="hidden sm:flex bg-[#25D366] text-white px-3 py-2 rounded-full text-xs md:text-sm font-bold shadow hover:bg-opacity-90 transition items-center gap-1">
-                    💬 WhatsApp
-                </a>
+                <a href="admin.html" class="md:hidden bg-amber-100 text-amber-800 p-2.5 rounded-lg text-xs font-bold">⚙️ Admin</a>
                 <button onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg text-gray-700 font-bold">☰</button>
             </div>
         </div>
@@ -121,20 +114,20 @@
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🔮 Pedras e Cristais</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">✨ Semijoias</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🪷 Decoração</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🕯️ Velas</button>
             <div class="border-t pt-2"></div>
             <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
+            <a href="admin.html" class="block w-full text-left py-2 font-semibold text-[#C5A880]">⚙️ Painel Admin</a>
             <a href="https://www.instagram.com/isiseholistica" target="_blank" rel="noreferrer" class="block text-center bg-gradient-to-r from-purple-600 via-pink-600 to-yellow-500 text-white font-bold py-2.5 rounded-xl mt-2">📸 Ver Instagram</a>
             <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="block text-center bg-[#25D366] text-white font-bold py-2.5 rounded-xl mt-2">💬 Falar no WhatsApp</a>
         </div>
     </header>
 
-    <!-- ABA 1: INÍCIO (CARROSSEL DINÂMICO RESPONSIVO + DESTAQUES) -->
+    <!-- ABA 1: INÍCIO -->
     <section id="view-home" class="app-view flex-grow">
-        <!-- Carrossel Dinâmico -->
         <div id="carousel-wrapper" class="text-white py-24 px-6 text-center overflow-hidden transition-all duration-700">
             <div class="carousel-overlay"></div>
             
-            <!-- Imagens do carrossel adaptadas para PC e Mobile -->
             <img id="carousel-img-mobile" class="carousel-bg-image carousel-img-mobile" src="" alt="Banner Mobile">
             <img id="carousel-img-pc" class="carousel-bg-image carousel-img-pc" src="" alt="Banner PC">
 
@@ -148,12 +141,12 @@
             <button onclick="mudarSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20 carousel-content">❯</button>
         </div>
 
-        <!-- Categorias -->
+        <!-- Categorias na Home (5 colunas) -->
         <div class="max-w-7xl mx-auto px-4 pt-12 pb-6">
             <div class="text-center mb-8">
                 <h3 class="text-2xl font-bold text-[#0E8685]">Explore Nossas Categorias</h3>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
                     <span class="text-3xl">🌿</span>
                     <h4 class="font-bold text-sm text-[#0E8685] mt-2">Incensos</h4>
@@ -169,6 +162,10 @@
                 <div onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100">
                     <span class="text-3xl">🪷</span>
                     <h4 class="font-bold text-sm text-[#0E8685] mt-2">Decoração</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="bg-white p-6 rounded-xl shadow-md text-center cursor-pointer hover:shadow-lg transition border border-gray-100 col-span-2 md:col-span-1">
+                    <span class="text-3xl">🕯️</span>
+                    <h4 class="font-bold text-sm text-[#0E8685] mt-2">Velas</h4>
                 </div>
             </div>
         </div>
@@ -221,6 +218,7 @@
                 <button onclick="filtrarProdutos('Pedras')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
                 <button onclick="filtrarProdutos('Semijoias')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">✨ Semijoias</button>
                 <button onclick="filtrarProdutos('Decoracao')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🪷 Decoração</button>
+                <button onclick="filtrarProdutos('Velas')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🕯️ Velas</button>
             </div>
         </div>
         <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
@@ -246,7 +244,7 @@
         </div>
     </section>
 
-    <!-- Modal de Detalhes do Produto com Descrição -->
+    <!-- Modal de Detalhes -->
     <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl relative">
             <button onclick="fecharModal()" class="absolute top-3 right-3 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center">✕</button>
@@ -257,7 +255,6 @@
                 <span id="modal-category" class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider"></span>
                 <h3 id="modal-title" class="text-xl font-bold text-gray-800 mt-1"></h3>
                 <p id="modal-price" class="text-2xl font-extrabold text-[#C5A880] mt-2"></p>
-                
                 <p id="modal-desc" class="text-gray-600 text-sm mt-3 leading-relaxed bg-gray-50 p-3 rounded-xl border"></p>
 
                 <div id="modal-natural-notice" class="hidden mt-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-lg">
@@ -321,7 +318,7 @@
         <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">© 2026 Ísis Holística. Todos os direitos reservados.</div>
     </footer>
 
-    <!-- Scripts da Loja -->
+    <!-- Script -->
     <script>
         let currentSlide = 0;
 
@@ -331,22 +328,9 @@
             { id: 3, nome: "Semijoia Quartzo Verde - Coração", preco: 89.90, categoria: "Semijoias", imagem: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop&q=60", descricao: "Colar em semijoia com pingente de quartzo verde.", destaque: true }
         ];
 
-        // Atualizado com suporte a imagem de PC e imagem de Mobile (Telemóvel)
         let slides = JSON.parse(localStorage.getItem('isis_slides')) || [
-            { 
-                badge: "🌸 Destaque da Semana", 
-                titulo: "Incensos Premium & Semijoias Esotéricas", 
-                desc: "100% naturais, sem carvão e com essências que transformam a vibração.", 
-                imagemPc: "", 
-                imagemMobile: "" 
-            },
-            { 
-                badge: "🔮 Espaço Terapêutico", 
-                titulo: "Jornada para o Equilíbrio", 
-                desc: "Humanoterapia & Psicanálise: Uma abordagem integrativa para mente, corpo e espírito.", 
-                imagemPc: "watermarked_img_16767091141142337326.jpg", 
-                imagemMobile: "watermarked_img_10282907314731288989.jpg" 
-            }
+            { badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias Esotéricas", desc: "100% naturais, sem carvão e com essências que transformam a vibração.", imagemPc: "", imagemMobile: "" },
+            { badge: "🔮 Espaço Terapêutico", titulo: "Jornada para o Equilíbrio", desc: "Humanoterapia & Psicanálise: Uma abordagem integrativa para mente, corpo e espírito.", imagemPc: "watermarked_img_16767091141142337326.jpg", imagemMobile: "watermarked_img_10282907314731288989.jpg" }
         ];
 
         renderizarDestaquesHome();
@@ -363,23 +347,14 @@
             document.getElementById('carousel-title').innerText = s.titulo;
             document.getElementById('carousel-desc').innerText = s.desc;
             
-            // Atribui as imagens específicas para PC e Mobile
             const imgPc = document.getElementById('carousel-img-pc');
             const imgMobile = document.getElementById('carousel-img-mobile');
 
-            if (s.imagemPc) {
-                imgPc.src = s.imagemPc;
-                imgPc.style.display = '';
-            } else {
-                imgPc.src = '';
-            }
+            imgPc.src = s.imagemPc || '';
+            imgPc.style.display = s.imagemPc ? '' : 'none';
 
-            if (s.imagemMobile) {
-                imgMobile.src = s.imagemMobile;
-                imgMobile.style.display = '';
-            } else {
-                imgMobile.src = '';
-            }
+            imgMobile.src = s.imagemMobile || '';
+            imgMobile.style.display = s.imagemMobile ? '' : 'none';
         }
 
         function mudarSlide(direcao) {
@@ -396,10 +371,6 @@
             if (!container) return;
             container.innerHTML = '';
             const destaques = listaProdutos.filter(p => p.destaque);
-            if (destaques.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 text-center col-span-3 py-6">Nenhum produto em destaque no momento.</p>';
-                return;
-            }
             destaques.forEach(p => {
                 const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
@@ -426,10 +397,6 @@
             if (!container) return;
             container.innerHTML = '';
             const filtrados = listaProdutos.filter(p => categoriaFiltro === 'todos' || p.categoria === categoriaFiltro);
-            if (filtrados.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 text-center col-span-3 py-8">Nenhum produto encontrado nesta categoria.</p>';
-                return;
-            }
             filtrados.forEach(p => {
                 const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
@@ -527,26 +494,22 @@
             let totalItens = 0, valorTotal = 0;
             cartItems.innerHTML = '';
 
-            if (carrinho.length === 0) {
-                cartItems.innerHTML = '<p class="text-gray-500 text-center py-8">O seu carrinho está vazio.</p>';
-            } else {
-                carrinho.forEach((item, index) => {
-                    totalItens += item.qtd;
-                    valorTotal += item.preco * item.qtd;
-                    cartItems.innerHTML += `
-                        <div class="flex items-center justify-between border-b pb-3">
-                            <div class="flex items-center gap-3">
-                                <img src="${item.imagem}" class="w-12 h-12 object-cover rounded-lg">
-                                <div>
-                                    <h4 class="font-bold text-sm">${item.nome}</h4>
-                                    <p class="text-xs text-gray-500">Qtd: ${item.qtd} x R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
-                                </div>
+            carrinho.forEach((item, index) => {
+                totalItens += item.qtd;
+                valorTotal += item.preco * item.qtd;
+                cartItems.innerHTML += `
+                    <div class="flex items-center justify-between border-b pb-3">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.imagem}" class="w-12 h-12 object-cover rounded-lg">
+                            <div>
+                                <h4 class="font-bold text-sm">${item.nome}</h4>
+                                <p class="text-xs text-gray-500">Qtd: ${item.qtd} x R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
                             </div>
-                            <button onclick="removerDoCarrinho(${index})" class="text-red-500 text-xs font-bold">Remover</button>
                         </div>
-                    `;
-                });
-            }
+                        <button onclick="removerDoCarrinho(${index})" class="text-red-500 text-xs font-bold">Remover</button>
+                    </div>
+                `;
+            });
 
             cartCount.innerText = totalItens;
             cartTotal.innerText = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
