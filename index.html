@@ -174,6 +174,52 @@
             </div>
             <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
         </div>
+
+        <!-- Seção de Depoimentos (Novo) -->
+        <div class="bg-gray-100 py-16 px-4 mt-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-10">
+                    <span class="text-[#0E8685] font-bold text-xs uppercase tracking-wider">Depoimentos</span>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">O que dizem nossos clientes e pacientes</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-gray-600 text-sm italic mb-4">"A curadoria de cristais e incensos é impecável. O atendimento é super acolhedor e a entrega em São Leopoldo foi super rápida!"</p>
+                        <span class="font-bold text-sm text-[#0E8685] block">— Juliana M.</span>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-gray-600 text-sm italic mb-4">"As sessões de Humanoterapia transformaram minha energia e clareza mental. Recomendo de olhos fechados!"</p>
+                        <span class="font-bold text-sm text-[#0E8685] block">— Carlos R.</span>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-gray-600 text-sm italic mb-4">"Comprar pelo site foi super prático e o formulário de análise deu toda a segurança para combinar a entrega. Excelente!"</p>
+                        <span class="font-bold text-sm text-[#0E8685] block">— Bruna S.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Perguntas Frequentes - FAQ (Novo) -->
+        <div class="max-w-5xl mx-auto px-4 py-16">
+            <div class="text-center mb-10">
+                <span class="text-[#0E8685] font-bold text-xs uppercase tracking-wider">Tire suas dúvidas</span>
+                <h3 class="text-2xl font-bold text-gray-900 mt-1">Perguntas Frequentes (FAQ)</h3>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="font-bold text-gray-800 mb-1">Como funciona o envio e cálculo de frete?</h4>
+                    <p class="text-gray-600 text-sm">Ao finalizar o pedido pelo site, você preenche seus dados de entrega e o pedido vai para nossa análise no WhatsApp. Retornamos rapidamente com os custos e prazos exatos para o seu CEP.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="font-bold text-gray-800 mb-1">Posso retirar meus produtos na loja física em São Leopoldo?</h4>
+                    <p class="text-gray-600 text-sm">Sim! Temos nossa loja física na Av. Feitoria, nº 2.300 - Lj 08 - Pinheiro, São Leopoldo - RS. Você pode selecionar a opção de retirada e sem custo de frete.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h4 class="font-bold text-gray-800 mb-1">Como agendar as sessões de Humanoterapia ou Psicanálise?</h4>
+                    <p class="text-gray-600 text-sm">Os agendamentos podem ser feitos diretamente pelo nosso botão de WhatsApp ou na aba 'Espaço Terapêutico', com atendimentos presenciais ou online realizados pela Fernanda Kristine e Rogério Soares.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- ABA 2: QUEM SOMOS (Com logo.png) -->
@@ -250,9 +296,14 @@
     <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
         <div class="text-center mb-8">
             <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
-            <p class="text-gray-600 mt-2">Selecione uma categoria ou clique no produto para ver detalhes e propriedades energéticas.</p>
+            <p class="text-gray-600 mt-2">Selecione uma categoria ou pesquise pelo produto desejado.</p>
             
-            <div class="flex flex-wrap justify-center gap-2 mt-6">
+            <!-- Barra de Pesquisa Instantânea (Novo) -->
+            <div class="max-w-md mx-auto my-6">
+                <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade energética..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-2 mt-4">
                 <button onclick="filtrarProdutos('todos')" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
                 <button onclick="filtrarProdutos('Incensos')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌿 Incensos</button>
                 <button onclick="filtrarProdutos('Pedras')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
@@ -284,6 +335,11 @@
             </div>
         </div>
     </section>
+
+    <!-- Botão Flutuante do WhatsApp (Novo) -->
+    <a href="https://wa.me/555195508826?text=Olá! Vim pelo site da Ísis Holística e gostaria de tirar uma dúvida." target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20ba5a] text-white w-14 h-14 rounded-full shadow-2xl transition transform hover:scale-110 flex items-center justify-center text-3xl" title="Falar no WhatsApp">
+        💬
+    </a>
 
     <!-- Modal de Detalhes do Produto -->
     <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
@@ -511,11 +567,27 @@
             });
         }
 
-        function renderizarProdutosLoja(categoriaFiltro) {
+        function renderizarProdutosLoja(categoriaFiltro, termoBusca = '') {
             const container = document.getElementById('grid-produtos');
             if (!container) return;
             container.innerHTML = '';
-            const filtrados = listaProdutos.filter(p => categoriaFiltro === 'todos' || p.categoria === categoriaFiltro);
+            
+            let filtrados = listaProdutos.filter(p => categoriaFiltro === 'todos' || p.categoria === categoriaFiltro);
+            
+            if (termoBusca.trim() !== '') {
+                const termo = termoBusca.toLowerCase();
+                filtrados = filtrados.filter(p => 
+                    p.nome.toLowerCase().includes(termo) || 
+                    p.descricao.toLowerCase().includes(termo) ||
+                    p.categoria.toLowerCase().includes(termo)
+                );
+            }
+
+            if (filtrados.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Nenhum produto encontrado com os termos pesquisados.</div>`;
+                return;
+            }
+
             filtrados.forEach(p => {
                 const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
@@ -537,6 +609,10 @@
             });
         }
 
+        function pesquisarProdutos(termo) {
+            renderizarProdutosLoja('todos', termo);
+        }
+
         function mudarAba(idAba) {
             document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
             const alvo = document.getElementById(idAba);
@@ -550,6 +626,8 @@
         }
 
         function filtrarProdutos(cat) {
+            const inputBusca = document.getElementById('input-busca');
+            if (inputBusca) inputBusca.value = '';
             renderizarProdutosLoja(cat);
         }
 
