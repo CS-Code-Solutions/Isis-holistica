@@ -16,7 +16,7 @@
     <!-- CABEÇALHO MOBILE -->
     <header class="bg-[#0E8685] text-white shadow-md md:hidden flex justify-between items-center px-4 py-3 sticky top-0 z-30">
         <div class="flex items-center gap-2">
-            <span class="text-xl">⚙️</span>
+            <span class="text-xl">⚙️️</span>
             <h1 class="font-bold text-sm">Painel Gestor | Ísis Holística</h1>
         </div>
         <div class="flex items-center gap-2">
@@ -49,313 +49,320 @@
             </nav>
         </div>
 
-        <div class="p-4 border-t border-teal-700/50 bg-[#0E8685]">
+        <div class="p-4 border-t border-teal-700/50 bg-[#0E8685] space-y-3">
             <a href="index.html" class="w-full flex items-center justify-center gap-2 bg-white text-[#0E8685] font-bold py-3 px-4 rounded-xl text-xs shadow hover:bg-teal-50 transition">
                 <span>Ver Loja ao Vivo</span> ➔
             </a>
+            <div class="text-center text-[10px] text-teal-200">
+                Sistema por <strong class="text-white">CS Code Solutions</strong>
+            </div>
         </div>
     </aside>
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
-        
-        <!-- ================= SEÇÃO 1: INVENTÁRIO DA LOJA ================= -->
-        <div id="admin-section-inventario" class="space-y-8">
-            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos (Loja)</h2>
-                    <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual da loja.</p>
-                </div>
-                <button onclick="abrirNovoProduto()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                    <span>➕</span> <span>Adicionar Produto do Depósito</span>
-                </button>
-            </div>
-
-            <!-- Formulário de Produto -->
-            <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
-                <div class="flex justify-between items-center mb-6 border-b pb-4">
-                    <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Cadastrar/Editar Produto na Loja</h3>
-                    <button onclick="toggleFormularioProduto()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col justify-between min-h-screen">
+        <div class="space-y-8">
+            
+            <!-- SEÇÃO 1: INVENTÁRIO DA LOJA -->
+            <div id="admin-section-inventario" class="space-y-8">
+                <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos (Loja)</h2>
+                        <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual da loja.</p>
+                    </div>
+                    <button onclick="abrirNovoProduto()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                        <span>➕</span> <span>Adicionar Produto do Depósito</span>
+                    </button>
                 </div>
 
-                <form id="product-form" onsubmit="salvarProduto(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="hidden" id="prod-id">
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">1. Filtrar por Categoria</label>
-                        <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                            <option value="Incensos">Incensos</option>
-                            <option value="Pedras">Pedras e Cristais</option>
-                            <option value="Semijoias">Semijoias</option>
-                            <option value="Decoracao">Decoração</option>
-                            <option value="Velas">Velas</option>
-                            <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
-                        <select id="prod-deposito-select" onchange="preencherDoDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                        </select>
+                <!-- Formulário de Produto -->
+                <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                    <div class="flex justify-between items-center mb-6 border-b pb-4">
+                        <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Cadastrar/Editar Produto na Loja</h3>
+                        <button onclick="toggleFormularioProduto()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
-                        <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
-                        <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria Final</label>
-                        <input type="text" id="prod-categoria" readonly class="w-full px-4 py-2.5 border bg-gray-100 rounded-xl text-sm text-gray-600">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Imagem do Produto (URL ou Ficheiro)</label>
-                        <input type="text" id="prod-imagem" placeholder="Link da imagem ou selecione o ficheiro abaixo" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
-                        <input type="file" id="prod-imagem-file" accept="image/*" onchange="converterImagemParaBase64(this, 'prod-imagem')" class="w-full text-xs text-gray-500">
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição do Produto</label>
-                        <textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
-                    </div>
-                    
-                    <div class="md:col-span-2 flex items-center gap-2 pt-2">
-                        <input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded focus:ring-[#0E8685]">
-                        <label for="prod-destaque" class="text-sm font-semibold text-gray-700">Deixar em destaque na Página Inicial da loja</label>
-                    </div>
-                    
-                    <div class="md:col-span-2 flex gap-3 pt-4 border-t">
-                        <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Produto</button>
-                        <button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Tabela do Inventário -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos na Vitrine</h3>
-                    <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                                <th class="py-3 px-3">Produto</th>
-                                <th class="py-3 px-3">Categoria</th>
-                                <th class="py-3 px-3">Preço</th>
-                                <th class="py-3 px-3 text-center">Destaque Home</th>
-                                <th class="py-3 px-3 text-right">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-product-list" class="text-sm divide-y"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= SEÇÃO 2: DEPÓSITO / ESTOQUE GERAL ================= -->
-        <div id="admin-section-deposito" class="space-y-8 hidden">
-            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
-                    <p class="text-gray-500 text-sm">Controle de quantidades, preços, imagens e sub-variações por categoria.</p>
-                </div>
-                <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                    <span>➕</span> <span>Cadastrar Item no Depósito</span>
-                </button>
-            </div>
-
-            <!-- Formulário de Depósito -->
-            <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
-                <div class="flex justify-between items-center mb-6 border-b pb-4">
-                    <h3 id="form-deposito-title" class="text-xl font-bold text-[#0E8685]">🏢 Novo Item no Depósito</h3>
-                    <button onclick="toggleFormularioDeposito()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
-                </div>
-
-                <form id="deposito-form" onsubmit="salvarItemDeposito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="hidden" id="dep-id">
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Item no Depósito</label>
-                        <input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Imagem de Oxalá">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
-                        <select id="dep-categoria" onchange="atualizarSubCamposDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                            <option value="Incensos">Incensos</option>
-                            <option value="Pedras">Pedras e Cristais</option>
-                            <option value="Semijoias">Semijoias</option>
-                            <option value="Decoracao">Decoração</option>
-                            <option value="Velas">Velas</option>
-                            <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço Sugerido (R$)</label>
-                        <input type="number" step="0.01" id="dep-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 55.00">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantidade em Estoque</label>
-                        <input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 10">
-                    </div>
-
-                    <!-- SUB-CAMPOS DINÂMICOS CONFORME A CATEGORIA -->
-                    <div id="sub-campos-container" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-xl border border-teal-100">
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Imagem do Depósito (URL ou Ficheiro)</label>
-                        <input type="text" id="dep-imagem" placeholder="Link da imagem ou selecione o ficheiro abaixo" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
-                        <input type="file" id="dep-imagem-file" accept="image/*" onchange="converterImagemParaBase64(this, 'dep-imagem')" class="w-full text-xs text-gray-500">
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Padrão</label>
-                        <textarea id="dep-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Detalhes e propriedades energéticas do item..."></textarea>
-                    </div>
-                    
-                    <div class="md:col-span-2 flex gap-3 pt-4 border-t">
-                        <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar no Depósito</button>
-                        <button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Tabela do Depósito -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-[#0E8685]">📦 Itens Registrados no Depósito</h3>
-                    <span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                                <th class="py-3 px-3">Item / Detalhes</th>
-                                <th class="py-3 px-3">Categoria</th>
-                                <th class="py-3 px-3">Preço</th>
-                                <th class="py-3 px-3 text-center">Estoque</th>
-                                <th class="py-3 px-3 text-right">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-deposito-list" class="text-sm divide-y"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= SEÇÃO 3: BANNERS DO CARROSSEL ================= -->
-        <div id="admin-section-banners" class="space-y-8 hidden">
-            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-[#0E8685]">Banners da Página Inicial (Carrossel)</h2>
-                    <p class="text-gray-500 text-sm">Gerencie os banners informando separadamente a imagem para PC e Telemóvel (Mobile).</p>
-                </div>
-                <button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                    <span>➕</span> <span>Adicionar Novo Banner</span>
-                </button>
-            </div>
-
-            <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
-                <div class="flex justify-between items-center mb-6 border-b pb-4">
-                    <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo/Editar Banner Responsivo</h3>
-                    <button onclick="toggleFormularioBanner()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
-                </div>
-
-                <form id="banner-form" onsubmit="salvarBanner(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="hidden" id="banner-id">
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selo / Categoria do Topo (Badge)</label>
-                        <input type="text" id="banner-badge" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 🌸 Destaque da Semana">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título Principal do Banner</label>
-                        <input type="text" id="banner-titulo" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Jornada para o Equilíbrio">
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Exibida no Banner</label>
-                        <textarea id="banner-desc" rows="2" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Uma abordagem integrativa para mente, corpo e espírito."></textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (URL ou Ficheiro)</label>
-                        <input type="text" id="banner-imgpc" placeholder="Link da imagem PC" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
-                        <input type="file" accept="image/*" onchange="converterImagemParaBase64(this, 'banner-imgpc')" class="w-full text-xs text-gray-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem para Mobile (URL ou Ficheiro)</label>
-                        <input type="text" id="banner-imgmob" placeholder="Link da imagem Mobile" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
-                        <input type="file" accept="image/*" onchange="converterImagemParaBase64(this, 'banner-imgmob')" class="w-full text-xs text-gray-500">
-                    </div>
-
-                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <form id="product-form" onsubmit="salvarProduto(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="hidden" id="prod-id">
+                        
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Destino ao Clicar no Banner</label>
-                            <select id="banner-linktipo" onchange="alternarDestinoBannerAdmin(this.value)" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white">
-                                <option value="produtos">Loja / Produtos</option>
-                                <option value="terapias">Espaço Terapêutico</option>
-                                <option value="produto">Produto Específico</option>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">1. Filtrar por Categoria</label>
+                            <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                                <option value="Incensos">Incensos</option>
+                                <option value="Pedras">Pedras e Cristais</option>
+                                <option value="Semijoias">Semijoias</option>
+                                <option value="Decoracao">Decoração</option>
+                                <option value="Velas">Velas</option>
+                                <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
                             </select>
                         </div>
-                        <div id="banner-linkalvo-container" class="hidden">
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selecione o Produto Alvo</label>
-                            <select id="banner-linkalvo-prod" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white"></select>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
+                            <select id="prod-deposito-select" onchange="preencherDoDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            </select>
                         </div>
-                    </div>
 
-                    <div class="md:col-span-2 flex gap-3 pt-4 border-t">
-                        <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Banner</button>
-                        <button type="button" onclick="toggleFormularioBanner()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
+                            <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
+                            <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria Final</label>
+                            <input type="text" id="prod-categoria" readonly class="w-full px-4 py-2.5 border bg-gray-100 rounded-xl text-sm text-gray-600">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Imagem do Produto (URL ou Ficheiro)</label>
+                            <input type="text" id="prod-imagem" placeholder="Link da imagem ou selecione o ficheiro abaixo" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                            <input type="file" id="prod-imagem-file" accept="image/*" onchange="converterImagemParaBase64(this, 'prod-imagem')" class="w-full text-xs text-gray-500">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição do Produto</label>
+                            <textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
+                        </div>
+                        
+                        <div class="md:col-span-2 flex items-center gap-2 pt-2">
+                            <input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded focus:ring-[#0E8685]">
+                            <label for="prod-destaque" class="text-sm font-semibold text-gray-700">Deixar em destaque na Página Inicial da loja</label>
+                        </div>
+                        
+                        <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+                            <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Produto</button>
+                            <button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tabela do Inventário -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos na Vitrine</h3>
+                        <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
                     </div>
-                </form>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                    <th class="py-3 px-3">Produto</th>
+                                    <th class="py-3 px-3">Categoria</th>
+                                    <th class="py-3 px-3">Preço</th>
+                                    <th class="py-3 px-3 text-center">Destaque Home</th>
+                                    <th class="py-3 px-3 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-product-list" class="text-sm divide-y"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <!-- Tabela dos Banners -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-[#0E8685]">🖼️ Banners Registrados</h3>
-                    <span id="total-banners" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 banners</span>
+            <!-- SEÇÃO 2: DEPÓSITO / ESTOQUE GERAL -->
+            <div id="admin-section-deposito" class="space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
+                        <p class="text-gray-500 text-sm">Controle de quantidades, preços, imagens e sub-variações por categoria.</p>
+                    </div>
+                    <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                        <span>➕</span> <span>Cadastrar Item no Depósito</span>
+                    </button>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                                <th class="py-3 px-3">Banner / Título</th>
-                                <th class="py-3 px-3">Badge</th>
-                                <th class="py-3 px-3">Destino do Clique</th>
-                                <th class="py-3 px-3 text-right">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-banner-list" class="text-sm divide-y"></tbody>
-                    </table>
+
+                <!-- Formulário de Depósito -->
+                <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                    <div class="flex justify-between items-center mb-6 border-b pb-4">
+                        <h3 id="form-deposito-title" class="text-xl font-bold text-[#0E8685]">🏢 Novo Item no Depósito</h3>
+                        <button onclick="toggleFormularioDeposito()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                    </div>
+
+                    <form id="deposito-form" onsubmit="salvarItemDeposito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="hidden" id="dep-id">
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Item no Depósito</label>
+                            <input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Imagem de Oxalá">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
+                            <select id="dep-categoria" onchange="atualizarSubCamposDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                                <option value="Incensos">Incensos</option>
+                                <option value="Pedras">Pedras e Cristais</option>
+                                <option value="Semijoias">Semijoias</option>
+                                <option value="Decoracao">Decoração</option>
+                                <option value="Velas">Velas</option>
+                                <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço Sugerido (R$)</label>
+                            <input type="number" step="0.01" id="dep-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 55.00">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantidade em Estoque</label>
+                            <input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 10">
+                        </div>
+
+                        <div id="sub-campos-container" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-xl border border-teal-100">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Imagem do Depósito (URL ou Ficheiro)</label>
+                            <input type="text" id="dep-imagem" placeholder="Link da imagem ou selecione o ficheiro abaixo" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                            <input type="file" id="dep-imagem-file" accept="image/*" onchange="converterImagemParaBase64(this, 'dep-imagem')" class="w-full text-xs text-gray-500">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Padrão</label>
+                            <textarea id="dep-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Detalhes e propriedades energéticas do item..."></textarea>
+                        </div>
+                        
+                        <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+                            <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar no Depósito</button>
+                            <button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tabela do Depósito -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-[#0E8685]">📦 Itens Registrados no Depósito</h3>
+                        <span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                    <th class="py-3 px-3">Item / Detalhes</th>
+                                    <th class="py-3 px-3">Categoria</th>
+                                    <th class="py-3 px-3">Preço</th>
+                                    <th class="py-3 px-3 text-center">Estoque</th>
+                                    <th class="py-3 px-3 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-deposito-list" class="text-sm divide-y"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: BANNERS DO CARROSSEL -->
+            <div id="admin-section-banners" class="space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#0E8685]">Banners da Página Inicial (Carrossel)</h2>
+                        <p class="text-gray-500 text-sm">Gerencie os banners informando separadamente a imagem para PC e Telemóvel (Mobile).</p>
+                    </div>
+                    <button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                        <span>➕</span> <span>Adicionar Novo Banner</span>
+                    </button>
+                </div>
+
+                <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                    <div class="flex justify-between items-center mb-6 border-b pb-4">
+                        <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo/Editar Banner Responsivo</h3>
+                        <button onclick="toggleFormularioBanner()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                    </div>
+
+                    <form id="banner-form" onsubmit="salvarBanner(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="hidden" id="banner-id">
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selo / Categoria do Topo (Badge)</label>
+                            <input type="text" id="banner-badge" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 🌸 Destaque da Semana">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título Principal do Banner</label>
+                            <input type="text" id="banner-titulo" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Jornada para o Equilíbrio">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Exibida no Banner</label>
+                            <textarea id="banner-desc" rows="2" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Uma abordagem integrativa para mente, corpo e espírito."></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (URL ou Ficheiro)</label>
+                            <input type="text" id="banner-imgpc" placeholder="Link da imagem PC" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                            <input type="file" accept="image/*" onchange="converterImagemParaBase64(this, 'banner-imgpc')" class="w-full text-xs text-gray-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem para Mobile (URL ou Ficheiro)</label>
+                            <input type="text" id="banner-imgmob" placeholder="Link da imagem Mobile" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                            <input type="file" accept="image/*" onchange="converterImagemParaBase64(this, 'banner-imgmob')" class="w-full text-xs text-gray-500">
+                        </div>
+
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Destino ao Clicar no Banner</label>
+                                <select id="banner-linktipo" onchange="alternarDestinoBannerAdmin(this.value)" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white">
+                                    <option value="produtos">Loja / Produtos</option>
+                                    <option value="terapias">Espaço Terapêutico</option>
+                                    <option value="produto">Produto Específico</option>
+                                </select>
+                            </div>
+                            <div id="banner-linkalvo-container" class="hidden">
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selecione o Produto Alvo</label>
+                                <select id="banner-linkalvo-prod" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white"></select>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+                            <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Banner</button>
+                            <button type="button" onclick="toggleFormularioBanner()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tabela dos Banners -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-[#0E8685]">🖼️ Banners Registrados</h3>
+                        <span id="total-banners" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 banners</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                    <th class="py-3 px-3">Banner / Título</th>
+                                    <th class="py-3 px-3">Badge</th>
+                                    <th class="py-3 px-3">Destino do Clique</th>
+                                    <th class="py-3 px-3 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-banner-list" class="text-sm divide-y"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Rodapé do Admin com assinatura CS Code Solutions -->
+        <footer class="mt-16 pt-6 border-t border-gray-200 text-center text-xs text-gray-500 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span>© 2026 Ísis Holística - Painel Gestor</span>
+            <span>Desenvolvido por <strong class="text-[#0E8685]">CS Code Solutions</strong></span>
+        </footer>
     </main>
 
     <!-- SCRIPT DE GESTÃO DO ADMIN -->
     <script>
-        // Dados locais sincronizados com localStorage
         let listaProdutos = JSON.parse(localStorage.getItem('isis_produtos')) || [];
         let listaDeposito = JSON.parse(localStorage.getItem('isis_deposito')) || [];
         let listaBanners = JSON.parse(localStorage.getItem('isis_slides')) || [];
 
-        // Inicialização ao carregar a página
         document.addEventListener("DOMContentLoaded", () => {
             renderizarTabelaProdutos();
             renderizarTabelaDeposito();
@@ -365,7 +372,6 @@
             atualizarSelectProdutosBanner();
         });
 
-        // Alternar Abas do Painel
         function mudarAbaAdmin(aba) {
             document.getElementById('admin-section-inventario').classList.add('hidden');
             document.getElementById('admin-section-deposito').classList.add('hidden');
@@ -392,7 +398,6 @@
             sidebar.classList.toggle('hidden');
         }
 
-        // Conversor de imagem para Base64
         function converterImagemParaBase64(input, targetId) {
             const file = input.files[0];
             if (file) {
@@ -404,7 +409,6 @@
             }
         }
 
-        // ================= GESTÃO DE PRODUTOS / INVENTÁRIO =================
         function toggleFormularioProduto() {
             document.getElementById('form-container-produto').classList.toggle('hidden');
         }
@@ -523,8 +527,6 @@
             }
         }
 
-
-        // ================= GESTÃO DE DEPÓSITO / ESTOQUE =================
         function toggleFormularioDeposito() {
             document.getElementById('form-container-deposito').classList.toggle('hidden');
         }
@@ -591,7 +593,6 @@
             const imagem = document.getElementById('dep-imagem').value;
             const descricao = document.getElementById('dep-descricao').value;
 
-            // Recolher sub-campos
             let subDetalhes = {};
             if (categoria === 'Incensos') {
                 subDetalhes.fragrancia = document.getElementById('sub-fragrancia')?.value || '';
@@ -672,7 +673,6 @@
             
             atualizarSubCamposDeposito();
             
-            // Preencher sub-campos se existirem
             setTimeout(() => {
                 if (d.subDetalhes) {
                     if (document.getElementById('sub-fragrancia')) document.getElementById('sub-fragrancia').value = d.subDetalhes.fragrancia || '';
@@ -696,8 +696,6 @@
             }
         }
 
-
-        // ================= GESTÃO DE BANNERS DO CARROSSEL =================
         function toggleFormularioBanner() {
             document.getElementById('form-container-banner').classList.toggle('hidden');
         }
@@ -800,7 +798,7 @@
                 }, 50);
             }
 
-            document.getElementById('form-banner-title').innerText = "🖼️️ Editar Banner Responsivo";
+            document.getElementById('form-banner-title').innerText = "🖼 Editar Banner Responsivo";
             document.getElementById('form-container-banner').classList.remove('hidden');
         }
 
