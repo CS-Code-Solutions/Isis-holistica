@@ -285,6 +285,10 @@
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título Principal do Banner</label>
                             <input type="text" id="banner-titulo" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Jornada para o Equilíbrio">
                         </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tempo de Exibição (Segundos)</label>
+                            <input type="number" id="banner-tempo" value="5" min="2" max="60" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 5">
+                        </div>
                         <div class="md:col-span-2">
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Exibida no Banner</label>
                             <textarea id="banner-desc" rows="2" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Uma abordagem integrativa para mente, corpo e espírito."></textarea>
@@ -332,8 +336,8 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                                    <th class="py-3 px-3">Banner / Título</th>
-                                    <th class="py-3 px-3">Badge</th>
+                                    <th class="py-3 px-3">Banner / Imagem</th>
+                                    <th class="py-3 px-3">Badge & Tempo</th>
                                     <th class="py-3 px-3">Destino do Clique</th>
                                     <th class="py-3 px-3 text-right">Ações</th>
                                 </tr>
@@ -446,6 +450,10 @@
                 document.getElementById('admin-section-banners').classList.remove('hidden');
                 document.getElementById('nav-banners').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
             }
+
+            if (window.innerWidth < 768) {
+                document.getElementById('admin-sidebar').classList.add('hidden');
+            }
         }
 
         window.toggleAdminMobileMenu = function() {
@@ -520,6 +528,7 @@
         window.abrirNovoBanner = function() {
             document.getElementById('banner-id').value = '';
             document.getElementById('banner-form').reset();
+            document.getElementById('banner-tempo').value = '5';
             document.getElementById('form-banner-title').innerText = "🖼️ Adicionar Novo Banner Responsivo";
             alternarDestinoBannerAdmin('produtos');
             document.getElementById('form-container-banner').classList.remove('hidden');
@@ -559,6 +568,7 @@
             const badge = document.getElementById('banner-badge').value;
             const titulo = document.getElementById('banner-titulo').value;
             const desc = document.getElementById('banner-desc').value;
+            const tempo = parseInt(document.getElementById('banner-tempo').value) || 5;
             const imagemPc = document.getElementById('banner-imgpc').value;
             const imagemMobile = document.getElementById('banner-imgmob').value;
             const linkTipo = document.getElementById('banner-linktipo').value;
@@ -568,7 +578,7 @@
                 linkAlvo = document.getElementById('banner-linkalvo-prod').value;
             }
 
-            const bannerData = { badge, titulo, desc, imagemPc, imagemMobile, linkTipo, linkAlvo };
+            const bannerData = { badge, titulo, desc, tempo, imagemPc, imagemMobile, linkTipo, linkAlvo };
 
             try {
                 if (idDoc !== '') {
@@ -603,13 +613,22 @@
                 else if (b.linkTipo === 'categoria') destinoStr = `Categoria: ${b.linkAlvo}`;
                 else if (b.linkTipo === 'produto') destinoStr = `Produto: ${b.linkAlvo}`;
 
+                const imgCapa = b.imagemPc || b.imagemMobile || '';
+                const tempoExibicao = b.tempo || 5;
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
-                        <td class="py-3 px-3">
-                            <span class="font-bold text-gray-800 block">${b.titulo}</span>
-                            <span class="text-xs text-gray-400">${b.desc}</span>
+                        <td class="py-3 px-3 flex items-center gap-3">
+                            <img src="${imgCapa || 'https://via.placeholder.com/60'}" class="w-14 h-9 object-cover rounded-lg border shadow-sm">
+                            <div>
+                                <span class="font-bold text-gray-800 block">${b.titulo}</span>
+                                <span class="text-xs text-gray-400 truncate max-w-xs block">${b.desc}</span>
+                            </div>
                         </td>
-                        <td class="py-3 px-3"><span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs">${b.badge}</span></td>
+                        <td class="py-3 px-3 space-y-1">
+                            <span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs inline-block">${b.badge}</span>
+                            <span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-md text-[10px] block w-fit">⏱️ ${tempoExibicao}s</span>
+                        </td>
                         <td class="py-3 px-3 text-gray-600 text-xs font-semibold">${destinoStr}</td>
                         <td class="py-3 px-3 text-right space-x-2">
                             <button onclick="editarBanner('${b.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
@@ -627,6 +646,7 @@
             document.getElementById('banner-badge').value = b.badge;
             document.getElementById('banner-titulo').value = b.titulo;
             document.getElementById('banner-desc').value = b.desc;
+            document.getElementById('banner-tempo').value = b.tempo || 5;
             document.getElementById('banner-imgpc').value = b.imagemPc || '';
             document.getElementById('banner-imgmob').value = b.imagemMobile || '';
             document.getElementById('banner-linktipo').value = b.linkTipo || 'produtos';
