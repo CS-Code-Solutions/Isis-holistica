@@ -166,7 +166,7 @@
                     <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Decoração</h4>
                 </div>
                 <div onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
-                    <span class="text-2xl sm:text-3xl">🕯️</span>
+                    <span class="text-2xl sm:text-3xl">🕯️️</span>
                     <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Velas</h4>
                 </div>
                 <div onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
@@ -246,7 +246,7 @@
                     <span class="text-[#0E8685] font-bold text-xs md:text-sm tracking-wider uppercase">Nossa Essência</span>
                     <h3 class="text-2xl md:text-4xl font-bold mt-1 mb-4 text-gray-900">Quem Somos</h3>
                     <p class="text-gray-700 leading-relaxed text-sm md:text-base mb-4">
-                        A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual. Mais do que uma loja esotérica, somos um espaço acolhedor dedicado à elevação da vibração através de elementos naturais, aromaterapia, cristais e acessórios com significado.
+                        A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual. Más do que uma loja esotérica, somos um espaço acolhedor dedicado à elevação da vibração através de elementos naturais, aromaterapia, cristais e acessórios com significado.
                     </p>
                     <p class="text-gray-700 leading-relaxed text-sm md:text-base mb-6">
                         Fundada com amor e dedicação em São Leopoldo - RS, unimos o comércio consciente de produtos esotéricos ao suporte terapêutico especializado para guiar a sua jornada de autoconhecimento.
@@ -351,7 +351,7 @@
         💬
     </a>
 
-    <!-- Modal de Detalhes do Produto (Com Carrossel e Legendas Posicionadas) -->
+    <!-- Modal de Detalhes do Produto -->
     <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
             <button onclick="fecharModal()" class="absolute top-3 right-3 bg-gray-100 hover:bg-gray-200 w-8 h-8 rounded-full font-bold flex items-center justify-center z-30">✕</button>
@@ -483,39 +483,64 @@
         </div>
     </footer>
 
-    <!-- Script -->
-    <script>
+    <!-- Script de Ligação ao Firebase e Lógica da Loja -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyACzkdrx9HUFoZE-emtGCx4SXLX9w7F4w",
+            authDomain: "isis-holistica.firebaseapp.com",
+            projectId: "isis-holistica",
+            storageBucket: "isis-holistica.firebasestorage.app",
+            messagingSenderId: "18451242035",
+            appId: "1:18451242035:web:2bc1df8c53716bdbd6a1746"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         let currentSlide = 0;
+        let listaProdutos = [];
+        let slides = [];
 
-        let listaProdutos = JSON.parse(localStorage.getItem('isis_produtos')) || [
-            { 
-                id: 1, 
-                nome: "Incenso Natural Artesanal de Alecrim e Arruda", 
-                preco: 18.90, 
-                categoria: "Incensos", 
-                imagens: [{ url: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60", texto: "", posH: "left", posV: "top" }], 
-                descricao: "Desenvolvido com ervas naturais selecionadas, este incenso promove limpeza energética.", 
-                destaque: true 
-            },
-            { 
-                id: 2, 
-                nome: "Bruto de Ametista Energizada", 
-                preco: 42.00, 
-                categoria: "Pedras", 
-                imagens: [{ url: "https://images.unsplash.com/photo-1569396111841-311f422c5bcd?w=500&auto=format&fit=crop&q=60", texto: "", posH: "left", posV: "top" }], 
-                descricao: "Cristal bruto 100% natural de alta vibração para espiritualidade e intuição.", 
-                destaque: true 
+        async function carregarDadosDoBanco() {
+            try {
+                // Carregar Produtos do Firestore
+                const querySnapshotProd = await getDocs(collection(db, "produtos"));
+                listaProdutos = [];
+                querySnapshotProd.forEach((docSnap) => {
+                    listaProdutos.push({ idFirestore: docSnap.id, ...docSnap.data() });
+                });
+
+                // Carregar Banners do Firestore
+                const querySnapshotSlides = await getDocs(collection(db, "slides"));
+                slides = [];
+                querySnapshotSlides.forEach((docSnap) => {
+                    slides.push({ idFirestore: docSnap.id, ...docSnap.data() });
+                });
+
+                renderizarDestaquesHome();
+                renderizarProdutosLoja('todos');
+                inicializarCarrossel();
+            } catch (e) {
+                console.error("Erro ao carregar dados do Firebase:", e);
             }
-        ];
+        }
 
-        let slides = JSON.parse(localStorage.getItem('isis_slides')) || [
-            { badge: "🌸 Destaque da Semana", titulo: "Incensos Premium & Semijoias", desc: "100% naturais, sem carvão e com essências que transformam a vibração.", imagemPc: "", imagemMobile: "", linkTipo: "produtos", linkAlvo: "" },
-            { badge: "🔮 Espaço Terapêutico", titulo: "Jornada para o Equilíbrio", desc: "Humanoterapia & Psicanálise: Abordagem integrativa para mente, corpo e espírito.", imagemPc: "watermarked_img_16767091141142337326.jpg", imagemMobile: "watermarked_img_4253682499609492167.jpg", linkTipo: "terapias", linkAlvo: "" }
-        ];
+        carregarDadosDoBanco();
 
-        renderizarDestaquesHome();
-        renderizarProdutosLoja('todos');
-        inicializarCarrossel();
+        window.mudarAba = function(idAba) {
+            document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
+            const alvo = document.getElementById(idAba);
+            if (alvo) alvo.classList.remove('hidden');
+            document.getElementById('mobile-menu').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.toggleMobileMenu = function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
 
         function inicializarCarrossel() {
             if (slides.length > 0) atualizarSlideUI();
@@ -523,9 +548,10 @@
 
         function atualizarSlideUI() {
             const s = slides[currentSlide];
-            document.getElementById('carousel-badge').innerText = s.badge;
-            document.getElementById('carousel-title').innerText = s.titulo;
-            document.getElementById('carousel-desc').innerText = s.desc;
+            if (!s) return;
+            document.getElementById('carousel-badge').innerText = s.badge || '';
+            document.getElementById('carousel-title').innerText = s.titulo || '';
+            document.getElementById('carousel-desc').innerText = s.desc || '';
             
             const imgPc = document.getElementById('carousel-img-pc');
             const imgMobile = document.getElementById('carousel-img-mobile');
@@ -537,16 +563,17 @@
             imgMobile.style.display = s.imagemMobile ? '' : 'none';
         }
 
-        function mudarSlide(direcao) {
+        window.mudarSlide = function(direcao) {
+            if (slides.length === 0) return;
             currentSlide = (currentSlide + direcao + slides.length) % slides.length;
             atualizarSlideUI();
         }
 
         setInterval(() => {
-            if (slides.length > 1) mudarSlide(1);
+            if (slides.length > 1) window.mudarSlide(1);
         }, 10000);
 
-        function clicarBannerAtual() {
+        window.clicarBannerAtual = function() {
             const s = slides[currentSlide];
             if (!s) return;
             if (s.linkTipo === 'terapias') {
@@ -564,11 +591,14 @@
             if (!container) return;
             container.innerHTML = '';
             const destaques = listaProdutos.filter(p => p.destaque);
+            if (destaques.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-gray-400">Nenhum produto em destaque no momento.</div>`;
+                return;
+            }
             destaques.forEach(p => {
                 const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
-                const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
-                    <div onclick='abrirModalProduto(${JSON.stringify(p).replace(/'/g, "&#39;")})' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                    <div onclick='abrirModalProdutoById("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
                         <div>
                             <div class="relative h-64 bg-gray-100 overflow-hidden">
                                 <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -577,7 +607,7 @@
                             <div class="p-6">
                                 <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
                                 <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
-                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
                             </div>
                         </div>
                         <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm hover:bg-opacity-95 transition">Ver Detalhes & Energia</span></div>
@@ -609,9 +639,8 @@
 
             filtrados.forEach(p => {
                 const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
-                const ehNatural = p.categoria === 'Pedras' || p.categoria === 'Semijoias';
                 container.innerHTML += `
-                    <div onclick='abrirModalProduto(${JSON.stringify(p).replace(/'/g, "&#39;")})' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                    <div onclick='abrirModalProdutoById("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
                         <div>
                             <div class="relative h-64 bg-gray-100 overflow-hidden">
                                 <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -620,7 +649,7 @@
                             <div class="p-6">
                                 <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
                                 <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
-                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${p.preco.toFixed(2).replace('.', ',')}</p>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
                             </div>
                         </div>
                         <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm hover:bg-opacity-95 transition">Ver Detalhes & Energia</span></div>
@@ -629,23 +658,11 @@
             });
         }
 
-        function pesquisarProdutos(termo) {
+        window.pesquisarProdutos = function(termo) {
             renderizarProdutosLoja('todos', termo);
         }
 
-        function mudarAba(idAba) {
-            document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
-            const alvo = document.getElementById(idAba);
-            if (alvo) alvo.classList.remove('hidden');
-            document.getElementById('mobile-menu').classList.add('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function toggleMobileMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        }
-
-        function filtrarProdutos(cat) {
+        window.filtrarProdutos = function(cat) {
             const inputBusca = document.getElementById('input-busca');
             if (inputBusca) inputBusca.value = '';
             renderizarProdutosLoja(cat);
@@ -655,6 +672,11 @@
         let quantidadeSelecionada = 1;
         let fotoModalIndex = 0;
         let fotosProdutoModal = [];
+
+        window.abrirModalProdutoById = function(idFirestore) {
+            const prod = listaProdutos.find(p => p.idFirestore === idFirestore);
+            if (prod) abrirModalProduto(prod);
+        }
 
         function abrirModalProduto(prod) {
             produtoAtual = prod;
@@ -668,7 +690,7 @@
             }
 
             document.getElementById('modal-title').innerText = prod.nome;
-            document.getElementById('modal-price').innerText = `R$ ${prod.preco.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-price').innerText = `R$ ${Number(prod.preco).toFixed(2).replace('.', ',')}`;
             document.getElementById('modal-category').innerText = prod.categoria;
             document.getElementById('modal-desc').innerText = prod.descricao || 'Produto selecionado com curadoria energética especial.';
             document.getElementById('modal-qty').innerText = quantidadeSelecionada;
@@ -712,17 +734,17 @@
             }
         }
 
-        function mudarFotoModal(dir) {
+        window.mudarFotoModal = function(dir) {
             if (fotosProdutoModal.length <= 1) return;
             fotoModalIndex = (fotoModalIndex + dir + fotosProdutoModal.length) % fotosProdutoModal.length;
             atualizarFotoModalUI();
         }
 
-        function fecharModal() {
+        window.fecharModal = function() {
             document.getElementById('product-modal').classList.add('hidden');
         }
 
-        function alterarQtd(val) {
+        window.alterarQtd = function(val) {
             quantidadeSelecionada += val;
             if (quantidadeSelecionada < 1) quantidadeSelecionada = 1;
             document.getElementById('modal-qty').innerText = quantidadeSelecionada;
@@ -731,22 +753,22 @@
         let carrinho = JSON.parse(localStorage.getItem('isis_carrinho')) || [];
         atualizarCarrinhoUI();
 
-        function adicionarAoCarrinho() {
+        window.adicionarAoCarrinho = function() {
             const imgCapa = (fotosProdutoModal.length > 0) ? fotosProdutoModal[0].url : '';
             const itemExistente = carrinho.find(i => i.nome === produtoAtual.nome);
             if (itemExistente) itemExistente.qtd += quantidadeSelecionada;
             else carrinho.push({ ...produtoAtual, imagem: imgCapa, qtd: quantidadeSelecionada });
-            salvarEAtualizar();
+            salvarEAtualizarCarrinho();
             fecharModal();
             toggleCartModal();
         }
 
-        function removerDoCarrinho(idx) {
+        window.removerDoCarrinho = function(idx) {
             carrinho.splice(idx, 1);
-            salvarEAtualizar();
+            salvarEAtualizarCarrinho();
         }
 
-        function salvarEAtualizar() {
+        function salvarEAtualizarCarrinho() {
             localStorage.setItem('isis_carrinho', JSON.stringify(carrinho));
             atualizarCarrinhoUI();
         }
@@ -767,7 +789,7 @@
                             <img src="${item.imagem}" class="w-12 h-12 object-cover rounded-xl">
                             <div>
                                 <h4 class="font-bold text-sm text-gray-800">${item.nome}</h4>
-                                <p class="text-xs text-gray-500">Qtd: ${item.qtd} x R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+                                <p class="text-xs text-gray-500">Qtd: ${item.qtd} x R$ ${Number(item.preco).toFixed(2).replace('.', ',')}</p>
                             </div>
                         </div>
                         <button onclick="removerDoCarrinho(${index})" class="text-red-500 text-xs font-bold hover:underline">Remover</button>
@@ -779,11 +801,11 @@
             cartTotal.innerText = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
         }
 
-        function toggleCartModal() {
+        window.toggleCartModal = function() {
             document.getElementById('cart-modal').classList.toggle('hidden');
         }
 
-        function abrirFormularioCheckout() {
+        window.abrirFormularioCheckout = function() {
             if (carrinho.length === 0) {
                 alert("O seu carrinho está vazio!");
                 return;
@@ -792,11 +814,11 @@
             document.getElementById('checkout-modal').classList.remove('hidden');
         }
 
-        function fecharFormularioCheckout() {
+        window.fecharFormularioCheckout = function() {
             document.getElementById('checkout-modal').classList.add('hidden');
         }
 
-        function enviarPedidoWhatsApp(e) {
+        window.enviarPedidoWhatsApp = function(e) {
             e.preventDefault();
 
             const nome = document.getElementById('cli-nome').value;
