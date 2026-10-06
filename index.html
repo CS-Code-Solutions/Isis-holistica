@@ -179,7 +179,7 @@
         </div>
     </section>
 
-    <!-- Outras abas (Quem somos, Produtos, Terapias, etc.) mantêm-se iguais -->
+    <!-- Outras abas -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-5xl mx-auto">
             <div class="flex flex-col md:flex-row items-center gap-8 mb-12 bg-[#F8F9FA] p-6 md:p-12 rounded-3xl border border-gray-100 shadow-sm">
@@ -229,9 +229,37 @@
         </div>
     </section>
 
-    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl">💬</a>
+    <!-- MODAL DE DETALHES DO PRODUTO (Com Seleção de Variação / Fotos com Posição) -->
+    <div id="modal-produto" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="fecharModalProduto()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-xl bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="space-y-4">
+                    <div id="modal-img-container" class="relative h-72 bg-gray-100 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center">
+                        <img id="modal-img" src="" alt="Produto" class="w-full h-full object-cover">
+                        <div id="modal-badge-texto" class="absolute hidden bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md max-w-[80%] text-center"></div>
+                    </div>
+                    <!-- Seletor de Variações gerado automaticamente pelas fotos -->
+                    <div id="modal-variacoes-container" class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase">Escolha a Variação / Detalhe:</label>
+                        <div id="modal-variantes-lista" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+                <div class="space-y-4 flex flex-col justify-between">
+                    <div>
+                        <span id="modal-categoria" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full uppercase"></span>
+                        <h3 id="modal-nome" class="text-2xl font-bold text-gray-900 mt-2"></h3>
+                        <p id="modal-preco" class="text-3xl font-extrabold text-[#C5A880] mt-2"></p>
+                        <p id="modal-descricao" class="text-gray-600 text-sm mt-4 leading-relaxed"></p>
+                    </div>
+                    <button onclick="adicionarProdutoAoCarrinhoModal()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm">🛒 Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Modais e Carrinho omitidos por brevidade, mantendo os originais -->
+    <!-- BOTÃO WHATSAPP -->
+    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl">💬</a>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -253,6 +281,8 @@
         let listaProdutos = [];
         let slides = [];
         let carouselTimer = null;
+        let produtoAtualModal = null;
+        let fotoSelecionadaModalIndex = 0;
 
         async function carregarDadosDoBanco() {
             try {
@@ -310,7 +340,6 @@
             const s = slides[currentSlide];
             if (!s) return;
             
-            // Badge (Selo) opcional
             const badgeEl = document.getElementById('carousel-badge');
             if (s.badge && s.badge.trim() !== '') {
                 badgeEl.innerText = s.badge;
@@ -319,7 +348,6 @@
                 badgeEl.style.display = 'none';
             }
 
-            // Título opcional
             const titleEl = document.getElementById('carousel-title');
             if (s.titulo && s.titulo.trim() !== '') {
                 titleEl.innerText = s.titulo;
@@ -328,7 +356,6 @@
                 titleEl.style.display = 'none';
             }
 
-            // Descrição opcional
             const descEl = document.getElementById('carousel-desc');
             if (s.desc && s.desc.trim() !== '') {
                 descEl.innerText = s.desc;
@@ -373,12 +400,92 @@
                 filtrarProdutos(s.linkAlvo);
             } else if (s.linkTipo === 'produto' && s.linkAlvo) {
                 const prod = listaProdutos.find(p => p.nome === s.linkAlvo);
-                if (prod) abrirModalProduto(prod);
+                if (prod) abrirModalProdutoId(prod.idFirestore);
                 else mudarAba('view-produtos');
             } else {
                 mudarAba('view-produtos');
                 filtrarProdutos('todos');
             }
+        }
+
+        // Funções do Modal de Produto com Variações Automáticas
+        window.abrirModalProdutoId = function(idFirestore) {
+            const p = listaProdutos.find(item => item.idFirestore === idFirestore);
+            if (!p) return;
+            produtoAtualModal = p;
+            fotoSelecionadaModalIndex = 0;
+
+            document.getElementById('modal-nome').innerText = p.nome;
+            document.getElementById('modal-preco').innerText = `R$ ${Number(p.preco).toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-categoria').innerText = p.categoria;
+            document.getElementById('modal-descricao').innerText = p.descricao || '';
+
+            atualizarVisualizacaoModalFoto();
+            renderizarBotoesVariacoesModal();
+
+            document.getElementById('modal-produto').classList.remove('hidden');
+        }
+
+        window.fecharModalProduto = function() {
+            document.getElementById('modal-produto').classList.add('hidden');
+        }
+
+        window.selecionarVariacaoModal = function(index) {
+            fotoSelecionadaModalIndex = index;
+            atualizarVisualizacaoModalFoto();
+            renderizarBotoesVariacoesModal();
+        }
+
+        function atualizarVisualizacaoModalFoto() {
+            if (!produtoAtualModal || !produtoAtualModal.imagens || produtoAtualModal.imagens.length === 0) return;
+            const imgData = produtoAtualModal.imagens[fotoSelecionadaModalIndex] || produtoAtualModal.imagens[0];
+            
+            const imgEl = document.getElementById('modal-img');
+            imgEl.src = imgData.url || '';
+
+            const badgeEl = document.getElementById('modal-badge-texto');
+            if (imgData.texto && imgData.texto.trim() !== '') {
+                badgeEl.innerText = imgData.texto;
+                badgeEl.style.display = 'block';
+
+                // Aplica posicionamento dinâmico conforme configurado no Admin
+                badgeEl.className = "absolute bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md max-w-[80%] text-center ";
+                if (imgData.posV === 'bottom') badgeEl.className += "bottom-4 ";
+                else badgeEl.className += "top-4 ";
+
+                if (imgData.posH === 'right') badgeEl.className += "right-4";
+                else badgeEl.className += "left-4";
+            } else {
+                badgeEl.style.display = 'none';
+            }
+        }
+
+        function renderizarBotoesVariacoesModal() {
+            const container = document.getElementById('modal-variantes-lista');
+            const wrapper = document.getElementById('modal-variacoes-container');
+            container.innerHTML = '';
+
+            if (!produtoAtualModal.imagens || produtoAtualModal.imagens.length <= 1) {
+                wrapper.classList.add('hidden');
+                return;
+            }
+
+            wrapper.classList.remove('hidden');
+            produtoAtualModal.imagens.forEach((img, idx) => {
+                const nomeVariacao = img.texto || `Opção ${idx + 1}`;
+                const isSelected = idx === fotoSelecionadaModalIndex;
+                
+                container.innerHTML += `
+                    <button onclick="selecionarVariacaoModal(${idx})" class="px-3.5 py-2 rounded-xl text-xs font-bold transition border ${isSelected ? 'bg-[#0E8685] text-white border-[#0E8685] shadow' : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200'}">
+                        ${nomeVariacao}
+                    </button>
+                `;
+            });
+        }
+
+        window.adicionarProdutoAoCarrinhoModal = function() {
+            alert(`Produto "${produtoAtualModal.nome}" adicionado com sucesso!`);
+            fecharModalProduto();
         }
 
         function renderizarDestaquesHome() {
@@ -393,7 +500,7 @@
             destaques.forEach(p => {
                 const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
                 container.innerHTML += `
-                    <div onclick='abrirModalProdutoById("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                    <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
                         <div>
                             <div class="relative h-64 bg-gray-100 overflow-hidden">
                                 <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -435,7 +542,7 @@
             filtrados.forEach(p => {
                 const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
                 container.innerHTML += `
-                    <div onclick='abrirModalProdutoById("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                    <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
                         <div>
                             <div class="relative h-64 bg-gray-100 overflow-hidden">
                                 <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
