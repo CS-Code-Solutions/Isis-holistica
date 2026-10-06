@@ -18,7 +18,7 @@
     <!-- CABEÇALHO MOBILE -->
     <header class="bg-[#0E8685] text-white shadow-md md:hidden flex justify-between items-center px-4 py-3 sticky top-0 z-30">
         <div class="flex items-center gap-2">
-            <span class="text-xl">⚙️️</span>
+            <span class="text-xl">⚙</span>
             <h1 class="font-bold text-sm">Painel Gestor | Ísis Holística</h1>
         </div>
         <div class="flex items-center gap-2">
@@ -46,7 +46,7 @@
                     <span>🏢</span> Depósito / Estoque Geral
                 </button>
                 <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
-                    <span>🖼️</span> Banners do Carrossel
+                    <span>🖼️️</span> Banners do Carrossel
                 </button>
             </nav>
         </div>
@@ -120,12 +120,6 @@
                             <input type="text" id="prod-categoria" readonly class="w-full px-4 py-2.5 border bg-gray-100 rounded-xl text-sm text-gray-600">
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Imagem do Produto (URL ou Ficheiro)</label>
-                            <input type="text" id="prod-imagem" placeholder="Link da imagem ou selecione o ficheiro abaixo" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
-                            <input type="file" id="prod-imagem-file" accept="image/*" onchange="converterImagemParaBase64(this, 'prod-imagem')" class="w-full text-xs text-gray-500">
-                        </div>
-
                         <div class="md:col-span-2">
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição do Produto</label>
                             <textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
@@ -166,12 +160,12 @@
                 </div>
             </div>
 
-            <!-- SEÇÃO 2: DEPÓSITO / ESTOQUE GERAL -->
+            <!-- SEÇÃO 2: DEPÓSITO / ESTOQUE GERAL (Com Múltiplas Fotos, Descrições e Posições) -->
             <div id="admin-section-deposito" class="space-y-8 hidden">
                 <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                     <div>
                         <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
-                        <p class="text-gray-500 text-sm">Controle de quantidades, preços, imagens e sub-variações por categoria.</p>
+                        <p class="text-gray-500 text-sm">Controle de quantidades, preços, galeria de fotos em carrossel e posicionamento de legendas.</p>
                     </div>
                     <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
                         <span>➕</span> <span>Cadastrar Item no Depósito</span>
@@ -218,10 +212,13 @@
                         <div id="sub-campos-container" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-xl border border-teal-100">
                         </div>
 
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📸 Imagem do Depósito (URL ou Ficheiro)</label>
-                            <input type="text" id="dep-imagem" placeholder="Link da imagem ou selecione o ficheiro abaixo" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
-                            <input type="file" id="dep-imagem-file" accept="image/*" onchange="converterImagemParaBase64(this, 'dep-imagem')" class="w-full text-xs text-gray-500">
+                        <!-- SEÇÃO DE MÚLTIPLAS FOTOS / CARROSSEL -->
+                        <div class="md:col-span-2 space-y-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <label class="block text-xs font-bold text-[#0E8685] uppercase">📸 Galeria de Fotos (Carrossel com Descrições Posicionadas)</label>
+                                <button type="button" onclick="adicionarCampoFoto()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-opacity-90 transition">➕ Adicionar Foto</button>
+                            </div>
+                            <div id="container-fotos-dinamico" class="space-y-4"></div>
                         </div>
 
                         <div class="md:col-span-2">
@@ -450,7 +447,6 @@
                 document.getElementById('prod-nome').value = item.nome;
                 document.getElementById('prod-preco').value = item.preco;
                 document.getElementById('prod-categoria').value = item.categoria;
-                document.getElementById('prod-imagem').value = item.imagem || '';
                 document.getElementById('prod-descricao').value = item.descricao || '';
             }
         }
@@ -458,17 +454,22 @@
         function salvarProduto(e) {
             e.preventDefault();
             const id = document.getElementById('prod-id').value;
+            const filtroCat = document.getElementById('prod-filtro-cat').value;
+            const depIdx = document.getElementById('prod-deposito-select').value;
+            const filtrados = listaDeposito.filter(d => d.categoria === filtroCat);
+            const itemDep = filtrados[depIdx] || {};
+
             const nome = document.getElementById('prod-nome').value;
             const preco = parseFloat(document.getElementById('prod-preco').value);
-            const categoria = document.getElementById('prod-filtro-cat').value;
-            const imagem = document.getElementById('prod-imagem').value;
+            const categoria = document.getElementById('prod-categoria').value;
             const descricao = document.getElementById('prod-descricao').value;
             const destaque = document.getElementById('prod-destaque').checked;
+            const imagens = itemDep.imagens || [{ url: itemDep.imagem || '', texto: '', posH: 'left', posV: 'top' }];
 
             if (id !== '') {
-                listaProdutos[id] = { id: Number(id), nome, preco, categoria, imagem, descricao, destaque };
+                listaProdutos[id] = { id: Number(id), nome, preco, categoria, imagens, descricao, destaque };
             } else {
-                listaProdutos.push({ id: Date.now(), nome, preco, categoria, imagem, descricao, destaque });
+                listaProdutos.push({ id: Date.now(), nome, preco, categoria, imagens, descricao, destaque });
             }
 
             localStorage.setItem('isis_produtos', JSON.stringify(listaProdutos));
@@ -488,10 +489,11 @@
             }
 
             listaProdutos.forEach((p, idx) => {
+                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
                         <td class="py-3 px-3 flex items-center gap-3">
-                            <img src="${p.imagem || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border">
+                            <img src="${imgCapa || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border">
                             <span class="font-bold text-gray-800">${p.nome}</span>
                         </td>
                         <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
@@ -514,7 +516,6 @@
             document.getElementById('prod-nome').value = p.nome;
             document.getElementById('prod-preco').value = p.preco;
             document.getElementById('prod-categoria').value = p.categoria;
-            document.getElementById('prod-imagem').value = p.imagem || '';
             document.getElementById('prod-descricao').value = p.descricao || '';
             document.getElementById('prod-destaque').checked = p.destaque || false;
             document.getElementById('form-produto-title').innerText = "📦 Editar Produto na Loja";
@@ -537,8 +538,61 @@
             document.getElementById('dep-id').value = '';
             document.getElementById('deposito-form').reset();
             document.getElementById('form-deposito-title').innerText = "🏢 Novo Item no Depósito";
+            document.getElementById('container-fotos-dinamico').innerHTML = '';
+            adicionarCampoFoto();
             atualizarSubCamposDeposito();
             document.getElementById('form-container-deposito').classList.remove('hidden');
+        }
+
+        function adicionarCampoFoto(url = '', texto = '', posH = 'left', posV = 'top') {
+            const container = document.getElementById('container-fotos-dinamico');
+            const idUnico = 'foto_item_' + Date.now() + Math.random().toString(36).substr(2, 5);
+            
+            const div = document.createElement('div');
+            div.className = "bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3 relative group";
+            div.innerHTML = `
+                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 font-bold text-xs bg-red-50 hover:bg-red-100 p-1.5 rounded-lg transition">🗑️ Remover Foto</button>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">URL da Imagem ou Ficheiro</label>
+                        <input type="text" class="input-foto-url w-full px-3 py-2 border rounded-lg text-xs" value="${url}" placeholder="https://...">
+                        <input type="file" accept="image/*" class="mt-1 w-full text-[10px] text-gray-400">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Descrição / Variação nesta foto</label>
+                        <input type="text" class="input-foto-texto w-full px-3 py-2 border rounded-lg text-xs" value="${texto}" placeholder="Ex: Tonalidade Azul Escuro">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Horizontal</label>
+                        <select class="input-foto-posh w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                            <option value="left" ${posH === 'left' ? 'selected' : ''}>Esquerda</option>
+                            <option value="right" ${posH === 'right' ? 'selected' : ''}>Direita</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Vertical</label>
+                        <select class="input-foto-posv w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                            <option value="top" ${posV === 'top' ? 'selected' : ''}>Em Cima</option>
+                            <option value="bottom" ${posV === 'bottom' ? 'selected' : ''}>Em Baixo</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+            
+            const fileInput = div.querySelector('input[type="file"]');
+            fileInput.onchange = function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        div.querySelector('.input-foto-url').value = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
         }
 
         function atualizarSubCamposDeposito() {
@@ -592,8 +646,24 @@
             const categoria = document.getElementById('dep-categoria').value;
             const preco = parseFloat(document.getElementById('dep-preco').value);
             const qtd = parseInt(document.getElementById('dep-qtd').value);
-            const imagem = document.getElementById('dep-imagem').value;
             const descricao = document.getElementById('dep-descricao').value;
+
+            const blocosFotos = document.querySelectorAll('#container-fotos-dinamico > div');
+            let imagens = [];
+            blocosFotos.forEach(bloco => {
+                const url = bloco.querySelector('.input-foto-url').value.trim();
+                const texto = bloco.querySelector('.input-foto-texto').value.trim();
+                const posH = bloco.querySelector('.input-foto-posh').value;
+                const posV = bloco.querySelector('.input-foto-posv').value;
+                if (url) {
+                    imagens.push({ url, texto, posH, posV });
+                }
+            });
+
+            if (imagens.length === 0) {
+                alert("Adicione pelo menos uma foto ao item no depósito!");
+                return;
+            }
 
             let subDetalhes = {};
             if (categoria === 'Incensos') {
@@ -607,7 +677,7 @@
                 subDetalhes.subCategoriaImg = document.getElementById('sub-categoria-img')?.value || '';
             }
 
-            const itemData = { id: id !== '' ? Number(id) : Date.now(), nome, categoria, preco, qtd, imagem, descricao, subDetalhes };
+            const itemData = { id: id !== '' ? Number(id) : Date.now(), nome, categoria, preco, qtd, imagens, descricao, subDetalhes };
 
             if (id !== '') {
                 listaDeposito[id] = itemData;
@@ -633,19 +703,19 @@
             }
 
             listaDeposito.forEach((d, idx) => {
-                let infoExtra = '';
+                const imgCapa = (d.imagens && d.imagens.length > 0) ? d.imagens[0].url : (d.imagem || '');
+                let infoExtra = `${d.imagens ? d.imagens.length : 1} foto(s) | `;
                 if (d.subDetalhes) {
                     if (d.subDetalhes.fragrancia) infoExtra += `Fragrância: ${d.subDetalhes.fragrancia} | `;
                     if (d.subDetalhes.marca) infoExtra += `Marca: ${d.subDetalhes.marca} | `;
                     if (d.subDetalhes.variacao) infoExtra += `Tipo: ${d.subDetalhes.variacao} | `;
                     if (d.subDetalhes.aroma) infoExtra += `Aroma: ${d.subDetalhes.aroma} | `;
-                    if (d.subDetalhes.subCategoriaImg) infoExtra += `Sub: ${d.subDetalhes.subCategoriaImg} | `;
                 }
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
                         <td class="py-3 px-3 flex items-center gap-3">
-                            <img src="${d.imagem || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border">
+                            <img src="${imgCapa || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border">
                             <div>
                                 <span class="font-bold text-gray-800 block">${d.nome}</span>
                                 <span class="text-xs text-gray-400">${infoExtra}</span>
@@ -670,10 +740,17 @@
             document.getElementById('dep-categoria').value = d.categoria;
             document.getElementById('dep-preco').value = d.preco;
             document.getElementById('dep-qtd').value = d.qtd;
-            document.getElementById('dep-imagem').value = d.imagem || '';
             document.getElementById('dep-descricao').value = d.descricao || '';
             
             atualizarSubCamposDeposito();
+
+            const containerFotos = document.getElementById('container-fotos-dinamico');
+            containerFotos.innerHTML = '';
+            
+            const listaImgs = (d.imagens && d.imagens.length > 0) ? d.imagens : [{ url: d.imagem || '', texto: '', posH: 'left', posV: 'top' }];
+            listaImgs.forEach(img => {
+                adicionarCampoFoto(img.url, img.texto, img.posH, img.posV);
+            });
             
             setTimeout(() => {
                 if (d.subDetalhes) {
