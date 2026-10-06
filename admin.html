@@ -391,7 +391,7 @@
                 await signInWithEmailAndPassword(auth, email, senha);
             } catch (err) {
                 console.error("Erro no login:", err);
-                alert("Erro ao entrar: Verifique o e-mail e a palavra-passe.");
+                alert("Erro no login (" + err.code + "): " + err.message);
             }
         }
 
