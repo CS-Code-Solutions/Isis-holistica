@@ -373,7 +373,6 @@
         let listaDeposito = [];
         let listaBanners = [];
 
-        // Controlo de autenticação (Exibe ou oculta a tela de login automaticamente)
         onAuthStateChanged(auth, (user) => {
             const overlay = document.getElementById('login-overlay');
             if (user) {
@@ -453,7 +452,6 @@
             document.getElementById('admin-sidebar').classList.toggle('hidden');
         }
 
-        // Função com bloqueio de botão durante a otimização
         window.comprimirEConverterImagem = function(input, targetId) {
             const file = input.files[0];
             if (!file) return;
@@ -651,7 +649,6 @@
             }
         }
 
-        // Gestão de Depósito e Inventário
         window.toggleFormularioDeposito = function() { document.getElementById('form-container-deposito').classList.toggle('hidden'); }
         window.abrirNovoDeposito = function() { document.getElementById('dep-id').value = ''; document.getElementById('deposito-form').reset(); document.getElementById('form-deposito-title').innerText = "🏢 Novo Item no Depósito"; document.getElementById('container-fotos-dinamico').innerHTML = ''; adicionarCampoFoto(); atualizarSubCamposDeposito(); document.getElementById('form-container-deposito').classList.remove('hidden'); }
         window.adicionarCampoFoto = function(url = '', texto = '', posH = 'left', posV = 'top') {
