@@ -299,7 +299,6 @@
             if (slides.length <= 1) return;
 
             const s = slides[currentSlide];
-            // Tempo em segundos configurado no admin (padrão 5 segundos se não definido)
             const tempoSegundos = Number(s?.tempo) || 5; 
 
             carouselTimer = setTimeout(() => {
@@ -310,9 +309,33 @@
         function atualizarSlideUI() {
             const s = slides[currentSlide];
             if (!s) return;
-            document.getElementById('carousel-badge').innerText = s.badge || '';
-            document.getElementById('carousel-title').innerText = s.titulo || '';
-            document.getElementById('carousel-desc').innerText = s.desc || '';
+            
+            // Badge (Selo) opcional
+            const badgeEl = document.getElementById('carousel-badge');
+            if (s.badge && s.badge.trim() !== '') {
+                badgeEl.innerText = s.badge;
+                badgeEl.style.display = '';
+            } else {
+                badgeEl.style.display = 'none';
+            }
+
+            // Título opcional
+            const titleEl = document.getElementById('carousel-title');
+            if (s.titulo && s.titulo.trim() !== '') {
+                titleEl.innerText = s.titulo;
+                titleEl.style.display = '';
+            } else {
+                titleEl.style.display = 'none';
+            }
+
+            // Descrição opcional
+            const descEl = document.getElementById('carousel-desc');
+            if (s.desc && s.desc.trim() !== '') {
+                descEl.innerText = s.desc;
+                descEl.style.display = '';
+            } else {
+                descEl.style.display = 'none';
+            }
             
             const imgPc = document.getElementById('carousel-img-pc');
             const imgMobile = document.getElementById('carousel-img-mobile');
@@ -323,7 +346,6 @@
             imgMobile.src = s.imagemMobile || '';
             imgMobile.style.display = s.imagemMobile ? '' : 'none';
 
-            // Reinicia o temporizador com base no tempo específico deste slide
             programarProximoSlide();
         }
 
@@ -333,7 +355,6 @@
             atualizarSlideUI();
         }
 
-        // Ação de clique no banner atualizada com os novos destinos
         window.clicarBannerAtual = function() {
             const s = slides[currentSlide];
             if (!s) return;
