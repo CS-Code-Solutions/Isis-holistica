@@ -278,20 +278,20 @@
                     <form id="banner-form" onsubmit="salvarBanner(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <input type="hidden" id="banner-id">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selo / Categoria do Topo (Badge)</label>
-                            <input type="text" id="banner-badge" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 🌸 Destaque da Semana">
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selo / Categoria do Topo (Badge) <span class="text-gray-400 font-normal">(Opcional)</span></label>
+                            <input type="text" id="banner-badge" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 🌸 Destaque da Semana">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título Principal do Banner</label>
-                            <input type="text" id="banner-titulo" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Jornada para o Equilíbrio">
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título Principal do Banner <span class="text-gray-400 font-normal">(Opcional)</span></label>
+                            <input type="text" id="banner-titulo" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Jornada para o Equilíbrio">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tempo de Exibição (Segundos)</label>
                             <input type="number" id="banner-tempo" value="5" min="2" max="60" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 5">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Exibida no Banner</label>
-                            <textarea id="banner-desc" rows="2" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Uma abordagem integrativa para mente, corpo e espírito."></textarea>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Exibida no Banner <span class="text-gray-400 font-normal">(Opcional)</span></label>
+                            <textarea id="banner-desc" rows="2" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Uma abordagem integrativa para mente, corpo e espírito."></textarea>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (URL ou Ficheiro)</label>
@@ -615,18 +615,19 @@
 
                 const imgCapa = b.imagemPc || b.imagemMobile || '';
                 const tempoExibicao = b.tempo || 5;
+                const tituloExibir = b.titulo || '(Banner sem texto)';
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
                         <td class="py-3 px-3 flex items-center gap-3">
                             <img src="${imgCapa || 'https://via.placeholder.com/60'}" class="w-14 h-9 object-cover rounded-lg border shadow-sm">
                             <div>
-                                <span class="font-bold text-gray-800 block">${b.titulo}</span>
-                                <span class="text-xs text-gray-400 truncate max-w-xs block">${b.desc}</span>
+                                <span class="font-bold text-gray-800 block">${tituloExibir}</span>
+                                <span class="text-xs text-gray-400 truncate max-w-xs block">${b.desc || ''}</span>
                             </div>
                         </td>
                         <td class="py-3 px-3 space-y-1">
-                            <span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs inline-block">${b.badge}</span>
+                            ${b.badge ? `<span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs inline-block">${b.badge}</span>` : '<span class="text-gray-400 text-xs">Sem badge</span>'}
                             <span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-md text-[10px] block w-fit">⏱️ ${tempoExibicao}s</span>
                         </td>
                         <td class="py-3 px-3 text-gray-600 text-xs font-semibold">${destinoStr}</td>
@@ -643,9 +644,9 @@
             const b = listaBanners.find(item => item.idFirestore === idFirestore);
             if (!b) return;
             document.getElementById('banner-id').value = b.idFirestore;
-            document.getElementById('banner-badge').value = b.badge;
-            document.getElementById('banner-titulo').value = b.titulo;
-            document.getElementById('banner-desc').value = b.desc;
+            document.getElementById('banner-badge').value = b.badge || '';
+            document.getElementById('banner-titulo').value = b.titulo || '';
+            document.getElementById('banner-desc').value = b.desc || '';
             document.getElementById('banner-tempo').value = b.tempo || 5;
             document.getElementById('banner-imgpc').value = b.imagemPc || '';
             document.getElementById('banner-imgmob').value = b.imagemMobile || '';
