@@ -295,13 +295,13 @@
                         <div>
                             <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem para PC (URL ou Ficheiro)</label>
                             <input type="text" id="banner-imgpc" placeholder="Link da imagem PC" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
-                            <input type="file" accept="image/*" onchange="converterImagemParaBase64(this, 'banner-imgpc')" class="w-full text-xs text-gray-500">
+                            <input type="file" accept="image/*" onchange="comprimirEConverterImagem(this, 'banner-imgpc')" class="w-full text-xs text-gray-500">
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem para Mobile (URL ou Ficheiro)</label>
                             <input type="text" id="banner-imgmob" placeholder="Link da imagem Mobile" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
-                            <input type="file" accept="image/*" onchange="converterImagemParaBase64(this, 'banner-imgmob')" class="w-full text-xs text-gray-500">
+                            <input type="file" accept="image/*" onchange="comprimirEConverterImagem(this, 'banner-imgmob')" class="w-full text-xs text-gray-500">
                         </div>
 
                         <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -329,7 +329,7 @@
                 <!-- Tabela dos Banners -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-bold text-[#0E8685]">🖼️️ Banners Registrados</h3>
+                        <h3 class="text-lg font-bold text-[#0E8685]">🖼 Banners Registrados</h3>
                         <span id="total-banners" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 banners</span>
                     </div>
                     <div class="overflow-x-auto">
@@ -356,7 +356,7 @@
         </footer>
     </main>
 
-    <!-- Script de Gestão do Admin ligado ao Firebase -->
+    <!-- Script de Gestão do Admin ligado ao Firebase com Compressão Automática -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -434,15 +434,54 @@
             document.getElementById('admin-sidebar').classList.toggle('hidden');
         }
 
-        window.converterImagemParaBase64 = function(input, targetId) {
+        // Função de Compressão Automática de Imagem no Navegador
+        window.comprimirEConverterImagem = function(input, targetId) {
             const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById(targetId).value = e.target.result;
+            if (!file) return;
+
+            const inputField = document.getElementById(targetId);
+            inputField.value = "A otimizar imagem...";
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    const MAX_DIMENSION = 1200;
+                    if (width > height) {
+                        if (width > MAX_DIMENSION) {
+                            height = Math.round((height * MAX_DIMENSION) / width);
+                            width = MAX_DIMENSION;
+                        }
+                    } else {
+                        if (height > MAX_DIMENSION) {
+                            width = Math.round((width * MAX_DIMENSION) / height);
+                            height = MAX_DIMENSION;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    let qualidade = 0.8;
+                    let dataUrl = canvas.toDataURL('image/jpeg', qualidade);
+
+                    // Garante que fica abaixo de 800KB para respeitar com folga o limite do Firestore
+                    if (dataUrl.length > 1000000) {
+                        qualidade = 0.6;
+                        dataUrl = canvas.toDataURL('image/jpeg', qualidade);
+                    }
+
+                    inputField.value = dataUrl;
                 };
-                reader.readAsDataURL(file);
-            }
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
         window.toggleFormularioProduto = function() {
@@ -600,7 +639,7 @@
                     <div>
                         <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">URL da Imagem ou Ficheiro</label>
                         <input type="text" class="input-foto-url w-full px-3 py-2 border rounded-lg text-xs" value="${url}" placeholder="https://...">
-                        <input type="file" accept="image/*" class="mt-1 w-full text-[10px] text-gray-400">
+                        <input type="file" accept="image/*" onchange="comprimirFotoDinamica(this)" class="mt-1 w-full text-[10px] text-gray-400">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Descrição / Variação nesta foto</label>
@@ -625,18 +664,54 @@
                 </div>
             `;
             container.appendChild(div);
-            
-            const fileInput = div.querySelector('input[type="file"]');
-            fileInput.onchange = function() {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        div.querySelector('.input-foto-url').value = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
+        }
+
+        window.comprimirFotoDinamica = function(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const bloco = input.closest('div.group');
+            const inputUrl = bloco.querySelector('.input-foto-url');
+            inputUrl.value = "A otimizar imagem...";
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    const MAX_DIMENSION = 1200;
+                    if (width > height) {
+                        if (width > MAX_DIMENSION) {
+                            height = Math.round((height * MAX_DIMENSION) / width);
+                            width = MAX_DIMENSION;
+                        }
+                    } else {
+                        if (height > MAX_DIMENSION) {
+                            width = Math.round((width * MAX_DIMENSION) / height);
+                            height = MAX_DIMENSION;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    let qualidade = 0.8;
+                    let dataUrl = canvas.toDataURL('image/jpeg', qualidade);
+                    if (dataUrl.length > 1000000) {
+                        qualidade = 0.6;
+                        dataUrl = canvas.toDataURL('image/jpeg', qualidade);
+                    }
+
+                    inputUrl.value = dataUrl;
+                };
+                img.src = e.target.result;
             };
+            reader.readAsDataURL(file);
         }
 
         window.atualizarSubCamposDeposito = function() {
