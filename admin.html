@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo | Ísis Holística</title>
+    <!-- Ícone da Página (Favicon) -->
     <link rel="icon" type="image/png" href="ico.png">
+    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -275,13 +277,16 @@
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Destino ao Clicar no Banner</label>
                                 <select id="banner-linktipo" onchange="alternarDestinoBannerAdmin(this.value)" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white">
-                                    <option value="produtos">Loja / Produtos</option>
-                                    <option value="terapias">Espaço Terapêutico</option>
-                                    <option value="produto">Produto Específico</option>
+                                    <option value="produtos">Loja / Todos os Produtos</option>
+                                    <option value="promocoes">🔥 Promoções</option>
+                                    <option value="destaques">⭐ Produtos em Destaque</option>
+                                    <option value="categoria">📁 Categoria Específica</option>
+                                    <option value="produto">📦 Produto Específico</option>
+                                    <option value="terapias">🪷 Espaço Terapêutico</option>
                                 </select>
                             </div>
                             <div id="banner-linkalvo-container" class="hidden">
-                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Selecione o Produto Alvo</label>
+                                <label id="banner-linkalvo-label" class="block text-xs font-bold text-gray-700 uppercase mb-1">Selecione o Alvo</label>
                                 <select id="banner-linkalvo-prod" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white"></select>
                             </div>
                         </div>
@@ -359,7 +364,6 @@
                 renderizarTabelaBanners();
                 atualizarSelectDeposito();
                 atualizarSubCamposDeposito();
-                atualizarSelectProdutosBanner();
             } catch (e) {
                 console.error("Erro ao carregar dados do Firebase:", e);
             }
@@ -445,7 +449,6 @@
 
                     inputField.value = dataUrl;
 
-                    // Reativa o botão de salvar quando a otimização termina
                     if (btnSalvar) {
                         btnSalvar.disabled = false;
                         btnSalvar.innerText = "Guardar Banner";
@@ -469,19 +472,29 @@
             document.getElementById('form-container-banner').classList.remove('hidden');
         }
 
-        function atualizarSelectProdutosBanner() {
-            const sel = document.getElementById('banner-linkalvo-prod');
-            sel.innerHTML = '';
-            listaProdutos.forEach(p => {
-                sel.innerHTML += `<option value="${p.nome}">${p.nome}</option>`;
-            });
-        }
-
         window.alternarDestinoBannerAdmin = function(val) {
             const container = document.getElementById('banner-linkalvo-container');
+            const labelAlvo = document.getElementById('banner-linkalvo-label');
+            const selectAlvo = document.getElementById('banner-linkalvo-prod');
+
             if (val === 'produto') {
                 container.classList.remove('hidden');
-                atualizarSelectProdutosBanner();
+                labelAlvo.innerText = "Selecione o Produto Alvo";
+                selectAlvo.innerHTML = '';
+                listaProdutos.forEach(p => {
+                    selectAlvo.innerHTML += `<option value="${p.nome}">${p.nome}</option>`;
+                });
+            } else if (val === 'categoria') {
+                container.classList.remove('hidden');
+                labelAlvo.innerText = "Selecione a Categoria";
+                selectAlvo.innerHTML = `
+                    <option value="Incensos">🌿 Incensos</option>
+                    <option value="Pedras">🔮 Pedras e Cristais</option>
+                    <option value="Semijoias">✨ Semijoias</option>
+                    <option value="Decoracao">🪷 Decoração</option>
+                    <option value="Velas">🕯️ Velas</option>
+                    <option value="Imagens (Esculturas)">🗿 Imagens (Esculturas)</option>
+                `;
             } else {
                 container.classList.add('hidden');
             }
@@ -496,7 +509,11 @@
             const imagemPc = document.getElementById('banner-imgpc').value;
             const imagemMobile = document.getElementById('banner-imgmob').value;
             const linkTipo = document.getElementById('banner-linktipo').value;
-            const linkAlvo = linkTipo === 'produto' ? document.getElementById('banner-linkalvo-prod').value : '';
+            
+            let linkAlvo = '';
+            if (linkTipo === 'produto' || linkTipo === 'categoria') {
+                linkAlvo = document.getElementById('banner-linkalvo-prod').value;
+            }
 
             const bannerData = { badge, titulo, desc, imagemPc, imagemMobile, linkTipo, linkAlvo };
 
@@ -526,7 +543,12 @@
             }
 
             listaBanners.forEach((b) => {
-                let destinoStr = b.linkTipo === 'terapias' ? 'Espaço Terapêutico' : (b.linkTipo === 'produto' ? `Produto: ${b.linkAlvo}` : 'Loja / Produtos');
+                let destinoStr = 'Loja / Todos';
+                if (b.linkTipo === 'terapias') destinoStr = 'Espaço Terapêutico';
+                else if (b.linkTipo === 'promocoes') destinoStr = '🔥 Promoções';
+                else if (b.linkTipo === 'destaques') destinoStr = '⭐ Destaques';
+                else if (b.linkTipo === 'categoria') destinoStr = `Categoria: ${b.linkAlvo}`;
+                else if (b.linkTipo === 'produto') destinoStr = `Produto: ${b.linkAlvo}`;
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
@@ -555,9 +577,10 @@
             document.getElementById('banner-imgpc').value = b.imagemPc || '';
             document.getElementById('banner-imgmob').value = b.imagemMobile || '';
             document.getElementById('banner-linktipo').value = b.linkTipo || 'produtos';
+            
             alternarDestinoBannerAdmin(b.linkTipo || 'produtos');
             
-            if (b.linkTipo === 'produto') {
+            if (b.linkTipo === 'produto' || b.linkTipo === 'categoria') {
                 setTimeout(() => {
                     document.getElementById('banner-linkalvo-prod').value = b.linkAlvo || '';
                 }, 50);
@@ -569,16 +592,11 @@
 
         window.removerBanner = async function(idFirestore) {
             if (confirm("Tem certeza que deseja apagar este banner?")) {
-                try {
-                    await deleteDoc(doc(db, "slides", idFirestore));
-                    await carregarDadosAdmin();
-                } catch (err) {
-                    console.error("Erro ao apagar banner:", err);
-                }
+                try { await deleteDoc(doc(db, "slides", idFirestore)); await carregarDadosAdmin(); } catch (err) { console.error("Erro ao apagar banner:", err); }
             }
         }
 
-        // Funções de depósito necessárias para manter a integridade
+        // Gestão de Depósito e Inventário
         window.toggleFormularioDeposito = function() { document.getElementById('form-container-deposito').classList.toggle('hidden'); }
         window.abrirNovoDeposito = function() { document.getElementById('dep-id').value = ''; document.getElementById('deposito-form').reset(); document.getElementById('form-deposito-title').innerText = "🏢 Novo Item no Depósito"; document.getElementById('container-fotos-dinamico').innerHTML = ''; adicionarCampoFoto(); atualizarSubCamposDeposito(); document.getElementById('form-container-deposito').classList.remove('hidden'); }
         window.adicionarCampoFoto = function(url = '', texto = '', posH = 'left', posV = 'top') {
@@ -834,28 +852,6 @@
             if (confirm("Tem certeza que deseja remover este produto da vitrine?")) {
                 try { await deleteDoc(doc(db, "produtos", idFirestore)); await carregarDadosAdmin(); } catch (err) { console.error("Erro ao excluir produto:", err); }
             }
-        }
-        window.removerBanner = async function(idFirestore) {
-            if (confirm("Tem certeza que deseja apagar este banner?")) {
-                try { await deleteDoc(doc(db, "slides", idFirestore)); await carregarDadosAdmin(); } catch (err) { console.error("Erro ao apagar banner:", err); }
-            }
-        }
-        window.editarBanner = function(idFirestore) {
-            const b = listaBanners.find(item => item.idFirestore === idFirestore);
-            if (!b) return;
-            document.getElementById('banner-id').value = b.idFirestore;
-            document.getElementById('banner-badge').value = b.badge;
-            document.getElementById('banner-titulo').value = b.titulo;
-            document.getElementById('banner-desc').value = b.desc;
-            document.getElementById('banner-imgpc').value = b.imagemPc || '';
-            document.getElementById('banner-imgmob').value = b.imagemMobile || '';
-            document.getElementById('banner-linktipo').value = b.linkTipo || 'produtos';
-            alternarDestinoBannerAdmin(b.linkTipo || 'produtos');
-            if (b.linkTipo === 'produto') {
-                setTimeout(() => { document.getElementById('banner-linkalvo-prod').value = b.linkAlvo || ''; }, 50);
-            }
-            document.getElementById('form-banner-title').innerText = "🖼️ Editar Banner Responsivo";
-            document.getElementById('form-container-banner').classList.remove('hidden');
         }
     </script>
 </body>
