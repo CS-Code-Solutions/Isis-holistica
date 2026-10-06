@@ -47,7 +47,9 @@
         }
 
         .carousel-content {
-            position: relative;
+            position: absolute;
+            inset-x: 0;
+            bottom: 4px;
             z-index: 2;
             pointer-events: none;
         }
@@ -115,15 +117,15 @@
     </header>
 
     <section id="view-home" class="app-view flex-grow">
-        <div id="carousel-wrapper" onclick="clicarBannerAtual()" class="text-white py-24 px-6 text-center overflow-hidden transition-all duration-700">
+        <div id="carousel-wrapper" onclick="clicarBannerAtual()" class="text-white py-16 px-6 text-center overflow-hidden transition-all duration-700">
             <div class="carousel-overlay"></div>
             <img id="carousel-img-mobile" class="carousel-bg-image carousel-img-mobile" src="" alt="Banner Mobile">
             <img id="carousel-img-pc" class="carousel-bg-image carousel-img-pc" src="" alt="Banner PC">
-            <div class="max-w-3xl mx-auto relative z-10 carousel-content" id="carousel-container">
-                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3.5 py-1.5 rounded-full tracking-wider shadow"></span>
-                <h2 id="carousel-title" class="text-2xl sm:text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight drop-shadow-md"></h2>
-                <p id="carousel-desc" class="text-base sm:text-lg opacity-95 mb-8 max-w-2xl mx-auto drop-shadow"></p>
-                <span class="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full border border-white/30">✨ Clique para explorar</span>
+            <div class="max-w-3xl mx-auto px-4 carousel-content flex flex-col items-center justify-end pb-3" id="carousel-container">
+                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3.5 py-1 rounded-full tracking-wider shadow mb-1.5"></span>
+                <h2 id="carousel-title" class="text-xl sm:text-2xl md:text-4xl font-extrabold mb-1.5 leading-tight drop-shadow-md"></h2>
+                <p id="carousel-desc" class="text-xs sm:text-sm md:text-base opacity-95 mb-3 max-w-2xl mx-auto drop-shadow line-clamp-2"></p>
+                <span class="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-1.5 rounded-full border border-white/30 shadow">✨ Clique para explorar</span>
             </div>
             <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❮</button>
             <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❯</button>
@@ -250,6 +252,7 @@
         let currentSlide = 0;
         let listaProdutos = [];
         let slides = [];
+        let carouselTimer = null;
 
         async function carregarDadosDoBanco() {
             try {
@@ -291,6 +294,19 @@
             if (slides.length > 0) atualizarSlideUI();
         }
 
+        function programarProximoSlide() {
+            if (carouselTimer) clearTimeout(carouselTimer);
+            if (slides.length <= 1) return;
+
+            const s = slides[currentSlide];
+            // Tempo em segundos configurado no admin (padrão 5 segundos se não definido)
+            const tempoSegundos = Number(s?.tempo) || 5; 
+
+            carouselTimer = setTimeout(() => {
+                window.mudarSlide(1);
+            }, tempoSegundos * 1000);
+        }
+
         function atualizarSlideUI() {
             const s = slides[currentSlide];
             if (!s) return;
@@ -306,6 +322,9 @@
 
             imgMobile.src = s.imagemMobile || '';
             imgMobile.style.display = s.imagemMobile ? '' : 'none';
+
+            // Reinicia o temporizador com base no tempo específico deste slide
+            programarProximoSlide();
         }
 
         window.mudarSlide = function(direcao) {
@@ -313,10 +332,6 @@
             currentSlide = (currentSlide + direcao + slides.length) % slides.length;
             atualizarSlideUI();
         }
-
-        setInterval(() => {
-            if (slides.length > 1) window.mudarSlide(1);
-        }, 10000);
 
         // Ação de clique no banner atualizada com os novos destinos
         window.clicarBannerAtual = function() {
