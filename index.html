@@ -1,5 +1,580 @@
 <!DOCTYPE html>
+<html lang="pt-BR"><!DOCTYPE html>
 <html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ísis Holística | Loja Esotérica e Espaço Terapêutico</title>
+    <link rel="icon" type="image/png" href="ico.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        #carousel-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .carousel-bg-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 0;
+        }
+
+        .carousel-img-pc { display: none; }
+        .carousel-img-mobile { display: block; }
+
+        @media (min-width: 768px) {
+            .carousel-img-pc { display: block; }
+            .carousel-img-mobile { display: none; }
+            #carousel-wrapper { min-height: 500px; }
+        }
+
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.35);
+            z-index: 1;
+        }
+
+        .carousel-content {
+            position: absolute;
+            inset-x: 0;
+            bottom: 4px;
+            z-index: 2;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <div class="bg-[#0E8685] text-white text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
+        ✨ Mais que produtos, energia para o seu dia a dia! Conheça nossa curadoria esotérica e terapias holísticas.
+    </div>
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
+                <img src="logo4.png" alt="Ísis Holística" class="h-16 md:h-24 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
+            </div>
+            
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center">
+                <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
+                <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Quem Somos</button>
+                
+                <div class="relative group py-2">
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] flex items-center gap-1 transition">Produtos ▾</button>
+                    <div class="absolute top-full left-0 w-52 bg-white shadow-xl rounded-xl py-2 hidden group-hover:block border border-gray-100">
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">Todos os Produtos</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-amber-600 font-bold">🔥 Promoções</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🌿 Incensos</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🔮 Pedras e Cristais</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">✨ Semijoias</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🏺 Decoração</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🕯️ Velas</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🗿 Imagens (Esculturas)</button>
+                    </div>
+                </div>
+
+                <button onclick="mudarAba('view-terapias')" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-4 py-2 rounded-xl transition flex items-center gap-1.5 font-bold border border-teal-200">
+                    <span class="hidden md:inline">🌸</span><span class="inline md:hidden">🪷</span> Espaço Terapêutico
+                </button>
+            </nav>
+
+            <div class="flex items-center gap-2">
+                <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 transition">
+                    🛒
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+                <button onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg text-gray-700 font-bold">☰</button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
+            <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
+            <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Quem Somos</button>
+            <div class="border-t pt-2 pb-1 text-xs font-bold text-[#0E8685] uppercase">Categorias de Produtos</div>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">📦 Todos os Produtos</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="block w-full text-left py-1 text-sm text-amber-600 font-bold pl-2">🔥 Promoções</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🌿 Incensos</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🔮 Pedras e Cristais</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">✨ Semijoias</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🏺 Decoração</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🕯️ Velas</button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🗿 Imagens (Esculturas)</button>
+            <div class="border-t pt-2"></div>
+            <button onclick="mudarAba('view-terapias')" class="w-full text-center bg-teal-50 text-[#0E8685] border border-teal-200 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
+                🪷 Espaço Terapêutico
+            </button>
+        </div>
+    </header>
+
+    <section id="view-home" class="app-view flex-grow">
+        <div id="carousel-wrapper" onclick="clicarBannerAtual()" class="text-white py-16 px-6 text-center overflow-hidden transition-all duration-700">
+            <div class="carousel-overlay"></div>
+            <img id="carousel-img-mobile" class="carousel-bg-image carousel-img-mobile" src="" alt="Banner Mobile">
+            <img id="carousel-img-pc" class="carousel-bg-image carousel-img-pc" src="" alt="Banner PC">
+            <div class="max-w-3xl mx-auto px-4 carousel-content flex flex-col items-center justify-end pb-3" id="carousel-container">
+                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3.5 py-1 rounded-full tracking-wider shadow mb-1.5"></span>
+                <h2 id="carousel-title" class="text-xl sm:text-2xl md:text-4xl font-extrabold mb-1.5 leading-tight drop-shadow-md"></h2>
+                <p id="carousel-desc" class="text-xs sm:text-sm md:text-base opacity-95 mb-3 max-w-2xl mx-auto drop-shadow line-clamp-2"></p>
+                <span class="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-1.5 rounded-full border border-white/30 shadow">✨ Clique para explorar</span>
+            </div>
+            <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❮</button>
+            <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❯</button>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 pt-8 pb-4">
+            <div class="text-center mb-6">
+                <h3 class="text-xl md:text-2xl font-bold text-[#0E8685]">Explore Nossas Categorias & Serviços</h3>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="bg-amber-50 py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-amber-200 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🔥</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-amber-700">Promoções</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🌿</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Incensos</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🔮</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Pedras</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">✨</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Semijoias</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🏺</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Decoração</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🕯️</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Velas</h4>
+                </div>
+                <div onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="bg-white py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-gray-100 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">🗿</span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Imagens</h4>
+                </div>
+                <div onclick="mudarAba('view-terapias');" class="bg-teal-50 py-3.5 px-3 rounded-xl shadow-sm text-center cursor-pointer hover:shadow-md transition border border-teal-200 flex items-center gap-3 justify-center sm:flex-col sm:py-4">
+                    <span class="text-2xl sm:text-3xl">
+                        <span class="hidden md:inline">🌸</span><span class="inline md:hidden">🪷</span>
+                    </span>
+                    <h4 class="font-bold text-xs sm:text-sm text-[#0E8685]">Terapias</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-8">
+                <div>
+                    <h3 id="secao-destaques-titulo" class="text-2xl font-bold text-[#0E8685]">Produtos em Destaque</h3>
+                    <p class="text-gray-600 text-sm mt-1">Seleção especial para elevar a sua energia hoje</p>
+                </div>
+                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="text-sm font-bold text-[#0E8685] hover:underline self-start sm:self-auto whitespace-nowrap">Ver Todos ➔</button>
+            </div>
+            <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+        </div>
+    </section>
+
+    <!-- Outras abas -->
+    <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center gap-8 mb-12 bg-[#F8F9FA] p-6 md:p-12 rounded-3xl border border-gray-100 shadow-sm">
+                <div class="w-56 md:w-80 flex-shrink-0 flex justify-center">
+                    <img src="logo.png" alt="Ísis Holística" class="w-full h-auto object-contain pointer-events-none select-none drop-shadow-md" draggable="false" oncontextmenu="return false;">
+                </div>
+                <div class="text-center md:text-left">
+                    <span class="text-[#0E8685] font-bold text-xs md:text-sm tracking-wider uppercase">Nossa Essência</span>
+                    <h3 class="text-2xl md:text-4xl font-bold mt-1 mb-4 text-gray-900">Quem Somos</h3>
+                    <p class="text-gray-700 leading-relaxed text-sm md:text-base mb-4">
+                        A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
+        <div class="text-center mb-8">
+            <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
+            <p class="text-gray-600 mt-2">Selecione uma categoria ou pesquise pelo produto desejado.</p>
+            <div class="max-w-md mx-auto my-6">
+                <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 mt-4">
+                <button onclick="filtrarProdutos('todos')" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
+                <button onclick="filtrarProdutos('Promoções')" class="px-4 py-2 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow">🔥 Promoções</button>
+                <button onclick="filtrarProdutos('Incensos')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌿 Incensos</button>
+                <button onclick="filtrarProdutos('Pedras')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
+                <button onclick="filtrarProdutos('Semijoias')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">✨ Semijoias</button>
+                <button onclick="filtrarProdutos('Decoracao')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🏺 Decoração</button>
+                <button onclick="filtrarProdutos('Velas')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🕯️ Velas</button>
+                <button onclick="filtrarProdutos('Imagens (Esculturas)')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🗿 Imagens</button>
+            </div>
+        </div>
+        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+    </section>
+
+    <section id="view-terapias" class="app-view hidden flex-grow bg-[#EFECE6] py-16 px-4">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="text-[#0E8685] font-bold text-sm tracking-wider uppercase">Atendimento Especializado</span>
+                <h3 class="text-3xl font-bold mt-2 mb-4 text-gray-900">Espaço Terapêutico Ísis Holística</h3>
+                <p class="text-gray-700 leading-relaxed mb-6">Humanoterapia, Psicanálise e Radiestesia para o seu autoconhecimento.</p>
+                <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="bg-[#C5A880] text-white font-bold px-6 py-3 rounded-lg shadow inline-block">Agendar Atendimento</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL DE DETALHES DO PRODUTO -->
+    <div id="modal-produto" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="fecharModalProduto()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-xl bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="space-y-4">
+                    <div id="modal-img-container" class="relative h-72 bg-gray-100 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center">
+                        <img id="modal-img" src="" alt="Produto" class="w-full h-full object-cover">
+                        <div id="modal-badge-texto" class="absolute hidden bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md max-w-[80%] text-center"></div>
+                    </div>
+                    <div id="modal-variacoes-container" class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase">Escolha a Variação / Detalhe:</label>
+                        <div id="modal-variantes-lista" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+                <div class="space-y-4 flex flex-col justify-between">
+                    <div>
+                        <span id="modal-categoria" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full uppercase"></span>
+                        <h3 id="modal-nome" class="text-2xl font-bold text-gray-900 mt-2"></h3>
+                        <p id="modal-preco" class="text-3xl font-extrabold text-[#C5A880] mt-2"></p>
+                        <p id="modal-descricao" class="text-gray-600 text-sm mt-4 leading-relaxed"></p>
+                    </div>
+                    <button onclick="adicionarProdutoAoCarrinhoModal()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm">🛒 Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÃO WHATSAPP -->
+    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl">💬</a>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyACzkdrx9HUFoZE-emtGCx4SXLX9w7F4w",
+            authDomain: "isis-holistica.firebaseapp.com",
+            projectId: "isis-holistica",
+            storageBucket: "isis-holistica.firebasestorage.app",
+            messagingSenderId: "18451242035",
+            appId: "1:18451242035:web:2bc1df8c53716bdbd6a1746"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let currentSlide = 0;
+        let listaProdutos = [];
+        let slides = [];
+        let carouselTimer = null;
+        let produtoAtualModal = null;
+        let fotoSelecionadaModalIndex = 0;
+
+        async function carregarDadosDoBanco() {
+            try {
+                const querySnapshotProd = await getDocs(collection(db, "produtos"));
+                listaProdutos = [];
+                querySnapshotProd.forEach((docSnap) => {
+                    listaProdutos.push({ idFirestore: docSnap.id, ...docSnap.data() });
+                });
+
+                const querySnapshotSlides = await getDocs(collection(db, "slides"));
+                slides = [];
+                querySnapshotSlides.forEach((docSnap) => {
+                    slides.push({ idFirestore: docSnap.id, ...docSnap.data() });
+                });
+
+                renderizarDestaquesHome();
+                renderizarProdutosLoja('todos');
+                inicializarCarrossel();
+            } catch (e) {
+                console.error("Erro ao carregar dados do Firebase:", e);
+            }
+        }
+
+        carregarDadosDoBanco();
+
+        window.mudarAba = function(idAba) {
+            document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
+            const alvo = document.getElementById(idAba);
+            if (alvo) alvo.classList.remove('hidden');
+            document.getElementById('mobile-menu').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.toggleMobileMenu = function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function inicializarCarrossel() {
+            if (slides.length > 0) atualizarSlideUI();
+        }
+
+        function programarProximoSlide() {
+            if (carouselTimer) clearTimeout(carouselTimer);
+            if (slides.length <= 1) return;
+
+            const s = slides[currentSlide];
+            const tempoSegundos = Number(s?.tempo) || 5; 
+
+            carouselTimer = setTimeout(() => {
+                window.mudarSlide(1);
+            }, tempoSegundos * 1000);
+        }
+
+        function atualizarSlideUI() {
+            const s = slides[currentSlide];
+            if (!s) return;
+            
+            const badgeEl = document.getElementById('carousel-badge');
+            if (s.badge && s.badge.trim() !== '') {
+                badgeEl.innerText = s.badge;
+                badgeEl.style.display = '';
+            } else {
+                badgeEl.style.display = 'none';
+            }
+
+            const titleEl = document.getElementById('carousel-title');
+            if (s.titulo && s.titulo.trim() !== '') {
+                titleEl.innerText = s.titulo;
+                titleEl.style.display = '';
+            } else {
+                titleEl.style.display = 'none';
+            }
+
+            const descEl = document.getElementById('carousel-desc');
+            if (s.desc && s.desc.trim() !== '') {
+                descEl.innerText = s.desc;
+                descEl.style.display = '';
+            } else {
+                descEl.style.display = 'none';
+            }
+            
+            const imgPc = document.getElementById('carousel-img-pc');
+            const imgMobile = document.getElementById('carousel-img-mobile');
+
+            imgPc.src = s.imagemPc || '';
+            imgPc.style.display = s.imagemPc ? '' : 'none';
+
+            imgMobile.src = s.imagemMobile || '';
+            imgMobile.style.display = s.imagemMobile ? '' : 'none';
+
+            programarProximoSlide();
+        }
+
+        window.mudarSlide = function(direcao) {
+            if (slides.length === 0) return;
+            currentSlide = (currentSlide + direcao + slides.length) % slides.length;
+            atualizarSlideUI();
+        }
+
+        window.clicarBannerAtual = function() {
+            const s = slides[currentSlide];
+            if (!s) return;
+
+            if (s.linkTipo === 'terapias') {
+                mudarAba('view-terapias');
+            } else if (s.linkTipo === 'promocoes') {
+                mudarAba('view-produtos');
+                filtrarProdutos('Promoções');
+            } else if (s.linkTipo === 'destaques') {
+                mudarAba('view-home');
+                const el = document.getElementById('home-destaques-grid');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            } else if (s.linkTipo === 'categoria' && s.linkAlvo) {
+                mudarAba('view-produtos');
+                filtrarProdutos(s.linkAlvo);
+            } else if (s.linkTipo === 'produto' && s.linkAlvo) {
+                const prod = listaProdutos.find(p => p.nome === s.linkAlvo);
+                if (prod) abrirModalProdutoId(prod.idFirestore);
+                else mudarAba('view-produtos');
+            } else {
+                mudarAba('view-produtos');
+                filtrarProdutos('todos');
+            }
+        }
+
+        window.abrirModalProdutoId = function(idFirestore) {
+            const p = listaProdutos.find(item => item.idFirestore === idFirestore);
+            if (!p) return;
+            produtoAtualModal = p;
+            fotoSelecionadaModalIndex = 0;
+
+            document.getElementById('modal-nome').innerText = p.nome;
+            document.getElementById('modal-preco').innerText = `R$ ${Number(p.preco).toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-categoria').innerText = p.categoria;
+            document.getElementById('modal-descricao').innerText = p.descricao || '';
+
+            atualizarVisualizacaoModalFoto();
+            renderizarBotoesVariacoesModal();
+
+            document.getElementById('modal-produto').classList.remove('hidden');
+        }
+
+        window.fecharModalProduto = function() {
+            document.getElementById('modal-produto').classList.add('hidden');
+        }
+
+        window.selecionarVariacaoModal = function(index) {
+            fotoSelecionadaModalIndex = index;
+            atualizarVisualizacaoModalFoto();
+            renderizarBotoesVariacoesModal();
+        }
+
+        function atualizarVisualizacaoModalFoto() {
+            if (!produtoAtualModal || !produtoAtualModal.imagens || produtoAtualModal.imagens.length === 0) return;
+            const imgData = produtoAtualModal.imagens[fotoSelecionadaModalIndex] || produtoAtualModal.imagens[0];
+            
+            const imgEl = document.getElementById('modal-img');
+            imgEl.src = imgData.url || '';
+
+            const badgeEl = document.getElementById('modal-badge-texto');
+            if (imgData.texto && imgData.texto.trim() !== '') {
+                badgeEl.innerText = imgData.texto;
+                badgeEl.style.display = 'block';
+
+                badgeEl.className = "absolute bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md max-w-[80%] text-center ";
+                if (imgData.posV === 'bottom') badgeEl.className += "bottom-4 ";
+                else badgeEl.className += "top-4 ";
+
+                if (imgData.posH === 'right') badgeEl.className += "right-4";
+                else badgeEl.className += "left-4";
+            } else {
+                badgeEl.style.display = 'none';
+            }
+        }
+
+        function renderizarBotoesVariacoesModal() {
+            const container = document.getElementById('modal-variantes-lista');
+            const wrapper = document.getElementById('modal-variacoes-container');
+            container.innerHTML = '';
+
+            if (!produtoAtualModal.imagens || produtoAtualModal.imagens.length <= 1) {
+                wrapper.classList.add('hidden');
+                return;
+            }
+
+            wrapper.classList.remove('hidden');
+            produtoAtualModal.imagens.forEach((img, idx) => {
+                const nomeVariacao = img.texto || `Opção ${idx + 1}`;
+                const isSelected = idx === fotoSelecionadaModalIndex;
+                
+                container.innerHTML += `
+                    <button onclick="selecionarVariacaoModal(${idx})" class="px-3.5 py-2 rounded-xl text-xs font-bold transition border ${isSelected ? 'bg-[#0E8685] text-white border-[#0E8685] shadow' : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200'}">
+                        ${nomeVariacao}
+                    </button>
+                `;
+            });
+        }
+
+        window.adicionarProdutoAoCarrinhoModal = function() {
+            alert(`Produto "${produtoAtualModal.nome}" adicionado com sucesso!`);
+            fecharModalProduto();
+        }
+
+        function renderizarDestaquesHome() {
+            const container = document.getElementById('home-destaques-grid');
+            if (!container) return;
+            container.innerHTML = '';
+            const destaques = listaProdutos.filter(p => p.destaque);
+            if (destaques.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-gray-400">Nenhum produto em destaque no momento.</div>`;
+                return;
+            }
+            destaques.forEach(p => {
+                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
+                container.innerHTML += `
+                    <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                        <div>
+                            <div class="relative h-64 bg-gray-100 overflow-hidden">
+                                <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">Destaque</span>
+                            </div>
+                            <div class="p-6">
+                                <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
+                                <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm">Ver Detalhes & Energia</span></div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderizarProdutosLoja(categoriaFiltro, termoBusca = '') {
+            const container = document.getElementById('grid-produtos');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            let filtrados = listaProdutos.filter(p => categoriaFiltro === 'todos' || p.categoria === categoriaFiltro);
+            
+            if (termoBusca.trim() !== '') {
+                const termo = termoBusca.toLowerCase();
+                filtrados = filtrados.filter(p => 
+                    p.nome.toLowerCase().includes(termo) || 
+                    (p.descricao || '').toLowerCase().includes(termo) ||
+                    p.categoria.toLowerCase().includes(termo)
+                );
+            }
+
+            if (filtrados.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Nenhum produto encontrado.</div>`;
+                return;
+            }
+
+            filtrados.forEach(p => {
+                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
+                container.innerHTML += `
+                    <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                        <div>
+                            <div class="relative h-64 bg-gray-100 overflow-hidden">
+                                <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">${p.categoria}</span>
+                            </div>
+                            <div class="p-6">
+                                <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
+                                <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm">Ver Detalhes & Energia</span></div>
+                    </div>
+                `;
+            });
+        }
+
+        window.pesquisarProdutos = function(termo) { renderizarProdutosLoja('todos', termo); }
+        window.filtrarProdutos = function(cat) {
+            const inputBusca = document.getElementById('input-busca');
+            if (inputBusca) inputBusca.value = '';
+            renderizarProdutosLoja(cat);
+        }
+    </script>
+</body>
+</html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
