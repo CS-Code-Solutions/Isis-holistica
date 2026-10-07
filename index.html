@@ -374,7 +374,14 @@
         let carouselTimer = null;
         let produtoAtualModal = null;
         let fotoSelecionadaModalIndex = 0;
-        let carrinho = JSON.parse(localStorage.getItem('carrinho_isis')) || [];
+        
+        // Recuperação segura do carrinho no carregamento inicial
+        let carrinho = [];
+        try {
+            carrinho = JSON.parse(localStorage.getItem('carrinho_isis')) || [];
+        } catch (e) {
+            carrinho = [];
+        }
 
         async function carregarDadosDoBanco() {
             try {
