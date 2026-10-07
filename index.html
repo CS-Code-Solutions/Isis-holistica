@@ -281,15 +281,71 @@
                 <!-- Itens injetados via JS -->
             </div>
 
-            <div class="border-t pt-4 mt-4 space-y-4">
+            <div class="border-t pt-4 mt-4 space-y-3">
                 <div class="flex justify-between items-center text-lg font-bold text-gray-900">
                     <span>Total:</span>
                     <span id="carrinho-total" class="text-[#C5A880] text-2xl font-extrabold">R$ 0,00</span>
                 </div>
-                <button onclick="finalizarPedidoWhatsApp()" class="w-full bg-[#25D366] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+                <button onclick="abrirCheckout()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+                    🛍️ Prosseguir com Pedido
+                </button>
+                <button onclick="mudarAba('view-produtos'); toggleCartModal();" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition text-sm">
+                    Continuar Comprando
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CHECKOUT (DADOS DO CLIENTE) -->
+    <div id="modal-checkout" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleCheckoutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-xl bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+            <h3 class="text-2xl font-bold text-[#0E8685] mb-4">Dados para Entrega 📋</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome Completo</label>
+                    <input type="text" id="chk-nome" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Seu nome completo">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">CPF</label>
+                    <input type="text" id="chk-cpf" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="000.000.000-00">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Telefone de Contato</label>
+                    <input type="text" id="chk-telefone" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="(51) 99999-9999">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Endereço para Entrega</label>
+                    <textarea id="chk-endereco" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Rua, número, complemento, bairro, cidade e CEP"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Forma de Pagamento Desejada</label>
+                    <select id="chk-pagamento" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] bg-white">
+                        <option value="Pix">Pix</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="A combinar">A combinar</option>
+                    </select>
+                </div>
+                <button onclick="finalizarPedidoWhatsApp()" class="w-full bg-[#25D366] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2 mt-2">
                     💬 Finalizar Pedido via WhatsApp
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE SUCESSO / AVISO FLUTUANTE -->
+    <div id="modal-sucesso" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 md:p-8 relative text-center space-y-4">
+            <div class="text-5xl mb-2">✨</div>
+            <h3 class="text-2xl font-bold text-[#0E8685]">Pedido Enviado!</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+                O seu pedido será analisado e assim que possível entraremos em contato com as informações sobre forma de entrega, valores e formas de frete, forma de pagamento e quaisquer informações adicionais.
+            </p>
+            <button onclick="concluirPedido()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm">
+                Concluir
+            </button>
         </div>
     </div>
 
@@ -553,6 +609,19 @@
             }
         }
 
+        window.abrirCheckout = function() {
+            if (carrinho.length === 0) {
+                alert("O seu carrinho está vazio!");
+                return;
+            }
+            toggleCartModal();
+            document.getElementById('modal-checkout').classList.remove('hidden');
+        }
+
+        window.toggleCheckoutModal = function() {
+            document.getElementById('modal-checkout').classList.toggle('hidden');
+        }
+
         function atualizarContadorCarrinho() {
             const contadorEl = document.getElementById('cart-count');
             if (contadorEl) {
@@ -598,23 +667,46 @@
         }
 
         window.finalizarPedidoWhatsApp = function() {
-            if (carrinho.length === 0) {
-                alert("O seu carrinho está vazio!");
+            const nome = document.getElementById('chk-nome').value.trim();
+            const cpf = document.getElementById('chk-cpf').value.trim();
+            const telefone = document.getElementById('chk-telefone').value.trim();
+            const endereco = document.getElementById('chk-endereco').value.trim();
+            const pagamento = document.getElementById('chk-pagamento').value;
+
+            if (!nome || !cpf || !telefone || !endereco) {
+                alert("Por favor, preencha todos os campos de cadastro e endereço!");
                 return;
             }
 
-            let mensagem = "✨ *Olá! Gostaria de finalizar o meu pedido na Ísis Holística:*\n\n";
-            let total = 0;
+            let mensagem = `✨ *Novo Pedido - Ísis Holística* ✨\n\n`;
+            mensagem += `👤 *Nome:* ${nome}\n`;
+            mensagem += `📄 *CPF:* ${cpf}\n`;
+            mensagem += `📞 *Telefone:* ${telefone}\n`;
+            mensagem += `📍 *Endereço:* ${endereco}\n`;
+            mensagem += `💳 *Forma de Pagamento:* ${pagamento}\n\n`;
+            mensagem += `🛒 *Itens do Pedido:*\n`;
 
+            let total = 0;
             carrinho.forEach((item, idx) => {
                 mensagem += `${idx + 1}. *${item.nome}* (${item.variacao}) - R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
                 total += item.preco;
             });
 
-            mensagem += `\n💰 *Total do Pedido:* R$ ${total.toFixed(2).replace('.', ',')}\n\nAguardo instruções para pagamento e envio!`;
+            mensagem += `\n💰 *Subtotal Produtos:* R$ ${total.toFixed(2).replace('.', ',')}`;
 
             const url = `https://wa.me/555195508826?text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
+
+            document.getElementById('modal-checkout').classList.add('hidden');
+            document.getElementById('modal-sucesso').classList.remove('hidden');
+        }
+
+        window.concluirPedido = function() {
+            carrinho = [];
+            localStorage.removeItem('carrinho_isis');
+            atualizarContadorCarrinho();
+            document.getElementById('modal-sucesso').classList.add('hidden');
+            mudarAba('view-home');
         }
 
         function renderizarDestaquesHome() {
