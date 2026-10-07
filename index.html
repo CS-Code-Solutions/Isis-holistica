@@ -374,8 +374,8 @@
         let carouselTimer = null;
         let produtoAtualModal = null;
         let fotoSelecionadaModalIndex = 0;
+        let mensagemWhatsAppPendente = "";
         
-        // Recuperação segura do carrinho no carregamento inicial
         let carrinho = [];
         try {
             carrinho = JSON.parse(localStorage.getItem('carrinho_isis')) || [];
@@ -701,14 +701,19 @@
 
             mensagem += `\n💰 *Subtotal Produtos:* R$ ${total.toFixed(2).replace('.', ',')}`;
 
-            const url = `https://wa.me/555195508826?text=${encodeURIComponent(mensagem)}`;
-            window.open(url, '_blank');
+            mensagemWhatsAppPendente = mensagem;
 
             document.getElementById('modal-checkout').classList.add('hidden');
             document.getElementById('modal-sucesso').classList.remove('hidden');
         }
 
         window.concluirPedido = function() {
+            if (mensagemWhatsAppPendente) {
+                const url = `https://wa.me/555195508826?text=${encodeURIComponent(mensagemWhatsAppPendente)}`;
+                window.open(url, '_blank');
+                mensagemWhatsAppPendente = "";
+            }
+
             carrinho = [];
             localStorage.removeItem('carrinho_isis');
             atualizarContadorCarrinho();
