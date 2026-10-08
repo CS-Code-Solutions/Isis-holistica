@@ -8,189 +8,196 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
         @media print {
-            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-            .no-print { display: none; }
+            body { 
+                print-color-adjust: exact; 
+                -webkit-print-color-adjust: exact; 
+                background-color: white !important;
+                padding: 0 !important;
+            }
+            .no-print { display: none !important; }
             .page-break { page-break-before: always; }
+            .pdf-card { break-inside: avoid; }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 p-4 sm:p-8 max-w-5xl mx-auto">
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8 max-w-4xl mx-auto">
 
-    <!-- CAPA E CABEÇALHO DO MANUAL -->
-    <div class="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 mb-8 text-center">
-        <div class="inline-block bg-teal-50 text-[#0E8685] font-bold text-xs uppercase px-4 py-1.5 rounded-full mb-4 border border-teal-100">
-            Documentação Oficial do Sistema
-        </div>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-[#0E8685]">Ísis Holística</h1>
-        <p class="text-xl font-bold text-gray-700 mt-2">Guia Prático do E-Commerce & Painel Administrativo</p>
-        <p class="text-xs text-gray-500 mt-3 max-w-xl mx-auto">
-            Este manual contém todas as instruções necessárias para navegar na loja virtual, realizar compras e utilizar o painel de administração para gerenciar produtos, estoque e banners.
-        </p>
-    </div>
-
-    <!-- NAVEGAÇÃO RÁPIDA -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div class="bg-[#0E8685] text-white p-6 rounded-3xl shadow-sm">
-            <h2 class="font-bold text-lg mb-2 flex items-center gap-2">
-                <span>🛍️</span> Parte 1: Loja Virtual (Cliente)
-            </h2>
-            <p class="text-xs opacity-90 leading-relaxed">
-                Apresentação da navegação, catálogo de produtos, filtros por categorias, detalhes com variações e fluxo de pedidos integrados ao WhatsApp.
+    <!-- ================= PÁGINA 1: CAPA + LOJA VIRTUAL ================= -->
+    <div class="pdf-page bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100 mb-8 space-y-6">
+        
+        <!-- Cabeçalho -->
+        <div class="text-center border-b border-gray-100 pb-6">
+            <div class="inline-block bg-teal-50 text-[#0E8685] font-bold text-xs uppercase px-4 py-1.5 rounded-full mb-3 border border-teal-100">
+                Documentação Oficial do Sistema
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-[#0E8685]">Ísis Holística</h1>
+            <p class="text-lg font-bold text-gray-700 mt-1">Guia Prático do E-Commerce & Painel Administrativo</p>
+            <p class="text-xs text-gray-500 mt-2 max-w-lg mx-auto">
+                Instruções passo a passo para navegação da loja virtual e gestão do painel administrativo.
             </p>
         </div>
-        <div class="bg-[#C5A880] text-white p-6 rounded-3xl shadow-sm">
-            <h2 class="font-bold text-lg mb-2 flex items-center gap-2">
-                <span>⚙️</span> Parte 2: Painel do Administrador
-            </h2>
-            <p class="text-xs opacity-90 leading-relaxed">
-                Instruções passo a passo para gerenciar produtos da loja, controlar o estoque físico no depósito, ajustar variações e editar banners do carrossel.
-            </p>
-        </div>
-    </div>
 
-    <!-- PARTE 1: A LOJA VIRTUAL -->
-    <div class="space-y-8 text-sm leading-relaxed mb-12">
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
-            <h2 class="text-2xl font-extrabold text-[#0E8685] border-b pb-4 flex items-center gap-2">
+        <!-- Módulos de Resumo -->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-[#0E8685] text-white p-4 rounded-2xl shadow-sm">
+                <h2 class="font-bold text-sm mb-1 flex items-center gap-1.5">
+                    <span>🛍️</span> Parte 1: Loja Virtual
+                </h2>
+                <p class="text-[11px] opacity-90 leading-snug">
+                    Navegação, carrinho e envio de pedidos via WhatsApp.
+                </p>
+            </div>
+            <div class="bg-[#C5A880] text-white p-4 rounded-2xl shadow-sm">
+                <h2 class="font-bold text-sm mb-1 flex items-center gap-2">
+                    <span>⚙️</span> Parte 2: Painel Admin
+                </h2>
+                <p class="text-[11px] opacity-90 leading-snug">
+                    Gestão de produtos, estoque no depósito e carrossel de banners.
+                </p>
+            </div>
+        </div>
+
+        <!-- PARTE 1: LOJA VIRTUAL -->
+        <div class="space-y-4 pt-2">
+            <h2 class="text-xl font-extrabold text-[#0E8685] border-b pb-2 flex items-center gap-2">
                 <span>🛍️</span> PARTE 1 – Guia de Uso da Loja Virtual (Visão do Cliente)
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2 bg-gray-50 p-5 rounded-2xl border border-gray-100">
-                    <h3 class="font-bold text-gray-900 text-base flex items-center gap-2">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 pdf-card space-y-1">
+                    <h3 class="font-bold text-gray-900 text-xs flex items-center gap-1.5">
                         <span>🔍</span> 1. Navegação e Busca
                     </h3>
-                    <p class="text-xs text-gray-600">
-                        O cliente pode navegar pelas abas superiores (<strong>Início</strong>, <strong>Quem Somos</strong>, <strong>Produtos</strong> e <strong>Espaço Terapêutico</strong>). Na aba de produtos, há um campo de busca por nome ou propriedade, além de botões para filtrar por categoria (Incensos, Pedras, Semijoias, Velas, etc.).
+                    <p class="text-[11px] text-gray-600 leading-relaxed">
+                        Navegação rápida pelas abas (Início, Quem Somos, Produtos e Espaço Terapêutico) com pesquisa avançada e filtros por categorias.
                     </p>
                 </div>
 
-                <div class="space-y-2 bg-gray-50 p-5 rounded-2xl border border-gray-100">
-                    <h3 class="font-bold text-gray-900 text-base flex items-center gap-2">
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 pdf-card space-y-1">
+                    <h3 class="font-bold text-gray-900 text-xs flex items-center gap-1.5">
                         <span>✨</span> 2. Detalhes e Variações
                     </h3>
-                    <p class="text-xs text-gray-600">
-                        Ao clicar em qualquer produto, abre-se uma janela flutuante detalhada. Se o produto possuir diferentes opções (ex: aromas, cores ou tamanhos), o cliente escolhe a variação clicando nos botões interativos antes de adicionar ao carrinho.
+                    <p class="text-[11px] text-gray-600 leading-relaxed">
+                        Modal interativo com fotos detalhadas e escolha de variações (aromas, pedras, cores ou tamanhos) antes da seleção.
                     </p>
                 </div>
 
-                <div class="space-y-2 bg-gray-50 p-5 rounded-2xl border border-gray-100">
-                    <h3 class="font-bold text-gray-900 text-base flex items-center gap-2">
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 pdf-card space-y-1">
+                    <h3 class="font-bold text-gray-900 text-xs flex items-center gap-1.5">
                         <span>🛒</span> 3. Carrinho Persistente
                     </h3>
-                    <p class="text-xs text-gray-600">
-                        Os itens adicionados ao carrinho ficam salvos automaticamente no navegador do cliente (mesmo que ele recarregue a página). No carrinho, é possível revisar itens, alterar quantidades ou remover produtos.
+                    <p class="text-[11px] text-gray-600 leading-relaxed">
+                        Os itens ficam salvos no navegador via <code class="bg-gray-200 px-1 rounded text-[10px]">localStorage</code>, garantindo segurança contra recarregamentos acidentais.
                     </p>
                 </div>
 
-                <div class="space-y-2 bg-gray-50 p-5 rounded-2xl border border-gray-100">
-                    <h3 class="font-bold text-gray-900 text-base flex items-center gap-2">
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 pdf-card space-y-1">
+                    <h3 class="font-bold text-gray-900 text-xs flex items-center gap-1.5">
                         <span>💬</span> 4. Finalização via WhatsApp
                     </h3>
-                    <p class="text-xs text-gray-600">
-                        Ao prosseguir com o pedido, o cliente preenche seus dados para entrega (Nome, CPF, Telefone, Endereço e Forma de Pagamento). Ao clicar em <strong>"Concluir"</strong> no modal de confirmação, o pedido é formatado e enviado diretamente para o WhatsApp do estabelecimento.
+                    <p class="text-[11px] text-gray-600 leading-relaxed">
+                        Ao clicar em "Concluir", a mensagem completa do pedido é enviada formatada diretamente para o WhatsApp da loja.
                     </p>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- QUEBRA DE PÁGINA PARA O PDF -->
+    <!-- QUEBRA DE PÁGINA REGRADA -->
     <div class="page-break"></div>
 
-    <!-- PARTE 2: PAINEL ADMINISTRATIVO -->
-    <div class="space-y-8 text-sm leading-relaxed">
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
-            <h2 class="text-2xl font-extrabold text-[#0E8685] border-b pb-4 flex items-center gap-2">
-                <span>⚙️</span> PARTE 2 – Manual de Operação do Painel Administrativo
-            </h2>
+    <!-- ================= PÁGINA 2: PAINEL ADMINISTRATIVO ================= -->
+    <div class="pdf-page bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100 space-y-6">
+        
+        <h2 class="text-xl font-extrabold text-[#0E8685] border-b pb-2 flex items-center gap-2">
+            <span>⚙️</span> PARTE 2 – Manual de Operação do Painel Administrativo
+        </h2>
 
-            <!-- MÓDULO 1: ACESSO -->
-            <div class="bg-teal-50/50 p-5 rounded-2xl border border-teal-100">
-                <h3 class="font-bold text-[#0E8685] text-base mb-1 flex items-center gap-2">
-                    <span>🔒</span> 1. Acesso e Segurança
-                </h3>
-                <p class="text-xs text-gray-700">
-                    O acesso à área administrativa é restrito. Para entrar, o administrador utiliza o login seguro integrado ao Firebase Authentication via Google. Somente a conta de e-mail cadastrada como administradora tem permissão para alterar os dados da loja.
-                </p>
-            </div>
+        <!-- MÓDULO 1: ACESSO -->
+        <div class="bg-teal-50/60 p-4 rounded-2xl border border-teal-100 pdf-card">
+            <h3 class="font-bold text-[#0E8685] text-xs mb-1 flex items-center gap-1.5">
+                <span>🔒</span> 1. Acesso Restrito e Segurança
+            </h3>
+            <p class="text-[11px] text-gray-700 leading-relaxed">
+                Acesso seguro via Google com autenticação federada (Firebase Auth). Apenas e-mails na lista de administradores liberam as permissões de escrita na base de dados.
+            </p>
+        </div>
 
-            <!-- MÓDULO 2: PRODUTOS DA LOJA -->
-            <div class="space-y-3">
-                <h3 class="font-bold text-gray-900 text-base flex items-center gap-2 border-b pb-2">
-                    <span>📦</span> 2. Gerenciando os Produtos da Loja Virtual
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <strong class="text-gray-900 block mb-1">Cadastrar / Editar</strong>
-                        <p class="text-gray-600">Preencha o Nome, Preço (R$), Categoria (Selecione da lista) e a Descrição com os atributos e energia do produto.</p>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <strong class="text-gray-900 block mb-1">Fotos e Variações</strong>
-                        <p class="text-gray-600">Adicione links de imagens para o produto. Em produtos com opções (aromas, pedras, etc.), defina o rótulo de cada foto para criar a variação.</p>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <strong class="text-gray-900 block mb-1">Destaques na Home</strong>
-                        <p class="text-gray-600">Marque a opção "Exibir em Destaque" para que o produto apareça na vitrine principal da página inicial.</p>
-                    </div>
+        <!-- MÓDULO 2: PRODUTOS DA LOJA -->
+        <div class="space-y-2 pdf-card">
+            <h3 class="font-bold text-gray-900 text-xs flex items-center gap-1.5 border-b pb-1">
+                <span>📦</span> 2. Gestão de Produtos da Loja Virtual
+            </h3>
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <strong class="text-gray-900 text-[11px] block mb-0.5">Cadastro / Edição</strong>
+                    <p class="text-[10px] text-gray-600 leading-tight">Título, Preço, Categoria e Descrição detalhada.</p>
                 </div>
-            </div>
-
-            <!-- MÓDULO 3: DEPÓSITO / ESTOQUE -->
-            <div class="space-y-3">
-                <h3 class="font-bold text-gray-900 text-base flex items-center gap-2 border-b pb-2">
-                    <span>🏭</span> 3. Gerenciando o Estoque (Depósito)
-                </h3>
-                
-                <p class="text-xs text-gray-600">
-                    A aba <strong>Depósito</strong> serve para o controle interno de inventário físico dos produtos e insumos:
-                </p>
-
-                <ul class="list-disc pl-5 space-y-1.5 text-xs text-gray-700">
-                    <li><strong>Novo Item no Depósito:</strong> Insira o nome do produto/insumo, selecione a categoria e informe a quantidade inicial.</li>
-                    <li><strong>Entrada de Estoque (+):</strong> Clique no botão de adição para somar novas unidades recebidas dos fornecedores.</li>
-                    <li><strong>Saída de Estoque (-):</strong> Clique no botão de subtração para registrar baixas de produtos vendidos ou utilizados.</li>
-                </ul>
-            </div>
-
-            <!-- MÓDULO 4: BANNERS / CARROSSEL -->
-            <div class="space-y-3">
-                <h3 class="font-bold text-gray-900 text-base flex items-center gap-2 border-b pb-2">
-                    <span>🖼️</span> 4. Gerenciando Banners do Carrossel
-                </h3>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <strong class="text-gray-900 block mb-1">Imagens Responsivas</strong>
-                        <p class="text-gray-600">Defina uma imagem na horizontal para ecrãs de Computador (PC) e uma versão na vertical ajustada para Telemóvel (Mobile).</p>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <strong class="text-gray-900 block mb-1">Textos e Badges</strong>
-                        <p class="text-gray-600">Insira o Título principal, Descrição curta e a Etiqueta de Destaque (ex: <i>NOVIDADE</i>, <i>PROMOÇÃO</i>).</p>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <strong class="text-gray-900 block mb-1">Ação ao Clicar (Link)</strong>
-                        <p class="text-gray-600">Escolha para onde o cliente é levado ao clicar no banner (Página de Promoções, Terapias, Categoria específica ou Produto).</p>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <strong class="text-gray-900 block mb-1">Tempo de Rotação</strong>
-                        <p class="text-gray-600">Configure a duração em segundos de permanência do banner antes de avançar para o próximo slide.</p>
-                    </div>
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <strong class="text-gray-900 text-[11px] block mb-0.5">Fotos e Variações</strong>
+                    <p class="text-[10px] text-gray-600 leading-tight">Múltiplos URLs de fotos e etiquetas de opção.</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <strong class="text-gray-900 text-[11px] block mb-0.5">Destaques Home</strong>
+                    <p class="text-[10px] text-gray-600 leading-tight">Ativação de destaque para a vitrine principal.</p>
                 </div>
             </div>
         </div>
+
+        <!-- MÓDULO 3: DEPÓSITO / ESTOQUE -->
+        <div class="space-y-2 pdf-card">
+            <h3 class="font-bold text-gray-900 text-xs flex items-center gap-1.5 border-b pb-1">
+                <span>🏭</span> 3. Controle de Estoque (Depósito)
+            </h3>
+            <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-100 space-y-1">
+                <p class="text-[11px] text-gray-600 leading-relaxed">
+                    Controle de inventário interno de insumos e produtos finalizados:
+                </p>
+                <ul class="list-disc pl-4 text-[10px] text-gray-700 space-y-0.5">
+                    <li><strong>Entrada de Estoque (+):</strong> Adicione unidades na chegada de mercadorias.</li>
+                    <li><strong>Saída de Estoque (-):</strong> Dê baixa manual para vendas realizadas ou consumo interno.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- MÓDULO 4: BANNERS / CARROSSEL -->
+        <div class="space-y-2 pdf-card">
+            <h3 class="font-bold text-gray-900 text-xs flex items-center gap-1.5 border-b pb-1">
+                <span>🖼️</span> 4. Configuração de Banners e Slides
+            </h3>
+            <div class="grid grid-cols-2 gap-3 text-[10px]">
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <strong class="text-gray-900 block mb-0.5">Imagens Responsivas</strong>
+                    <p class="text-gray-600 leading-tight">Layout horizontal para PC e vertical para Telemóvel.</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <strong class="text-gray-900 block mb-0.5">Textos e Badges</strong>
+                    <p class="text-gray-600 leading-tight">Títulos promocionais e etiquetas de destaque.</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <strong class="text-gray-900 block mb-0.5">Ação do Clique (Link)</strong>
+                    <p class="text-gray-600 leading-tight">Redirecionamento direto para promoções, produtos ou terapias.</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <strong class="text-gray-900 block mb-0.5">Tempo de Rotação</strong>
+                    <p class="text-gray-600 leading-tight">Controle da duração em segundos de cada slide.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rodapé -->
+        <div class="text-center text-[10px] text-gray-400 border-t pt-3">
+            Ísis Holística &copy; Documento Técnico e Manual de Operações.
+        </div>
     </div>
 
-    <!-- RODAPÉ E BOTÃO -->
-    <div class="mt-8 text-center text-xs text-gray-400 border-t pt-4">
-        Ísis Holística &copy; Documento Técnico e Manual do Usuário.
-    </div>
-
+    <!-- Botão Flutuante para Imprimir -->
     <div class="mt-6 text-center no-print pb-8">
-        <button onclick="window.print()" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg transition text-sm flex items-center gap-2 mx-auto">
-            <span>🖨️</span> Salvar / Imprimir Manual em PDF
+        <button onclick="window.print()" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-8 py-3 rounded-xl shadow-lg transition text-xs flex items-center gap-2 mx-auto">
+            <span>🖨️</span> Salvar Manual Harmonizado em PDF
         </button>
     </div>
 
