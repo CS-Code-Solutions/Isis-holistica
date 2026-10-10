@@ -43,6 +43,21 @@
             z-index: 2;
         }
 
+        /* Estilo para fundo administrativo/logo */
+        .admin-logo-bg {
+            background-image: url('42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .admin-logo-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(11, 46, 45, 0.85);
+            z-index: 0;
+        }
+
         #modal-carousel-wrapper {
             position: relative;
             width: 100%;
@@ -288,7 +303,7 @@
                 <button onclick="filtrarProdutos('Promoções')" class="px-4 py-2 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow">🔥 Promoções</button>
                 <button onclick="filtrarProdutos('Incensos')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌿 Incensos</button>
                 <button onclick="filtrarProdutos('Pedras')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
-                <button onclick="filtrarProdutos('Semijoias')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">✨ Semijoias</button>
+                <button onclick="filtrarProdutos('Semijoias')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">Semijoias</button>
                 <button onclick="filtrarProdutos('Decoracao')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🏺 Decoração</button>
                 <button onclick="filtrarProdutos('Velas')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🕯️ Velas</button>
                 <button onclick="filtrarProdutos('Imagens (Esculturas)')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🗿 Imagens</button>
