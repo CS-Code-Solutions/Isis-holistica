@@ -10,17 +10,15 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         
-        #modal-carousel-wrapper {
+        #carousel-wrapper {
             position: relative;
             width: 100%;
-            min-height: 420px;
+            min-height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             background-color: #0b2e2d;
-            border-radius: 1.5rem;
-            overflow: hidden;
         }
 
         .carousel-bg-image {
@@ -43,7 +41,7 @@
         .carousel-content {
             position: absolute;
             inset-x: 0;
-            bottom: 24px;
+            bottom: 35px;
             z-index: 2;
             pointer-events: none;
         }
@@ -57,7 +55,7 @@
     </div>
 
     <!-- CABEÇALHO -->
-    <header class="bg-white shadow-sm sticky top-0 z-40">
+    <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
                 <img src="logo4.png" alt="Ísis Holística" class="h-12 md:h-16 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;" onerror="this.src='logo.png'">
@@ -65,7 +63,6 @@
             
             <nav class="hidden md:flex space-x-8 text-sm font-semibold items-center text-gray-700">
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
-                <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">✨ Destaques & Rituais</button>
                 <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] transition">Loja esotérica</button>
                 <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685] transition">Espaço terapêutico</button>
                 <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Nossa essência</button>
@@ -83,7 +80,6 @@
         <!-- MENU MOBILE -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
-            <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">✨ Destaques & Rituais</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Loja Esotérica</button>
             <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
             <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Nossa Essência</button>
@@ -100,59 +96,37 @@
         </div>
     </div>
 
-    <!-- INÍCIO (PÁGINA PRINCIPAL LIMPA) -->
-    <section id="view-home" class="app-view flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
-        <!-- Hero Clean de Boas-vindas -->
-        <div class="bg-gradient-to-r from-[#0E8685]/10 to-[#C5A880]/1{-gradient} rounded-3xl p-8 md:p-12 mb-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-gray-100 shadow-sm">
-            <div class="space-y-4 max-w-xl text-center md:text-left">
-                <span class="bg-[#0E8685] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider">Seja bem-vindo(a)</span>
-                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">O equilíbrio começa nos pequenos rituais.</h2>
-                <p class="text-gray-600 text-sm leading-relaxed">Explore nossa curadoria esotérica com cristais, aromas, decoração e agende seu momento de cuidado terapêutico.</p>
-                <div class="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
-                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow text-xs hover:bg-opacity-90 transition">Explorar Loja ➔</button>
-                    <button onclick="abrirModalBanner()" class="bg-white border border-gray-200 text-gray-700 font-bold px-6 py-3 rounded-xl shadow-sm text-xs hover:bg-gray-50 transition">✨ Ver Destaques</button>
+    <!-- INÍCIO -->
+    <section id="view-home" class="app-view flex-grow">
+        <!-- Banner / Carrossel Principal em Destaque no Fundo -->
+        <div id="carousel-wrapper" onclick="clicarBannerAtual()" class="text-white py-16 px-6 text-center overflow-hidden transition-all duration-700">
+            <div class="carousel-overlay"></div>
+            <img id="carousel-bg" class="carousel-bg-image" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Banner Fundo" onerror="this.style.display='none'">
+            <div class="max-w-3xl mx-auto px-4 carousel-content flex flex-col items-center justify-end pb-4">
+                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3.5 py-1 rounded-full tracking-wider shadow mb-2">LOJA ESOTÉRICA & ESPAÇO TERAPÊUTICO</span>
+                <h2 id="carousel-title" class="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-2 leading-tight drop-shadow-md">O equilíbrio começa nos pequenos rituais.</h2>
+                <p id="carousel-desc" class="text-xs sm:text-sm md:text-base opacity-95 mb-4 max-w-xl mx-auto drop-shadow">Encontre produtos com significado e um espaço de acolhimento para a sua jornada.</p>
+                <div class="flex gap-3 pointer-events-auto">
+                    <button onclick="event.stopPropagation(); mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-5 py-2.5 rounded-xl shadow text-xs transition">Explore nossa loja ➔</button>
+                    <button onclick="event.stopPropagation(); mudarAba('view-terapias');" class="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-bold px-5 py-2.5 rounded-xl border border-white/40 shadow text-xs transition">Conheça as terapias ➔</button>
                 </div>
             </div>
-            <div class="w-full md:w-80 h-64 rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
-                <img src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Ísis Holística" class="w-full h-full object-cover">
-            </div>
+            <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❮</button>
+            <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❯</button>
         </div>
 
-        <!-- Seção de Destaques da Loja -->
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-8">
-            <div>
-                <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">ESCOLHIDOS COM CARINHO</span>
-                <h3 class="text-2xl font-bold text-gray-900 mt-1">Seleção Ísis</h3>
+        <!-- Seção de Destaques -->
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-8">
+                <div>
+                    <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">ESCOLHIDOS COM CARINHO</span>
+                    <h3 id="secao-destaques-titulo" class="text-2xl font-bold text-gray-900 mt-1">Seleção Ísis</h3>
+                </div>
+                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="text-sm font-bold text-[#0E8685] hover:underline self-start sm:self-auto whitespace-nowrap">Ver todos os produtos ➔</button>
             </div>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="text-sm font-bold text-[#0E8685] hover:underline self-start sm:self-auto whitespace-nowrap">Ver todos os produtos ➔</button>
+            <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
         </div>
-        <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
     </section>
-
-    <!-- MODAL DO BANNER / CARROSSEL PRINCIPAL -->
-    <div id="modal-banner" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-6 relative">
-            <button onclick="fecharModalBanner()" class="absolute top-4 right-4 z-30 text-gray-500 hover:text-gray-800 font-bold bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center transition shadow-sm">✕</button>
-            <div class="mb-4">
-                <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">ESPAÇO DE DESTAQUES</span>
-                <h3 class="text-2xl font-bold text-gray-900">Rituais e Novidades</h3>
-            </div>
-            
-            <!-- Carrossel na Modal -->
-            <div id="modal-carousel-wrapper" onclick="clicarBannerAtual()">
-                <div class="carousel-overlay"></div>
-                <img id="carousel-bg" class="carousel-bg-image" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Banner Fundo" onerror="this.style.display='none'">
-                <div class="max-w-xl mx-auto px-4 carousel-content text-center text-white pb-6">
-                    <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow mb-2 inline-block">LOJA ESOTÉRICA</span>
-                    <h2 id="carousel-title" class="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 leading-tight drop-shadow-md">O equilíbrio começa nos pequenos rituais.</h2>
-                    <p id="carousel-desc" class="text-xs sm:text-sm opacity-95 mb-4 drop-shadow">Encontre produtos com significado para a sua jornada.</p>
-                    <button onclick="event.stopPropagation(); clicarBannerAtual();" class="pointer-events-auto bg-[#0E8685] text-white font-bold px-5 py-2.5 rounded-xl shadow text-xs hover:bg-opacity-90 transition">Acessar Seção ➔</button>
-                </div>
-                <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full z-20">❮</button>
-                <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full z-20">❯</button>
-            </div>
-        </div>
-    </div>
 
     <!-- QUEM SOMOS / NOSSA ESSÊNCIA -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
@@ -437,9 +411,6 @@
                 renderizarProdutosLoja('todos');
                 inicializarCarrossel();
                 atualizarContadorCarrinho();
-
-                // Opcional: abre o banner modal automaticamente ao entrar no site pela primeira vez
-                // setTimeout(() => abrirModalBanner(), 800);
             } catch (e) {
                 console.error("Erro ao carregar dados do Firebase:", e);
             }
@@ -457,16 +428,6 @@
 
         window.toggleMobileMenu = function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
-        }
-
-        window.abrirModalBanner = function() {
-            document.getElementById('modal-banner').classList.remove('hidden');
-            if (slides.length > 0) atualizarSlideUI();
-        }
-
-        window.fecharModalBanner = function() {
-            document.getElementById('modal-banner').classList.add('hidden');
-            if (carouselTimer) clearTimeout(carouselTimer);
         }
 
         function inicializarCarrossel() {
@@ -528,7 +489,6 @@
         }
 
         window.clicarBannerAtual = function() {
-            fecharModalBanner();
             if (slides.length === 0) return;
             const s = slides[currentSlide];
             if (!s) return;
