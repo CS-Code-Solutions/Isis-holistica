@@ -10,7 +10,6 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         
-        /* Fundo limpo sem sobreposição verde */
         .admin-logo-bg {
             background-image: url('42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg');
             background-size: cover;
@@ -20,7 +19,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col md:flex-row min-h-screen">
 
-    <!-- TELA DE LOGIN (Visível por padrão para evitar piscar o painel) -->
+    <!-- TELA DE LOGIN -->
     <div id="login-overlay" class="fixed inset-0 z-50 admin-logo-bg flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full space-y-6 border border-teal-100 relative z-10">
             <div class="text-center space-y-2">
@@ -45,7 +44,7 @@
         </div>
     </div>
 
-    <!-- PAINEL ADMINISTRATIVO (Oculto inicialmente até a autenticação carregar) -->
+    <!-- PAINEL ADMINISTRATIVO -->
     <div id="admin-main-wrapper" class="contents hidden">
         <!-- CABEÇALHO MOBILE -->
         <header class="bg-[#0E8685] text-white shadow-md md:hidden flex justify-between items-center px-4 py-3 sticky top-0 z-30">
@@ -105,9 +104,14 @@
                             <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos (Loja)</h2>
                             <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual da loja.</p>
                         </div>
-                        <button onclick="abrirNovoProduto()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                            <span>➕</span> <span>Adicionar Produto do Depósito</span>
-                        </button>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="abrirNovoProdutoDeposito()" class="bg-gray-100 text-[#0E8685] font-bold px-4 py-3 rounded-xl shadow-sm hover:bg-gray-200 transition flex items-center gap-2 text-xs border border-teal-100">
+                                <span>📦</span> <span>Vincular do Depósito</span>
+                            </button>
+                            <button onclick="abrirNovoProdutoDireto()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-xs">
+                                <span>➕</span> <span>Adicionar Produto Direto</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
@@ -115,44 +119,69 @@
                             <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Cadastrar/Editar Produto na Loja</h3>
                             <button onclick="toggleFormularioProduto()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                         </div>
-                        <form id="product-form" onsubmit="salvarProduto(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <form id="product-form" onsubmit="salvarProduto(event)" class="space-y-6">
                             <input type="hidden" id="prod-id">
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">1. Filtrar por Categoria</label>
-                                <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                                    <option value="Incensos">Incensos</option>
-                                    <option value="Pedras">Pedras e Cristais</option>
-                                    <option value="Semijoias">Semijoias</option>
-                                    <option value="Decoracao">Decoração</option>
-                                    <option value="Velas">Velas</option>
-                                    <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
-                                </select>
+                            <input type="hidden" id="prod-modo-cadastro" value="direto">
+                            
+                            <div id="bloco-deposito-vinculo" class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-teal-50/40 p-4 rounded-xl border border-teal-100">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">1. Filtrar por Categoria</label>
+                                    <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white">
+                                        <option value="Incensos">Incensos</option>
+                                        <option value="Pedras">Pedras e Cristais</option>
+                                        <option value="Semijoias">Semijoias</option>
+                                        <option value="Decoracao">Decoração</option>
+                                        <option value="Velas">Velas</option>
+                                        <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
+                                    <select id="prod-deposito-select" onchange="preencherDoDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white"></select>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
-                                <select id="prod-deposito-select" onchange="preencherDoDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></select>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
+                                    <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
+                                    <select id="prod-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white">
+                                        <option value="Incensos">Incensos</option>
+                                        <option value="Pedras">Pedras e Cristais</option>
+                                        <option value="Semijoias">Semijoias</option>
+                                        <option value="Decoracao">Decoração</option>
+                                        <option value="Velas">Velas</option>
+                                        <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
+                                    <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
-                                <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+
+                            <div class="space-y-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <label class="block text-xs font-bold text-[#0E8685] uppercase">📸 Galeria de Fotos e Variações</label>
+                                    <button type="button" onclick="adicionarCampoFotoProd()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-opacity-90 transition">➕ Adicionar Foto</button>
+                                </div>
+                                <div id="container-fotos-prod-dinamico" class="space-y-4"></div>
                             </div>
+
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
-                                <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria Final</label>
-                                <input type="text" id="prod-categoria" readonly class="w-full px-4 py-2.5 border bg-gray-100 rounded-xl text-sm text-gray-600">
-                            </div>
-                            <div class="md:col-span-2">
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição do Produto</label>
                                 <textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
                             </div>
-                            <div class="md:col-span-2 flex items-center gap-2 pt-2">
+
+                            <div class="flex items-center gap-2 pt-2">
                                 <input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded focus:ring-[#0E8685]">
                                 <label for="prod-destaque" class="text-sm font-semibold text-gray-700">Deixar em destaque na Página Inicial da loja</label>
                             </div>
-                            <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+
+                            <div class="flex gap-3 pt-4 border-t">
                                 <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Produto</button>
                                 <button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
                             </div>
@@ -439,7 +468,6 @@
                 renderizarTabelaDeposito();
                 renderizarTabelaBanners();
                 atualizarSelectDeposito();
-                atualizarSubCamposDeposito();
             } catch (e) {
                 console.error("Erro ao carregar dados do Firebase:", e);
             }
@@ -722,6 +750,44 @@
             `;
             container.appendChild(div);
         }
+
+        window.adicionarCampoFotoProd = function(url = '', texto = '', posH = 'left', posV = 'top') {
+            const container = document.getElementById('container-fotos-prod-dinamico');
+            const div = document.createElement('div');
+            div.className = "bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3 relative group";
+            div.innerHTML = `
+                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 font-bold text-xs bg-red-50 hover:bg-red-100 p-1.5 rounded-lg transition">🗑️ Remover Foto</button>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">URL da Imagem ou Ficheiro</label>
+                        <input type="text" class="input-prod-foto-url w-full px-3 py-2 border rounded-lg text-xs" value="${url}" placeholder="https://...">
+                        <input type="file" accept="image/*" onchange="comprimirFotoProdDinamica(this)" class="mt-1 w-full text-[10px] text-gray-400">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Descrição / Variação nesta foto</label>
+                        <input type="text" class="input-prod-foto-texto w-full px-3 py-2 border rounded-lg text-xs" value="${texto}" placeholder="Ex: Tonalidade Azul Escuro">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Horizontal</label>
+                        <select class="input-prod-foto-posh w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                            <option value="left" ${posH === 'left' ? 'selected' : ''}>Esquerda</option>
+                            <option value="right" ${posH === 'right' ? 'selected' : ''}>Direita</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Vertical</label>
+                        <select class="input-prod-foto-posv w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                            <option value="top" ${posV === 'top' ? 'selected' : ''}>Em Cima</option>
+                            <option value="bottom" ${posV === 'bottom' ? 'selected' : ''}>Em Baixo</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
         window.comprimirFotoDinamica = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -751,6 +817,37 @@
             };
             reader.readAsDataURL(file);
         }
+
+        window.comprimirFotoProdDinamica = function(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const bloco = input.closest('div.group');
+            const inputUrl = bloco.querySelector('.input-prod-foto-url');
+            inputUrl.value = "A otimizar imagem...";
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width, height = img.height;
+                    const MAX_DIMENSION = 1200;
+                    if (width > height) {
+                        if (width > MAX_DIMENSION) { height = Math.round((height * MAX_DIMENSION) / width); width = MAX_DIMENSION; }
+                    } else {
+                        if (height > MAX_DIMENSION) { width = Math.round((width * MAX_DIMENSION) / height); height = MAX_DIMENSION; }
+                    }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    let dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    if (dataUrl.length > 1000000) dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                    inputUrl.value = dataUrl;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
         window.atualizarSubCamposDeposito = function() {
             const cat = document.getElementById('dep-categoria').value;
             const container = document.getElementById('sub-campos-container');
@@ -765,6 +862,7 @@
                 container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-categoria</label><select id="sub-categoria-img" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="Católica">Católica</option><option value="Zen">Zen</option><option value="Axé">Axé</option></select></div>`;
             }
         }
+
         window.salvarItemDeposito = async function(e) {
             e.preventDefault();
             const idDoc = document.getElementById('dep-id').value;
@@ -796,6 +894,7 @@
                 toggleFormularioDeposito();
             } catch (err) { console.error("Erro ao guardar no depósito:", err); alert("Erro ao gravar no Firebase: " + err.message); }
         }
+
         window.renderizarTabelaDeposito = function() {
             const tbody = document.getElementById('admin-deposito-list');
             const counter = document.getElementById('total-deposito');
@@ -821,6 +920,7 @@
                 `;
             });
         }
+
         window.editarDeposito = function(idFirestore) {
             const d = listaDeposito.find(item => item.idFirestore === idFirestore);
             if (!d) return;
@@ -847,13 +947,39 @@
             document.getElementById('form-deposito-title').innerText = "🏢 Editar Item no Depósito";
             document.getElementById('form-container-deposito').classList.remove('hidden');
         }
+
         window.removerDeposito = async function(idFirestore) {
             if (confirm("Tem certeza que deseja apagar este item do depósito?")) {
                 try { await deleteDoc(doc(db, "deposito", idFirestore)); await carregarDadosAdmin(); } catch (err) { console.error("Erro ao apagar do depósito:", err); }
             }
         }
+
         window.toggleFormularioProduto = function() { document.getElementById('form-container-produto').classList.toggle('hidden'); }
-        window.abrirNovoProduto = function() { document.getElementById('prod-id').value = ''; document.getElementById('product-form').reset(); document.getElementById('form-produto-title').innerText = "📦 Adicionar Produto do Depósito"; atualizarSelectDeposito(); document.getElementById('form-container-produto').classList.remove('hidden'); }
+
+        window.abrirNovoProdutoDeposito = function() {
+            document.getElementById('prod-id').value = '';
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-modo-cadastro').value = 'deposito';
+            document.getElementById('bloco-deposito-vinculo').classList.remove('hidden');
+            document.getElementById('prod-categoria').setAttribute('readonly', true);
+            document.getElementById('form-produto-title').innerText = "📦 Adicionar Produto do Depósito";
+            document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
+            atualizarSelectDeposito();
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+
+        window.abrirNovoProdutoDireto = function() {
+            document.getElementById('prod-id').value = '';
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-modo-cadastro').value = 'direto';
+            document.getElementById('bloco-deposito-vinculo').classList.add('hidden');
+            document.getElementById('prod-categoria').removeAttribute('readonly');
+            document.getElementById('form-produto-title').innerText = "➕ Adicionar Produto Direto na Vitrine";
+            document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
+            adicionarCampoFotoProd();
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+
         window.atualizarSelectDeposito = function() {
             const filtroCat = document.getElementById('prod-filtro-cat').value;
             const selectDep = document.getElementById('prod-deposito-select');
@@ -863,6 +989,7 @@
             filtrados.forEach((item, idx) => { selectDep.innerHTML += `<option value="${idx}">${item.nome} (Estoque: ${item.qtd}) - R$ ${item.preco}</option>`; });
             preencherDoDeposito();
         }
+
         window.preencherDoDeposito = function() {
             const filtroCat = document.getElementById('prod-filtro-cat').value;
             const idx = document.getElementById('prod-deposito-select').value;
@@ -873,21 +1000,43 @@
                 document.getElementById('prod-preco').value = item.preco;
                 document.getElementById('prod-categoria').value = item.categoria;
                 document.getElementById('prod-descricao').value = item.descricao || '';
+                
+                const containerFotos = document.getElementById('container-fotos-prod-dinamico');
+                containerFotos.innerHTML = '';
+                const listaImgs = (item.imagens && item.imagens.length > 0) ? item.imagens : [{ url: item.imagem || '', texto: '', posH: 'left', posV: 'top' }];
+                listaImgs.forEach(img => adicionarCampoFotoProd(img.url, img.texto, img.posH, img.posV));
             }
         }
+
         window.salvarProduto = async function(e) {
             e.preventDefault();
             const idDoc = document.getElementById('prod-id').value;
-            const filtroCat = document.getElementById('prod-filtro-cat').value;
-            const depIdx = document.getElementById('prod-deposito-select').value;
-            const filtrados = listaDeposito.filter(d => d.categoria === filtroCat);
-            const itemDep = filtrados[depIdx] || {};
+            const modo = document.getElementById('prod-modo-cadastro').value;
             const nome = document.getElementById('prod-nome').value;
             const preco = parseFloat(document.getElementById('prod-preco').value);
             const categoria = document.getElementById('prod-categoria').value;
             const descricao = document.getElementById('prod-descricao').value;
             const destaque = document.getElementById('prod-destaque').checked;
-            const imagens = itemDep.imagens || [{ url: itemDep.imagem || '', texto: '', posH: 'left', posV: 'top' }];
+
+            let imagens = [];
+            if (modo === 'deposito') {
+                const filtroCat = document.getElementById('prod-filtro-cat').value;
+                const depIdx = document.getElementById('prod-deposito-select').value;
+                const filtrados = listaDeposito.filter(d => d.categoria === filtroCat);
+                const itemDep = filtrados[depIdx] || {};
+                imagens = itemDep.imagens || [{ url: itemDep.imagem || '', texto: '', posH: 'left', posV: 'top' }];
+            } else {
+                const blocosFotos = document.querySelectorAll('#container-fotos-prod-dinamico > div');
+                blocosFotos.forEach(bloco => {
+                    const url = bloco.querySelector('.input-prod-foto-url').value.trim();
+                    const texto = bloco.querySelector('.input-prod-foto-texto').value.trim();
+                    const posH = bloco.querySelector('.input-prod-foto-posh').value;
+                    const posV = bloco.querySelector('.input-prod-foto-posv').value;
+                    if (url) imagens.push({ url, texto, posH, posV });
+                });
+                if (imagens.length === 0) { alert("Adicione pelo menos uma foto ao produto!"); return; }
+            }
+
             const dadosProd = { nome, preco, categoria, imagens, descricao, destaque };
             try {
                 if (idDoc !== '') await updateDoc(doc(db, "produtos", idDoc), dadosProd);
@@ -896,6 +1045,7 @@
                 toggleFormularioProduto();
             } catch (err) { console.error("Erro ao guardar produto:", err); alert("Erro ao guardar no Firebase: " + err.message); }
         }
+
         window.renderizarTabelaProdutos = function() {
             const tbody = document.getElementById('admin-product-list');
             const counter = document.getElementById('total-produtos');
@@ -921,20 +1071,28 @@
                 `;
             });
         }
+
         window.editarProduto = function(idFirestore) {
             const p = listaProdutos.find(item => item.idFirestore === idFirestore);
             if (!p) return;
             document.getElementById('prod-id').value = p.idFirestore;
-            document.getElementById('prod-filtro-cat').value = p.categoria;
-            atualizarSelectDeposito();
+            document.getElementById('prod-modo-cadastro').value = 'direto';
+            document.getElementById('bloco-deposito-vinculo').classList.add('hidden');
             document.getElementById('prod-nome').value = p.nome;
             document.getElementById('prod-preco').value = p.preco;
             document.getElementById('prod-categoria').value = p.categoria;
             document.getElementById('prod-descricao').value = p.descricao || '';
             document.getElementById('prod-destaque').checked = p.destaque || false;
+
+            const containerFotos = document.getElementById('container-fotos-prod-dinamico');
+            containerFotos.innerHTML = '';
+            const listaImgs = (p.imagens && p.imagens.length > 0) ? p.imagens : [{ url: p.imagem || '', texto: '', posH: 'left', posV: 'top' }];
+            listaImgs.forEach(img => adicionarCampoFotoProd(img.url, img.texto, img.posH, img.posV));
+
             document.getElementById('form-produto-title').innerText = "📦 Editar Produto na Loja";
             document.getElementById('form-container-produto').classList.remove('hidden');
         }
+
         window.removerProduto = async function(idFirestore) {
             if (confirm("Tem certeza que deseja remover este produto da vitrine?")) {
                 try { await deleteDoc(doc(db, "produtos", idFirestore)); await carregarDadosAdmin(); } catch (err) { console.error("Erro ao excluir produto:", err); }
