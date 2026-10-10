@@ -13,7 +13,7 @@
         #carousel-wrapper {
             position: relative;
             width: 100%;
-            min-height: 420px;
+            min-height: 460px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -36,20 +36,20 @@
         @media (min-width: 768px) {
             .carousel-img-pc { display: block; }
             .carousel-img-mobile { display: none; }
-            #carousel-wrapper { min-height: 500px; }
+            #carousel-wrapper { min-height: 520px; }
         }
 
         .carousel-overlay {
             position: absolute;
             inset: 0;
-            background-color: rgba(0, 0, 0, 0.35);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.5));
             z-index: 1;
         }
 
         .carousel-content {
             position: absolute;
             inset-x: 0;
-            bottom: 4px;
+            bottom: 24px;
             z-index: 2;
             pointer-events: none;
         }
@@ -57,40 +57,26 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
+    <!-- BARRA DE AVISO SUPERIOR -->
     <div class="bg-[#0E8685] text-white text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
         ✨ Mais que produtos, energia para o seu dia a dia! Conheça nossa curadoria esotérica e terapias holísticas.
     </div>
 
+    <!-- CABEÇALHO LIMPO -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
-                <img src="logo4.png" alt="Ísis Holística" class="h-16 md:h-24 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
+                <img src="logo4.png" alt="Ísis Holística" class="h-16 md:h-20 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;">
             </div>
             
-            <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center">
+            <nav class="hidden md:flex space-x-8 text-sm font-semibold items-center text-gray-700">
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
-                <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Quem Somos</button>
-                
-                <div class="relative group py-2">
-                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] flex items-center gap-1 transition">Produtos ▾</button>
-                    <div class="absolute top-full left-0 w-52 bg-white shadow-xl rounded-xl py-2 hidden group-hover:block border border-gray-100">
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">Todos os Produtos</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-amber-600 font-bold">🔥 Promoções</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🌿 Incensos</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🔮 Pedras e Cristais</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">✨ Semijoias</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🏺 Decoração</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🕯️ Velas</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-xs text-gray-700">🗿 Imagens (Esculturas)</button>
-                    </div>
-                </div>
-
-                <button onclick="mudarAba('view-terapias')" class="bg-teal-50 text-[#0E8685] hover:bg-teal-100 px-4 py-2 rounded-xl transition flex items-center gap-1.5 font-bold border border-teal-200">
-                    <span class="hidden md:inline">🌸</span><span class="inline md:hidden">🪷</span> Espaço Terapêutico
-                </button>
+                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] transition">Loja esotérica</button>
+                <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685] transition">Espaço terapêutico</button>
+                <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Nossa essência</button>
             </nav>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
                 <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 transition">
                     🛒
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
@@ -99,126 +85,98 @@
             </div>
         </div>
 
+        <!-- MENU MOBILE -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
-            <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Quem Somos</button>
-            <div class="border-t pt-2 pb-1 text-xs font-bold text-[#0E8685] uppercase">Categorias de Produtos</div>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">📦 Todos os Produtos</button>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="block w-full text-left py-1 text-sm text-amber-600 font-bold pl-2">🔥 Promoções</button>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🌿 Incensos</button>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🔮 Pedras e Cristais</button>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">✨ Semijoias</button>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🏺 Decoração</button>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🕯️ Velas</button>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="block w-full text-left py-1 text-sm text-gray-600 pl-2">🗿 Imagens (Esculturas)</button>
-            <div class="border-t pt-2"></div>
-            <button onclick="mudarAba('view-terapias')" class="w-full text-center bg-teal-50 text-[#0E8685] border border-teal-200 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-                🪷 Espaço Terapêutico
-            </button>
+            <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Loja Esotérica</button>
+            <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
+            <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Nossa Essência</button>
         </div>
     </header>
 
+    <!-- BARRA DE CONCEITO / VALORES -->
+    <div class="bg-white border-b border-gray-100 py-3 px-4 hidden sm:block">
+        <div class="max-w-7xl mx-auto flex justify-around items-center text-xs text-gray-600 font-medium">
+            <span class="flex items-center gap-1.5">🍃 Curadoria com propósito</span>
+            <span class="flex items-center gap-1.5">💎 Produtos com significado</span>
+            <span class="flex items-center gap-1.5">🤍 Atendimento acolhedor</span>
+            <span class="flex items-center gap-1.5">💬 Compre pelo WhatsApp</span>
+        </div>
+    </div>
+
     <!-- INÍCIO -->
     <section id="view-home" class="app-view flex-grow">
+        <!-- Banner / Carrossel principal -->
         <div id="carousel-wrapper" onclick="clicarBannerAtual()" class="text-white py-16 px-6 text-center overflow-hidden transition-all duration-700">
             <div class="carousel-overlay"></div>
-            <img id="carousel-img-mobile" class="carousel-bg-image carousel-img-mobile" src="" alt="Banner Mobile">
-            <img id="carousel-img-pc" class="carousel-bg-image carousel-img-pc" src="" alt="Banner PC">
-            <div class="max-w-3xl mx-auto px-4 carousel-content flex flex-col items-center justify-end pb-3" id="carousel-container">
-                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3.5 py-1 rounded-full tracking-wider shadow mb-1.5"></span>
-                <h2 id="carousel-title" class="text-xl sm:text-2xl md:text-4xl font-extrabold mb-1.5 leading-tight drop-shadow-md"></h2>
-                <p id="carousel-desc" class="text-xs sm:text-sm md:text-base opacity-95 mb-3 max-w-2xl mx-auto drop-shadow line-clamp-2"></p>
-                <span class="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-1.5 rounded-full border border-white/30 shadow">✨ Clique para explorar</span>
+            <img id="carousel-img-mobile" class="carousel-bg-image carousel-img-mobile" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Banner Mobile">
+            <img id="carousel-img-pc" class="carousel-bg-image carousel-img-pc" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Banner PC">
+            <div class="max-w-3xl mx-auto px-4 carousel-content flex flex-col items-center justify-end pb-4" id="carousel-container">
+                <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3.5 py-1 rounded-full tracking-wider shadow mb-2">LOJA ESOTÉRICA & ESPAÇO TERAPÊUTICO</span>
+                <h2 id="carousel-title" class="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-2 leading-tight drop-shadow-md">O equilíbrio começa nos pequenos rituais.</h2>
+                <p id="carousel-desc" class="text-xs sm:text-sm md:text-base opacity-95 mb-4 max-w-xl mx-auto drop-shadow">Encontre produtos com significado e um espaço de acolhimento para a sua jornada.</p>
+                <div class="flex gap-3 pointer-events-auto">
+                    <button onclick="event.stopPropagation(); mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-5 py-2.5 rounded-xl shadow text-xs transition">Explore nossa loja ➔</button>
+                    <button onclick="event.stopPropagation(); mudarAba('view-terapias');" class="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-bold px-5 py-2.5 rounded-xl border border-white/40 shadow text-xs transition">Conheça as terapias ➔</button>
+                </div>
             </div>
             <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❮</button>
             <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2.5 rounded-full z-20">❯</button>
         </div>
 
+        <!-- Seção de Destaques -->
         <div class="max-w-7xl mx-auto px-4 py-12">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-8">
                 <div>
-                    <h3 id="secao-destaques-titulo" class="text-2xl font-bold text-[#0E8685]">Produtos em Destaque</h3>
-                    <p class="text-gray-600 text-sm mt-1">Seleção especial para elevar a sua energia hoje</p>
+                    <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">ESCOLHIDOS COM CARINHO</span>
+                    <h3 id="secao-destaques-titulo" class="text-2xl font-bold text-gray-900 mt-1">Seleção Ísis</h3>
                 </div>
-                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="text-sm font-bold text-[#0E8685] hover:underline self-start sm:self-auto whitespace-nowrap">Ver Todos ➔</button>
+                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="text-sm font-bold text-[#0E8685] hover:underline self-start sm:self-auto whitespace-nowrap">Ver todos os produtos ➔</button>
             </div>
             <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
         </div>
     </section>
 
-    <!-- QUEM SOMOS -->
+    <!-- QUEM SOMOS / NOSSA ESSÊNCIA -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-5xl mx-auto space-y-12">
+            <div class="space-y-3">
+                <span class="text-[#0E8685] font-bold text-xs uppercase tracking-wider">RAIZES E PROPÓSITO</span>
+                <h3 class="text-3xl md:text-4xl font-bold text-gray-900">Nossa essência</h3>
+                <p class="text-gray-500 text-sm">Mais que uma loja. Um encontro com você.</p>
+            </div>
+
             <div class="flex flex-col md:flex-row items-center gap-8 bg-[#F8F9FA] p-6 md:p-12 rounded-3xl border border-gray-100 shadow-sm">
-                <div class="w-56 md:w-80 flex-shrink-0 flex justify-center">
+                <div class="w-48 md:w-64 flex-shrink-0 flex justify-center">
                     <img src="logo.png" alt="Ísis Holística" class="w-full h-auto object-contain pointer-events-none select-none drop-shadow-md" draggable="false" oncontextmenu="return false;">
                 </div>
                 <div class="text-center md:text-left space-y-4">
-                    <span class="text-[#0E8685] font-bold text-xs md:text-sm tracking-wider uppercase">Nossa Essência</span>
-                    <h3 class="text-2xl md:text-4xl font-bold text-gray-900">Quem Somos</h3>
-                    <p class="text-gray-700 leading-relaxed text-sm md:text-base">
-                        A <strong>Ísis Holística</strong> nasce do propósito de conectar você com a sua melhor energia, equilíbrio e bem-estar espiritual. Mais do que uma loja esotérica, somos um espaço acolhedor dedicado à elevação da vibração através de elementos naturais, aromaterapia, cristais e acessórios com significado.
+                    <h4 class="text-2xl font-bold text-gray-900">Ísis Holística</h4>
+                    <p class="text-gray-700 leading-relaxed text-sm">
+                        Nascemos do propósito de conectar você com sua melhor energia, equilíbrio e bem-estar. Em São Leopoldo, RS, reunimos produtos esotéricos e um espaço acolhedor dedicado ao autoconhecimento.
                     </p>
-                    <p class="text-gray-700 leading-relaxed text-sm md:text-base">
-                        Fundada com amor e dedicação em São Leopoldo - RS, unimos o comércio consciente de produtos esotéricos ao suporte terapêutico especializado para guiar a sua jornada de autoconhecimento.
+                    <p class="text-gray-700 leading-relaxed text-sm">
+                        De cristais, aromas, acessórios e objetos com significado, nossa curadoria convida você a desacelerar e habitar o presente.
                     </p>
-                    <div class="pt-2">
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow transition hover:bg-opacity-90 text-sm">Conhecer Nossos Produtos</button>
-                    </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Loja de Produtos Esotéricos -->
-                <div class="bg-[#F8F9FA] p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
-                    <div class="flex items-center gap-2">
-                        <span class="text-2xl">🛍️</span>
-                        <h4 class="text-xl font-bold text-[#0E8685]">Loja de Produtos Esotéricos</h4>
-                    </div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Nossa curadoria de produtos inclui:</p>
-                    <ul class="space-y-2 text-sm text-gray-700">
-                        <li class="flex items-center gap-2">🌿 Incensos, Ervas, Defumações, Banhos, Perfumes</li>
-                        <li class="flex items-center gap-2">💨 Aromatizadores de ambiente</li>
-                        <li class="flex items-center gap-2">🔮 Cristais e Pedras</li>
-                        <li class="flex items-center gap-2">📜 Oráculos e Tarôs</li>
-                        <li class="flex items-center gap-2">🕯️ Velas e Óleos Essenciais</li>
-                        <li class="flex items-center gap-2">🗿 Imagens e Esculturas (Católica, Zen, Axé)</li>
-                        <li class="flex items-center gap-2">🕊️ Artigos religiosos e Tabacaria</li>
-                        <li class="flex items-center gap-2">🏺 Itens de Decoração e Presentes</li>
-                    </ul>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-2">
+                    <span class="text-2xl">🍃</span>
+                    <h5 class="font-bold text-gray-900">Curadoria com significado</h5>
+                    <p class="text-xs text-gray-600 leading-relaxed">Elementos naturais, aromas e objetos que acompanham sua jornada.</p>
                 </div>
-
-                <!-- Terapias Holísticas -->
-                <div class="bg-[#F8F9FA] p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
-                    <div class="flex items-center gap-2">
-                        <span class="text-2xl">🌸</span>
-                        <h4 class="text-xl font-bold text-[#0E8685]">Terapias Holísticas</h4>
-                    </div>
-                    <div class="space-y-3 text-sm text-gray-700">
-                        <div>
-                            <strong class="text-gray-900">Humanoterapia:</strong> tratamento energético e espiritual para limpar bloqueios profundos, além de trazer a reconexão pessoal. Utiliza técnicas como humanometria, mesa quântica, TDR, regressão, táquions tok e baralho terapêutico.
-                        </div>
-                        <div>
-                            <strong class="text-gray-900">Psicanálise:</strong> tratamento terapêutico com uma visão mais ampla sobre a consciência e o propósito de vida. Investigação do inconsciente, promovendo o autoconhecimento e saúde mental.
-                        </div>
-                        <div>
-                            <strong class="text-gray-900">Radiestesia e Radiônica:</strong> Alinhamento energético e harmonização.
-                        </div>
-                    </div>
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-2">
+                    <span class="text-2xl">🤍</span>
+                    <h5 class="font-bold text-gray-900">Acolhimento</h5>
+                    <p class="text-xs text-gray-600 leading-relaxed">Um olhar atento para cada pessoa e sua história.</p>
                 </div>
-            </div>
-
-            <!-- Banner de Agendamento -->
-            <div class="bg-[#0E8685] text-white p-6 md:p-8 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 shadow-lg">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-widest opacity-90">Para terapias agende o seu horário</p>
-                    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="text-2xl md:text-3xl font-extrabold hover:underline flex items-center gap-2 mt-1">
-                        💬 (51) 99550-8826
-                    </a>
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-2">
+                    <span class="text-2xl">💎</span>
+                    <h5 class="font-bold text-gray-900">Sua própria essência</h5>
+                    <p class="text-xs text-gray-600 leading-relaxed">Um convite ao equilíbrio, à presença e ao autoconhecimento.</p>
                 </div>
-                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-white text-[#0E8685] font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-gray-100 text-sm whitespace-nowrap">
-                    Ver Loja Virtual
-                </button>
             </div>
         </div>
     </section>
@@ -227,7 +185,7 @@
     <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
         <div class="text-center mb-8">
             <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
-            <p class="text-gray-600 mt-2">Selecione uma categoria ou pesquise pelo produto desejado.</p>
+            <p class="text-gray-600 mt-2">Explore nossa curadoria de produtos esotéricos e vibracionais.</p>
             <div class="max-w-md mx-auto my-6">
                 <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
             </div>
@@ -246,50 +204,46 @@
     </section>
 
     <!-- ESPAÇO TERAPÊUTICO -->
-    <section id="view-terapias" class="app-view hidden flex-grow bg-[#EFECE6] py-16 px-4">
-        <div class="max-w-5xl mx-auto space-y-10">
-            <!-- Cabeçalho com Logo (Esquerda no PC / Acima no Mobile) -->
-            <div class="flex flex-col md:flex-row items-center gap-8 bg-white p-6 md:p-12 rounded-3xl border border-gray-200 shadow-sm">
-                <div class="w-56 md:w-80 flex-shrink-0 flex justify-center">
-                    <img src="logo.png" alt="Ísis Holística" class="w-full h-auto object-contain pointer-events-none select-none drop-shadow-md" draggable="false" oncontextmenu="return false;">
-                </div>
-                <div class="text-center md:text-left space-y-3">
-                    <span class="text-[#0E8685] font-bold text-xs md:text-sm tracking-wider uppercase">Atendimento Especializado</span>
-                    <h3 class="text-2xl md:text-4xl font-bold text-gray-900">Espaço Terapêutico Ísis Holística</h3>
-                    <p class="text-gray-700 text-sm md:text-base leading-relaxed">
-                        Humanoterapia, Psicanálise e Radiestesia para o seu autoconhecimento e evolução espiritual.
-                    </p>
-                </div>
+    <section id="view-terapias" class="app-view hidden flex-grow py-16 px-4 bg-white">
+        <div class="max-w-5xl mx-auto space-y-12">
+            <div class="space-y-3">
+                <span class="text-[#0E8685] font-bold text-xs uppercase tracking-wider">ATENDIMENTO ESPECIALIZADO</span>
+                <h3 class="text-3xl md:text-4xl font-bold text-gray-900">Espaço terapêutico</h3>
+                <p class="text-gray-500 text-sm">Práticas integrativas voltadas à harmonização e ao equilíbrio.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-3">
-                    <h4 class="text-lg font-bold text-[#0E8685]">Humanoterapia</h4>
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
+                    <span class="text-2xl">🤍</span>
+                    <h4 class="text-lg font-bold text-gray-900">Humanoterapia</h4>
                     <p class="text-sm text-gray-600 leading-relaxed">
-                        Tratamento energético e espiritual para limpar bloqueios profundos, além de trazer a reconexão pessoal. Utiliza técnicas como humanometria, mesa quântica, TDR, regressão, táquions tok e baralho terapêutico.
+                        Um espaço de acolhimento e reconexão pessoal, com práticas voltadas ao bem-estar e ao autoconhecimento.
                     </p>
                 </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-3">
-                    <h4 class="text-lg font-bold text-[#0E8685]">Psicanálise</h4>
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
+                    <span class="text-2xl">🌿</span>
+                    <h4 class="text-lg font-bold text-gray-900">Psicanálise</h4>
                     <p class="text-sm text-gray-600 leading-relaxed">
-                        Tratamento terapêutico com uma visão mais ampla sobre a consciência e o propósito de vida. Investigação do inconsciente, promovendo o autoconhecimento e saúde mental.
+                        Escuta e investigação do inconsciente para compreender vivências, emoções e sua história.
                     </p>
                 </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-200 space-y-3">
-                    <h4 class="text-lg font-bold text-[#0E8685]">Radiestesia e Radiônica</h4>
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
+                    <span class="text-2xl">✨</span>
+                    <h4 class="text-lg font-bold text-gray-900">Radiestesia e radiônica</h4>
                     <p class="text-sm text-gray-600 leading-relaxed">
-                        Alinhamento energético e harmonização para restaurar o equilíbrio do seu campo vibracional.
+                        Práticas integrativas voltadas à harmonização e ao equilíbrio, respeitando sua jornada pessoal.
                     </p>
                 </div>
             </div>
 
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="bg-[#0E8685] text-white p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
                 <div class="space-y-1 text-center md:text-left">
-                    <h4 class="text-xl font-bold text-gray-900">Agende sua sessão terapêutica</h4>
-                    <p class="text-sm text-gray-600">Entre em contacto direto connosco através do WhatsApp para verificar disponibilidade e horários.</p>
+                    <span class="text-xs uppercase tracking-widest opacity-90 font-bold">SEU PRÓXIMO PASSO</span>
+                    <h4 class="text-2xl font-bold">Reserve um momento de cuidado.</h4>
+                    <p class="text-xs opacity-90">Consulte valores, duração das sessões e horários com nossa equipe.</p>
                 </div>
-                <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="bg-[#25D366] text-white font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-opacity-90 whitespace-nowrap">
-                    💬 (51) 99550-8826
+                <a href="https://wa.me/555195508826?text=Olá!%20Gostaria%20de%20sugerir%20agendamento%20para%20terapias." target="_blank" rel="noreferrer" class="bg-[#25D366] text-white font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-opacity-90 whitespace-nowrap text-sm flex items-center gap-2">
+                    💬 Agendar pelo WhatsApp
                 </a>
             </div>
         </div>
@@ -329,9 +283,7 @@
             <button onclick="toggleCartModal()" class="absolute top-3 right-3 z-20 text-gray-500 hover:text-gray-800 font-bold text-lg bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center transition shadow-sm">✕</button>
             <h3 class="text-2xl font-bold text-[#0E8685] mb-4">Seu Carrinho 🛒</h3>
             
-            <div id="carrinho-itens-lista" class="flex-grow overflow-y-auto space-y-4 divide-y divide-gray-100 max-h-[50vh] pr-1">
-                <!-- Itens injetados via JS -->
-            </div>
+            <div id="carrinho-itens-lista" class="flex-grow overflow-y-auto space-y-4 divide-y divide-gray-100 max-h-[50vh] pr-1"></div>
 
             <div class="border-t pt-4 mt-4 space-y-3">
                 <div class="flex justify-between items-center text-lg font-bold text-gray-900">
@@ -393,7 +345,7 @@
             <div class="text-5xl mb-2">✨</div>
             <h3 class="text-2xl font-bold text-[#0E8685]">Pedido Enviado!</h3>
             <p class="text-gray-600 text-sm leading-relaxed">
-                Seu pedido será analisado com todo o cuidado e, o mais breve possível, entraremos em contato para compartilhar todas as informações necessárias sobre a entrega, valores e opções de frete, formas de pagamento e demais detalhes para que tudo siga de forma tranquila e harmoniosa.
+                Seu pedido será analisado com todo o cuidado e, o mais breve possível, entraremos em contato para compartilhar todas as informações necessárias.
             </p>
             <button onclick="concluirPedido()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm">
                 Concluir via WhatsApp 
@@ -404,6 +356,21 @@
     <!-- BOTÃO WHATSAPP FIXO -->
     <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl">💬</a>
 
+    <!-- RODAPÉ LIMPO -->
+    <footer class="bg-white border-t border-gray-100 py-10 px-4 mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <img src="logo.png" alt="Ísis Holística" class="h-10 w-auto object-contain">
+                <span class="text-xs text-gray-500">Produtos com significado. Cuidado com a sua essência.</span>
+            </div>
+            <div class="text-xs text-gray-400 text-center md:text-right">
+                Ísis Holística &copy; 2026 — São Leopoldo - RS<br>
+                <span>Powered by <strong class="text-gray-600">CS Code Solutions</strong></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT DE INTEGRAÇÃO COM FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -519,11 +486,11 @@
             const imgPc = document.getElementById('carousel-img-pc');
             const imgMobile = document.getElementById('carousel-img-mobile');
 
-            imgPc.src = s.imagemPc || '';
-            imgPc.style.display = s.imagemPc ? '' : 'none';
+            imgPc.src = s.imagemPc || '42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg';
+            imgPc.style.display = '';
 
-            imgMobile.src = s.imagemMobile || '';
-            imgMobile.style.display = s.imagemMobile ? '' : 'none';
+            imgMobile.src = s.imagemMobile || '42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg';
+            imgMobile.style.display = '';
 
             programarProximoSlide();
         }
