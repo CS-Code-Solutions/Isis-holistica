@@ -86,7 +86,7 @@
 
     <!-- BARRA DE AVISO SUPERIOR -->
     <div class="bg-[#0E8685] text-white text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
-         Mais que produtos, energia para o seu dia a dia! Conheça nossa curadoria esotérica e terapias holísticas.
+        ✨ Mais que produtos, energia para o seu dia a dia! Conheça nossa curadoria esotérica e terapias holísticas.
     </div>
 
     <!-- CABEÇALHO -->
@@ -96,9 +96,10 @@
                 <img src="logo4.png" alt="Ísis Holística" class="h-12 md:h-16 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;" onerror="this.src='logo.png'">
             </div>
             
-            <nav class="hidden md:flex space-x-8 text-sm font-semibold items-center text-gray-700">
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center text-gray-700">
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
-                <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition"> Destaques & Rituais</button>
+                <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">✨ Destaques & Rituais</button>
+                <button onclick="mudarAba('view-lancamentos');" class="text-amber-600 hover:text-amber-700 font-bold transition">🌟 Lançamentos</button>
                 <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] transition">Loja esotérica</button>
                 <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685] transition">Espaço terapêutico</button>
                 <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Nossa essência</button>
@@ -116,7 +117,8 @@
         <!-- MENU MOBILE -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
-            <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]"> Destaques & Rituais</button>
+            <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">✨ Destaques & Rituais</button>
+            <button onclick="mudarAba('view-lancamentos')" class="block w-full text-left py-2 font-bold text-amber-600">🌟 Lançamentos</button>
             <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Loja Esotérica</button>
             <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
             <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Nossa Essência</button>
@@ -145,7 +147,7 @@
                     <p class="text-sm md:text-base opacity-95 leading-relaxed drop-shadow">Explore nossa curadoria esotérica com cristais, aromas, decoração e agende seu momento de cuidado terapêutico.</p>
                     <div class="flex flex-wrap gap-3 pt-2">
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition text-xs">Explorar Loja ➔</button>
-                        <button onclick="abrirModalBanner()" class="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-bold px-6 py-3 rounded-xl border border-white/30 shadow-lg transition text-xs"> Ver Destaques</button>
+                        <button onclick="abrirModalBanner()" class="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-bold px-6 py-3 rounded-xl border border-white/30 shadow-lg transition text-xs">✨ Ver Destaques</button>
                     </div>
                 </div>
             </div>
@@ -161,6 +163,16 @@
             </div>
             <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
         </div>
+    </section>
+
+    <!-- LANÇAMENTOS -->
+    <section id="view-lancamentos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
+        <div class="text-center mb-8 space-y-2">
+            <span class="text-amber-600 font-bold text-xs uppercase tracking-wider">NOVIDADES E CHEGADAS</span>
+            <h3 class="text-2xl md:text-3xl font-bold text-gray-900">Lançamentos & Rituais Recentes</h3>
+            <p class="text-gray-600 text-sm">Descubra as energias recém-chegadas para elevar a sua vibração.</p>
+        </div>
+        <div id="grid-lancamentos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
     </section>
 
     <!-- MODAL DO BANNER / CARROSSEL DE DESTAQUES -->
@@ -224,7 +236,7 @@
                         </div>
                     </div>
                     <a href="https://www.instagram.com/isiseholistica?exln=MW1ieHpxYncxYTQ3dg==" target="_blank" rel="noreferrer" class="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-95 text-white font-bold px-6 py-3 rounded-xl shadow transition text-xs whitespace-nowrap flex items-center gap-2">
-                         Seguir no Instagram
+                        ✨ Seguir no Instagram
                     </a>
                 </div>
             </div>
@@ -336,7 +348,6 @@
                     <h4 class="text-2xl font-bold">Reserve um momento de cuidado.</h4>
                     <p class="text-xs opacity-90">Consulte valores, duração das sessões e horários com nossa equipe.</p>
                 </div>
-                <!-- MENSAGEM AJUSTADA PARA O AGENDAMENTO DE TERAPIAS -->
                 <a href="https://wa.me/555195508826?text=Olá,%20querida%20equipe%20da%20Ísis%20Holística!%20Sinto%20o%20chamado%20para%20cuidar%20da%20minha%20energia%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20horários%20e%20valores%20para%20o%20Espaço%20Terapêutico.%20Gratidão!%20🌸" target="_blank" rel="noreferrer" class="bg-[#25D366] text-white font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-opacity-90 whitespace-nowrap text-sm flex items-center gap-2">
                     💬 Agendar pelo WhatsApp
                 </a>
@@ -449,17 +460,16 @@
     </div>
 
     <!-- BOTÃO WHATSAPP FIXO FLUTUANTE -->
-    <!-- MENSAGEM AJUSTADA PARA O BOTÃO FLUTUANTE GERAL -->
     <a href="https://wa.me/555195508826?text=Olá,%20Ísis%20Holística!%20Sinto-me%20atraído(a)%20pela%20energia%20da%20loja%20e%20gostaria%20de%20tirar%20algumas%20dúvidas%20sobre%20os%20produtos%20e%20rituais.%20Gratidão!%20✨" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-105 transition">💬</a>
 
-    <!-- RODAPÉ -->
-    <footer class="bg-white border-t border-gray-100 py-10 px-4 mt-auto">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <!-- RODAPÉ CENTRALIZADO -->
+    <footer class="bg-white border-t border-gray-100 py-10 px-4 mt-auto text-center">
+        <div class="max-w-7xl mx-auto flex flex-col items-center justify-center gap-4">
             <div class="flex items-center gap-3">
                 <img src="ico.png" alt="Ísis Holística" class="h-10 w-auto object-contain">
-                <span class="text-xs text-gray-500">Produtos com significado. Cuidado com a sua essência.</span>
             </div>
-            <div class="text-xs text-gray-400 text-center md:text-right">
+            <span class="text-xs text-gray-500">Produtos com significado. Cuidado com a sua essência.</span>
+            <div class="text-xs text-gray-400">
                 Ísis Holística &copy; 2026 — São Leopoldo - RS<br>
                 <span>Powered by <a href="https://www.instagram.com/cs_code_solutions?vrfl=Ym1mNDMzYTYxa3d6" target="_blank" rel="noreferrer" class="text-gray-600 hover:text-[#0E8685] font-bold transition">CS Code Solutions</a></span>
             </div>
@@ -513,6 +523,7 @@
                 });
 
                 renderizarDestaquesHome();
+                renderizarLancamentos();
                 renderizarProdutosLoja('todos');
                 inicializarCarrossel();
                 atualizarContadorCarrinho();
@@ -614,6 +625,8 @@
             } else if (s.linkTipo === 'promocoes') {
                 mudarAba('view-produtos');
                 filtrarProdutos('Promoções');
+            } else if (s.linkTipo === 'lancamentos') {
+                mudarAba('view-lancamentos');
             } else if (s.linkTipo === 'destaques') {
                 mudarAba('view-home');
             } else if (s.linkTipo === 'categoria' && s.linkAlvo) {
@@ -794,7 +807,6 @@
             renderizarCarrinho();
         }
 
-        // MENSAGEM AJUSTADA PARA O CHECKOUT DE COMPRAS NA LOJA ESOTÉRICA
         window.finalizarPedidoWhatsApp = function() {
             const nome = document.getElementById('chk-nome').value.trim();
             const cpf = document.getElementById('chk-cpf').value.trim();
@@ -864,6 +876,39 @@
                             </div>
                             <div class="p-6">
                                 <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
+                                <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm">Ver Detalhes & Energia</span></div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderizarLancamentos() {
+            const container = document.getElementById('grid-lancamentos');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const lancamentos = listaProdutos.filter(p => p.categoria === 'Lançamentos' || p.lancamento === true);
+            
+            if (lancamentos.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Novidades chegando em breve. Acompanhe! ✨</div>`;
+                return;
+            }
+
+            lancamentos.forEach(p => {
+                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
+                container.innerHTML += `
+                    <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                        <div>
+                            <div class="relative h-64 bg-gray-100 overflow-hidden">
+                                <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">🌟 Lançamento</span>
+                            </div>
+                            <div class="p-6">
+                                <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Novidade</span>
                                 <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
                                 <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
                             </div>
