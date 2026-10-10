@@ -187,7 +187,7 @@
         </div>
     </div>
 
-    <!-- NOSSA ESSÊNCIA (COM MAPA, ENDEREÇO E BOTÃO DO INSTAGRAM) -->
+    <!-- NOSSA ESSÊNCIA -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-5xl mx-auto space-y-12">
             <div class="space-y-3">
@@ -211,7 +211,7 @@
                 </div>
             </div>
 
-            <!-- BOTÃO DO INSTAGRAM COM CORES OFICIAIS -->
+            <!-- BOTÃO DO INSTAGRAM -->
             <div class="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] p-1 rounded-3xl shadow-lg">
                 <div class="bg-white rounded-[22px] p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="flex items-center gap-4 text-center sm:text-left">
@@ -242,7 +242,6 @@
                     </a>
                 </div>
 
-                <!-- MAPA DO GOOGLE MAPS EMBUTIDO -->
                 <div class="w-full h-80 rounded-2xl overflow-hidden shadow-inner border border-gray-200">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3463.8562375841445!2d-51.144889!3d-29.773123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x951943c2c1a8d053%3A0x8e8334bc62bb920f!2sAv.%20Feitoria%2C%202300%20-%20Pinheiro%2C%20S%C3%A3o%20Leopoldo%20-%20RS%2C%2093042-252!5e0!3m2!1spt-BR!2sbr!4v1710000000000!5m2!1spt-BR!2sbr" 
@@ -337,7 +336,8 @@
                     <h4 class="text-2xl font-bold">Reserve um momento de cuidado.</h4>
                     <p class="text-xs opacity-90">Consulte valores, duração das sessões e horários com nossa equipe.</p>
                 </div>
-                <a href="https://wa.me/555195508826?text=Olá!%20Gostaria%20de%20sugerir%20agendamento%20para%20terapias." target="_blank" rel="noreferrer" class="bg-[#25D366] text-white font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-opacity-90 whitespace-nowrap text-sm flex items-center gap-2">
+                <!-- MENSAGEM AJUSTADA PARA O AGENDAMENTO DE TERAPIAS -->
+                <a href="https://wa.me/555195508826?text=Olá,%20querida%20equipe%20da%20Ísis%20Holística!%20Sinto%20o%20chamado%20para%20cuidar%20da%20minha%20energia%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20horários%20e%20valores%20para%20o%20Espaço%20Terapêutico.%20Gratidão!%20🌸" target="_blank" rel="noreferrer" class="bg-[#25D366] text-white font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-opacity-90 whitespace-nowrap text-sm flex items-center gap-2">
                     💬 Agendar pelo WhatsApp
                 </a>
             </div>
@@ -448,8 +448,9 @@
         </div>
     </div>
 
-    <!-- BOTÃO WHATSAPP FIXO -->
-    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl">💬</a>
+    <!-- BOTÃO WHATSAPP FIXO FLUTUANTE -->
+    <!-- MENSAGEM AJUSTADA PARA O BOTÃO FLUTUANTE GERAL -->
+    <a href="https://wa.me/555195508826?text=Olá,%20Ísis%20Holística!%20Sinto-me%20atraído(a)%20pela%20energia%20da%20loja%20e%20gostaria%20de%20tirar%20algumas%20dúvidas%20sobre%20os%20produtos%20e%20rituais.%20Gratidão!%20✨" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-105 transition">💬</a>
 
     <!-- RODAPÉ -->
     <footer class="bg-white border-t border-gray-100 py-10 px-4 mt-auto">
@@ -793,6 +794,7 @@
             renderizarCarrinho();
         }
 
+        // MENSAGEM AJUSTADA PARA O CHECKOUT DE COMPRAS NA LOJA ESOTÉRICA
         window.finalizarPedidoWhatsApp = function() {
             const nome = document.getElementById('chk-nome').value.trim();
             const cpf = document.getElementById('chk-cpf').value.trim();
@@ -805,13 +807,14 @@
                 return;
             }
 
-            let mensagem = `✨ *Novo Pedido - Ísis Holística* ✨\n\n`;
+            let mensagem = `✨ *Novo Pedido & Rituais - Ísis Holística* ✨\n\n`;
+            mensagem += `Olá! Gostaria de alinhar a entrega dos meus itens de curadoria esotérica:\n\n`;
             mensagem += `👤 *Nome:* ${nome}\n`;
             mensagem += `📄 *CPF:* ${cpf}\n`;
             mensagem += `📞 *Telefone:* ${telefone}\n`;
             mensagem += `📍 *Endereço:* ${endereco}\n`;
             mensagem += `💳 *Forma de Pagamento:* ${pagamento}\n\n`;
-            mensagem += `🛒 *Itens do Pedido:*\n`;
+            mensagem += `🛒 *Itens Escolhidos:*\n`;
 
             let total = 0;
             carrinho.forEach((item, idx) => {
@@ -819,7 +822,7 @@
                 total += item.preco;
             });
 
-            mensagem += `\n💰 *Subtotal Produtos:* R$ ${total.toFixed(2).replace('.', ',')}\n\nAguardo seu retorno!`;
+            mensagem += `\n💰 *Valor Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\nGratidão e luz! Aguardo instruções para o envio. 🙏`;
 
             mensagemWhatsAppPendente = mensagem;
 
