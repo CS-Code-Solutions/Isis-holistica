@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin.html
+
+Sitemap: https://cs-code-solutions.github.io/Isis-holistica/sitemap.xml
