@@ -1,0 +1,18 @@
+# Ísis Holística
+
+> Ísis Holística é um espaço dedicado ao autoconhecimento, bem-estar e produtos esotéricos integrativos, desenvolvido pela CS Code Solutions.
+
+## Páginas Principais
+- [Início](https://cs-code-solutions.github.io/Isis-holistica/index.html): Página principal com carrossel de destaques, vitrine de produtos por categorias e banners institucionais.
+- [Espaço Terapêutico](https://cs-code-solutions.github.io/Isis-holistica/index.html#terapias): Informações sobre abordagens integrativas para mente, corpo e espírito.
+
+## Categorias de Produtos na Loja
+- Incensos e Aromatizadores
+- Pedras e Cristais Energéticos
+- Semijoias Holísticas
+- Decoração Esotérica
+- Velas Aromáticas e Rituais
+- Imagens e Esculturas (Católica, Zen e Axé)
+
+## Informações de Desenvolvimento
+- Desenvolvido por CS Code Solutions (https://www.instagram.com/cscode.solutions)
