@@ -502,7 +502,7 @@
             }
         }
 
-        /* CARREGAMENTO DIRETO (SEM OBRIGAR RECORTE) */
+        /* CARREGAMENTO DIRETO DE IMAGENS */
         window.carregarImagemOriginal = function(input, targetId) {
             const file = input.files[0];
             if (!file) return;
@@ -553,7 +553,7 @@
             img.src = src;
         }
 
-        /* ABRIR RECORTE OPCIONAL SE CLICADO NO BOTÃO ✂️ */
+        /* RECORTE OPCIONAL */
         window.abrirRecorteComInput = function(targetId, aspectRatio = 1/1) {
             targetInputGlobal = document.getElementById(targetId);
             const currentVal = targetInputGlobal.value.trim();
@@ -987,7 +987,7 @@
             document.getElementById('product-form').reset();
             document.getElementById('prod-modo-cadastro').value = 'deposito';
             document.getElementById('bloco-deposito-vinculo').classList.remove('hidden');
-            document.getElementById('prod-categoria').setAttribute('readonly', true);
+            document.getElementById('prod-categoria').removeAttribute('disabled');
             document.getElementById('form-produto-title').innerText = "📦 Adicionar Produto do Depósito";
             document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
             atualizarSelectDeposito();
@@ -999,8 +999,8 @@
             document.getElementById('product-form').reset();
             document.getElementById('prod-modo-cadastro').value = 'direto';
             document.getElementById('bloco-deposito-vinculo').classList.add('hidden');
-            document.getElementById('prod-categoria').removeAttribute('readonly');
-            document.getElementById('form-produto-title').innerText = "➕ Adicionar Produto Direto na Vitrine";
+            document.getElementById('prod-categoria').removeAttribute('disabled');
+            document.getElementById('form-produto-title').innerText = "➕ Adicionar Produto Direto na Vitrine e Estoque";
             document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
             adicionarCampoFotoProd();
             document.getElementById('form-container-produto').classList.remove('hidden');
@@ -1065,8 +1065,23 @@
 
             const dadosProd = { nome, preco, categoria, imagens, descricao, destaque };
             try {
-                if (idDoc !== '') await updateDoc(doc(db, "produtos", idDoc), dadosProd);
-                else await addDoc(collection(db, "produtos"), dadosProd);
+                // 1. Salva na vitrine (produtos)
+                if (idDoc !== '') {
+                    await updateDoc(doc(db, "produtos", idDoc), dadosProd);
+                } else {
+                    await addDoc(collection(db, "produtos"), dadosProd);
+                    
+                    // Se for cadastro direto novo, cria também no Depósito automaticamente com 10 unidades em stock
+                    await addDoc(collection(db, "deposito"), {
+                        nome,
+                        categoria,
+                        preco,
+                        qtd: 10,
+                        imagens,
+                        descricao,
+                        subDetalhes: {}
+                    });
+                }
                 await carregarDadosAdmin();
                 toggleFormularioProduto();
             } catch (err) { console.error("Erro ao guardar produto:", err); alert("Erro ao guardar no Firebase: " + err.message); }
