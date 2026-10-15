@@ -510,7 +510,7 @@
             }
         }
 
-        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL (COLUNA B = NOME DO PRODUTO) */
+        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL - CORRIGIDA PARA LER O TEXTO DA COLUNA DE PRODUTOS */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -539,32 +539,46 @@
                         const row = rows[i];
                         if (!row || row.length === 0) continue;
 
-                        // Coluna B (índice 1) é o Nome do Produto na planilha
-                        const nomeProduto = row[1] !== undefined ? String(row[1]).trim() : '';
-                        if (!nomeProduto || nomeProduto === '' || nomeProduto.toLowerCase() === 'produto') continue;
+                        let nomeProduto = '';
+                        // Procura na linha o primeiro campo que seja texto válido e não seja cabeçalho nem número puro
+                        for (let c = 0; c < row.length; c++) {
+                            const val = row[c];
+                            if (val !== undefined && val !== null) {
+                                const valStr = String(val).trim();
+                                if (valStr.length > 1 && isNaN(valStr) && valStr.toUpperCase() !== 'PRODUTO') {
+                                    nomeProduto = valStr;
+                                    break;
+                                }
+                            }
+                        }
 
-                        // Quantidade / Estoque (Colunas vizinhas ou índice 4)
+                        // Fallback fixo para a Coluna B (índice 1) caso não encontre pela varredura
+                        if (!nomeProduto && row[1] !== undefined) {
+                            nomeProduto = String(row[1]).trim();
+                        }
+
+                        if (!nomeProduto || nomeProduto.toLowerCase() === 'produto' || !isNaN(nomeProduto)) continue;
+
                         let qtdEstoque = parseInt(row[4]);
                         if (isNaN(qtdEstoque)) {
                             qtdEstoque = parseInt(row[3]) || parseInt(row[2]) || 1;
                         }
 
-                        // Preço de Venda (Índice 6 ou vizinhas)
                         let precoVenda = parseFloat(row[6]);
                         if (isNaN(precoVenda)) {
-                            precoVenda = parseFloat(row[5]) || 0.00;
+                            precoVenda = parseFloat(row[5]) || 25.00;
                         }
 
-                        if (nomeProduto && precoVenda > 0) {
-                            // Procura se já existe no depósito (pelo nome exato ou se o nome antigo era apenas um número)
+                        if (nomeProduto) {
+                            // Procura se já existe no depósito (pelo nome exato ou se o nome anterior era numérico)
                             const jaExisteDep = listaDeposito.find(d => 
                                 d.nome.toLowerCase() === nomeProduto.toLowerCase() || 
-                                (!isNaN(d.nome) && Number(d.nome) === (i - 5))
+                                !isNaN(d.nome)
                             );
                             
                             if (jaExisteDep) {
                                 await updateDoc(doc(db, "deposito", jaExisteDep.idFirestore), {
-                                    nome: nomeProduto, // Atualiza para o nome correto
+                                    nome: nomeProduto,
                                     qtd: qtdEstoque,
                                     preco: precoVenda
                                 });
@@ -583,12 +597,12 @@
                             // Procura na Vitrine
                             const jaExisteVitrine = listaProdutos.find(p => 
                                 p.nome.toLowerCase() === nomeProduto.toLowerCase() || 
-                                (!isNaN(p.nome) && Number(p.nome) === (i - 5))
+                                !isNaN(p.nome)
                             );
 
                             if (jaExisteVitrine) {
                                 await updateDoc(doc(db, "produtos", jaExisteVitrine.idFirestore), {
-                                    nome: nomeProduto, // Atualiza para o nome correto
+                                    nome: nomeProduto,
                                     preco: precoVenda
                                 });
                             } else {
