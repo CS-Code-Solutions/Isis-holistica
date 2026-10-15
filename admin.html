@@ -239,8 +239,9 @@
                             <p class="text-gray-500 text-sm">Controle de quantidades, preços de compra/venda, galeria de fotos e importação por planilha.</p>
                         </div>
                         <div class="flex flex-wrap gap-3 items-center">
-                            <button onclick="limparProdutosNumericos()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold px-4 py-3 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
-                                <span>🗑️</span> <span>Limpar Produtos Numéricos</span>
+                            <!-- Botão de limpeza de duplicados -->
+                            <button onclick="limparDuplicadosMantendoImagens()" class="bg-orange-50 hover:bg-orange-100 text-orange-600 border border-orange-200 font-bold px-4 py-3 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                                <span>🧹</span> <span>Limpar Duplicados (Mantendo Imagens)</span>
                             </button>
                             <label id="label-btn-upload" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center gap-2 text-sm cursor-pointer">
                                 <span id="icone-upload">📁</span> <span id="texto-btn-upload">Importar Planilha (Excel)</span>
@@ -578,7 +579,41 @@
             }
         };
 
-        /* IMPORTAÇÃO INTELIGENTE: ATUALIZA O ESTOQUE E CUSTO POR NOME SEM APAGAR AS FOTOS DOS ITENS EXISTENTES */
+        /* FUNÇÃO PARA LIMPAR DUPLICADOS MANTENDO OS QUE TÊM IMAGEM OU DADOS */
+        window.limparDuplicadosMantendoImagens = async function() {
+            if (!confirm("Deseja remover os itens duplicados no depósito? O sistema manterá sempre os registos que contêm imagens ou descrições personalizadas.")) return;
+
+            try {
+                let vistos = {};
+                let removidosCount = 0;
+
+                // Ordena a lista para priorizar os que têm imagens (garantindo que eles fiquem salvos)
+                let itensOrdenados = [...listaDeposito].sort((a, b) => {
+                    let temImgA = (a.imagens && a.imagens.length > 0 && a.imagens[0].url) ? 1 : 0;
+                    let temImgB = (b.imagens && b.imagens.length > 0 && b.imagens[0].url) ? 1 : 0;
+                    return temImgB - temImgA; // os que têm imagens vêm primeiro
+                });
+
+                for (const item of itensOrdenados) {
+                    let nomeNormalizado = item.nome.trim().toLowerCase();
+                    if (!vistos[nomeNormalizado]) {
+                        vistos[nomeNormalizado] = true; // Primeiro encontro (mantém)
+                    } else {
+                        // É duplicado! Remove da base de dados
+                        await deleteDoc(doc(db, "deposito", item.idFirestore));
+                        removidosCount++;
+                    }
+                }
+
+                await carregarDadosAdmin();
+                alert(`✅ Limpeza concluída com sucesso! Foram removidas ${removidosCount} cópias duplicadas, preservando os itens com imagens e dados.`);
+            } catch (err) {
+                console.error("Erro ao limpar duplicados:", err);
+                alert("❌ Ocorreu um erro ao limpar os duplicados.");
+            }
+        };
+
+        /* IMPORTAÇÃO INTELIGENTE POR NOME */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -641,11 +676,9 @@
                         if (isNaN(precoVenda)) precoVenda = 0.00;
 
                         if (nomeProduto) {
-                            // Verifica se já existe um item no depósito com exatamente este nome (evita duplicar)
                             const itemExistente = listaDeposito.find(d => d.nome.trim().toLowerCase() === nomeProduto.trim().toLowerCase());
 
                             if (itemExistente) {
-                                // Atualiza apenas quantidade, preço e custo mantendo as fotos e descrições originais
                                 await updateDoc(doc(db, "deposito", itemExistente.idFirestore), {
                                     qtd: qtdEstoque,
                                     compra: precoCompra,
@@ -653,7 +686,6 @@
                                 });
                                 atualizadosCount++;
                             } else {
-                                // Se for realmente novo, cadastra no depósito
                                 await addDoc(collection(db, "deposito"), {
                                     nome: nomeProduto,
                                     categoria: 'Incensos',
@@ -665,7 +697,6 @@
                                     subDetalhes: {}
                                 });
                                
-                                // Cadastra na vitrine
                                 await addDoc(collection(db, "produtos"), {
                                     nome: nomeProduto,
                                     categoria: 'Incensos',
