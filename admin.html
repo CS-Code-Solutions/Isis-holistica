@@ -296,6 +296,15 @@
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Padrão</label>
                                 <textarea id="dep-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Detalhes e propriedades energéticas do item..."></textarea>
                             </div>
+
+                            <div class="md:col-span-2 flex items-center gap-3 bg-teal-50/60 p-4 rounded-xl border border-teal-100">
+                                <input type="checkbox" id="dep-exibir-vitrine" checked class="w-5 h-5 text-[#0E8685] rounded focus:ring-[#0E8685]">
+                                <div>
+                                    <label for="dep-exibir-vitrine" class="text-sm font-bold text-[#0E8685] block cursor-pointer">✨ Exibir imediatamente na Vitrine da Loja</label>
+                                    <span class="text-xs text-gray-500 block">Ao guardar, o produto será automaticamente publicado ou atualizado na loja virtual.</span>
+                                </div>
+                            </div>
+
                             <div class="md:col-span-2 flex gap-3 pt-4 border-t">
                                 <button type="submit" id="btn-salvar-dep" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar no Depósito</button>
                                 <button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
@@ -513,9 +522,8 @@
             }
         }
 
-        /* FUNÇÃO PARA APAGAR APENAS OS REGISTOS NUMÉRICOS, PRESERVANDO OS CADASTROS REAIS */
         window.limparProdutosNumericos = async function() {
-            if (!confirm("Tem certeza que deseja apagar todos os itens que possuem apenas números no nome? (Os seus produtos reais cadastrados serão mantidos)")) {
+            if (!confirm("Tem certeza que deseja apagar todos os itens que possuem apenas números no nome?")) {
                 return;
             }
 
@@ -523,7 +531,6 @@
                 let removidosDep = 0;
                 let removidosProd = 0;
 
-                // Remove do depósito se o nome for puramente numérico (ex: "1", "2", "3")
                 for (const d of listaDeposito) {
                     if (/^\d+$/.test(d.nome.trim())) {
                         await deleteDoc(doc(db, "deposito", d.idFirestore));
@@ -531,7 +538,6 @@
                     }
                 }
 
-                // Remove da vitrine de produtos se o nome for puramente numérico
                 for (const p of listaProdutos) {
                     if (/^\d+$/.test(p.nome.trim())) {
                         await deleteDoc(doc(db, "produtos", p.idFirestore));
@@ -540,14 +546,13 @@
                 }
 
                 await carregarDadosAdmin();
-                alert(`✅ Limpeza concluída! Foram removidos ${removidosDep} itens numéricos do depósito e ${removidosProd} da vitrine. Os seus produtos reais continuam salvos.`);
+                alert(`✅ Limpeza concluída! Foram removidos ${removidosDep} itens do depósito e ${removidosProd} da vitrine.`);
             } catch (err) {
                 console.error("Erro ao limpar itens numéricos:", err);
                 alert("❌ Ocorreu um erro ao limpar os itens.");
             }
         };
 
-        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -578,7 +583,6 @@
 
                         let nomeProduto = '';
                         
-                        // Procura um texto válido com letras na linha
                         for (let c = 0; c < row.length; c++) {
                             const val = row[c];
                             if (val !== undefined && val !== null) {
@@ -649,7 +653,6 @@
             reader.readAsArrayBuffer(file);
         }
 
-        /* CARREGAMENTO DIRETO DE IMAGENS */
         window.carregarImagemOriginal = function(input, targetId) {
             const file = input.files[0];
             if (!file) return;
@@ -700,7 +703,6 @@
             img.src = src;
         }
 
-        /* RECORTE OPCIONAL */
         window.abrirRecorteComInput = function(targetId, aspectRatio = 1/1) {
             targetInputGlobal = document.getElementById(targetId);
             const currentVal = targetInputGlobal.value.trim();
@@ -939,7 +941,16 @@
         }
 
         window.toggleFormularioDeposito = function() { document.getElementById('form-container-deposito').classList.toggle('hidden'); }
-        window.abrirNovoDeposito = function() { document.getElementById('dep-id').value = ''; document.getElementById('deposito-form').reset(); document.getElementById('form-deposito-title').innerText = "🏢 Novo Item no Depósito"; document.getElementById('container-fotos-dinamico').innerHTML = ''; adicionarCampoFoto(); atualizarSubCamposDeposito(); document.getElementById('form-container-deposito').classList.remove('hidden'); }
+        window.abrirNovoDeposito = function() { 
+            document.getElementById('dep-id').value = ''; 
+            document.getElementById('deposito-form').reset(); 
+            document.getElementById('dep-exibir-vitrine').checked = true;
+            document.getElementById('form-deposito-title').innerText = "🏢 Novo Item no Depósito"; 
+            document.getElementById('container-fotos-dinamico').innerHTML = ''; 
+            adicionarCampoFoto(); 
+            atualizarSubCamposDeposito(); 
+            document.getElementById('form-container-deposito').classList.remove('hidden'); 
+        }
         
         window.adicionarCampoFoto = function(url = '', texto = '', posH = 'left', posV = 'top') {
             const container = document.getElementById('container-fotos-dinamico');
@@ -1044,6 +1055,8 @@
             const preco = parseFloat(document.getElementById('dep-preco').value);
             const qtd = parseInt(document.getElementById('dep-qtd').value);
             const descricao = document.getElementById('dep-descricao').value;
+            const exibirNaVitrine = document.getElementById('dep-exibir-vitrine').checked;
+
             const blocosFotos = document.querySelectorAll('#container-fotos-dinamico > div');
             let imagens = [];
             blocosFotos.forEach(bloco => {
@@ -1054,18 +1067,40 @@
                 if (url) imagens.push({ url, texto, posH, posV });
             });
             if (imagens.length === 0) { alert("Adicione pelo menos uma foto ao item no depósito!"); return; }
+
             let subDetalhes = {};
             if (categoria === 'Incensos') { subDetalhes.fragrancia = document.getElementById('sub-fragrancia')?.value || ''; subDetalhes.marca = document.getElementById('sub-marca')?.value || ''; }
             else if (categoria === 'Pedras' || categoria === 'Semijoias') { subDetalhes.variacao = document.getElementById('sub-variacao')?.value || ''; }
             else if (categoria === 'Velas') { subDetalhes.aroma = document.getElementById('sub-aroma')?.value || ''; }
             else if (categoria === 'Imagens (Esculturas)') { subDetalhes.subCategoriaImg = document.getElementById('sub-categoria-img')?.value || ''; }
+
             const itemData = { nome, categoria, preco, qtd, imagens, descricao, subDetalhes };
             try {
-                if (idDoc !== '') await updateDoc(doc(db, "deposito", idDoc), itemData);
-                else await addDoc(collection(db, "deposito"), itemData);
+                if (idDoc !== '') {
+                    await updateDoc(doc(db, "deposito", idDoc), itemData);
+                } else {
+                    await addDoc(collection(db, "deposito"), itemData);
+                }
+
+                // Se a opção de exibir na vitrine estiver marcada, publica ou atualiza automaticamente na vitrine
+                if (exibirNaVitrine) {
+                    const produtoExistente = listaProdutos.find(p => p.nome.toLowerCase() === nome.toLowerCase());
+                    const dadosVitrine = { nome, preco, categoria, imagens, descricao, destaque: false };
+
+                    if (produtoExistente) {
+                        await updateDoc(doc(db, "produtos", produtoExistente.idFirestore), dadosVitrine);
+                    } else {
+                        await addDoc(collection(db, "produtos"), dadosVitrine);
+                    }
+                }
+
                 await carregarDadosAdmin();
                 toggleFormularioDeposito();
-            } catch (err) { console.error("Erro ao guardar no depósito:", err); alert("Erro ao gravar no Firebase: " + err.message); }
+                alert("✅ Item guardado com sucesso!");
+            } catch (err) { 
+                console.error("Erro ao guardar no depósito:", err); 
+                alert("Erro ao gravar no Firebase: " + err.message); 
+            }
         }
 
         window.renderizarTabelaDeposito = function() {
@@ -1103,11 +1138,14 @@
             document.getElementById('dep-preco').value = d.preco;
             document.getElementById('dep-qtd').value = d.qtd;
             document.getElementById('dep-descricao').value = d.descricao || '';
+            document.getElementById('dep-exibir-vitrine').checked = true;
+
             atualizarSubCamposDeposito();
             const containerFotos = document.getElementById('container-fotos-dinamico');
             containerFotos.innerHTML = '';
             const listaImgs = (d.imagens && d.imagens.length > 0) ? d.imagens : [{ url: d.imagem || '', texto: '', posH: 'left', posV: 'top' }];
             listaImgs.forEach(img => adicionarCampoFoto(img.url, img.texto, img.posH, img.posV));
+            
             setTimeout(() => {
                 if (d.subDetalhes) {
                     if (document.getElementById('sub-fragrancia')) document.getElementById('sub-fragrancia').value = d.subDetalhes.fragrancia || '';
@@ -1117,6 +1155,7 @@
                     if (document.getElementById('sub-categoria-img')) document.getElementById('sub-categoria-img').value = d.subDetalhes.subCategoriaImg || '';
                 }
             }, 50);
+
             document.getElementById('form-deposito-title').innerText = "🏢 Editar Item no Depósito";
             document.getElementById('form-container-deposito').classList.remove('hidden');
         }
