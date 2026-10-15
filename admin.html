@@ -156,7 +156,7 @@
                                         <option value="Semijoias">Semijoias</option>
                                         <option value="Decoracao">Decoração</option>
                                         <option value="Velas">Velas</option>
-                                        <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
+                                        <option value="Imagens">Imagens</option>
                                     </select>
                                 </div>
                                 <div>
@@ -178,7 +178,7 @@
                                         <option value="Semijoias">Semijoias</option>
                                         <option value="Decoracao">Decoração</option>
                                         <option value="Velas">Velas</option>
-                                        <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
+                                        <option value="Imagens">Imagens</option>
                                     </select>
                                 </div>
                                 <div>
@@ -228,7 +228,7 @@
                                     <option value="Semijoias">Semijoias</option>
                                     <option value="Decoracao">Decoração</option>
                                     <option value="Velas">Velas</option>
-                                    <option value="Imagens (Esculturas)">Imagens</option>
+                                    <option value="Imagens">Imagens</option>
                                 </select>
                             </div>
                         </div>
@@ -298,7 +298,7 @@
                                     <option value="Semijoias">Semijoias</option>
                                     <option value="Decoracao">Decoração</option>
                                     <option value="Velas">Velas</option>
-                                    <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
+                                    <option value="Imagens">Imagens</option>
                                 </select>
                             </div>
                             <div>
@@ -359,7 +359,7 @@
                                     <option value="Semijoias">Semijoias</option>
                                     <option value="Decoracao">Decoração</option>
                                     <option value="Velas">Velas</option>
-                                    <option value="Imagens (Esculturas)">Imagens</option>
+                                    <option value="Imagens">Imagens</option>
                                 </select>
                             </div>
                         </div>
@@ -846,7 +846,7 @@
             } else if (val === 'categoria') {
                 container.classList.remove('hidden');
                 labelAlvo.innerText = "Selecione a Categoria";
-                selectAlvo.innerHTML = `<option value="Incensos">🌿 Incensos</option><option value="Pedras">🔮 Pedras e Cristais</option><option value="Semijoias">✨ Semijoias</option><option value="Decoracao">🪷 Decoração</option><option value="Velas">🕯️ Velas</option><option value="Imagens (Esculturas)">🗿 Imagens (Esculturas)</option>`;
+                selectAlvo.innerHTML = `<option value="Incensos">🌿 Incensos</option><option value="Pedras">🔮 Pedras e Cristais</option><option value="Semijoias">✨ Semijoias</option><option value="Decoracao">🪷 Decoração</option><option value="Velas">🕯️ Velas</option><option value="Imagens">🗿 Imagens</option>`;
             } else { container.classList.add('hidden'); }
         }
 
@@ -980,7 +980,7 @@
             if (cat === 'Incensos') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fragrância</label><input type="text" id="sub-fragrancia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div><div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Marca</label><input type="text" id="sub-marca" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
             else if (cat === 'Pedras' || cat === 'Semijoias') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-variação</label><input type="text" id="sub-variacao" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
             else if (cat === 'Velas') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Aroma</label><input type="text" id="sub-aroma" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
-            else if (cat === 'Imagens (Esculturas)') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-categoria</label><select id="sub-categoria-img" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="Católica">Católica</option><option value="Zen">Zen</option><option value="Axé">Axé</option></select></div>`; }
+            else if (cat === 'Imagens') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-categoria</label><select id="sub-categoria-img" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="Católica">Católica</option><option value="Zen">Zen</option><option value="Axé">Axé</option></select></div>`; }
         }
 
         window.salvarItemDeposito = async function(e) {
@@ -1009,7 +1009,7 @@
             if (categoria === 'Incensos') { subDetalhes.fragrancia = document.getElementById('sub-fragrancia')?.value || ''; subDetalhes.marca = document.getElementById('sub-marca')?.value || ''; }
             else if (categoria === 'Pedras' || categoria === 'Semijoias') { subDetalhes.variacao = document.getElementById('sub-variacao')?.value || ''; }
             else if (categoria === 'Velas') { subDetalhes.aroma = document.getElementById('sub-aroma')?.value || ''; }
-            else if (categoria === 'Imagens (Esculturas)') { subDetalhes.subCategoriaImg = document.getElementById('sub-categoria-img')?.value || ''; }
+            else if (categoria === 'Imagens') { subDetalhes.subCategoriaImg = document.getElementById('sub-categoria-img')?.value || ''; }
 
             const itemData = { nome, categoria, preco, compra, qtd, imagens, descricao, subDetalhes };
             try {
