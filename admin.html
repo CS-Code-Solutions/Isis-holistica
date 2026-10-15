@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Cropper.js CSS para a tela de recorte -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <!-- SheetJS para leitura de planilhas Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -234,11 +236,17 @@
                     <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                         <div>
                             <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
-                            <p class="text-gray-500 text-sm">Controle de quantidades, preços, galeria de fotos em carrossel e posicionamento de legendas.</p>
+                            <p class="text-gray-500 text-sm">Controle de quantidades, preços, galeria de fotos em carrossel e importação por planilha.</p>
                         </div>
-                        <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                            <span>➕</span> <span>Cadastrar Item no Depósito</span>
-                        </button>
+                        <div class="flex flex-wrap gap-3">
+                            <label class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center gap-2 text-sm cursor-pointer">
+                                <span>📁</span> <span>Importar Planilha (Excel)</span>
+                                <input type="file" id="input-excel-upload" accept=".xlsx, .xls, .csv" onchange="importarPlanilhaExcel(this)" class="hidden">
+                            </label>
+                            <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                                <span>➕</span> <span>Cadastrar Item no Depósito</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
@@ -500,6 +508,97 @@
             } catch (e) {
                 console.error("Erro ao carregar dados do Firebase:", e);
             }
+        }
+
+        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL */
+        window.importarPlanilhaExcel = function(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                    let importadosCount = 0;
+                    
+                    // Analisa as linhas a partir da linha 4 (conforme o formato da sua planilha)
+                    for (let i = 4; i < rows.length; i++) {
+                        const row = rows[i];
+                        if (!row || row.length === 0) continue;
+
+                        // Coluna 1: Nome do Produto (Ajuste conforme os índices da tabela)
+                        const nomeProduto = row[1] !== undefined ? String(row[1]).trim() : '';
+                        if (!nomeProduto || nomeProduto === '' || nomeProduto.toLowerCase() === 'produto') continue;
+
+                        // Coluna 4 (índice 4): Estoque
+                        let qtdEstoque = parseInt(row[4]);
+                        if (isNaN(qtdEstoque)) {
+                            // Se a coluna 4 não for número, tenta encontrar nas colunas vizinhas
+                            qtdEstoque = parseInt(row[3]) || parseInt(row[2]) || 1;
+                        }
+
+                        // Coluna 6 (índice 6): Preço de Venda
+                        let precoVenda = parseFloat(row[6]);
+                        if (isNaN(precoVenda)) {
+                            // Fallback caso o preço esteja na coluna 5 ou outra
+                            precoVenda = parseFloat(row[5]) || 0.00;
+                        }
+
+                        if (nomeProduto && precoVenda > 0) {
+                            // Verifica se já existe no depósito
+                            const jaExisteDep = listaDeposito.find(d => d.nome.toLowerCase() === nomeProduto.toLowerCase());
+                            
+                            const itemData = {
+                                nome: nomeProduto,
+                                categoria: 'Incensos', // Categoria padrão inicial adaptável
+                                preco: precoVenda,
+                                qtd: qtdEstoque,
+                                imagens: [],
+                                descricao: 'Importado via planilha de estoque.',
+                                subDetalhes: {}
+                            };
+
+                            if (jaExisteDep) {
+                                await updateDoc(doc(db, "deposito", jaExisteDep.idFirestore), {
+                                    qtd: qtdEstoque,
+                                    preco: precoVenda
+                                });
+                            } else {
+                                await addDoc(collection(db, "deposito"), itemData);
+                            }
+
+                            // Verifica se já existe na Vitrine (produtos)
+                            const jaExisteVitrine = listaProdutos.find(p => p.nome.toLowerCase() === nomeProduto.toLowerCase());
+                            if (!jaExisteVitrine) {
+                                await addDoc(collection(db, "produtos"), {
+                                    nome: nomeProduto,
+                                    categoria: 'Incensos',
+                                    preco: precoVenda,
+                                    imagens: [],
+                                    descricao: 'Importado via planilha de estoque.',
+                                    destaque: false
+                                });
+                            }
+
+                            importadosCount++;
+                        }
+                    }
+
+                    alert(`Sucesso! ${importadosCount} produtos foram importados/atualizados no Depósito e na Vitrine.`);
+                    await carregarDadosAdmin();
+                } catch (err) {
+                    console.error("Erro ao processar planilha:", err);
+                    alert("Erro ao ler o ficheiro Excel. Verifique se o formato corresponde ao modelo esperado.");
+                } finally {
+                    input.value = '';
+                }
+            };
+            reader.readAsArrayBuffer(file);
         }
 
         /* CARREGAMENTO DIRETO DE IMAGENS */
@@ -1065,13 +1164,11 @@
 
             const dadosProd = { nome, preco, categoria, imagens, descricao, destaque };
             try {
-                // 1. Salva na vitrine (produtos)
                 if (idDoc !== '') {
                     await updateDoc(doc(db, "produtos", idDoc), dadosProd);
                 } else {
                     await addDoc(collection(db, "produtos"), dadosProd);
                     
-                    // Se for cadastro direto novo, cria também no Depósito automaticamente com 10 unidades em stock
                     await addDoc(collection(db, "deposito"), {
                         nome,
                         categoria,
