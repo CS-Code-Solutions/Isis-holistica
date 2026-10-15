@@ -510,7 +510,7 @@
             }
         }
 
-        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL - CORRIGIDA PARA LER O TEXTO DA COLUNA DE PRODUTOS */
+        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL - COM VALIDAÇÃO RIGOROSA DE TEXTO (IGNORA NÚMEROS) */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -540,24 +540,29 @@
                         if (!row || row.length === 0) continue;
 
                         let nomeProduto = '';
-                        // Procura na linha o primeiro campo que seja texto válido e não seja cabeçalho nem número puro
+                        
+                        // Varre a linha para encontrar um texto real (que contenha letras e não seja apenas números ou cabeçalho)
                         for (let c = 0; c < row.length; c++) {
                             const val = row[c];
                             if (val !== undefined && val !== null) {
                                 const valStr = String(val).trim();
-                                if (valStr.length > 1 && isNaN(valStr) && valStr.toUpperCase() !== 'PRODUTO') {
+                                // Exige que tenha letras e não seja "PRODUTO"
+                                if (/[a-zA-ZÀ-ÿ]/.test(valStr) && valStr.toUpperCase() !== 'PRODUTO') {
                                     nomeProduto = valStr;
                                     break;
                                 }
                             }
                         }
 
-                        // Fallback fixo para a Coluna B (índice 1) caso não encontre pela varredura
+                        // Fallback estrito para a coluna B (índice 1) se contiver letras
                         if (!nomeProduto && row[1] !== undefined) {
-                            nomeProduto = String(row[1]).trim();
+                            const valB = String(row[1]).trim();
+                            if (/[a-zA-ZÀ-ÿ]/.test(valB)) {
+                                nomeProduto = valB;
+                            }
                         }
 
-                        if (!nomeProduto || nomeProduto.toLowerCase() === 'produto' || !isNaN(nomeProduto)) continue;
+                        if (!nomeProduto || nomeProduto.toLowerCase() === 'produto') continue;
 
                         let qtdEstoque = parseInt(row[4]);
                         if (isNaN(qtdEstoque)) {
@@ -570,10 +575,10 @@
                         }
 
                         if (nomeProduto) {
-                            // Procura se já existe no depósito (pelo nome exato ou se o nome anterior era numérico)
+                            // Procura se já existe no depósito (pelo nome exato ou se o registo anterior era um número)
                             const jaExisteDep = listaDeposito.find(d => 
                                 d.nome.toLowerCase() === nomeProduto.toLowerCase() || 
-                                !isNaN(d.nome)
+                                /^\d+$/.test(d.nome)
                             );
                             
                             if (jaExisteDep) {
@@ -597,7 +602,7 @@
                             // Procura na Vitrine
                             const jaExisteVitrine = listaProdutos.find(p => 
                                 p.nome.toLowerCase() === nomeProduto.toLowerCase() || 
-                                !isNaN(p.nome)
+                                /^\d+$/.test(p.nome)
                             );
 
                             if (jaExisteVitrine) {
@@ -621,10 +626,10 @@
                     }
 
                     await carregarDadosAdmin();
-                    alert(`✅ Sucesso! Concluído o carregamento. ${importadosCount} produtos foram importados/atualizados com os nomes corretos na Vitrine e no Depósito.`);
+                    alert(`✅ Sucesso! ${importadosCount} produtos foram importados/atualizados com os nomes corretos (os números antigos foram substituídos automaticamente).`);
                 } catch (err) {
                     console.error("Erro ao processar planilha:", err);
-                    alert("❌ Erro ao ler o ficheiro Excel. Verifique se o formato corresponde ao modelo esperado.");
+                    alert("❌ Erro ao ler o ficheiro Excel.");
                 } finally {
                     labelBtn.classList.remove('bg-amber-600', 'cursor-not-allowed');
                     labelBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
