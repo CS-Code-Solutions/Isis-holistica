@@ -493,7 +493,6 @@
         let cropperInstance = null;
         let targetInputGlobal = null;
 
-        // Variáveis de Paginação e Filtro do Depósito
         let paginaAtualDeposito = 1;
         const itensPorPagina = 20;
         let categoriaFiltroAtual = "TODAS";
@@ -525,11 +524,7 @@
         }
 
         window.fazerLogout = async function() {
-            try {
-                await signOut(auth);
-            } catch (err) {
-                console.error("Erro ao sair:", err);
-            }
+            try { await signOut(auth); } catch (err) { console.error("Erro ao sair:", err); }
         }
 
         async function carregarDadosAdmin() {
@@ -580,11 +575,10 @@
                 alert(`✅ Limpeza concluída! Foram removidos ${removidosDep} itens do depósito e ${removidosProd} da vitrine.`);
             } catch (err) {
                 console.error("Erro ao limpar itens numéricos:", err);
-                alert("❌ Ocorreu um erro ao limpar os itens.");
             }
         };
 
-        /* IMPORTAÇÃO DE PLANILHA CORRIGIDA PARA LER COMPRA E ESTOQUE */
+        /* IMPORTAÇÃO INTELIGENTE: ATUALIZA O ESTOQUE E CUSTO POR NOME SEM APAGAR AS FOTOS DOS ITENS EXISTENTES */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -607,7 +601,8 @@
                     const worksheet = workbook.Sheets[firstSheetName];
                     const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-                    let importadosCount = 0;
+                    let atualizadosCount = 0;
+                    let novosCount = 0;
                     
                     for (let i = 5; i < rows.length; i++) {
                         const row = rows[i];
@@ -642,38 +637,50 @@
                         let precoCompra = parseFloat(row[5]); // Coluna F: Compra
                         if (isNaN(precoCompra)) precoCompra = 0.00;
 
-                        let precoVenda = parseFloat(row[6]); // Coluna G: Preço de Venda
+                        let precoVenda = parseFloat(row[6]); // Coluna G: Venda
                         if (isNaN(precoVenda)) precoVenda = 0.00;
 
                         if (nomeProduto) {
-                            const itemDepositoData = {
-                                nome: nomeProduto,
-                                categoria: 'Incensos',
-                                preco: precoVenda,
-                                compra: precoCompra,
-                                qtd: qtdEstoque,
-                                imagens: [],
-                                descricao: 'Importado via planilha de estoque.',
-                                subDetalhes: {}
-                            };
+                            // Verifica se já existe um item no depósito com exatamente este nome (evita duplicar)
+                            const itemExistente = listaDeposito.find(d => d.nome.trim().toLowerCase() === nomeProduto.trim().toLowerCase());
 
-                            await addDoc(collection(db, "deposito"), itemDepositoData);
-
-                            await addDoc(collection(db, "produtos"), {
-                                nome: nomeProduto,
-                                categoria: 'Incensos',
-                                preco: precoVenda,
-                                imagens: [],
-                                descricao: 'Importado via planilha de estoque.',
-                                destaque: false
-                            });
-
-                            importadosCount++;
+                            if (itemExistente) {
+                                // Atualiza apenas quantidade, preço e custo mantendo as fotos e descrições originais
+                                await updateDoc(doc(db, "deposito", itemExistente.idFirestore), {
+                                    qtd: qtdEstoque,
+                                    compra: precoCompra,
+                                    preco: precoVenda > 0 ? precoVenda : itemExistente.preco
+                                });
+                                atualizadosCount++;
+                            } else {
+                                // Se for realmente novo, cadastra no depósito
+                                await addDoc(collection(db, "deposito"), {
+                                    nome: nomeProduto,
+                                    categoria: 'Incensos',
+                                    preco: precoVenda,
+                                    compra: precoCompra,
+                                    qtd: qtdEstoque,
+                                    imagens: [],
+                                    descricao: 'Importado via planilha de estoque.',
+                                    subDetalhes: {}
+                                });
+                               
+                                // Cadastra na vitrine
+                                await addDoc(collection(db, "produtos"), {
+                                    nome: nomeProduto,
+                                    categoria: 'Incensos',
+                                    preco: precoVenda,
+                                    imagens: [],
+                                    descricao: 'Importado via planilha de estoque.',
+                                    destaque: false
+                                });
+                                novosCount++;
+                            }
                         }
                     }
 
                     await carregarDadosAdmin();
-                    alert(`✅ Sucesso! ${importadosCount} produtos importados com valores de custo e estoque corretos.`);
+                    alert(`✅ Sincronização concluída!\n- ${atualizadosCount} produtos existentes foram atualizados (estoque e custo).\n- ${novosCount} novos produtos foram adicionados.`);
                 } catch (err) {
                     console.error("Erro ao processar planilha:", err);
                     alert("❌ Erro ao ler o ficheiro Excel.");
@@ -996,7 +1003,6 @@
             } catch (err) { console.error("Erro:", err); alert("Erro ao guardar: " + err.message); }
         }
 
-        /* FILTRO DE CATEGORIA E PAGINAÇÃO */
         window.mudarFiltroCategoriaDeposito = function(cat) {
             categoriaFiltroAtual = cat;
             paginaAtualDeposito = 1;
@@ -1004,19 +1010,13 @@
         }
 
         window.paginaAnteriorDeposito = function() {
-            if (paginaAtualDeposito > 1) {
-                paginaAtualDeposito--;
-                renderizarTabelaDeposito();
-            }
+            if (paginaAtualDeposito > 1) { paginaAtualDeposito--; renderizarTabelaDeposito(); }
         }
 
         window.proximaPaginaDeposito = function() {
             const filtrados = categoriaFiltroAtual === "TODAS" ? listaDeposito : listaDeposito.filter(d => d.categoria === categoriaFiltroAtual);
             const totalPaginas = Math.ceil(filtrados.length / itensPorPagina) || 1;
-            if (paginaAtualDeposito < totalPaginas) {
-                paginaAtualDeposito++;
-                renderizarTabelaDeposito();
-            }
+            if (paginaAtualDeposito < totalPaginas) { paginaAtualDeposito++; renderizarTabelaDeposito(); }
         }
 
         window.renderizarTabelaDeposito = function() {
