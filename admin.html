@@ -239,16 +239,15 @@
                             <p class="text-gray-500 text-sm">Controle de quantidades, preços de compra/venda, galeria de fotos e importação por planilha.</p>
                         </div>
                         <div class="flex flex-wrap gap-3 items-center">
-                            <!-- Botão de limpeza de duplicados -->
                             <button onclick="limparDuplicadosMantendoImagens()" class="bg-orange-50 hover:bg-orange-100 text-orange-600 border border-orange-200 font-bold px-4 py-3 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
-                                <span>🧹</span> <span>Limpar Duplicados (Mantendo Imagens)</span>
+                                <span>🧹</span> <span>Limpar Duplicados</span>
                             </button>
                             <label id="label-btn-upload" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center gap-2 text-sm cursor-pointer">
-                                <span id="icone-upload">📁</span> <span id="texto-btn-upload">Importar Planilha (Excel)</span>
+                                <span id="icone-upload">📁</span> <span id="texto-btn-upload">Importar Planilha</span>
                                 <input type="file" id="input-excel-upload" accept=".xlsx, .xls, .csv" onchange="importarPlanilhaExcel(this)" class="hidden">
                             </label>
                             <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
-                                <span>➕</span> <span>Cadastrar Item no Depósito</span>
+                                <span>➕</span> <span>Novo Item</span>
                             </button>
                         </div>
                     </div>
@@ -318,47 +317,35 @@
                         </form>
                     </div>
 
-                    <!-- TABELA DE DEPÓSITO COM FILTROS E PAGINAÇÃO -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <!-- LISTAGEM EM CARTÕES RESPONSIVOS (SEM ROLAGEM HORIZONTAL NO CELULAR) -->
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
                             <div class="flex items-center gap-3">
                                 <h3 class="text-lg font-bold text-[#0E8685]">📦 Itens no Depósito</h3>
                                 <span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span>
                             </div>
-                            <div class="flex items-center gap-3 w-full sm:w-auto">
-                                <label class="text-xs font-bold text-gray-500 uppercase whitespace-nowrap">Filtrar Categoria:</label>
-                                <select id="filtro-cat-deposito" onchange="mudarFiltroCategoriaDeposito(this.value)" class="px-4 py-2 border rounded-xl text-xs bg-white font-semibold text-[#0E8685] focus:outline-none focus:border-[#0E8685]">
-                                    <option value="TODAS">Todas as Categorias</option>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <label class="text-xs font-bold text-gray-500 uppercase whitespace-nowrap">Categoria:</label>
+                                <select id="filtro-cat-deposito" onchange="mudarFiltroCategoriaDeposito(this.value)" class="w-full sm:w-auto px-3 py-2 border rounded-xl text-xs bg-white font-semibold text-[#0E8685] focus:outline-none focus:border-[#0E8685]">
+                                    <option value="TODAS">Todas</option>
                                     <option value="Incensos">Incensos</option>
-                                    <option value="Pedras">Pedras e Cristais</option>
+                                    <option value="Pedras">Pedras</option>
                                     <option value="Semijoias">Semijoias</option>
                                     <option value="Decoracao">Decoração</option>
                                     <option value="Velas">Velas</option>
-                                    <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
+                                    <option value="Imagens (Esculturas)">Imagens</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="border-b text-xs font-bold text-gray-400 uppercase">
-                                        <th class="py-3 px-3">Item / Detalhes</th>
-                                        <th class="py-3 px-3">Categoria</th>
-                                        <th class="py-3 px-3">Preço Venda / Custo</th>
-                                        <th class="py-3 px-3 text-center">Estoque</th>
-                                        <th class="py-3 px-3 text-right">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-deposito-list" class="text-sm divide-y"></tbody>
-                            </table>
-                        </div>
+                        <!-- CONTAINER DOS CARTÕES -->
+                        <div id="admin-deposito-list" class="space-y-3"></div>
 
                         <!-- CONTROLES DE PAGINAÇÃO -->
                         <div class="flex justify-between items-center pt-4 border-t text-xs font-bold text-gray-600">
-                            <button onclick="paginaAnteriorDeposito()" id="btn-pag-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl transition">⬅️ Anterior</button>
-                            <span id="paginacao-info">Página 1 de 1</span>
-                            <button onclick="proximaPaginaDeposito()" id="btn-pag-prox" class="bg-[#0E8685] hover:bg-opacity-90 text-white px-4 py-2 rounded-xl transition">Próxima ➡️</button>
+                            <button onclick="paginaAnteriorDeposito()" id="btn-pag-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl transition">⬅️ Anterior</button>
+                            <span id="paginacao-info" class="text-center">Página 1 de 1</span>
+                            <button onclick="proximaPaginaDeposito()" id="btn-pag-prox" class="bg-[#0E8685] hover:bg-opacity-90 text-white px-4 py-2.5 rounded-xl transition">Próxima ➡️</button>
                         </div>
                     </div>
                 </div>
@@ -579,7 +566,6 @@
             }
         };
 
-        /* FUNÇÃO PARA LIMPAR DUPLICADOS MANTENDO OS QUE TÊM IMAGEM OU DADOS */
         window.limparDuplicadosMantendoImagens = async function() {
             if (!confirm("Deseja remover os itens duplicados no depósito? O sistema manterá sempre os registos que contêm imagens ou descrições personalizadas.")) return;
 
@@ -587,19 +573,17 @@
                 let vistos = {};
                 let removidosCount = 0;
 
-                // Ordena a lista para priorizar os que têm imagens (garantindo que eles fiquem salvos)
                 let itensOrdenados = [...listaDeposito].sort((a, b) => {
                     let temImgA = (a.imagens && a.imagens.length > 0 && a.imagens[0].url) ? 1 : 0;
                     let temImgB = (b.imagens && b.imagens.length > 0 && b.imagens[0].url) ? 1 : 0;
-                    return temImgB - temImgA; // os que têm imagens vêm primeiro
+                    return temImgB - temImgA;
                 });
 
                 for (const item of itensOrdenados) {
                     let nomeNormalizado = item.nome.trim().toLowerCase();
                     if (!vistos[nomeNormalizado]) {
-                        vistos[nomeNormalizado] = true; // Primeiro encontro (mantém)
+                        vistos[nomeNormalizado] = true;
                     } else {
-                        // É duplicado! Remove da base de dados
                         await deleteDoc(doc(db, "deposito", item.idFirestore));
                         removidosCount++;
                     }
@@ -613,7 +597,6 @@
             }
         };
 
-        /* IMPORTAÇÃO INTELIGENTE POR NOME */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -625,7 +608,7 @@
             labelBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
             labelBtn.classList.add('bg-amber-600', 'cursor-not-allowed');
             iconeUpload.innerText = '⏳';
-            textoBtn.innerText = 'A processar planilha...';
+            textoBtn.innerText = 'A processar...';
 
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -666,13 +649,13 @@
 
                         if (!nomeProduto || nomeProduto.toLowerCase() === 'produto') continue;
 
-                        let qtdEstoque = parseInt(row[4]); // Coluna E: Estoque
+                        let qtdEstoque = parseInt(row[4]);
                         if (isNaN(qtdEstoque)) qtdEstoque = 0;
 
-                        let precoCompra = parseFloat(row[5]); // Coluna F: Compra
+                        let precoCompra = parseFloat(row[5]);
                         if (isNaN(precoCompra)) precoCompra = 0.00;
 
-                        let precoVenda = parseFloat(row[6]); // Coluna G: Venda
+                        let precoVenda = parseFloat(row[6]);
                         if (isNaN(precoVenda)) precoVenda = 0.00;
 
                         if (nomeProduto) {
@@ -711,7 +694,7 @@
                     }
 
                     await carregarDadosAdmin();
-                    alert(`✅ Sincronização concluída!\n- ${atualizadosCount} produtos existentes foram atualizados (estoque e custo).\n- ${novosCount} novos produtos foram adicionados.`);
+                    alert(`✅ Sincronização concluída!\n- ${atualizadosCount} atualizados (estoque e custo).\n- ${novosCount} novos adicionados.`);
                 } catch (err) {
                     console.error("Erro ao processar planilha:", err);
                     alert("❌ Erro ao ler o ficheiro Excel.");
@@ -719,7 +702,7 @@
                     labelBtn.classList.remove('bg-amber-600', 'cursor-not-allowed');
                     labelBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
                     iconeUpload.innerText = '📁';
-                    textoBtn.innerText = 'Importar Planilha (Excel)';
+                    textoBtn.innerText = 'Importar Planilha';
                     input.value = '';
                 }
             };
@@ -1050,10 +1033,11 @@
             if (paginaAtualDeposito < totalPaginas) { paginaAtualDeposito++; renderizarTabelaDeposito(); }
         }
 
+        /* RENDERIZAÇÃO EM CARTÕES VERTICAIS RESPONSIVOS PARA TELEMÓVEL */
         window.renderizarTabelaDeposito = function() {
-            const tbody = document.getElementById('admin-deposito-list');
+            const containerList = document.getElementById('admin-deposito-list');
             const counter = document.getElementById('total-deposito');
-            tbody.innerHTML = '';
+            containerList.innerHTML = '';
 
             const filtrados = categoriaFiltroAtual === "TODAS" ? listaDeposito : listaDeposito.filter(d => d.categoria === categoriaFiltroAtual);
             counter.innerText = `${filtrados.length} itens`;
@@ -1065,32 +1049,36 @@
             const fim = inicio + itensPorPagina;
             const itensPagina = filtrados.slice(inicio, fim);
 
-            document.getElementById('paginacao-info').innerText = `Página ${paginaAtualDeposito} de ${totalPaginas} (${filtrados.length} no total)`;
+            document.getElementById('paginacao-info').innerText = `Página ${paginaAtualDeposito} de ${totalPaginas}`;
 
             if (itensPagina.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum item encontrado nesta categoria.</td></tr>`;
+                containerList.innerHTML = `<div class="py-8 text-center text-gray-400 text-sm">Nenhum item encontrado.</div>`;
                 return;
             }
 
             itensPagina.forEach((d) => {
                 const imgCapa = (d.imagens && d.imagens.length > 0) ? d.imagens[0].url : '';
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-3 px-3 flex items-center gap-3">
-                            <img src="${imgCapa || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border">
-                            <span class="font-bold text-gray-800">${d.nome}</span>
-                        </td>
-                        <td class="py-3 px-3 text-gray-600">${d.categoria}</td>
-                        <td class="py-3 px-3 font-semibold text-xs">
-                            <span class="text-[#C5A880] font-bold">Venda: R$ ${Number(d.preco || 0).toFixed(2)}</span><br>
-                            <span class="text-gray-500 font-bold">Custo: R$ ${Number(d.compra || 0).toFixed(2)}</span>
-                        </td>
-                        <td class="py-3 px-3 text-center"><span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs">${d.qtd} un.</span></td>
-                        <td class="py-3 px-3 text-right space-x-2">
-                            <button onclick="editarDeposito('${d.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
-                            <button onclick="removerDeposito('${d.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</button>
-                        </td>
-                    </tr>
+                containerList.innerHTML += `
+                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-[#0E8685] transition">
+                        <div class="flex items-center gap-3 w-full sm:w-auto">
+                            <img src="${imgCapa || 'https://via.placeholder.com/60'}" class="w-14 h-14 object-cover rounded-xl border shadow-sm shrink-0">
+                            <div>
+                                <h4 class="font-bold text-gray-800 text-sm leading-snug">${d.nome}</h4>
+                                <span class="bg-teal-50 text-[#0E8685] text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block mt-1">${d.categoria}</span>
+                                <span class="bg-gray-200 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded-md ml-1">Estoque: ${d.qtd} un.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-200">
+                            <div class="text-left sm:text-right text-xs">
+                                <span class="text-[#C5A880] font-extrabold block">Venda: R$ ${Number(d.preco || 0).toFixed(2)}</span>
+                                <span class="text-gray-500 font-semibold block">Custo: R$ ${Number(d.compra || 0).toFixed(2)}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editarDeposito('${d.idFirestore}')" class="bg-teal-50 hover:bg-teal-100 text-[#0E8685] font-bold px-3 py-1.5 rounded-xl text-xs transition">Editar</button>
+                                <button onclick="removerDeposito('${d.idFirestore}')" class="bg-red-50 hover:bg-red-100 text-red-500 font-bold px-3 py-1.5 rounded-xl text-xs transition">Excluir</button>
+                            </div>
+                        </div>
+                    </div>
                 `;
             });
         }
