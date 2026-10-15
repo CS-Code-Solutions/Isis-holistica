@@ -118,7 +118,7 @@
         <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col justify-between min-h-screen">
             <div class="space-y-8">
                 
-                <!-- SEÇÃO 1: INVENTÁRIO -->
+                <!-- SEÇÃO 1: INVENTÁRIO (VITRINE) -->
                 <div id="admin-section-inventario" class="space-y-8">
                     <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                         <div>
@@ -209,11 +209,27 @@
                         </form>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos na Vitrine</h3>
-                            <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
+                    <!-- LISTAGEM DE PRODUTOS DA VITRINE COM FILTRO E PAGINAÇÃO DE 20 ITENS -->
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos na Vitrine</h3>
+                                <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <label class="text-xs font-bold text-gray-500 uppercase whitespace-nowrap">Categoria:</label>
+                                <select id="filtro-cat-produtos" onchange="mudarFiltroCategoriaProdutos(this.value)" class="w-full sm:w-auto px-3 py-2 border rounded-xl text-xs bg-white font-semibold text-[#0E8685] focus:outline-none focus:border-[#0E8685]">
+                                    <option value="TODAS">Todas</option>
+                                    <option value="Incensos">Incensos</option>
+                                    <option value="Pedras">Pedras</option>
+                                    <option value="Semijoias">Semijoias</option>
+                                    <option value="Decoracao">Decoração</option>
+                                    <option value="Velas">Velas</option>
+                                    <option value="Imagens (Esculturas)">Imagens</option>
+                                </select>
+                            </div>
                         </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
@@ -227,6 +243,13 @@
                                 </thead>
                                 <tbody id="admin-product-list" class="text-sm divide-y"></tbody>
                             </table>
+                        </div>
+
+                        <!-- CONTROLES DE PAGINAÇÃO DA VITRINE -->
+                        <div class="flex justify-between items-center pt-4 border-t text-xs font-bold text-gray-600">
+                            <button onclick="paginaAnteriorProdutos()" id="btn-prod-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl transition">⬅️ Anterior</button>
+                            <span id="paginacao-prod-info" class="text-center">Página 1 de 1</span>
+                            <button onclick="proximaPaginaProdutos()" id="btn-prod-prox" class="bg-[#0E8685] hover:bg-opacity-90 text-white px-4 py-2.5 rounded-xl transition">Próxima ➡️</button>
                         </div>
                     </div>
                 </div>
@@ -317,7 +340,7 @@
                         </form>
                     </div>
 
-                    <!-- LISTAGEM EM CARTÕES RESPONSIVOS (SEM ROLAGEM HORIZONTAL NO CELULAR) -->
+                    <!-- LISTAGEM DE DEPÓSITO -->
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
                             <div class="flex items-center gap-3">
@@ -338,10 +361,8 @@
                             </div>
                         </div>
 
-                        <!-- CONTAINER DOS CARTÕES -->
                         <div id="admin-deposito-list" class="space-y-3"></div>
 
-                        <!-- CONTROLES DE PAGINAÇÃO -->
                         <div class="flex justify-between items-center pt-4 border-t text-xs font-bold text-gray-600">
                             <button onclick="paginaAnteriorDeposito()" id="btn-pag-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl transition">⬅️ Anterior</button>
                             <span id="paginacao-info" class="text-center">Página 1 de 1</span>
@@ -480,6 +501,10 @@
         let listaBanners = [];
         let cropperInstance = null;
         let targetInputGlobal = null;
+
+        // PAGINAÇÃO DA VITRINE E DEPÓSITO (20 ITENS MÁXIMO POR PÁGINA)
+        let paginaAtualProdutos = 1;
+        let categoriaFiltroProdutos = "TODAS";
 
         let paginaAtualDeposito = 1;
         const itensPorPagina = 20;
@@ -1033,7 +1058,59 @@
             if (paginaAtualDeposito < totalPaginas) { paginaAtualDeposito++; renderizarTabelaDeposito(); }
         }
 
-        /* RENDERIZAÇÃO EM CARTÕES VERTICAIS RESPONSIVOS PARA TELEMÓVEL */
+        /* FILTROS E PAGINAÇÃO DOS PRODUTOS DA VITRINE (20 ITENS POR PÁGINA) */
+        window.mudarFiltroCategoriaProdutos = function(cat) {
+            categoriaFiltroProdutos = cat;
+            paginaAtualProdutos = 1;
+            renderizarTabelaProdutos();
+        }
+
+        window.paginaAnteriorProdutos = function() {
+            if (paginaAtualProdutos > 1) { paginaAtualProdutos--; renderizarTabelaProdutos(); }
+        }
+
+        window.proximaPaginaProdutos = function() {
+            const filtrados = categoriaFiltroProdutos === "TODAS" ? listaProdutos : listaProdutos.filter(p => p.categoria === categoriaFiltroProdutos);
+            const totalPaginas = Math.ceil(filtrados.length / itensPorPagina) || 1;
+            if (paginaAtualProdutos < totalPaginas) { paginaAtualProdutos++; renderizarTabelaProdutos(); }
+        }
+
+        window.renderizarTabelaProdutos = function() {
+            const tbody = document.getElementById('admin-product-list');
+            const counter = document.getElementById('total-produtos');
+            tbody.innerHTML = '';
+
+            const filtrados = categoriaFiltroProdutos === "TODAS" ? listaProdutos : listaProdutos.filter(p => p.categoria === categoriaFiltroProdutos);
+            counter.innerText = `${filtrados.length} produtos`;
+
+            const totalPaginas = Math.ceil(filtrados.length / itensPorPagina) || 1;
+            if (paginaAtualProdutos > totalPaginas) paginaAtualProdutos = totalPaginas;
+
+            const inicio = (paginaAtualProdutos - 1) * itensPorPagina;
+            const fim = inicio + itensPorPagina;
+            const itensPagina = filtrados.slice(inicio, fim);
+
+            document.getElementById('paginacao-prod-info').innerText = `Página ${paginaAtualProdutos} de ${totalPaginas}`;
+
+            if (itensPagina.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum produto encontrado nesta categoria.</td></tr>`;
+                return;
+            }
+
+            itensPagina.forEach((p) => {
+                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : '';
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3 px-3 flex items-center gap-3"><img src="${imgCapa || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border"><span class="font-bold text-gray-800">${p.nome}</span></td>
+                        <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
+                        <td class="py-3 px-3 font-extrabold text-[#C5A880]">R$ ${Number(p.preco).toFixed(2)}</td>
+                        <td class="py-3 px-3 text-center">${p.destaque ? '<span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold">Sim</span>' : '<span class="text-gray-400 text-xs">Não</span>'}</td>
+                        <td class="py-3 px-3 text-right space-x-2"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</button></td>
+                    </tr>
+                `;
+            });
+        }
+
         window.renderizarTabelaDeposito = function() {
             const containerList = document.getElementById('admin-deposito-list');
             const counter = document.getElementById('total-deposito');
@@ -1217,26 +1294,6 @@
                 await carregarDadosAdmin();
                 toggleFormularioProduto();
             } catch (err) { console.error("Erro:", err); }
-        }
-
-        window.renderizarTabelaProdutos = function() {
-            const tbody = document.getElementById('admin-product-list');
-            const counter = document.getElementById('total-produtos');
-            tbody.innerHTML = '';
-            counter.innerText = `${listaProdutos.length} produtos`;
-            if (listaProdutos.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum produto na vitrine.</td></tr>`; return; }
-            listaProdutos.forEach((p) => {
-                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : '';
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-3 px-3 flex items-center gap-3"><img src="${imgCapa || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border"><span class="font-bold text-gray-800">${p.nome}</span></td>
-                        <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
-                        <td class="py-3 px-3 font-extrabold text-[#C5A880]">R$ ${Number(p.preco).toFixed(2)}</td>
-                        <td class="py-3 px-3 text-center">${p.destaque ? '<span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold">Sim</span>' : '<span class="text-gray-400 text-xs">Não</span>'}</td>
-                        <td class="py-3 px-3 text-right space-x-2"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</button></td>
-                    </tr>
-                `;
-            });
         }
 
         window.editarProduto = function(idFirestore) {
