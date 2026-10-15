@@ -125,7 +125,10 @@
                             <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos (Loja)</h2>
                             <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual da loja.</p>
                         </div>
-                        <div class="flex flex-wrap gap-3">
+                        <div class="flex flex-wrap gap-3 items-center">
+                            <button onclick="removerProdutosSemFoto()" class="bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 font-bold px-4 py-3 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                                <span>🧹</span> <span>Remover Sem Foto da Vitrine</span>
+                            </button>
                             <button onclick="abrirNovoProdutoDeposito()" class="bg-gray-100 text-[#0E8685] font-bold px-4 py-3 rounded-xl shadow-sm hover:bg-gray-200 transition flex items-center gap-2 text-xs border border-teal-100">
                                 <span>📦</span> <span>Vincular do Depósito</span>
                             </button>
@@ -213,7 +216,7 @@
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
                             <div class="flex items-center gap-3">
-                                <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos na Vitrine</h3>
+                                <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos na Vitrine (Com Fotos)</h3>
                                 <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
                             </div>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
@@ -502,7 +505,6 @@
         let cropperInstance = null;
         let targetInputGlobal = null;
 
-        // PAGINAÇÃO DA VITRINE E DEPÓSITO (20 ITENS MÁXIMO POR PÁGINA)
         let paginaAtualProdutos = 1;
         let categoriaFiltroProdutos = "TODAS";
 
@@ -563,31 +565,25 @@
             }
         }
 
-        window.limparProdutosNumericos = async function() {
-            if (!confirm("Tem certeza que deseja apagar todos os itens que possuem apenas números no nome?")) return;
+        /* FUNÇÃO PARA REMOVER DA VITRINE PRODUTOS QUE NÃO TÊM FOTO VÁLIDA */
+        window.removerProdutosSemFoto = async function() {
+            if (!confirm("Deseja remover da vitrine todos os produtos que não possuem fotos cadastradas?")) return;
 
             try {
-                let removidosDep = 0;
-                let removidosProd = 0;
-
-                for (const d of listaDeposito) {
-                    if (/^\d+$/.test(d.nome.trim())) {
-                        await deleteDoc(doc(db, "deposito", d.idFirestore));
-                        removidosDep++;
-                    }
-                }
-
+                let removidos = 0;
                 for (const p of listaProdutos) {
-                    if (/^\d+$/.test(p.nome.trim())) {
+                    const temFoto = (p.imagens && p.imagens.length > 0 && p.imagens[0].url && p.imagens[0].url.trim() !== '') || (p.imagem && p.imagem.trim() !== '');
+                    if (!temFoto) {
                         await deleteDoc(doc(db, "produtos", p.idFirestore));
-                        removidosProd++;
+                        removidos++;
                     }
                 }
 
                 await carregarDadosAdmin();
-                alert(`✅ Limpeza concluída! Foram removidos ${removidosDep} itens do depósito e ${removidosProd} da vitrine.`);
+                alert(`✅ Limpeza concluída! Foram removidos ${removidos} produtos sem foto da vitrine.`);
             } catch (err) {
-                console.error("Erro ao limpar itens numéricos:", err);
+                console.error("Erro ao limpar produtos sem foto:", err);
+                alert("❌ Ocorreu um erro ao limpar os produtos.");
             }
         };
 
@@ -704,22 +700,13 @@
                                     descricao: 'Importado via planilha de estoque.',
                                     subDetalhes: {}
                                 });
-                               
-                                await addDoc(collection(db, "produtos"), {
-                                    nome: nomeProduto,
-                                    categoria: 'Incensos',
-                                    preco: precoVenda,
-                                    imagens: [],
-                                    descricao: 'Importado via planilha de estoque.',
-                                    destaque: false
-                                });
                                 novosCount++;
                             }
                         }
                     }
 
                     await carregarDadosAdmin();
-                    alert(`✅ Sincronização concluída!\n- ${atualizadosCount} atualizados (estoque e custo).\n- ${novosCount} novos adicionados.`);
+                    alert(`✅ Sincronização concluída!\n- ${atualizadosCount} atualizados (estoque e custo).\n- ${novosCount} novos adicionados ao depósito (sem fotos na vitrine).`);
                 } catch (err) {
                     console.error("Erro ao processar planilha:", err);
                     alert("❌ Erro ao ler o ficheiro Excel.");
@@ -1029,7 +1016,7 @@
                 if (idDoc !== '') await updateDoc(doc(db, "deposito", idDoc), itemData);
                 else await addDoc(collection(db, "deposito"), itemData);
 
-                if (exibirNaVitrine) {
+                if (exibirNaVitrine && imagens.length > 0) {
                     const produtoExistente = listaProdutos.find(p => p.nome.toLowerCase() === nome.toLowerCase());
                     const dadosVitrine = { nome, preco, categoria, imagens, descricao, destaque: false };
                     if (produtoExistente) await updateDoc(doc(db, "produtos", produtoExistente.idFirestore), dadosVitrine);
@@ -1058,7 +1045,6 @@
             if (paginaAtualDeposito < totalPaginas) { paginaAtualDeposito++; renderizarTabelaDeposito(); }
         }
 
-        /* FILTROS E PAGINAÇÃO DOS PRODUTOS DA VITRINE (20 ITENS POR PÁGINA) */
         window.mudarFiltroCategoriaProdutos = function(cat) {
             categoriaFiltroProdutos = cat;
             paginaAtualProdutos = 1;
@@ -1070,7 +1056,13 @@
         }
 
         window.proximaPaginaProdutos = function() {
-            const filtrados = categoriaFiltroProdutos === "TODAS" ? listaProdutos : listaProdutos.filter(p => p.categoria === categoriaFiltroProdutos);
+            // Filtra apenas produtos que possuem imagem válida
+            const produtosComFoto = listaProdutos.filter(p => {
+                const temImgValida = (p.imagens && p.imagens.length > 0 && p.imagens[0].url && p.imagens[0].url.trim() !== '') || (p.imagem && p.imagem.trim() !== '');
+                return temImgValida;
+            });
+
+            const filtrados = categoriaFiltroProdutos === "TODAS" ? produtosComFoto : produtosComFoto.filter(p => p.categoria === categoriaFiltroProdutos);
             const totalPaginas = Math.ceil(filtrados.length / itensPorPagina) || 1;
             if (paginaAtualProdutos < totalPaginas) { paginaAtualProdutos++; renderizarTabelaProdutos(); }
         }
@@ -1080,7 +1072,13 @@
             const counter = document.getElementById('total-produtos');
             tbody.innerHTML = '';
 
-            const filtrados = categoriaFiltroProdutos === "TODAS" ? listaProdutos : listaProdutos.filter(p => p.categoria === categoriaFiltroProdutos);
+            // FILTRA AUTOMATICAMENTE APENAS OS PRODUTOS QUE POSSUEM FOTO VÁLIDA
+            const produtosComFoto = listaProdutos.filter(p => {
+                const temImgValida = (p.imagens && p.imagens.length > 0 && p.imagens[0].url && p.imagens[0].url.trim() !== '') || (p.imagem && p.imagem.trim() !== '');
+                return temImgValida;
+            });
+
+            const filtrados = categoriaFiltroProdutos === "TODAS" ? produtosComFoto : produtosComFoto.filter(p => p.categoria === categoriaFiltroProdutos);
             counter.innerText = `${filtrados.length} produtos`;
 
             const totalPaginas = Math.ceil(filtrados.length / itensPorPagina) || 1;
@@ -1093,15 +1091,15 @@
             document.getElementById('paginacao-prod-info').innerText = `Página ${paginaAtualProdutos} de ${totalPaginas}`;
 
             if (itensPagina.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum produto encontrado nesta categoria.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum produto com foto encontrado nesta categoria.</td></tr>`;
                 return;
             }
 
             itensPagina.forEach((p) => {
-                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : '';
+                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
-                        <td class="py-3 px-3 flex items-center gap-3"><img src="${imgCapa || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border"><span class="font-bold text-gray-800">${p.nome}</span></td>
+                        <td class="py-3 px-3 flex items-center gap-3"><img src="${imgCapa}" class="w-10 h-10 object-cover rounded-lg border"><span class="font-bold text-gray-800">${p.nome}</span></td>
                         <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
                         <td class="py-3 px-3 font-extrabold text-[#C5A880]">R$ ${Number(p.preco).toFixed(2)}</td>
                         <td class="py-3 px-3 text-center">${p.destaque ? '<span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold">Sim</span>' : '<span class="text-gray-400 text-xs">Não</span>'}</td>
@@ -1134,7 +1132,7 @@
             }
 
             itensPagina.forEach((d) => {
-                const imgCapa = (d.imagens && d.imagens.length > 0) ? d.imagens[0].url : '';
+                const imgCapa = (d.imagens && d.imagens.length > 0) ? d.imagens[0].url : (d.imagem || '');
                 containerList.innerHTML += `
                     <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-[#0E8685] transition">
                         <div class="flex items-center gap-3 w-full sm:w-auto">
