@@ -331,11 +331,11 @@
         
         <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
 
-        <!-- PAGINAÇÃO DA LOJA (MÁXIMO 15 ITENS POR PÁGINA) -->
-        <div class="flex justify-between items-center mt-12 pt-6 border-t border-gray-200 text-xs font-bold text-gray-700">
-            <button onclick="mudarPaginaLoja(-1)" id="btn-loja-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl transition shadow-sm">⬅️ Anterior</button>
-            <span id="loja-paginacao-info" class="text-sm">Página 1 de 1</span>
-            <button onclick="mudarPaginaLoja(1)" id="btn-loja-prox" class="bg-[#0E8685] hover:bg-opacity-90 text-white px-5 py-3 rounded-xl transition shadow">Próxima ➡️</button>
+        <!-- PAGINAÇÃO DA LOJA (MODERNA E COMPACTA COM BOTÕES < e >) -->
+        <div class="flex justify-center items-center gap-4 mt-12 pt-6 border-t border-gray-200 text-xs font-bold text-gray-700">
+            <button onclick="mudarPaginaLoja(-1)" id="btn-loja-ant" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition shadow-sm text-base">‹</button>
+            <span id="loja-paginacao-info" class="text-sm font-semibold text-gray-600">Página 1 de 1</span>
+            <button onclick="mudarPaginaLoja(1)" id="btn-loja-prox" class="w-10 h-10 rounded-xl bg-[#0E8685] hover:bg-opacity-90 text-white flex items-center justify-center transition shadow text-base">›</button>
         </div>
     </section>
 
@@ -468,7 +468,7 @@
                         <option value="A combinar">A combinar</option>
                     </select>
                 </div>
-                <button onclick="finalizarPedidoWhatsApp()" class="w-full bg-[#25D366] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2 mt-2">
+                <button onclick="finalizarPedidoWhatsApp()" class="w-full bg-[#25D366] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
                     Finalizar Pedido via WhatsApp
                 </button>
             </div>
@@ -926,7 +926,7 @@
             });
         }
 
-        /* RENDERIZAÇÃO DA LOJA COM PAGINAÇÃO DE 15 ITENS MÁXIMO POR PÁGINA */
+        /* RENDERIZAÇÃO DA LOJA COM PAGINAÇÃO ELEGANTE (< e >) */
         function renderizarProdutosLoja() {
             const container = document.getElementById('grid-produtos');
             if (!container) return;
@@ -1009,7 +1009,6 @@
             const inputBusca = document.getElementById('input-busca');
             if (inputBusca) inputBusca.value = '';
 
-            // Atualiza botões visuais de categoria
             const botoesCat = ['todos', 'Promoções', 'Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens (Esculturas)'];
             botoesCat.forEach(b => {
                 const btnEl = document.getElementById(`btn-cat-${b}`);
