@@ -113,7 +113,7 @@
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">💎 Semijoias</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🏺 Decoração</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🕯️ Velas</button>
-                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🗿 Imagens</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🗿 Imagens</button>
                     </div>
                 </div>
 
@@ -148,7 +148,7 @@
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="block text-left text-xs font-bold text-gray-600">💎 Semijoias</button>
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block text-left text-xs font-bold text-gray-600">🏺 Decoração</button>
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="block text-left text-xs font-bold text-gray-600">🕯️ Velas</button>
-                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="block text-left text-xs font-bold text-gray-600">🗿 Imagens</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens');" class="block text-left text-xs font-bold text-gray-600">🗿 Imagens</button>
                 </div>
             </div>
 
@@ -325,7 +325,7 @@
                 <button onclick="filtrarProdutos('Semijoias')" id="btn-cat-Semijoias" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">Semijoias</button>
                 <button onclick="filtrarProdutos('Decoracao')" id="btn-cat-Decoracao" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🏺 Decoração</button>
                 <button onclick="filtrarProdutos('Velas')" id="btn-cat-Velas" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🕯️ Velas</button>
-                <button onclick="filtrarProdutos('Imagens (Esculturas)')" id="btn-cat-Imagens" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🗿 Imagens</button>
+                <button onclick="filtrarProdutos('Imagens')" id="btn-cat-Imagens" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🗿 Imagens</button>
             </div>
         </div>
         
@@ -1009,7 +1009,7 @@
             const inputBusca = document.getElementById('input-busca');
             if (inputBusca) inputBusca.value = '';
 
-            const botoesCat = ['todos', 'Promoções', 'Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens (Esculturas)'];
+            const botoesCat = ['todos', 'Promoções', 'Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens'];
             botoesCat.forEach(b => {
                 const btnEl = document.getElementById(`btn-cat-${b}`);
                 if (btnEl) {
