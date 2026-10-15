@@ -252,6 +252,7 @@
                         </div>
                     </div>
 
+                    <!-- FORMULÁRIO DE DEPÓSITO -->
                     <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
                         <div class="flex justify-between items-center mb-6 border-b pb-4">
                             <h3 id="form-deposito-title" class="text-xl font-bold text-[#0E8685]">🏢 Novo Item no Depósito</h3>
@@ -316,11 +317,27 @@
                         </form>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-lg font-bold text-[#0E8685]">📦 Itens Registrados no Depósito</h3>
-                            <span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span>
+                    <!-- TABELA DE DEPÓSITO COM FILTROS E PAGINAÇÃO -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-lg font-bold text-[#0E8685]">📦 Itens no Depósito</h3>
+                                <span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span>
+                            </div>
+                            <div class="flex items-center gap-3 w-full sm:w-auto">
+                                <label class="text-xs font-bold text-gray-500 uppercase whitespace-nowrap">Filtrar Categoria:</label>
+                                <select id="filtro-cat-deposito" onchange="mudarFiltroCategoriaDeposito(this.value)" class="px-4 py-2 border rounded-xl text-xs bg-white font-semibold text-[#0E8685] focus:outline-none focus:border-[#0E8685]">
+                                    <option value="TODAS">Todas as Categorias</option>
+                                    <option value="Incensos">Incensos</option>
+                                    <option value="Pedras">Pedras e Cristais</option>
+                                    <option value="Semijoias">Semijoias</option>
+                                    <option value="Decoracao">Decoração</option>
+                                    <option value="Velas">Velas</option>
+                                    <option value="Imagens (Esculturas)">Imagens (Esculturas)</option>
+                                </select>
+                            </div>
                         </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
@@ -334,6 +351,13 @@
                                 </thead>
                                 <tbody id="admin-deposito-list" class="text-sm divide-y"></tbody>
                             </table>
+                        </div>
+
+                        <!-- CONTROLES DE PAGINAÇÃO -->
+                        <div class="flex justify-between items-center pt-4 border-t text-xs font-bold text-gray-600">
+                            <button onclick="paginaAnteriorDeposito()" id="btn-pag-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl transition">⬅️ Anterior</button>
+                            <span id="paginacao-info">Página 1 de 1</span>
+                            <button onclick="proximaPaginaDeposito()" id="btn-pag-prox" class="bg-[#0E8685] hover:bg-opacity-90 text-white px-4 py-2 rounded-xl transition">Próxima ➡️</button>
                         </div>
                     </div>
                 </div>
@@ -469,6 +493,11 @@
         let cropperInstance = null;
         let targetInputGlobal = null;
 
+        // Variáveis de Paginação e Filtro do Depósito
+        let paginaAtualDeposito = 1;
+        const itensPorPagina = 20;
+        let categoriaFiltroAtual = "TODAS";
+
         onAuthStateChanged(auth, (user) => {
             const overlay = document.getElementById('login-overlay');
             const mainWrapper = document.getElementById('admin-main-wrapper');
@@ -527,9 +556,7 @@
         }
 
         window.limparProdutosNumericos = async function() {
-            if (!confirm("Tem certeza que deseja apagar todos os itens que possuem apenas números no nome?")) {
-                return;
-            }
+            if (!confirm("Tem certeza que deseja apagar todos os itens que possuem apenas números no nome?")) return;
 
             try {
                 let removidosDep = 0;
@@ -557,7 +584,7 @@
             }
         };
 
-        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL - COM MAPEAMENTO CORRETO DE ESTOQUE E COMPRA */
+        /* IMPORTAÇÃO DE PLANILHA CORRIGIDA PARA LER COMPRA E ESTOQUE */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -582,13 +609,11 @@
 
                     let importadosCount = 0;
                     
-                    for (let i = 5; i < rows.length; i++) { // Começa a partir da linha 6 (índice 5), onde os produtos iniciam
+                    for (let i = 5; i < rows.length; i++) {
                         const row = rows[i];
                         if (!row || row.length === 0) continue;
 
                         let nomeProduto = '';
-                        
-                        // Coluna B (índice 1) é o Produto
                         if (row[1] !== undefined && row[1] !== null) {
                             const valB = String(row[1]).trim();
                             if (/[a-zA-ZÀ-ÿ]/.test(valB) && valB.toUpperCase() !== 'PRODUTO') {
@@ -596,7 +621,6 @@
                             }
                         }
 
-                        // Fallback se não estiver na coluna B exata
                         if (!nomeProduto) {
                             for (let c = 0; c < row.length; c++) {
                                 const val = row[c];
@@ -612,16 +636,13 @@
 
                         if (!nomeProduto || nomeProduto.toLowerCase() === 'produto') continue;
 
-                        // Coluna E (índice 4): Estoque (Verde)[span_2](start_span)[span_2](end_span)
-                        let qtdEstoque = parseInt(row[4]);
+                        let qtdEstoque = parseInt(row[4]); // Coluna E: Estoque
                         if (isNaN(qtdEstoque)) qtdEstoque = 0;
 
-                        // Coluna F (índice 5): Valor de Compra[span_3](start_span)[span_3](end_span)
-                        let precoCompra = parseFloat(row[5]);
+                        let precoCompra = parseFloat(row[5]); // Coluna F: Compra
                         if (isNaN(precoCompra)) precoCompra = 0.00;
 
-                        // Coluna G (índice 6): Preço de Venda[span_4](start_span)[span_4](end_span)
-                        let precoVenda = parseFloat(row[6]);
+                        let precoVenda = parseFloat(row[6]); // Coluna G: Preço de Venda
                         if (isNaN(precoVenda)) precoVenda = 0.00;
 
                         if (nomeProduto) {
@@ -638,7 +659,6 @@
 
                             await addDoc(collection(db, "deposito"), itemDepositoData);
 
-                            // Publica automaticamente na vitrine também
                             await addDoc(collection(db, "produtos"), {
                                 nome: nomeProduto,
                                 categoria: 'Incensos',
@@ -653,7 +673,7 @@
                     }
 
                     await carregarDadosAdmin();
-                    alert(`✅ Sucesso! ${importadosCount} produtos foram importados com estoque e valores de compra corretos.`);
+                    alert(`✅ Sucesso! ${importadosCount} produtos importados com valores de custo e estoque corretos.`);
                 } catch (err) {
                     console.error("Erro ao processar planilha:", err);
                     alert("❌ Erro ao ler o ficheiro Excel.");
@@ -673,11 +693,8 @@
             if (!file) return;
             const inputField = document.getElementById(targetId);
             inputField.value = "A carregar imagem...";
-
             const reader = new FileReader();
-            reader.onload = function(e) {
-                comprimirEConverterDireto(e.target.result, inputField);
-            };
+            reader.onload = function(e) { comprimirEConverterDireto(e.target.result, inputField); };
             reader.readAsDataURL(file);
             input.value = '';
         }
@@ -688,11 +705,8 @@
             const bloco = input.closest('div.group');
             const inputUrl = bloco.querySelector('.input-foto-url') || bloco.querySelector('.input-prod-foto-url');
             inputUrl.value = "A carregar imagem...";
-
             const reader = new FileReader();
-            reader.onload = function(e) {
-                comprimirEConverterDireto(e.target.result, inputUrl);
-            };
+            reader.onload = function(e) { comprimirEConverterDireto(e.target.result, inputUrl); };
             reader.readAsDataURL(file);
             input.value = '';
         }
@@ -721,10 +735,7 @@
         window.abrirRecorteComInput = function(targetId, aspectRatio = 1/1) {
             targetInputGlobal = document.getElementById(targetId);
             const currentVal = targetInputGlobal.value.trim();
-            if (!currentVal || currentVal.startsWith('A carregar')) {
-                alert("Por favor, selecione uma imagem primeiro!");
-                return;
-            }
+            if (!currentVal || currentVal.startsWith('A carregar')) { alert("Por favor, selecione uma imagem primeiro!"); return; }
             abrirModalCropper(currentVal, aspectRatio);
         }
 
@@ -732,10 +743,7 @@
             const bloco = btn.closest('div.group');
             targetInputGlobal = bloco.querySelector('.input-foto-url') || bloco.querySelector('.input-prod-foto-url');
             const currentVal = targetInputGlobal.value.trim();
-            if (!currentVal || currentVal.startsWith('A carregar')) {
-                alert("Por favor, selecione uma imagem primeiro!");
-                return;
-            }
+            if (!currentVal || currentVal.startsWith('A carregar')) { alert("Por favor, selecione uma imagem primeiro!"); return; }
             abrirModalCropper(currentVal, aspectRatio);
         }
 
@@ -743,37 +751,19 @@
             const imgElement = document.getElementById('imagem-para-recortar');
             imgElement.src = imageSrc;
             document.getElementById('modal-recorte').classList.remove('hidden');
-
-            if (cropperInstance) {
-                cropperInstance.destroy();
-            }
-
-            cropperInstance = new Cropper(imgElement, {
-                aspectRatio: aspectRatio,
-                viewMode: 1,
-                autoCropArea: 1,
-                responsive: true,
-            });
+            if (cropperInstance) cropperInstance.destroy();
+            cropperInstance = new Cropper(imgElement, { aspectRatio: aspectRatio, viewMode: 1, autoCropArea: 1, responsive: true });
         }
 
         window.fecharModalRecorte = function() {
             document.getElementById('modal-recorte').classList.add('hidden');
-            if (cropperInstance) {
-                cropperInstance.destroy();
-                cropperInstance = null;
-            }
+            if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
         }
 
         window.aplicarRecorte = function() {
             if (!cropperInstance || !targetInputGlobal) return;
-
-            const canvas = cropperInstance.getCroppedCanvas({
-                width: 1000,
-                height: 1000,
-            });
-
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-            targetInputGlobal.value = dataUrl;
+            const canvas = cropperInstance.getCroppedCanvas({ width: 1000, height: 1000 });
+            targetInputGlobal.value = canvas.toDataURL('image/jpeg', 0.85);
             fecharModalRecorte();
         }
 
@@ -796,19 +786,11 @@
                 document.getElementById('admin-section-banners').classList.remove('hidden');
                 document.getElementById('nav-banners').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
             }
-
-            if (window.innerWidth < 768) {
-                document.getElementById('admin-sidebar').classList.add('hidden');
-            }
+            if (window.innerWidth < 768) document.getElementById('admin-sidebar').classList.add('hidden');
         }
 
-        window.toggleAdminMobileMenu = function() {
-            document.getElementById('admin-sidebar').classList.toggle('hidden');
-        }
-
-        window.toggleFormularioBanner = function() {
-            document.getElementById('form-container-banner').classList.toggle('hidden');
-        }
+        window.toggleAdminMobileMenu = function() { document.getElementById('admin-sidebar').classList.toggle('hidden'); }
+        window.toggleFormularioBanner = function() { document.getElementById('form-container-banner').classList.toggle('hidden'); }
 
         window.abrirNovoBanner = function() {
             document.getElementById('banner-id').value = '';
@@ -823,28 +805,16 @@
             const container = document.getElementById('banner-linkalvo-container');
             const labelAlvo = document.getElementById('banner-linkalvo-label');
             const selectAlvo = document.getElementById('banner-linkalvo-prod');
-
             if (val === 'produto') {
                 container.classList.remove('hidden');
                 labelAlvo.innerText = "Selecione o Produto Alvo";
                 selectAlvo.innerHTML = '';
-                listaProdutos.forEach(p => {
-                    selectAlvo.innerHTML += `<option value="${p.nome}">${p.nome}</option>`;
-                });
+                listaProdutos.forEach(p => { selectAlvo.innerHTML += `<option value="${p.nome}">${p.nome}</option>`; });
             } else if (val === 'categoria') {
                 container.classList.remove('hidden');
                 labelAlvo.innerText = "Selecione a Categoria";
-                selectAlvo.innerHTML = `
-                    <option value="Incensos">🌿 Incensos</option>
-                    <option value="Pedras">🔮 Pedras e Cristais</option>
-                    <option value="Semijoias">✨ Semijoias</option>
-                    <option value="Decoracao">🪷 Decoração</option>
-                    <option value="Velas">🕯️ Velas</option>
-                    <option value="Imagens (Esculturas)">🗿 Imagens (Esculturas)</option>
-                `;
-            } else {
-                container.classList.add('hidden');
-            }
+                selectAlvo.innerHTML = `<option value="Incensos">🌿 Incensos</option><option value="Pedras">🔮 Pedras e Cristais</option><option value="Semijoias">✨ Semijoias</option><option value="Decoracao">🪷 Decoração</option><option value="Velas">🕯️ Velas</option><option value="Imagens (Esculturas)">🗿 Imagens (Esculturas)</option>`;
+            } else { container.classList.add('hidden'); }
         }
 
         window.salvarBanner = async function(e) {
@@ -857,26 +827,16 @@
             const imagemPc = document.getElementById('banner-imgpc').value;
             const imagemMobile = document.getElementById('banner-imgmob').value;
             const linkTipo = document.getElementById('banner-linktipo').value;
-            
             let linkAlvo = '';
-            if (linkTipo === 'produto' || linkTipo === 'categoria') {
-                linkAlvo = document.getElementById('banner-linkalvo-prod').value;
-            }
+            if (linkTipo === 'produto' || linkTipo === 'categoria') linkAlvo = document.getElementById('banner-linkalvo-prod').value;
 
             const bannerData = { badge, titulo, desc, tempo, imagemPc, imagemMobile, linkTipo, linkAlvo };
-
             try {
-                if (idDoc !== '') {
-                    await updateDoc(doc(db, "slides", idDoc), bannerData);
-                } else {
-                    await addDoc(collection(db, "slides"), bannerData);
-                }
+                if (idDoc !== '') await updateDoc(doc(db, "slides", idDoc), bannerData);
+                else await addDoc(collection(db, "slides"), bannerData);
                 await carregarDadosAdmin();
                 toggleFormularioBanner();
-            } catch (err) {
-                console.error("Erro ao guardar banner:", err);
-                alert("Erro ao gravar banner no Firebase: " + err.message);
-            }
+            } catch (err) { console.error("Erro ao guardar banner:", err); }
         }
 
         function renderizarTabelaBanners() {
@@ -884,12 +844,7 @@
             const counter = document.getElementById('total-banners');
             tbody.innerHTML = '';
             counter.innerText = `${listaBanners.length} banners`;
-
-            if (listaBanners.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">Nenhum banner cadastrado.</td></tr>`;
-                return;
-            }
-
+            if (listaBanners.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-gray-400">Nenhum banner cadastrado.</td></tr>`; return; }
             listaBanners.forEach((b) => {
                 let destinoStr = 'Loja / Todos';
                 if (b.linkTipo === 'terapias') destinoStr = 'Espaço Terapêutico';
@@ -898,28 +853,15 @@
                 else if (b.linkTipo === 'categoria') destinoStr = `Categoria: ${b.linkAlvo}`;
                 else if (b.linkTipo === 'produto') destinoStr = `Produto: ${b.linkAlvo}`;
 
-                const imgCapa = b.imagemPc || b.imagemMobile || '';
-                const tempoExibicao = b.tempo || 5;
-                const tituloExibir = b.titulo || '(Banner sem texto)';
-
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
                         <td class="py-3 px-3 flex items-center gap-3">
-                            <img src="${imgCapa || 'https://via.placeholder.com/60'}" class="w-14 h-9 object-cover rounded-lg border shadow-sm">
-                            <div>
-                                <span class="font-bold text-gray-800 block">${tituloExibir}</span>
-                                <span class="text-xs text-gray-400 truncate max-w-xs block">${b.desc || ''}</span>
-                            </div>
+                            <img src="${b.imagemPc || b.imagemMobile || 'https://via.placeholder.com/60'}" class="w-14 h-9 object-cover rounded-lg border shadow-sm">
+                            <div><span class="font-bold text-gray-800 block">${b.titulo || '(Banner)'}</span><span class="text-xs text-gray-400 truncate max-w-xs block">${b.desc || ''}</span></div>
                         </td>
-                        <td class="py-3 px-3 space-y-1">
-                            ${b.badge ? `<span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs inline-block">${b.badge}</span>` : '<span class="text-gray-400 text-xs">Sem badge</span>'}
-                            <span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-md text-[10px] block w-fit">⏱️ ${tempoExibicao}s</span>
-                        </td>
+                        <td class="py-3 px-3 space-y-1">${b.badge ? `<span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs inline-block">${b.badge}</span>` : ''}<span class="bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded-md text-[10px] block w-fit">⏱️ ${b.tempo || 5}s</span></td>
                         <td class="py-3 px-3 text-gray-600 text-xs font-semibold">${destinoStr}</td>
-                        <td class="py-3 px-3 text-right space-x-2">
-                            <button onclick="editarBanner('${b.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
-                            <button onclick="removerBanner('${b.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</button>
-                        </td>
+                        <td class="py-3 px-3 text-right space-x-2"><button onclick="editarBanner('${b.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button><button onclick="removerBanner('${b.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</button></td>
                     </tr>
                 `;
             });
@@ -936,26 +878,20 @@
             document.getElementById('banner-imgpc').value = b.imagemPc || '';
             document.getElementById('banner-imgmob').value = b.imagemMobile || '';
             document.getElementById('banner-linktipo').value = b.linkTipo || 'produtos';
-            
             alternarDestinoBannerAdmin(b.linkTipo || 'produtos');
-            
             if (b.linkTipo === 'produto' || b.linkTipo === 'categoria') {
-                setTimeout(() => {
-                    document.getElementById('banner-linkalvo-prod').value = b.linkAlvo || '';
-                }, 50);
+                setTimeout(() => { document.getElementById('banner-linkalvo-prod').value = b.linkAlvo || ''; }, 50);
             }
-
             document.getElementById('form-banner-title').innerText = "🖼️ Editar Banner Responsivo";
             document.getElementById('form-container-banner').classList.remove('hidden');
         }
 
         window.removerBanner = async function(idFirestore) {
-            if (confirm("Tem certeza que deseja apagar este banner?")) {
-                try { await deleteDoc(doc(db, "slides", idFirestore)); await carregarDadosAdmin(); } catch (err) { console.error("Erro ao apagar banner:", err); }
-            }
+            if (confirm("Deseja apagar este banner?")) { await deleteDoc(doc(db, "slides", idFirestore)); await carregarDadosAdmin(); }
         }
 
         window.toggleFormularioDeposito = function() { document.getElementById('form-container-deposito').classList.toggle('hidden'); }
+        
         window.abrirNovoDeposito = function() { 
             document.getElementById('dep-id').value = ''; 
             document.getElementById('deposito-form').reset(); 
@@ -964,7 +900,8 @@
             document.getElementById('container-fotos-dinamico').innerHTML = ''; 
             adicionarCampoFoto(); 
             atualizarSubCamposDeposito(); 
-            document.getElementById('form-container-deposito').classList.remove('hidden'); 
+            document.getElementById('form-container-deposito').classList.remove('hidden');
+            document.getElementById('form-container-deposito').scrollIntoView({ behavior: 'smooth' });
         }
         
         window.adicionarCampoFoto = function(url = '', texto = '', posH = 'left', posV = 'top') {
@@ -972,36 +909,14 @@
             const div = document.createElement('div');
             div.className = "bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3 relative group";
             div.innerHTML = `
-                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 font-bold text-xs bg-red-50 hover:bg-red-100 p-1.5 rounded-lg transition">🗑️ Remover Foto</button>
+                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 font-bold text-xs bg-red-50 hover:bg-red-100 p-1.5 rounded-lg transition">🗑️ Remover</button>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">URL da Imagem ou Ficheiro</label>
-                        <input type="text" class="input-foto-url w-full px-3 py-2 border rounded-lg text-xs" value="${url}" placeholder="https://...">
-                        <div class="flex gap-2 mt-1">
-                            <input type="file" accept="image/*" onchange="carregarImagemOriginalDinamica(this)" class="w-full text-[10px] text-gray-400 py-1">
-                            <button type="button" onclick="abrirRecorteDinamicoBtn(this, 1/1)" class="bg-teal-50 text-[#0E8685] font-bold text-[10px] px-2.5 py-1 rounded-lg border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">✂️ Recortar</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Descrição / Variação nesta foto</label>
-                        <input type="text" class="input-foto-texto w-full px-3 py-2 border rounded-lg text-xs" value="${texto}" placeholder="Ex: Tonalidade Azul Escuro">
-                    </div>
+                    <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">URL da Imagem ou Ficheiro</label><input type="text" class="input-foto-url w-full px-3 py-2 border rounded-lg text-xs" value="${url}" placeholder="https://..."><div class="flex gap-2 mt-1"><input type="file" accept="image/*" onchange="carregarImagemOriginalDinamica(this)" class="w-full text-[10px] text-gray-400 py-1"><button type="button" onclick="abrirRecorteDinamicoBtn(this, 1/1)" class="bg-teal-50 text-[#0E8685] font-bold text-[10px] px-2.5 py-1 rounded-lg border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">✂️ Recortar</button></div></div>
+                    <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Descrição / Variação</label><input type="text" class="input-foto-texto w-full px-3 py-2 border rounded-lg text-xs" value="${texto}" placeholder="Ex: Azul"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Horizontal</label>
-                        <select class="input-foto-posh w-full px-3 py-2 border rounded-lg text-xs bg-white">
-                            <option value="left" ${posH === 'left' ? 'selected' : ''}>Esquerda</option>
-                            <option value="right" ${posH === 'right' ? 'selected' : ''}>Direita</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Vertical</label>
-                        <select class="input-foto-posv w-full px-3 py-2 border rounded-lg text-xs bg-white">
-                            <option value="top" ${posV === 'top' ? 'selected' : ''}>Em Cima</option>
-                            <option value="bottom" ${posV === 'bottom' ? 'selected' : ''}>Em Baixo</option>
-                        </select>
-                    </div>
+                    <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Horizontal</label><select class="input-foto-posh w-full px-3 py-2 border rounded-lg text-xs bg-white"><option value="left" ${posH === 'left' ? 'selected' : ''}>Esquerda</option><option value="right" ${posH === 'right' ? 'selected' : ''}>Direita</option></select></div>
+                    <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Vertical</label><select class="input-foto-posv w-full px-3 py-2 border rounded-lg text-xs bg-white"><option value="top" ${posV === 'top' ? 'selected' : ''}>Em Cima</option><option value="bottom" ${posV === 'bottom' ? 'selected' : ''}>Em Baixo</option></select></div>
                 </div>
             `;
             container.appendChild(div);
@@ -1012,36 +927,14 @@
             const div = document.createElement('div');
             div.className = "bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3 relative group";
             div.innerHTML = `
-                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 font-bold text-xs bg-red-50 hover:bg-red-100 p-1.5 rounded-lg transition">🗑️ Remover Foto</button>
+                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 font-bold text-xs bg-red-50 hover:bg-red-100 p-1.5 rounded-lg transition">🗑️ Remover</button>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">URL da Imagem ou Ficheiro</label>
-                        <input type="text" class="input-prod-foto-url w-full px-3 py-2 border rounded-lg text-xs" value="${url}" placeholder="https://...">
-                        <div class="flex gap-2 mt-1">
-                            <input type="file" accept="image/*" onchange="carregarImagemOriginalDinamica(this)" class="w-full text-[10px] text-gray-400 py-1">
-                            <button type="button" onclick="abrirRecorteDinamicoBtn(this, 1/1)" class="bg-teal-50 text-[#0E8685] font-bold text-[10px] px-2.5 py-1 rounded-lg border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">✂️ Recortar</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Descrição / Variação nesta foto</label>
-                        <input type="text" class="input-prod-foto-texto w-full px-3 py-2 border rounded-lg text-xs" value="${texto}" placeholder="Ex: Tonalidade Azul Escuro">
-                    </div>
+                    <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">URL da Imagem ou Ficheiro</label><input type="text" class="input-prod-foto-url w-full px-3 py-2 border rounded-lg text-xs" value="${url}" placeholder="https://..."><div class="flex gap-2 mt-1"><input type="file" accept="image/*" onchange="carregarImagemOriginalDinamica(this)" class="w-full text-[10px] text-gray-400 py-1"><button type="button" onclick="abrirRecorteDinamicoBtn(this, 1/1)" class="bg-teal-50 text-[#0E8685] font-bold text-[10px] px-2.5 py-1 rounded-lg border border-teal-200 hover:bg-teal-100 transition whitespace-nowrap">✂️ Recortar</button></div></div>
+                    <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Descrição / Variação</label><input type="text" class="input-prod-foto-texto w-full px-3 py-2 border rounded-lg text-xs" value="${texto}" placeholder="Ex: Azul"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Horizontal</label>
-                        <select class="input-prod-foto-posh w-full px-3 py-2 border rounded-lg text-xs bg-white">
-                            <option value="left" ${posH === 'left' ? 'selected' : ''}>Esquerda</option>
-                            <option value="right" ${posH === 'right' ? 'selected' : ''}>Direita</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Vertical</label>
-                        <select class="input-prod-foto-posv w-full px-3 py-2 border rounded-lg text-xs bg-white">
-                            <option value="top" ${posV === 'top' ? 'selected' : ''}>Em Cima</option>
-                            <option value="bottom" ${posV === 'bottom' ? 'selected' : ''}>Em Baixo</option>
-                        </select>
-                    </div>
+                    <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Horizontal</label><select class="input-prod-foto-posh w-full px-3 py-2 border rounded-lg text-xs bg-white"><option value="left" ${posH === 'left' ? 'selected' : ''}>Esquerda</option><option value="right" ${posH === 'right' ? 'selected' : ''}>Direita</option></select></div>
+                    <div><label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Posição Vertical</label><select class="input-prod-foto-posv w-full px-3 py-2 border rounded-lg text-xs bg-white"><option value="top" ${posV === 'top' ? 'selected' : ''}>Em Cima</option><option value="bottom" ${posV === 'bottom' ? 'selected' : ''}>Em Baixo</option></select></div>
                 </div>
             `;
             container.appendChild(div);
@@ -1051,15 +944,10 @@
             const cat = document.getElementById('dep-categoria').value;
             const container = document.getElementById('sub-campos-container');
             container.innerHTML = '';
-            if (cat === 'Incensos') {
-                container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fragrância</label><input type="text" id="sub-fragrancia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white" placeholder="Ex: Lavanda"></div><div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Marca</label><input type="text" id="sub-marca" class="w-full px-3 py-2 border rounded-lg text-sm bg-white" placeholder="Ex: Marca X"></div>`;
-            } else if (cat === 'Pedras' || cat === 'Semijoias') {
-                container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-variação</label><input type="text" id="sub-variacao" class="w-full px-3 py-2 border rounded-lg text-sm bg-white" placeholder="Ex: Bruto / Rolado"></div>`;
-            } else if (cat === 'Velas') {
-                container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Aroma</label><input type="text" id="sub-aroma" class="w-full px-3 py-2 border rounded-lg text-sm bg-white" placeholder="Ex: Canela"></div>`;
-            } else if (cat === 'Imagens (Esculturas)') {
-                container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-categoria</label><select id="sub-categoria-img" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="Católica">Católica</option><option value="Zen">Zen</option><option value="Axé">Axé</option></select></div>`;
-            }
+            if (cat === 'Incensos') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fragrância</label><input type="text" id="sub-fragrancia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div><div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Marca</label><input type="text" id="sub-marca" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
+            else if (cat === 'Pedras' || cat === 'Semijoias') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-variação</label><input type="text" id="sub-variacao" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
+            else if (cat === 'Velas') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Aroma</label><input type="text" id="sub-aroma" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
+            else if (cat === 'Imagens (Esculturas)') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-categoria</label><select id="sub-categoria-img" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="Católica">Católica</option><option value="Zen">Zen</option><option value="Axé">Axé</option></select></div>`; }
         }
 
         window.salvarItemDeposito = async function(e) {
@@ -1067,9 +955,9 @@
             const idDoc = document.getElementById('dep-id').value;
             const nome = document.getElementById('dep-nome').value;
             const categoria = document.getElementById('dep-categoria').value;
-            const preco = parseFloat(document.getElementById('dep-preco').value);
-            const compra = parseFloat(document.getElementById('dep-compra').value);
-            const qtd = parseInt(document.getElementById('dep-qtd').value);
+            const preco = parseFloat(document.getElementById('dep-preco').value) || 0;
+            const compra = parseFloat(document.getElementById('dep-compra').value) || 0;
+            const qtd = parseInt(document.getElementById('dep-qtd').value) || 0;
             const descricao = document.getElementById('dep-descricao').value;
             const exibirNaVitrine = document.getElementById('dep-exibir-vitrine').checked;
 
@@ -1082,7 +970,7 @@
                 const posV = bloco.querySelector('.input-foto-posv').value;
                 if (url) imagens.push({ url, texto, posH, posV });
             });
-            if (imagens.length === 0) { alert("Adicione pelo menos uma foto ao item no depósito!"); return; }
+            if (imagens.length === 0) { alert("Adicione pelo menos uma foto!"); return; }
 
             let subDetalhes = {};
             if (categoria === 'Incensos') { subDetalhes.fragrancia = document.getElementById('sub-fragrancia')?.value || ''; subDetalhes.marca = document.getElementById('sub-marca')?.value || ''; }
@@ -1092,29 +980,42 @@
 
             const itemData = { nome, categoria, preco, compra, qtd, imagens, descricao, subDetalhes };
             try {
-                if (idDoc !== '') {
-                    await updateDoc(doc(db, "deposito", idDoc), itemData);
-                } else {
-                    await addDoc(collection(db, "deposito"), itemData);
-                }
+                if (idDoc !== '') await updateDoc(doc(db, "deposito", idDoc), itemData);
+                else await addDoc(collection(db, "deposito"), itemData);
 
                 if (exibirNaVitrine) {
                     const produtoExistente = listaProdutos.find(p => p.nome.toLowerCase() === nome.toLowerCase());
                     const dadosVitrine = { nome, preco, categoria, imagens, descricao, destaque: false };
-
-                    if (produtoExistente) {
-                        await updateDoc(doc(db, "produtos", produtoExistente.idFirestore), dadosVitrine);
-                    } else {
-                        await addDoc(collection(db, "produtos"), dadosVitrine);
-                    }
+                    if (produtoExistente) await updateDoc(doc(db, "produtos", produtoExistente.idFirestore), dadosVitrine);
+                    else await addDoc(collection(db, "produtos"), dadosVitrine);
                 }
 
                 await carregarDadosAdmin();
                 toggleFormularioDeposito();
                 alert("✅ Item guardado com sucesso!");
-            } catch (err) { 
-                console.error("Erro ao guardar no depósito:", err); 
-                alert("Erro ao gravar no Firebase: " + err.message); 
+            } catch (err) { console.error("Erro:", err); alert("Erro ao guardar: " + err.message); }
+        }
+
+        /* FILTRO DE CATEGORIA E PAGINAÇÃO */
+        window.mudarFiltroCategoriaDeposito = function(cat) {
+            categoriaFiltroAtual = cat;
+            paginaAtualDeposito = 1;
+            renderizarTabelaDeposito();
+        }
+
+        window.paginaAnteriorDeposito = function() {
+            if (paginaAtualDeposito > 1) {
+                paginaAtualDeposito--;
+                renderizarTabelaDeposito();
+            }
+        }
+
+        window.proximaPaginaDeposito = function() {
+            const filtrados = categoriaFiltroAtual === "TODAS" ? listaDeposito : listaDeposito.filter(d => d.categoria === categoriaFiltroAtual);
+            const totalPaginas = Math.ceil(filtrados.length / itensPorPagina) || 1;
+            if (paginaAtualDeposito < totalPaginas) {
+                paginaAtualDeposito++;
+                renderizarTabelaDeposito();
             }
         }
 
@@ -1122,9 +1023,25 @@
             const tbody = document.getElementById('admin-deposito-list');
             const counter = document.getElementById('total-deposito');
             tbody.innerHTML = '';
-            counter.innerText = `${listaDeposito.length} itens`;
-            if (listaDeposito.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum item registrado no depósito.</td></tr>`; return; }
-            listaDeposito.forEach((d) => {
+
+            const filtrados = categoriaFiltroAtual === "TODAS" ? listaDeposito : listaDeposito.filter(d => d.categoria === categoriaFiltroAtual);
+            counter.innerText = `${filtrados.length} itens`;
+
+            const totalPaginas = Math.ceil(filtrados.length / itensPorPagina) || 1;
+            if (paginaAtualDeposito > totalPaginas) paginaAtualDeposito = totalPaginas;
+
+            const inicio = (paginaAtualDeposito - 1) * itensPorPagina;
+            const fim = inicio + itensPorPagina;
+            const itensPagina = filtrados.slice(inicio, fim);
+
+            document.getElementById('paginacao-info').innerText = `Página ${paginaAtualDeposito} de ${totalPaginas} (${filtrados.length} no total)`;
+
+            if (itensPagina.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum item encontrado nesta categoria.</td></tr>`;
+                return;
+            }
+
+            itensPagina.forEach((d) => {
                 const imgCapa = (d.imagens && d.imagens.length > 0) ? d.imagens[0].url : '';
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
@@ -1134,8 +1051,8 @@
                         </td>
                         <td class="py-3 px-3 text-gray-600">${d.categoria}</td>
                         <td class="py-3 px-3 font-semibold text-xs">
-                            <span class="text-[#C5A880] font-bold">Venda: R$ ${Number(d.preco).toFixed(2)}</span><br>
-                            <span class="text-gray-400">Custo: R$ ${Number(d.compra || 0).toFixed(2)}</span>
+                            <span class="text-[#C5A880] font-bold">Venda: R$ ${Number(d.preco || 0).toFixed(2)}</span><br>
+                            <span class="text-gray-500 font-bold">Custo: R$ ${Number(d.compra || 0).toFixed(2)}</span>
                         </td>
                         <td class="py-3 px-3 text-center"><span class="bg-teal-50 text-[#0E8685] font-bold px-2.5 py-1 rounded-full text-xs">${d.qtd} un.</span></td>
                         <td class="py-3 px-3 text-right space-x-2">
@@ -1153,9 +1070,9 @@
             document.getElementById('dep-id').value = d.idFirestore;
             document.getElementById('dep-nome').value = d.nome;
             document.getElementById('dep-categoria').value = d.categoria;
-            document.getElementById('dep-preco').value = d.preco;
-            document.getElementById('dep-compra').value = d.compra || '';
-            document.getElementById('dep-qtd').value = d.qtd;
+            document.getElementById('dep-preco').value = d.preco || 0;
+            document.getElementById('dep-compra').value = d.compra || 0;
+            document.getElementById('dep-qtd').value = d.qtd || 0;
             document.getElementById('dep-descricao').value = d.descricao || '';
             document.getElementById('dep-exibir-vitrine').checked = true;
 
@@ -1176,17 +1093,19 @@
             }, 50);
 
             document.getElementById('form-deposito-title').innerText = "🏢 Editar Item no Depósito";
-            document.getElementById('form-container-deposito').classList.remove('hidden');
+            const formContainer = document.getElementById('form-container-deposito');
+            formContainer.classList.remove('hidden');
+            formContainer.scrollIntoView({ behavior: 'smooth' });
         }
 
         window.removerDeposito = async function(idFirestore) {
-            if (confirm("Tem certeza que deseja apagar este item do depósito?")) {
-                try { await deleteDoc(doc(db, "deposito", idFirestore)); await carregarDadosAdmin(); } catch (err) { console.error("Erro ao apagar do depósito:", err); }
+            if (confirm("Deseja apagar este item?")) {
+                await deleteDoc(doc(db, "deposito", idFirestore));
+                await carregarDadosAdmin();
             }
         }
 
         window.toggleFormularioProduto = function() { document.getElementById('form-container-produto').classList.toggle('hidden'); }
-
         window.abrirNovoProdutoDeposito = function() {
             document.getElementById('prod-id').value = '';
             document.getElementById('product-form').reset();
@@ -1197,6 +1116,7 @@
             document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
             atualizarSelectDeposito();
             document.getElementById('form-container-produto').classList.remove('hidden');
+            document.getElementById('form-container-produto').scrollIntoView({ behavior: 'smooth' });
         }
 
         window.abrirNovoProdutoDireto = function() {
@@ -1209,6 +1129,7 @@
             document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
             adicionarCampoFotoProd();
             document.getElementById('form-container-produto').classList.remove('hidden');
+            document.getElementById('form-container-produto').scrollIntoView({ behavior: 'smooth' });
         }
 
         window.atualizarSelectDeposito = function() {
@@ -1231,7 +1152,6 @@
                 document.getElementById('prod-preco').value = item.preco;
                 document.getElementById('prod-categoria').value = item.categoria;
                 document.getElementById('prod-descricao').value = item.descricao || '';
-                
                 const containerFotos = document.getElementById('container-fotos-prod-dinamico');
                 containerFotos.innerHTML = '';
                 const listaImgs = (item.imagens && item.imagens.length > 0) ? item.imagens : [{ url: item.imagem || '', texto: '', posH: 'left', posV: 'top' }];
@@ -1265,30 +1185,19 @@
                     const posV = bloco.querySelector('.input-prod-foto-posv').value;
                     if (url) imagens.push({ url, texto, posH, posV });
                 });
-                if (imagens.length === 0) { alert("Adicione pelo menos uma foto ao produto!"); return; }
+                if (imagens.length === 0) { alert("Adicione pelo menos uma foto!"); return; }
             }
 
             const dadosProd = { nome, preco, categoria, imagens, descricao, destaque };
             try {
-                if (idDoc !== '') {
-                    await updateDoc(doc(db, "produtos", idDoc), dadosProd);
-                } else {
+                if (idDoc !== '') await updateDoc(doc(db, "produtos", idDoc), dadosProd);
+                else {
                     await addDoc(collection(db, "produtos"), dadosProd);
-                    
-                    await addDoc(collection(db, "deposito"), {
-                        nome,
-                        categoria,
-                        preco,
-                        compra: preco * 0.7,
-                        qtd: 10,
-                        imagens,
-                        descricao,
-                        subDetalhes: {}
-                    });
+                    await addDoc(collection(db, "deposito"), { nome, categoria, preco, compra: preco * 0.7, qtd: 10, imagens, descricao, subDetalhes: {} });
                 }
                 await carregarDadosAdmin();
                 toggleFormularioProduto();
-            } catch (err) { console.error("Erro ao guardar produto:", err); alert("Erro ao guardar no Firebase: " + err.message); }
+            } catch (err) { console.error("Erro:", err); }
         }
 
         window.renderizarTabelaProdutos = function() {
@@ -1296,22 +1205,16 @@
             const counter = document.getElementById('total-produtos');
             tbody.innerHTML = '';
             counter.innerText = `${listaProdutos.length} produtos`;
-            if (listaProdutos.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum produto cadastrado na vitrine.</td></tr>`; return; }
+            if (listaProdutos.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-400">Nenhum produto na vitrine.</td></tr>`; return; }
             listaProdutos.forEach((p) => {
                 const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : '';
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
-                        <td class="py-3 px-3 flex items-center gap-3">
-                            <img src="${imgCapa || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border">
-                            <span class="font-bold text-gray-800">${p.nome}</span>
-                        </td>
+                        <td class="py-3 px-3 flex items-center gap-3"><img src="${imgCapa || 'https://via.placeholder.com/50'}" class="w-10 h-10 object-cover rounded-lg border"><span class="font-bold text-gray-800">${p.nome}</span></td>
                         <td class="py-3 px-3 text-gray-600">${p.categoria}</td>
                         <td class="py-3 px-3 font-extrabold text-[#C5A880]">R$ ${Number(p.preco).toFixed(2)}</td>
                         <td class="py-3 px-3 text-center">${p.destaque ? '<span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold">Sim</span>' : '<span class="text-gray-400 text-xs">Não</span>'}</td>
-                        <td class="py-3 px-3 text-right space-x-2">
-                            <button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
-                            <button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</i></button>
-                        </td>
+                        <td class="py-3 px-3 text-right space-x-2"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</button></td>
                     </tr>
                 `;
             });
@@ -1336,12 +1239,11 @@
 
             document.getElementById('form-produto-title').innerText = "📦 Editar Produto na Loja";
             document.getElementById('form-container-produto').classList.remove('hidden');
+            document.getElementById('form-container-produto').scrollIntoView({ behavior: 'smooth' });
         }
 
         window.removerProduto = async function(idFirestore) {
-            if (confirm("Tem certeza que deseja remover este produto da vitrine?")) {
-                try { await deleteDoc(doc(db, "produtos", idFirestore)); await carregarDadosAdmin(); } catch (err) { console.error("Erro ao excluir produto:", err); }
-            }
+            if (confirm("Remover este produto da vitrine?")) { await deleteDoc(doc(db, "produtos", idFirestore)); await carregarDadosAdmin(); }
         }
     </script>
 </body>
