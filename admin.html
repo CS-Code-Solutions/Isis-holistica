@@ -239,6 +239,9 @@
                             <p class="text-gray-500 text-sm">Controle de quantidades, preços, galeria de fotos e importação automática por planilha.</p>
                         </div>
                         <div class="flex flex-wrap gap-3 items-center">
+                            <button onclick="limparProdutosNumericos()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold px-4 py-3 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                                <span>🗑️</span> <span>Limpar Produtos Numéricos</span>
+                            </button>
                             <label id="label-btn-upload" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center gap-2 text-sm cursor-pointer">
                                 <span id="icone-upload">📁</span> <span id="texto-btn-upload">Importar Planilha (Excel)</span>
                                 <input type="file" id="input-excel-upload" accept=".xlsx, .xls, .csv" onchange="importarPlanilhaExcel(this)" class="hidden">
@@ -510,7 +513,41 @@
             }
         }
 
-        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL - COM VALIDAÇÃO RIGOROSA DE TEXTO (IGNORA NÚMEROS) */
+        /* FUNÇÃO PARA APAGAR APENAS OS REGISTOS NUMÉRICOS, PRESERVANDO OS CADASTROS REAIS */
+        window.limparProdutosNumericos = async function() {
+            if (!confirm("Tem certeza que deseja apagar todos os itens que possuem apenas números no nome? (Os seus produtos reais cadastrados serão mantidos)")) {
+                return;
+            }
+
+            try {
+                let removidosDep = 0;
+                let removidosProd = 0;
+
+                // Remove do depósito se o nome for puramente numérico (ex: "1", "2", "3")
+                for (const d of listaDeposito) {
+                    if (/^\d+$/.test(d.nome.trim())) {
+                        await deleteDoc(doc(db, "deposito", d.idFirestore));
+                        removidosDep++;
+                    }
+                }
+
+                // Remove da vitrine de produtos se o nome for puramente numérico
+                for (const p of listaProdutos) {
+                    if (/^\d+$/.test(p.nome.trim())) {
+                        await deleteDoc(doc(db, "produtos", p.idFirestore));
+                        removidosProd++;
+                    }
+                }
+
+                await carregarDadosAdmin();
+                alert(`✅ Limpeza concluída! Foram removidos ${removidosDep} itens numéricos do depósito e ${removidosProd} da vitrine. Os seus produtos reais continuam salvos.`);
+            } catch (err) {
+                console.error("Erro ao limpar itens numéricos:", err);
+                alert("❌ Ocorreu um erro ao limpar os itens.");
+            }
+        };
+
+        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -541,12 +578,11 @@
 
                         let nomeProduto = '';
                         
-                        // Varre a linha para encontrar um texto real (que contenha letras e não seja apenas números ou cabeçalho)
+                        // Procura um texto válido com letras na linha
                         for (let c = 0; c < row.length; c++) {
                             const val = row[c];
                             if (val !== undefined && val !== null) {
                                 const valStr = String(val).trim();
-                                // Exige que tenha letras e não seja "PRODUTO"
                                 if (/[a-zA-ZÀ-ÿ]/.test(valStr) && valStr.toUpperCase() !== 'PRODUTO') {
                                     nomeProduto = valStr;
                                     break;
@@ -554,7 +590,6 @@
                             }
                         }
 
-                        // Fallback estrito para a coluna B (índice 1) se contiver letras
                         if (!nomeProduto && row[1] !== undefined) {
                             const valB = String(row[1]).trim();
                             if (/[a-zA-ZÀ-ÿ]/.test(valB)) {
@@ -575,58 +610,31 @@
                         }
 
                         if (nomeProduto) {
-                            // Procura se já existe no depósito (pelo nome exato ou se o registo anterior era um número)
-                            const jaExisteDep = listaDeposito.find(d => 
-                                d.nome.toLowerCase() === nomeProduto.toLowerCase() || 
-                                /^\d+$/.test(d.nome)
-                            );
-                            
-                            if (jaExisteDep) {
-                                await updateDoc(doc(db, "deposito", jaExisteDep.idFirestore), {
-                                    nome: nomeProduto,
-                                    qtd: qtdEstoque,
-                                    preco: precoVenda
-                                });
-                            } else {
-                                await addDoc(collection(db, "deposito"), {
-                                    nome: nomeProduto,
-                                    categoria: 'Incensos',
-                                    preco: precoVenda,
-                                    qtd: qtdEstoque,
-                                    imagens: [],
-                                    descricao: 'Importado via planilha de estoque.',
-                                    subDetalhes: {}
-                                });
-                            }
+                            await addDoc(collection(db, "deposito"), {
+                                nome: nomeProduto,
+                                categoria: 'Incensos',
+                                preco: precoVenda,
+                                qtd: qtdEstoque,
+                                imagens: [],
+                                descricao: 'Importado via planilha de estoque.',
+                                subDetalhes: {}
+                            });
 
-                            // Procura na Vitrine
-                            const jaExisteVitrine = listaProdutos.find(p => 
-                                p.nome.toLowerCase() === nomeProduto.toLowerCase() || 
-                                /^\d+$/.test(p.nome)
-                            );
-
-                            if (jaExisteVitrine) {
-                                await updateDoc(doc(db, "produtos", jaExisteVitrine.idFirestore), {
-                                    nome: nomeProduto,
-                                    preco: precoVenda
-                                });
-                            } else {
-                                await addDoc(collection(db, "produtos"), {
-                                    nome: nomeProduto,
-                                    categoria: 'Incensos',
-                                    preco: precoVenda,
-                                    imagens: [],
-                                    descricao: 'Importado via planilha de estoque.',
-                                    destaque: false
-                                });
-                            }
+                            await addDoc(collection(db, "produtos"), {
+                                nome: nomeProduto,
+                                categoria: 'Incensos',
+                                preco: precoVenda,
+                                imagens: [],
+                                descricao: 'Importado via planilha de estoque.',
+                                destaque: false
+                            });
 
                             importadosCount++;
                         }
                     }
 
                     await carregarDadosAdmin();
-                    alert(`✅ Sucesso! ${importadosCount} produtos foram importados/atualizados com os nomes corretos (os números antigos foram substituídos automaticamente).`);
+                    alert(`✅ Sucesso! ${importadosCount} novos produtos foram importados corretamente.`);
                 } catch (err) {
                     console.error("Erro ao processar planilha:", err);
                     alert("❌ Erro ao ler o ficheiro Excel.");
