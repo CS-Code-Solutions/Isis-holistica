@@ -43,21 +43,6 @@
             z-index: 2;
         }
 
-        /* Estilo para fundo administrativo/logo */
-        .admin-logo-bg {
-            background-image: url('42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .admin-logo-overlay {
-            position: absolute;
-            inset: 0;
-            background-color: rgba(11, 46, 45, 0.85);
-            z-index: 0;
-        }
-
         #modal-carousel-wrapper {
             position: relative;
             width: 100%;
@@ -114,7 +99,24 @@
             <nav class="hidden md:flex space-x-8 text-sm font-semibold items-center text-gray-700">
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
                 <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">Destaques & Rituais</button>
-                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] transition">Loja esotérica</button>
+                
+                <!-- MENU CASCATA (DROPDOWN) DESKTOP -->
+                <div class="relative group">
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] transition flex items-center gap-1 py-2">
+                        Loja esotérica ▾
+                    </button>
+                    <div class="absolute top-full left-0 w-56 bg-white border border-gray-100 shadow-xl rounded-2xl py-2 hidden group-hover:block z-50">
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">✨ Todos os Produtos</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-amber-600 hover:bg-amber-50 transition">🔥 Promoções</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🌿 Incensos</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🔮 Pedras e Cristais</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">💎 Semijoias</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🏺 Decoração</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🕯️ Velas</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🗿 Imagens</button>
+                    </div>
+                </div>
+
                 <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685] transition">Espaço terapêutico</button>
                 <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Nossa essência</button>
             </nav>
@@ -128,11 +130,28 @@
             </div>
         </div>
 
-        <!-- MENU MOBILE -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-lg">
+        <!-- MENU MOBILE COM CASCATA EXPANSÍVEL -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 shadow-lg">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
             <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">Destaques & Rituais</button>
-            <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Loja Esotérica</button>
+            
+            <div class="border-y border-gray-100 py-2 space-y-1">
+                <button onclick="toggleMobileLojaSubmenu()" class="flex justify-between items-center w-full py-1 font-semibold text-gray-700 hover:text-[#0E8685]">
+                    <span>Loja Esotérica</span>
+                    <span id="mobile-submenu-arrow">▼</span>
+                </button>
+                <div id="mobile-loja-submenu" class="hidden pl-4 space-y-2 pt-2">
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">✨ Todos os Produtos</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="block text-left text-xs font-bold text-amber-600">🔥 Promoções</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="block text-left text-xs font-bold text-gray-600">🌿 Incensos</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="block text-left text-xs font-bold text-gray-600">🔮 Pedras e Cristais</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="block text-left text-xs font-bold text-gray-600">💎 Semijoias</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block text-left text-xs font-bold text-gray-600">🏺 Decoração</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="block text-left text-xs font-bold text-gray-600">🕯️ Velas</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens (Esculturas)');" class="block text-left text-xs font-bold text-gray-600">🗿 Imagens</button>
+                </div>
+            </div>
+
             <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
             <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Nossa Essência</button>
         </div>
@@ -299,17 +318,25 @@
                 <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
             </div>
             <div class="flex flex-wrap justify-center gap-2 mt-4">
-                <button onclick="filtrarProdutos('todos')" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
-                <button onclick="filtrarProdutos('Promoções')" class="px-4 py-2 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow">🔥 Promoções</button>
-                <button onclick="filtrarProdutos('Incensos')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌿 Incensos</button>
-                <button onclick="filtrarProdutos('Pedras')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
-                <button onclick="filtrarProdutos('Semijoias')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">Semijoias</button>
-                <button onclick="filtrarProdutos('Decoracao')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🏺 Decoração</button>
-                <button onclick="filtrarProdutos('Velas')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🕯️ Velas</button>
-                <button onclick="filtrarProdutos('Imagens (Esculturas)')" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🗿 Imagens</button>
+                <button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
+                <button onclick="filtrarProdutos('Promoções')" id="btn-cat-Promoções" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔥 Promoções</button>
+                <button onclick="filtrarProdutos('Incensos')" id="btn-cat-Incensos" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌿 Incensos</button>
+                <button onclick="filtrarProdutos('Pedras')" id="btn-cat-Pedras" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
+                <button onclick="filtrarProdutos('Semijoias')" id="btn-cat-Semijoias" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">Semijoias</button>
+                <button onclick="filtrarProdutos('Decoracao')" id="btn-cat-Decoracao" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🏺 Decoração</button>
+                <button onclick="filtrarProdutos('Velas')" id="btn-cat-Velas" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🕯️ Velas</button>
+                <button onclick="filtrarProdutos('Imagens (Esculturas)')" id="btn-cat-Imagens" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🗿 Imagens</button>
             </div>
         </div>
+        
         <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+
+        <!-- PAGINAÇÃO DA LOJA (MÁXIMO 15 ITENS POR PÁGINA) -->
+        <div class="flex justify-between items-center mt-12 pt-6 border-t border-gray-200 text-xs font-bold text-gray-700">
+            <button onclick="mudarPaginaLoja(-1)" id="btn-loja-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl transition shadow-sm">⬅️ Anterior</button>
+            <span id="loja-paginacao-info" class="text-sm">Página 1 de 1</span>
+            <button onclick="mudarPaginaLoja(1)" id="btn-loja-prox" class="bg-[#0E8685] hover:bg-opacity-90 text-white px-5 py-3 rounded-xl transition shadow">Próxima ➡️</button>
+        </div>
     </section>
 
     <!-- ESPAÇO TERAPÊUTICO -->
@@ -503,6 +530,12 @@
         let produtoAtualModal = null;
         let fotoSelecionadaModalIndex = 0;
         let mensagemWhatsAppPendente = "";
+
+        // ESTADO DE PAGINAÇÃO DA LOJA (15 ITENS MÁXIMO POR PÁGINA)
+        let paginaAtualLoja = 1;
+        const itensPorPaginaLoja = 15;
+        let categoriaFiltroAtiva = 'todos';
+        let termoBuscaAtivo = '';
         
         let carrinho = [];
         try {
@@ -526,7 +559,7 @@
                 });
 
                 renderizarDestaquesHome();
-                renderizarProdutosLoja('todos');
+                renderizarProdutosLoja();
                 inicializarCarrossel();
                 atualizarContadorCarrinho();
             } catch (e) {
@@ -546,6 +579,13 @@
 
         window.toggleMobileMenu = function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        window.toggleMobileLojaSubmenu = function() {
+            const sub = document.getElementById('mobile-loja-submenu');
+            const arrow = document.getElementById('mobile-submenu-arrow');
+            sub.classList.toggle('hidden');
+            arrow.innerText = sub.classList.contains('hidden') ? '▼' : '▲';
         }
 
         window.abrirModalBanner = function() {
@@ -886,15 +926,16 @@
             });
         }
 
-        function renderizarProdutosLoja(categoriaFiltro, termoBusca = '') {
+        /* RENDERIZAÇÃO DA LOJA COM PAGINAÇÃO DE 15 ITENS MÁXIMO POR PÁGINA */
+        function renderizarProdutosLoja() {
             const container = document.getElementById('grid-produtos');
             if (!container) return;
             container.innerHTML = '';
             
-            let filtrados = listaProdutos.filter(p => categoriaFiltro === 'todos' || p.categoria === categoriaFiltro);
+            let filtrados = listaProdutos.filter(p => categoriaFiltroAtiva === 'todos' || p.categoria === categoriaFiltroAtiva);
             
-            if (termoBusca.trim() !== '') {
-                const termo = termoBusca.toLowerCase();
+            if (termoBuscaAtivo.trim() !== '') {
+                const termo = termoBuscaAtivo.toLowerCase();
                 filtrados = filtrados.filter(p => 
                     p.nome.toLowerCase().includes(termo) || 
                     (p.descricao || '').toLowerCase().includes(termo) ||
@@ -902,12 +943,22 @@
                 );
             }
 
-            if (filtrados.length === 0) {
+            const totalPaginas = Math.ceil(filtrados.length / itensPorPaginaLoja) || 1;
+            if (paginaAtualLoja > totalPaginas) paginaAtualLoja = totalPaginas;
+            if (paginaAtualLoja < 1) paginaAtualLoja = 1;
+
+            const inicio = (paginaAtualLoja - 1) * itensPorPaginaLoja;
+            const fim = inicio + itensPorPaginaLoja;
+            const itensPagina = filtrados.slice(inicio, fim);
+
+            document.getElementById('loja-paginacao-info').innerText = `Página ${paginaAtualLoja} de ${totalPaginas} (${filtrados.length} itens)`;
+
+            if (itensPagina.length === 0) {
                 container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Nenhum produto encontrado.</div>`;
                 return;
             }
 
-            filtrados.forEach(p => {
+            itensPagina.forEach(p => {
                 const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
                 container.innerHTML += `
                     <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
@@ -928,11 +979,51 @@
             });
         }
 
-        window.pesquisarProdutos = function(termo) { renderizarProdutosLoja('todos', termo); }
+        window.mudarPaginaLoja = function(direcao) {
+            let filtrados = listaProdutos.filter(p => categoriaFiltroAtiva === 'todos' || p.categoria === categoriaFiltroAtiva);
+            if (termoBuscaAtivo.trim() !== '') {
+                const termo = termoBuscaAtivo.toLowerCase();
+                filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(termo) || (p.descricao || '').toLowerCase().includes(termo));
+            }
+            const totalPaginas = Math.ceil(filtrados.length / itensPorPaginaLoja) || 1;
+
+            paginaAtualLoja += direcao;
+            if (paginaAtualLoja < 1) paginaAtualLoja = 1;
+            if (paginaAtualLoja > totalPaginas) paginaAtualLoja = totalPaginas;
+
+            renderizarProdutosLoja();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.pesquisarProdutos = function(termo) {
+            termoBuscaAtivo = termo;
+            paginaAtualLoja = 1;
+            renderizarProdutosLoja();
+        }
+
         window.filtrarProdutos = function(cat) {
+            categoriaFiltroAtiva = cat;
+            termoBuscaAtivo = '';
+            paginaAtualLoja = 1;
+            
             const inputBusca = document.getElementById('input-busca');
             if (inputBusca) inputBusca.value = '';
-            renderizarProdutosLoja(cat);
+
+            // Atualiza botões visuais de categoria
+            const botoesCat = ['todos', 'Promoções', 'Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens (Esculturas)'];
+            botoesCat.forEach(b => {
+                const btnEl = document.getElementById(`btn-cat-${b}`);
+                if (btnEl) {
+                    if (b === cat) {
+                        btnEl.className = "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow";
+                    } else {
+                        btnEl.className = "px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition";
+                    }
+                }
+            });
+
+            renderizarProdutosLoja();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
