@@ -510,7 +510,7 @@
             }
         }
 
-        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL COM FEEDBACK VISUAL */
+        /* IMPORTAÇÃO AUTOMÁTICA DE PLANILHA EXCEL (COLUNA B = NOME DO PRODUTO) */
         window.importarPlanilhaExcel = function(input) {
             const file = input.files[0];
             if (!file) return;
@@ -519,7 +519,6 @@
             const iconeUpload = document.getElementById('icone-upload');
             const textoBtn = document.getElementById('texto-btn-upload');
 
-            // Muda visualmente o botão para indicar processamento
             labelBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
             labelBtn.classList.add('bg-amber-600', 'cursor-not-allowed');
             iconeUpload.innerText = '⏳';
@@ -540,43 +539,59 @@
                         const row = rows[i];
                         if (!row || row.length === 0) continue;
 
+                        // Coluna B (índice 1) é o Nome do Produto na planilha
                         const nomeProduto = row[1] !== undefined ? String(row[1]).trim() : '';
                         if (!nomeProduto || nomeProduto === '' || nomeProduto.toLowerCase() === 'produto') continue;
 
+                        // Quantidade / Estoque (Colunas vizinhas ou índice 4)
                         let qtdEstoque = parseInt(row[4]);
                         if (isNaN(qtdEstoque)) {
                             qtdEstoque = parseInt(row[3]) || parseInt(row[2]) || 1;
                         }
 
+                        // Preço de Venda (Índice 6 ou vizinhas)
                         let precoVenda = parseFloat(row[6]);
                         if (isNaN(precoVenda)) {
                             precoVenda = parseFloat(row[5]) || 0.00;
                         }
 
                         if (nomeProduto && precoVenda > 0) {
-                            const jaExisteDep = listaDeposito.find(d => d.nome.toLowerCase() === nomeProduto.toLowerCase());
+                            // Procura se já existe no depósito (pelo nome exato ou se o nome antigo era apenas um número)
+                            const jaExisteDep = listaDeposito.find(d => 
+                                d.nome.toLowerCase() === nomeProduto.toLowerCase() || 
+                                (!isNaN(d.nome) && Number(d.nome) === (i - 5))
+                            );
                             
-                            const itemData = {
-                                nome: nomeProduto,
-                                categoria: 'Incensos',
-                                preco: precoVenda,
-                                qtd: qtdEstoque,
-                                imagens: [],
-                                descricao: 'Importado via planilha de estoque.',
-                                subDetalhes: {}
-                            };
-
                             if (jaExisteDep) {
                                 await updateDoc(doc(db, "deposito", jaExisteDep.idFirestore), {
+                                    nome: nomeProduto, // Atualiza para o nome correto
                                     qtd: qtdEstoque,
                                     preco: precoVenda
                                 });
                             } else {
-                                await addDoc(collection(db, "deposito"), itemData);
+                                await addDoc(collection(db, "deposito"), {
+                                    nome: nomeProduto,
+                                    categoria: 'Incensos',
+                                    preco: precoVenda,
+                                    qtd: qtdEstoque,
+                                    imagens: [],
+                                    descricao: 'Importado via planilha de estoque.',
+                                    subDetalhes: {}
+                                });
                             }
 
-                            const jaExisteVitrine = listaProdutos.find(p => p.nome.toLowerCase() === nomeProduto.toLowerCase());
-                            if (!jaExisteVitrine) {
+                            // Procura na Vitrine
+                            const jaExisteVitrine = listaProdutos.find(p => 
+                                p.nome.toLowerCase() === nomeProduto.toLowerCase() || 
+                                (!isNaN(p.nome) && Number(p.nome) === (i - 5))
+                            );
+
+                            if (jaExisteVitrine) {
+                                await updateDoc(doc(db, "produtos", jaExisteVitrine.idFirestore), {
+                                    nome: nomeProduto, // Atualiza para o nome correto
+                                    preco: precoVenda
+                                });
+                            } else {
                                 await addDoc(collection(db, "produtos"), {
                                     nome: nomeProduto,
                                     categoria: 'Incensos',
@@ -592,12 +607,11 @@
                     }
 
                     await carregarDadosAdmin();
-                    alert(`✅ Sucesso! Concluído o carregamento. ${importadosCount} produtos foram importados/atualizados no Depósito e na Vitrine.`);
+                    alert(`✅ Sucesso! Concluído o carregamento. ${importadosCount} produtos foram importados/atualizados com os nomes corretos na Vitrine e no Depósito.`);
                 } catch (err) {
                     console.error("Erro ao processar planilha:", err);
                     alert("❌ Erro ao ler o ficheiro Excel. Verifique se o formato corresponde ao modelo esperado.");
                 } finally {
-                    // Restaura o botão ao estado original
                     labelBtn.classList.remove('bg-amber-600', 'cursor-not-allowed');
                     labelBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
                     iconeUpload.innerText = '📁';
