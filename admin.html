@@ -96,6 +96,9 @@
                     <button onclick="mudarAbaAdmin('deposito')" id="nav-deposito" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
                         <span>🏢</span> Depósito / Estoque Geral
                     </button>
+                    <button onclick="mudarAbaAdmin('categorias')" id="nav-categorias" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
+                        <span>🏷️</span> Gestão de Categorias
+                    </button>
                     <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
                         <span>🖼️</span> Banners do Carrossel
                     </button>
@@ -150,14 +153,7 @@
                             <div id="bloco-deposito-vinculo" class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-teal-50/40 p-4 rounded-xl border border-teal-100">
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">1. Filtrar por Categoria</label>
-                                    <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white">
-                                        <option value="Incensos">Incensos</option>
-                                        <option value="Pedras">Pedras e Cristais</option>
-                                        <option value="Semijoias">Semijoias</option>
-                                        <option value="Decoracao">Decoração</option>
-                                        <option value="Velas">Velas</option>
-                                        <option value="Imagens">Imagens</option>
-                                    </select>
+                                    <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white"></select>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
@@ -172,14 +168,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
-                                    <select id="prod-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white">
-                                        <option value="Incensos">Incensos</option>
-                                        <option value="Pedras">Pedras e Cristais</option>
-                                        <option value="Semijoias">Semijoias</option>
-                                        <option value="Decoracao">Decoração</option>
-                                        <option value="Velas">Velas</option>
-                                        <option value="Imagens">Imagens</option>
-                                    </select>
+                                    <select id="prod-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white"></select>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
@@ -212,7 +201,7 @@
                         </form>
                     </div>
 
-                    <!-- LISTAGEM DE PRODUTOS DA VITRINE COM FILTRO E PAGINAÇÃO DE 20 ITENS -->
+                    <!-- LISTAGEM DE PRODUTOS DA VITRINE -->
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
                             <div class="flex items-center gap-3">
@@ -223,12 +212,6 @@
                                 <label class="text-xs font-bold text-gray-500 uppercase whitespace-nowrap">Categoria:</label>
                                 <select id="filtro-cat-produtos" onchange="mudarFiltroCategoriaProdutos(this.value)" class="w-full sm:w-auto px-3 py-2 border rounded-xl text-xs bg-white font-semibold text-[#0E8685] focus:outline-none focus:border-[#0E8685]">
                                     <option value="TODAS">Todas</option>
-                                    <option value="Incensos">Incensos</option>
-                                    <option value="Pedras">Pedras</option>
-                                    <option value="Semijoias">Semijoias</option>
-                                    <option value="Decoracao">Decoração</option>
-                                    <option value="Velas">Velas</option>
-                                    <option value="Imagens">Imagens</option>
                                 </select>
                             </div>
                         </div>
@@ -248,7 +231,6 @@
                             </table>
                         </div>
 
-                        <!-- CONTROLES DE PAGINAÇÃO DA VITRINE -->
                         <div class="flex justify-between items-center pt-4 border-t text-xs font-bold text-gray-600">
                             <button onclick="paginaAnteriorProdutos()" id="btn-prod-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl transition">⬅️ Anterior</button>
                             <span id="paginacao-prod-info" class="text-center">Página 1 de 1</span>
@@ -288,18 +270,11 @@
                             <input type="hidden" id="dep-id">
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Item no Depósito</label>
-                                <input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Imagem de Oxalá">
+                                <input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Item Exemplo">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
-                                <select id="dep-categoria" onchange="atualizarSubCamposDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
-                                    <option value="Incensos">Incensos</option>
-                                    <option value="Pedras">Pedras e Cristais</option>
-                                    <option value="Semijoias">Semijoias</option>
-                                    <option value="Decoracao">Decoração</option>
-                                    <option value="Velas">Velas</option>
-                                    <option value="Imagens">Imagens</option>
-                                </select>
+                                <select id="dep-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white"></select>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Valor de Compra / Custo (R$)</label>
@@ -313,11 +288,10 @@
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantidade em Estoque</label>
                                 <input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 1">
                             </div>
-                            <div id="sub-campos-container" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-xl border border-teal-100"></div>
 
                             <div class="md:col-span-2 space-y-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
                                 <div class="flex justify-between items-center">
-                                    <label class="block text-xs font-bold text-[#0E8685] uppercase">📸 Galeria de Fotos (Carrossel com Descrições Posicionadas)</label>
+                                    <label class="block text-xs font-bold text-[#0E8685] uppercase">📸 Galeria de Fotos</label>
                                     <button type="button" onclick="adicionarCampoFoto()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-opacity-90 transition">➕ Adicionar Foto</button>
                                 </div>
                                 <div id="container-fotos-dinamico" class="space-y-4"></div>
@@ -354,12 +328,6 @@
                                 <label class="text-xs font-bold text-gray-500 uppercase whitespace-nowrap">Categoria:</label>
                                 <select id="filtro-cat-deposito" onchange="mudarFiltroCategoriaDeposito(this.value)" class="w-full sm:w-auto px-3 py-2 border rounded-xl text-xs bg-white font-semibold text-[#0E8685] focus:outline-none focus:border-[#0E8685]">
                                     <option value="TODAS">Todas</option>
-                                    <option value="Incensos">Incensos</option>
-                                    <option value="Pedras">Pedras</option>
-                                    <option value="Semijoias">Semijoias</option>
-                                    <option value="Decoracao">Decoração</option>
-                                    <option value="Velas">Velas</option>
-                                    <option value="Imagens">Imagens</option>
                                 </select>
                             </div>
                         </div>
@@ -374,7 +342,63 @@
                     </div>
                 </div>
 
-                <!-- SEÇÃO 3: BANNERS -->
+                <!-- SEÇÃO 3: GESTÃO DE CATEGORIAS (NOVO!) -->
+                <div id="admin-section-categorias" class="space-y-8 hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-[#0E8685]">Gestão de Categorias</h2>
+                            <p class="text-gray-500 text-sm">Crie, edite ou remova as categorias que aparecem no menu e filtros da loja virtual.</p>
+                        </div>
+                        <button onclick="abrirNovaCategoria()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                            <span>➕</span> <span>Adicionar Nova Categoria</span>
+                        </button>
+                    </div>
+
+                    <!-- FORMULÁRIO DE CATEGORIA -->
+                    <div id="form-container-categoria" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 max-w-xl">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 id="form-categoria-title" class="text-xl font-bold text-[#0E8685]">🏷️ Nova Categoria</h3>
+                            <button onclick="toggleFormularioCategoria()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                        </div>
+                        <form id="categoria-form" onsubmit="salvarCategoria(event)" class="space-y-4">
+                            <input type="hidden" id="cat-id">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome da Categoria</label>
+                                <input type="text" id="cat-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Incensos, Cristais, Terços...">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Ícone / Emoji (Opcional)</label>
+                                <input type="text" id="cat-icone" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 🌿, 🔮, ✨">
+                            </div>
+                            <div class="flex gap-3 pt-4 border-t">
+                                <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Categoria</button>
+                                <button type="button" onclick="toggleFormularioCategoria()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- LISTAGEM DE CATEGORIAS -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-bold text-[#0E8685]">🏷️ Categorias Registradas</h3>
+                            <span id="total-categorias" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 categorias</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                        <th class="py-3 px-3">Ícone</th>
+                                        <th class="py-3 px-3">Nome da Categoria</th>
+                                        <th class="py-3 px-3 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-categoria-list" class="text-sm divide-y"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 4: BANNERS -->
                 <div id="admin-section-banners" class="space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                         <div>
@@ -501,6 +525,7 @@
 
         let listaProdutos = [];
         let listaDeposito = [];
+        let listaCategorias = [];
         let listaBanners = [];
         let cropperInstance = null;
         let targetInputGlobal = null;
@@ -544,6 +569,11 @@
 
         async function carregarDadosAdmin() {
             try {
+                const snapCat = await getDocs(collection(db, "categorias"));
+                listaCategorias = [];
+                snapCat.forEach(d => listaCategorias.push({ idFirestore: d.id, ...d.data() }));
+                listaCategorias.sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+
                 const snapProd = await getDocs(collection(db, "produtos"));
                 listaProdutos = [];
                 snapProd.forEach(d => listaProdutos.push({ idFirestore: d.id, ...d.data() }));
@@ -556,16 +586,149 @@
                 listaBanners = [];
                 snapBanners.forEach(d => listaBanners.push({ idFirestore: d.id, ...d.data() }));
 
+                atualizarSelectsCategoriaAdmin();
                 renderizarTabelaProdutos();
                 renderizarTabelaDeposito();
+                renderizarTabelaCategorias();
                 renderizarTabelaBanners();
-                atualizarSelectDeposito();
             } catch (e) {
                 console.error("Erro ao carregar dados do Firebase:", e);
             }
         }
 
-        /* FUNÇÃO PARA REMOVER DA VITRINE PRODUTOS QUE NÃO TÊM FOTO VÁLIDA */
+        function atualizarSelectsCategoriaAdmin() {
+            // Filtro de Categorias no Inventário
+            const selFiltroProd = document.getElementById('filtro-cat-produtos');
+            if (selFiltroProd) {
+                const atual = selFiltroProd.value;
+                selFiltroProd.innerHTML = `<option value="TODAS">Todas</option>`;
+                listaCategorias.forEach(c => {
+                    selFiltroProd.innerHTML += `<option value="${c.nome}">${c.icone || ''} ${c.nome}</option>`;
+                });
+                selFiltroProd.value = atual;
+            }
+
+            // Filtro de Categorias no Depósito
+            const selFiltroDep = document.getElementById('filtro-cat-deposito');
+            if (selFiltroDep) {
+                const atual = selFiltroDep.value;
+                selFiltroDep.innerHTML = `<option value="TODAS">Todas</option>`;
+                listaCategorias.forEach(c => {
+                    selFiltroDep.innerHTML += `<option value="${c.nome}">${c.icone || ''} ${c.nome}</option>`;
+                });
+                selFiltroDep.value = atual;
+            }
+
+            // Select de Categoria no formulário de Depósito
+            const selDepCat = document.getElementById('dep-categoria');
+            if (selDepCat) {
+                selDepCat.innerHTML = '';
+                listaCategorias.forEach(c => {
+                    selDepCat.innerHTML += `<option value="${c.nome}">${c.icone || ''} ${c.nome}</option>`;
+                });
+            }
+
+            // Select de Categoria no formulário de Produto Direto / Vínculo
+            const selProdCat = document.getElementById('prod-categoria');
+            if (selProdCat) {
+                selProdCat.innerHTML = '';
+                listaCategorias.forEach(c => {
+                    selProdCat.innerHTML += `<option value="${c.nome}">${c.icone || ''} ${c.nome}</option>`;
+                });
+            }
+
+            const selProdFiltro = document.getElementById('prod-filtro-cat');
+            if (selProdFiltro) {
+                selProdFiltro.innerHTML = '';
+                listaCategorias.forEach(c => {
+                    selProdFiltro.innerHTML += `<option value="${c.nome}">${c.icone || ''} ${c.nome}</option>`;
+                });
+            }
+        }
+
+        /* GESTÃO DE CATEGORIAS */
+        window.abrirNovaCategoria = function() {
+            document.getElementById('cat-id').value = '';
+            document.getElementById('categoria-form').reset();
+            document.getElementById('form-categoria-title').innerText = "🏷️ Nova Categoria";
+            document.getElementById('form-container-categoria').classList.remove('hidden');
+            document.getElementById('form-container-categoria').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.toggleFormularioCategoria = function() {
+            document.getElementById('form-container-categoria').classList.toggle('hidden');
+        }
+
+        window.salvarCategoria = async function(e) {
+            e.preventDefault();
+            const idDoc = document.getElementById('cat-id').value;
+            const nome = document.getElementById('cat-nome').value.trim();
+            const icone = document.getElementById('cat-icone').value.trim();
+
+            if (!nome) { alert("Insira o nome da categoria!"); return; }
+
+            try {
+                if (idDoc) {
+                    await updateDoc(doc(db, "categorias", idDoc), { nome, icone });
+                } else {
+                    await addDoc(collection(db, "categorias"), { nome, icone });
+                }
+                await carregarDadosAdmin();
+                toggleFormularioCategoria();
+                alert("✅ Categoria guardada com sucesso!");
+            } catch (err) {
+                console.error("Erro ao guardar categoria:", err);
+                alert("❌ Erro ao guardar categoria: " + err.message);
+            }
+        }
+
+        window.editarCategoria = function(idFirestore) {
+            const cat = listaCategorias.find(c => c.idFirestore === idFirestore);
+            if (!cat) return;
+            document.getElementById('cat-id').value = cat.idFirestore;
+            document.getElementById('cat-nome').value = cat.nome || '';
+            document.getElementById('cat-icone').value = cat.icone || '';
+            document.getElementById('form-categoria-title').innerText = "🏷️ Editar Categoria";
+            document.getElementById('form-container-categoria').classList.remove('hidden');
+            document.getElementById('form-container-categoria').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.removerCategoria = async function(idFirestore) {
+            if (confirm("Tem certeza que deseja apagar esta categoria?")) {
+                try {
+                    await deleteDoc(doc(db, "categorias", idFirestore));
+                    await carregarDadosAdmin();
+                } catch (err) {
+                    console.error("Erro ao apagar categoria:", err);
+                }
+            }
+        }
+
+        function renderizarTabelaCategorias() {
+            const tbody = document.getElementById('admin-categoria-list');
+            const counter = document.getElementById('total-categorias');
+            tbody.innerHTML = '';
+            counter.innerText = `${listaCategorias.length} categorias`;
+
+            if (listaCategorias.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="py-6 text-center text-gray-400">Nenhuma categoria cadastrada.</td></tr>`;
+                return;
+            }
+
+            listaCategorias.forEach(c => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3 px-3 text-xl">${c.icone || '✨'}</td>
+                        <td class="py-3 px-3 font-bold text-gray-800">${c.nome}</td>
+                        <td class="py-3 px-3 text-right space-x-2">
+                            <button onclick="editarCategoria('${c.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
+                            <button onclick="removerCategoria('${c.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
         window.removerProdutosSemFoto = async function() {
             if (!confirm("Deseja remover da vitrine todos os produtos que não possuem fotos cadastradas?")) return;
 
@@ -681,6 +844,7 @@
 
                         if (nomeProduto) {
                             const itemExistente = listaDeposito.find(d => d.nome.trim().toLowerCase() === nomeProduto.trim().toLowerCase());
+                            const categoriaPadrao = listaCategorias.length > 0 ? listaCategorias[0].nome : 'Geral';
 
                             if (itemExistente) {
                                 await updateDoc(doc(db, "deposito", itemExistente.idFirestore), {
@@ -692,7 +856,7 @@
                             } else {
                                 await addDoc(collection(db, "deposito"), {
                                     nome: nomeProduto,
-                                    categoria: 'Incensos',
+                                    categoria: categoriaPadrao,
                                     preco: precoVenda,
                                     compra: precoCompra,
                                     qtd: qtdEstoque,
@@ -706,7 +870,7 @@
                     }
 
                     await carregarDadosAdmin();
-                    alert(`✅ Sincronização concluída!\n- ${atualizadosCount} atualizados (estoque e custo).\n- ${novosCount} novos adicionados ao depósito (sem fotos na vitrine).`);
+                    alert(`✅ Sincronização concluída!\n- ${atualizadosCount} atualizados (estoque e custo).\n- ${novosCount} novos adicionados ao depósito.`);
                 } catch (err) {
                     console.error("Erro ao processar planilha:", err);
                     alert("❌ Erro ao ler o ficheiro Excel.");
@@ -803,10 +967,12 @@
         window.mudarAbaAdmin = function(aba) {
             document.getElementById('admin-section-inventario').classList.add('hidden');
             document.getElementById('admin-section-deposito').classList.add('hidden');
+            document.getElementById('admin-section-categorias').classList.add('hidden');
             document.getElementById('admin-section-banners').classList.add('hidden');
 
             document.getElementById('nav-inventario').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
             document.getElementById('nav-deposito').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+            document.getElementById('nav-categorias').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
             document.getElementById('nav-banners').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
 
             if (aba === 'inventario') {
@@ -815,6 +981,9 @@
             } else if (aba === 'deposito') {
                 document.getElementById('admin-section-deposito').classList.remove('hidden');
                 document.getElementById('nav-deposito').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
+            } else if (aba === 'categorias') {
+                document.getElementById('admin-section-categorias').classList.remove('hidden');
+                document.getElementById('nav-categorias').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
             } else if (aba === 'banners') {
                 document.getElementById('admin-section-banners').classList.remove('hidden');
                 document.getElementById('nav-banners').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
@@ -846,7 +1015,8 @@
             } else if (val === 'categoria') {
                 container.classList.remove('hidden');
                 labelAlvo.innerText = "Selecione a Categoria";
-                selectAlvo.innerHTML = `<option value="Incensos">🌿 Incensos</option><option value="Pedras">🔮 Pedras e Cristais</option><option value="Semijoias">✨ Semijoias</option><option value="Decoracao">🪷 Decoração</option><option value="Velas">🕯️ Velas</option><option value="Imagens">🗿 Imagens</option>`;
+                selectAlvo.innerHTML = '';
+                listaCategorias.forEach(c => { selectAlvo.innerHTML += `<option value="${c.nome}">${c.icone || ''} ${c.nome}</option>`; });
             } else { container.classList.add('hidden'); }
         }
 
@@ -932,7 +1102,6 @@
             document.getElementById('form-deposito-title').innerText = "🏢 Novo Item no Depósito"; 
             document.getElementById('container-fotos-dinamico').innerHTML = ''; 
             adicionarCampoFoto(); 
-            atualizarSubCamposDeposito(); 
             document.getElementById('form-container-deposito').classList.remove('hidden');
             document.getElementById('form-container-deposito').scrollIntoView({ behavior: 'smooth' });
         }
@@ -973,16 +1142,6 @@
             container.appendChild(div);
         }
 
-        window.atualizarSubCamposDeposito = function() {
-            const cat = document.getElementById('dep-categoria').value;
-            const container = document.getElementById('sub-campos-container');
-            container.innerHTML = '';
-            if (cat === 'Incensos') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Fragrância</label><input type="text" id="sub-fragrancia" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div><div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Marca</label><input type="text" id="sub-marca" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
-            else if (cat === 'Pedras' || cat === 'Semijoias') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-variação</label><input type="text" id="sub-variacao" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
-            else if (cat === 'Velas') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Aroma</label><input type="text" id="sub-aroma" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"></div>`; }
-            else if (cat === 'Imagens') { container.innerHTML = `<div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Sub-categoria</label><select id="sub-categoria-img" class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="Católica">Católica</option><option value="Zen">Zen</option><option value="Axé">Axé</option></select></div>`; }
-        }
-
         window.salvarItemDeposito = async function(e) {
             e.preventDefault();
             const idDoc = document.getElementById('dep-id').value;
@@ -1005,13 +1164,7 @@
             });
             if (imagens.length === 0) { alert("Adicione pelo menos uma foto!"); return; }
 
-            let subDetalhes = {};
-            if (categoria === 'Incensos') { subDetalhes.fragrancia = document.getElementById('sub-fragrancia')?.value || ''; subDetalhes.marca = document.getElementById('sub-marca')?.value || ''; }
-            else if (categoria === 'Pedras' || categoria === 'Semijoias') { subDetalhes.variacao = document.getElementById('sub-variacao')?.value || ''; }
-            else if (categoria === 'Velas') { subDetalhes.aroma = document.getElementById('sub-aroma')?.value || ''; }
-            else if (categoria === 'Imagens') { subDetalhes.subCategoriaImg = document.getElementById('sub-categoria-img')?.value || ''; }
-
-            const itemData = { nome, categoria, preco, compra, qtd, imagens, descricao, subDetalhes };
+            const itemData = { nome, categoria, preco, compra, qtd, imagens, descricao, subDetalhes: {} };
             try {
                 if (idDoc !== '') await updateDoc(doc(db, "deposito", idDoc), itemData);
                 else await addDoc(collection(db, "deposito"), itemData);
@@ -1056,7 +1209,6 @@
         }
 
         window.proximaPaginaProdutos = function() {
-            // Filtra apenas produtos que possuem imagem válida
             const produtosComFoto = listaProdutos.filter(p => {
                 const temImgValida = (p.imagens && p.imagens.length > 0 && p.imagens[0].url && p.imagens[0].url.trim() !== '') || (p.imagem && p.imagem.trim() !== '');
                 return temImgValida;
@@ -1072,7 +1224,6 @@
             const counter = document.getElementById('total-produtos');
             tbody.innerHTML = '';
 
-            // FILTRA AUTOMATICAMENTE APENAS OS PRODUTOS QUE POSSUEM FOTO VÁLIDA
             const produtosComFoto = listaProdutos.filter(p => {
                 const temImgValida = (p.imagens && p.imagens.length > 0 && p.imagens[0].url && p.imagens[0].url.trim() !== '') || (p.imagem && p.imagem.trim() !== '');
                 return temImgValida;
@@ -1170,21 +1321,10 @@
             document.getElementById('dep-descricao').value = d.descricao || '';
             document.getElementById('dep-exibir-vitrine').checked = true;
 
-            atualizarSubCamposDeposito();
             const containerFotos = document.getElementById('container-fotos-dinamico');
             containerFotos.innerHTML = '';
             const listaImgs = (d.imagens && d.imagens.length > 0) ? d.imagens : [{ url: d.imagem || '', texto: '', posH: 'left', posV: 'top' }];
             listaImgs.forEach(img => adicionarCampoFoto(img.url, img.texto, img.posH, img.posV));
-            
-            setTimeout(() => {
-                if (d.subDetalhes) {
-                    if (document.getElementById('sub-fragrancia')) document.getElementById('sub-fragrancia').value = d.subDetalhes.fragrancia || '';
-                    if (document.getElementById('sub-marca')) document.getElementById('sub-marca').value = d.subDetalhes.marca || '';
-                    if (document.getElementById('sub-variacao')) document.getElementById('sub-variacao').value = d.subDetalhes.variacao || '';
-                    if (document.getElementById('sub-aroma')) document.getElementById('sub-aroma').value = d.subDetalhes.aroma || '';
-                    if (document.getElementById('sub-categoria-img')) document.getElementById('sub-categoria-img').value = d.subDetalhes.subCategoriaImg || '';
-                }
-            }, 50);
 
             document.getElementById('form-deposito-title').innerText = "🏢 Editar Item no Depósito";
             const formContainer = document.getElementById('form-container-deposito');
@@ -1205,7 +1345,6 @@
             document.getElementById('product-form').reset();
             document.getElementById('prod-modo-cadastro').value = 'deposito';
             document.getElementById('bloco-deposito-vinculo').classList.remove('hidden');
-            document.getElementById('prod-categoria').removeAttribute('disabled');
             document.getElementById('form-produto-title').innerText = "📦 Adicionar Produto do Depósito";
             document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
             atualizarSelectDeposito();
@@ -1218,7 +1357,6 @@
             document.getElementById('product-form').reset();
             document.getElementById('prod-modo-cadastro').value = 'direto';
             document.getElementById('bloco-deposito-vinculo').classList.add('hidden');
-            document.getElementById('prod-categoria').removeAttribute('disabled');
             document.getElementById('form-produto-title').innerText = "➕ Adicionar Produto Direto na Vitrine e Estoque";
             document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
             adicionarCampoFotoProd();
