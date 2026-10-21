@@ -565,6 +565,8 @@
                 atualizarContadorCarrinho();
             } catch (e) {
                 console.error("Erro ao carregar dados do Firebase:", e);
+                // Garante que mesmo com erro no Firebase as categorias aparecem na loja
+                atualizarMenusCategoriasUI();
             }
         }
 
@@ -578,7 +580,10 @@
         }
 
         function atualizarMenusCategoriasUI() {
-            const todas = obterTodasCategoriasUnificadasLoja();
+            let mapa = new Map();
+            categoriasBaseFixas.forEach(c => mapa.set(c.nome, c));
+            listaCategoriasCustom.forEach(c => mapa.set(c.nome, { ...c, isCustom: true }));
+            const todas = Array.from(mapa.values());
 
             // Menu Desktop
             const desktopSub = document.getElementById('desktop-subcategorias-dinamicas');
