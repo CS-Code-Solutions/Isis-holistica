@@ -6,102 +6,189 @@
     <title>Painel Gestor | Ísis Holística</title>
     <link rel="icon" type="image/png" href="ico.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+<body class="bg-gray-50 text-gray-800 flex flex-col md:flex-row min-h-screen">
 
-    <!-- CABEÇALHO DO PAINEL -->
-    <header class="bg-[#0E8685] text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <span class="text-xl">⚙️</span>
-                <h1 class="font-bold text-base sm:text-lg">Painel Gestor | Ísis Holística</h1>
+    <!-- MODAL DE RECORTE -->
+    <div id="modal-recorte" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 max-w-xl w-full space-y-4 border border-teal-100 flex flex-col">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-lg font-bold text-[#0E8685]">✂️ Ajustar e Recortar Imagem</h3>
+                <button type="button" onclick="fecharModalRecorte()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="index.html" target="_blank" class="bg-white text-[#0E8685] px-4 py-2 rounded-xl text-xs font-bold hover:bg-teal-50 transition shadow">Ver Loja ➔</a>
+            <div class="max-h-[60vh] overflow-hidden flex items-center justify-center bg-gray-900 rounded-xl">
+                <img id="imagem-para-recortar" src="" alt="Recorte" class="max-w-full block">
             </div>
-        </div>
-    </header>
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full space-y-8">
-        
-        <!-- SEÇÃO DE GESTÃO DE CATEGORIAS -->
-        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100 pb-6">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900">Gestão de Categorias</h2>
-                    <p class="text-xs text-gray-500 mt-1">Crie, edite ou remova as categorias que aparecem no menu, filtros da loja e cadastros[span_1](start_span)[span_1](end_span).</p>
-                </div>
-                <button onclick="abrirModalCategoria()" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-5 py-3 rounded-2xl shadow transition text-xs whitespace-nowrap">
-                    + Adicionar Nova Categoria
-                </button>
-            </div>
-
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-sm text-gray-800 flex items-center gap-2"><span>🏷️</span> Categorias Registradas</h3>
-                    <span id="total-categorias" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 categorias</span>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead>
-                            <tr class="border-b border-gray-100 text-gray-400 text-xs uppercase tracking-wider">
-                                <th class="py-3 px-3">Ícone</th>
-                                <th class="py-3 px-3">Nome da Categoria</th>
-                                <th class="py-3 px-3 text-right">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-categoria-list" class="divide-y divide-gray-50">
-                            <tr>
-                                <td colspan="3" class="text-center py-8 text-gray-400 text-xs">Carregando categorias...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- MODAL DE CATEGORIA -->
-    <div id="modal-categoria" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 relative space-y-4">
-            <button onclick="fecharModalCategoria()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 font-bold bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center">✕</button>
-            <h3 id="modal-cat-titulo" class="text-lg font-bold text-[#0E8685]">Adicionar Categoria</h3>
-            
-            <input type="hidden" id="cat-id-firestore">
-            
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome da Categoria</label>
-                    <input type="text" id="cat-nome" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: Amuletos">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Ícone / Emoji</label>
-                    <input type="text" id="cat-icone" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Ex: 🔮">
-                </div>
-                <button onclick="salvarCategoriaFirebase()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3 rounded-xl shadow transition text-xs">
-                    Salvar Categoria
-                </button>
+            <div class="flex gap-3 pt-2 border-t">
+                <button type="button" onclick="aplicarRecorte()" class="flex-1 bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition text-sm">Concluir Recorte</button>
+                <button type="button" onclick="fecharModalRecorte()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition text-sm">Cancelar</button>
             </div>
         </div>
     </div>
 
-    <!-- RODAPÉ -->
-    <footer class="bg-white border-t border-gray-100 py-8 text-center text-xs text-gray-400 mt-auto">
-        &copy; 2026 Ísis Holística. Todos os direitos reservados.<br>
-        <span>Powered by <span class="font-bold text-gray-600">CS Code Solutions</span></span>
-    </footer>
+    <!-- TELA DE LOGIN -->
+    <div id="login-overlay" class="fixed inset-0 z-50 bg-[#0E8685] flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full space-y-6 border border-teal-100">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl font-extrabold text-[#0E8685]">Painel Ísis Holística</h2>
+                <p class="text-xs text-gray-500">Insira as credenciais de administrador</p>
+            </div>
+            <form onsubmit="fazerLoginAdmin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">E-mail</label>
+                    <input type="email" id="login-email" required class="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Palavra-passe</label>
+                    <input type="password" id="login-senha" required class="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                </div>
+                <button type="submit" class="w-full bg-[#0E8685] text-white font-bold py-3.5 rounded-xl hover:bg-opacity-90 transition text-sm">Entrar no Painel</button>
+            </form>
+        </div>
+    </div>
 
-    <!-- SCRIPT DO PAINEL -->
+    <!-- PAINEL PRINCIPAL -->
+    <div id="admin-main-wrapper" class="contents hidden">
+        <aside class="w-full md:w-64 bg-[#0E8685] text-white flex flex-col justify-between shadow-xl z-20 md:min-h-screen">
+            <div>
+                <div class="p-6 border-b border-teal-700/50 hidden md:flex items-center gap-3">
+                    <span class="text-2xl">⚙️</span>
+                    <div>
+                        <h1 class="font-bold text-base leading-tight">Painel Gestor</h1>
+                        <span class="text-xs text-teal-200">Ísis Holística</span>
+                    </div>
+                </div>
+                <nav class="p-4 space-y-2">
+                    <button onclick="mudarAbaAdmin('inventario')" id="nav-inventario" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left">📦 Inventário da Loja</button>
+                    <button onclick="mudarAbaAdmin('deposito')" id="nav-deposito" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">🏢 Depósito / Estoque</button>
+                    <button onclick="mudarAbaAdmin('categorias')" id="nav-categorias" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">🏷️ Gestão de Categorias</button>
+                    <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">🖼️ Banners</button>
+                </nav>
+            </div>
+            <div class="p-4 border-t border-teal-700/50 space-y-3">
+                <a href="index.html" target="_blank" class="w-full flex items-center justify-center gap-2 bg-white text-[#0E8685] font-bold py-3 px-4 rounded-xl text-xs shadow hover:bg-teal-50 transition">Ver Loja ao Vivo ➔</a>
+                <button onclick="fazerLogout()" class="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition">Terminar Sessão</button>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col justify-between min-h-screen">
+            <div class="space-y-8">
+                
+                <!-- ABA 1: INVENTÁRIO -->
+                <div id="admin-section-inventario" class="space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos (Loja)</h2>
+                            <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual.</p>
+                        </div>
+                        <button onclick="abrirNovoProdutoDireto()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow hover:bg-opacity-90 transition text-xs">+ Adicionar Produto</button>
+                    </div>
+
+                    <div id="form-container-produto" class="hidden bg-white p-6 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 space-y-4">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <h3 id="form-produto-title" class="text-lg font-bold text-[#0E8685]">Cadastrar/Editar Produto</h3>
+                            <button onclick="toggleFormularioProduto()" class="text-gray-400 font-bold">✕</button>
+                        </div>
+                        <form id="product-form" onsubmit="salvarProduto(event)" class="space-y-4">
+                            <input type="hidden" id="prod-id">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div><label class="block text-xs font-bold uppercase mb-1">Nome</label><input type="text" id="prod-nome" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                                <div><label class="block text-xs font-bold uppercase mb-1">Categoria</label><select id="prod-categoria" class="select-categorias-dinamico w-full px-4 py-2 border rounded-xl text-sm bg-white"></select></div>
+                                <div><label class="block text-xs font-bold uppercase mb-1">Preço (R$)</label><input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase mb-1">URL da Foto</label>
+                                <input type="text" id="prod-foto" required class="w-full px-4 py-2 border rounded-xl text-sm" placeholder="https://...">
+                            </div>
+                            <div><label class="block text-xs font-bold uppercase mb-1">Descrição</label><textarea id="prod-descricao" rows="2" class="w-full px-4 py-2 border rounded-xl text-sm"></textarea></div>
+                            <div class="flex items-center gap-2"><input type="checkbox" id="prod-destaque" class="w-4 h-4"><label for="prod-destaque" class="text-sm font-semibold">Deixar em Destaque na Home</label></div>
+                            <div class="flex gap-3 pt-2"><button type="submit" class="bg-[#0E8685] text-white font-bold px-6 py-2.5 rounded-xl text-sm">Guardar Produto</button><button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 font-bold px-5 py-2.5 rounded-xl text-sm">Cancelar</button></div>
+                        </form>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex justify-between items-center"><h3 class="font-bold text-[#0E8685]">Produtos na Vitrine</h3><span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span></div>
+                        <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="admin-product-list" class="divide-y"></tbody></table></div>
+                    </div>
+                </div>
+
+                <!-- ABA 2: DEPÓSITO -->
+                <div id="admin-section-deposito" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div><h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2><p class="text-gray-500 text-sm">Controle de quantidades e custos.</p></div>
+                        <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow text-xs">+ Novo Item</button>
+                    </div>
+
+                    <div id="form-container-deposito" class="hidden bg-white p-6 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 space-y-4">
+                        <div class="flex justify-between items-center border-b pb-3"><h3 id="form-deposito-title" class="text-lg font-bold text-[#0E8685]">Item no Depósito</h3><button onclick="toggleFormularioDeposito()" class="text-gray-400 font-bold">✕</button></div>
+                        <form id="deposito-form" onsubmit="salvarItemDeposito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="hidden" id="dep-id">
+                            <div><label class="block text-xs font-bold uppercase mb-1">Nome</label><input type="text" id="dep-nome" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                            <div><label class="block text-xs font-bold uppercase mb-1">Categoria</label><select id="dep-categoria" class="select-categorias-dinamico w-full px-4 py-2 border rounded-xl text-sm bg-white"></select></div>
+                            <div><label class="block text-xs font-bold uppercase mb-1">Custo (R$)</label><input type="number" step="0.01" id="dep-compra" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                            <div><label class="block text-xs font-bold uppercase mb-1">Preço Venda (R$)</label><input type="number" step="0.01" id="dep-preco" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                            <div><label class="block text-xs font-bold uppercase mb-1">Quantidade</label><input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                            <div><label class="block text-xs font-bold uppercase mb-1">Foto URL</label><input type="text" id="dep-foto" class="w-full px-4 py-2 border rounded-xl text-sm" placeholder="https://..."></div>
+                            <div class="md:col-span-2 flex gap-3 pt-2"><button type="submit" class="bg-[#0E8685] text-white font-bold px-6 py-2.5 rounded-xl text-sm">Guardar no Depósito</button><button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 font-bold px-5 py-2.5 rounded-xl text-sm">Cancelar</button></div>
+                        </form>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex justify-between items-center"><h3 class="font-bold text-[#0E8685]">Itens no Estoque</h3><span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span></div>
+                        <div id="admin-deposito-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <!-- ABA 3: CATEGORIAS -->
+                <div id="admin-section-categorias" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div><h2 class="text-xl font-bold text-[#0E8685]">Gestão de Categorias</h2><p class="text-gray-500 text-sm">Crie, edite ou remova categorias customizadas.</p></div>
+                        <button onclick="abrirNovaCategoria()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow text-xs">+ Adicionar Categoria</button>
+                    </div>
+
+                    <div id="form-container-categoria" class="hidden bg-white p-6 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 max-w-lg space-y-4">
+                        <div class="flex justify-between items-center border-b pb-3"><h3 id="form-categoria-title" class="text-lg font-bold text-[#0E8685]">Nova Categoria</h3><button onclick="toggleFormularioCategoria()" class="text-gray-400 font-bold">✕</button></div>
+                        <form id="categoria-form" onsubmit="salvarCategoria(event)" class="space-y-4">
+                            <input type="hidden" id="cat-id">
+                            <div><label class="block text-xs font-bold uppercase mb-1">Nome</label><input type="text" id="cat-nome" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                            <div><label class="block text-xs font-bold uppercase mb-1">Ícone / Emoji</label><input type="text" id="cat-icone" class="w-full px-4 py-2 border rounded-xl text-sm" placeholder="🌿"></div>
+                            <div class="flex gap-3 pt-2"><button type="submit" class="bg-[#0E8685] text-white font-bold px-6 py-2.5 rounded-xl text-sm">Guardar Categoria</button><button type="button" onclick="toggleFormularioCategoria()" class="bg-gray-100 font-bold px-5 py-2.5 rounded-xl text-sm">Cancelar</button></div>
+                        </form>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex justify-between items-center"><h3 class="font-bold text-[#0E8685]">Categorias Registradas</h3><span id="total-categorias" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 categorias</span></div>
+                        <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="admin-categoria-list" class="divide-y"></tbody></table></div>
+                    </div>
+                </div>
+
+                <!-- ABA 4: BANNERS -->
+                <div id="admin-section-banners" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div><h2 class="text-xl font-bold text-[#0E8685]">Banners da Home</h2></div>
+                        <button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow text-xs">+ Adicionar Banner</button>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="admin-banner-list" class="divide-y"></tbody></table></div>
+                    </div>
+                </div>
+
+            </div>
+            <footer class="mt-16 pt-6 border-t text-center text-xs text-gray-400">© 2026 Ísis Holística — Powered by CS Code Solutions</footer>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyACzkdrx9HUFoZE-emtGCx4SXLX9w7F4w",
@@ -114,6 +201,12 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let listaProdutos = [];
+        let listaDeposito = [];
+        let listaBanners = [];
+        let listaCategoriasCustom = [];
 
         const categoriasBaseFixas = [
             { nome: 'Incensos', icone: '🌿' },
@@ -127,7 +220,20 @@
             { nome: 'Aromatizador', icone: '🍃' }
         ];
 
-        let listaCategoriasCustom = [];
+        onAuthStateChanged(auth, (user) => {
+            const overlay = document.getElementById('login-overlay');
+            const mainWrapper = document.getElementById('admin-main-wrapper');
+            if (user) { overlay.classList.add('hidden'); mainWrapper.classList.remove('hidden'); carregarDadosAdmin(); }
+            else { mainWrapper.classList.add('hidden'); overlay.classList.remove('hidden'); }
+        });
+
+        window.fazerLoginAdmin = async function(e) {
+            e.preventDefault();
+            try { await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-senha').value); }
+            catch (err) { alert("Erro no login: " + err.message); }
+        }
+
+        window.fazerLogout = async function() { await signOut(auth); }
 
         async function carregarDadosAdmin() {
             try {
@@ -135,14 +241,25 @@
                 listaCategoriasCustom = [];
                 snapCat.forEach(d => listaCategoriasCustom.push({ idFirestore: d.id, ...d.data() }));
 
-                renderizarTabelaCategorias();
-            } catch (e) {
-                console.error("Erro ao carregar dados do admin:", e);
-                renderizarTabelaCategorias();
-            }
-        }
+                const snapProd = await getDocs(collection(db, "produtos"));
+                listaProdutos = [];
+                snapProd.forEach(d => listaProdutos.push({ idFirestore: d.id, ...d.data() }));
 
-        carregarDadosAdmin();
+                const snapDep = await getDocs(collection(db, "deposito"));
+                listaDeposito = [];
+                snapDep.forEach(d => listaDeposito.push({ idFirestore: d.id, ...d.data() }));
+
+                const snapBanners = await getDocs(collection(db, "slides"));
+                listaBanners = [];
+                snapBanners.forEach(d => listaBanners.push({ idFirestore: d.id, ...d.data() }));
+
+                atualizarSelectsCategoriasGeral();
+                renderizarTabelaProdutos();
+                renderizarTabelaDeposito();
+                renderizarTabelaCategorias();
+                renderizarTabelaBanners();
+            } catch (e) { console.error("Erro ao carregar admin:", e); }
+        }
 
         function obterTodasCategoriasUnificadas() {
             let mapa = new Map();
@@ -151,86 +268,163 @@
             return Array.from(mapa.values());
         }
 
-        function renderizarTabelaCategorias() {
-            const tbody = document.getElementById('admin-categoria-list');
-            const counter = document.getElementById('total-categorias');
-            tbody.innerHTML = '';
-            
-            const todas = obterTodasCategoriasUnificadas();
-            counter.innerText = `${todas.length} categorias (${listaCategoriasCustom.length} customizadas)`;
-
-            todas.forEach(c => {
-                let acoesHtml = c.isCustom ? 
-                    `<button onclick="editarCategoria('${c.idFirestore}')" class="text-teal-600 hover:underline font-bold text-xs">Editar</button>
-                     <button onclick="removerCategoria('${c.idFirestore}')" class="text-red-500 hover:underline font-bold text-xs">Excluir</button>` :
-                    `<span class="text-gray-400 text-xs italic">Categoria padrão do sistema</span>`;
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 border-b border-gray-50">
-                        <td class="py-3 px-3 text-xl">${c.icone || '✨'}</td>
-                        <td class="py-3 px-3 font-bold text-gray-800">${c.nome}</td>
-                        <td class="py-3 px-3 text-right space-x-2">${acoesHtml}</td>
-                    </tr>
-                `;
+        function atualizarSelectsCategoriasGeral() {
+            const todasCats = obterTodasCategoriasUnificadas();
+            document.querySelectorAll('.select-categorias-dinamico').forEach(selectEl => {
+                selectEl.innerHTML = '';
+                todasCats.forEach(cat => { selectEl.innerHTML += `<option value="${cat.nome}">${cat.icone || '✨'} ${cat.nome}</option>`; });
             });
         }
 
-        window.abrirModalCategoria = function() {
-            document.getElementById('cat-id-firestore').value = '';
-            document.getElementById('cat-nome').value = '';
-            document.getElementById('cat-icone').value = '';
-            document.getElementById('modal-cat-titulo').innerText = 'Adicionar Nova Categoria';
-            document.getElementById('modal-categoria').classList.remove('hidden');
+        window.mudarAbaAdmin = function(aba) {
+            ['inventario', 'deposito', 'categorias', 'banners'].forEach(s => {
+                document.getElementById(`admin-section-${s}`).classList.add('hidden');
+                document.getElementById(`nav-${s}`).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+            });
+            document.getElementById(`admin-section-${aba}`).classList.remove('hidden');
+            document.getElementById(`nav-${aba}`).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
         }
 
-        window.fecharModalCategoria = function() {
-            document.getElementById('modal-categoria').classList.add('hidden');
+        // PRODUTOS
+        window.toggleFormularioProduto = function() { document.getElementById('form-container-produto').classList.toggle('hidden'); }
+        window.abrirNovoProdutoDireto = function() {
+            document.getElementById('prod-id').value = '';
+            document.getElementById('product-form').reset();
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+        window.salvarProduto = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value;
+            const data = {
+                nome: document.getElementById('prod-nome').value,
+                categoria: document.getElementById('prod-categoria').value,
+                preco: parseFloat(document.getElementById('prod-preco').value),
+                imagem: document.getElementById('prod-foto').value,
+                descricao: document.getElementById('prod-descricao').value,
+                destaque: document.getElementById('prod-destaque').checked
+            };
+            if (id) await updateDoc(doc(db, "produtos", id), data);
+            else await addDoc(collection(db, "produtos"), data);
+            toggleFormularioProduto();
+            carregarDadosAdmin();
+        }
+        window.editarProduto = function(id) {
+            const p = listaProdutos.find(item => item.idFirestore === id);
+            if (!p) return;
+            document.getElementById('prod-id').value = p.idFirestore;
+            document.getElementById('prod-nome').value = p.nome;
+            document.getElementById('prod-categoria').value = p.categoria;
+            document.getElementById('prod-preco').value = p.preco;
+            document.getElementById('prod-foto').value = p.imagem || (p.imagens?.[0]?.url || '');
+            document.getElementById('prod-descricao').value = p.descricao || '';
+            document.getElementById('prod-destaque').checked = p.destaque || false;
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+        window.removerproduto = async function(id) {
+            if (confirm("Remover produto?")) { await deleteDoc(doc(db, "produtos", id)); carregarDadosAdmin(); }
+        }
+        function renderizarTabelaProdutos() {
+            const tbody = document.getElementById('admin-product-list');
+            document.getElementById('total-produtos').innerText = `${listaProdutos.length} produtos`;
+            tbody.innerHTML = listaProdutos.length === 0 ? `<tr><td colspan="4" class="py-4 text-center text-gray-400">Nenhum produto cadastrado.</td></tr>` : '';
+            listaProdutos.forEach(p => {
+                tbody.innerHTML += `<tr class="border-b"><td class="py-3 px-2 font-bold">${p.nome}</td><td class="py-3 px-2">${p.categoria}</td><td class="py-3 px-2">R$ ${Number(p.preco).toFixed(2)}</td><td class="py-3 px-2 text-right"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerproduto('${p.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`;
+            });
         }
 
-        window.salvarCategoriaFirebase = async function() {
-            const id = document.getElementById('cat-id-firestore').value;
+        // DEPÓSITO
+        window.toggleFormularioDeposito = function() { document.getElementById('form-container-deposito').classList.toggle('hidden'); }
+        window.abrirNovoDeposito = function() { document.getElementById('dep-id').value = ''; document.getElementById('deposito-form').reset(); document.getElementById('form-container-deposito').classList.remove('hidden'); }
+        window.salvarItemDeposito = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('dep-id').value;
+            const data = {
+                nome: document.getElementById('dep-nome').value,
+                categoria: document.getElementById('dep-categoria').value,
+                compra: parseFloat(document.getElementById('dep-compra').value),
+                preco: parseFloat(document.getElementById('dep-preco').value),
+                qtd: parseInt(document.getElementById('dep-qtd').value),
+                imagem: document.getElementById('dep-foto').value
+            };
+            if (id) await updateDoc(doc(db, "deposito", id), data);
+            else await addDoc(collection(db, "deposito"), data);
+            toggleFormularioDeposito();
+            carregarDadosAdmin();
+        }
+        window.editarDeposito = function(id) {
+            const d = listaDeposito.find(item => item.idFirestore === id);
+            if (!d) return;
+            document.getElementById('dep-id').value = d.idFirestore;
+            document.getElementById('dep-nome').value = d.nome;
+            document.getElementById('dep-categoria').value = d.categoria;
+            document.getElementById('dep-compra').value = d.compra || 0;
+            document.getElementById('dep-preco').value = d.preco || 0;
+            document.getElementById('dep-qtd').value = d.qtd || 0;
+            document.getElementById('dep-foto').value = d.imagem || '';
+            document.getElementById('form-container-deposito').classList.remove('hidden');
+        }
+        window.removerDeposito = async function(id) {
+            if (confirm("Remover item?")) { await deleteDoc(doc(db, "deposito", id)); carregarDadosAdmin(); }
+        }
+        function renderizarTabelaDeposito() {
+            const container = document.getElementById('admin-deposito-list');
+            document.getElementById('total-deposito').innerText = `${listaDeposito.length} itens`;
+            container.innerHTML = listaDeposito.length === 0 ? `<div class="text-center py-4 text-gray-400">Nenhum item no depósito.</div>` : '';
+            listaDeposito.forEach(d => {
+                container.innerHTML += `<div class="bg-gray-50 p-3 rounded-xl flex justify-between items-center border"><div><strong>${d.nome}</strong> (${d.categoria}) - Qtd: ${d.qtd}</div><div><button onclick="editarDeposito('${d.idFirestore}')" class="text-teal-600 font-bold mr-2 text-xs">Editar</button><button onclick="removerDeposito('${d.idFirestore}')" class="text-red-500 font-bold text-xs">Excluir</button></div></div>`;
+            });
+        }
+
+        // CATEGORIAS
+        window.toggleFormularioCategoria = function() { document.getElementById('form-container-categoria').classList.toggle('hidden'); }
+        window.abrirNovaCategoria = function() { document.getElementById('cat-id').value = ''; document.getElementById('categoria-form').reset(); document.getElementById('form-container-categoria').classList.remove('hidden'); }
+        window.salvarCategoria = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('cat-id').value;
             const nome = document.getElementById('cat-nome').value.trim();
             const icone = document.getElementById('cat-icone').value.trim();
-
-            if (!nome) {
-                alert("Por favor, informe o nome da categoria.");
-                return;
-            }
-
-            try {
-                if (id) {
-                    await updateDoc(doc(db, "categorias", id), { nome, icone });
-                } else {
-                    await addDoc(collection(db, "categorias"), { nome, icone });
-                }
-                fecharModalCategoria();
-                carregarDadosAdmin();
-            } catch (e) {
-                console.error("Erro ao salvar categoria:", e);
-                alert("Erro ao salvar categoria no Firebase.");
-            }
+            if (id) await updateDoc(doc(db, "categorias", id), { nome, icone });
+            else await addDoc(collection(db, "categorias"), { nome, icone });
+            toggleFormularioCategoria();
+            carregarDadosAdmin();
+        }
+        window.editarCategoriaCustom = function(id) {
+            const c = listaCategoriasCustom.find(item => item.idFirestore === id);
+            if (!c) return;
+            document.getElementById('cat-id').value = c.idFirestore;
+            document.getElementById('cat-nome').value = c.nome;
+            document.getElementById('cat-icone').value = c.icone || '';
+            document.getElementById('form-container-categoria').classList.remove('hidden');
+        }
+        window.removerCategoriaCustom = async function(id) {
+            if (confirm("Excluir categoria?")) { await deleteDoc(doc(db, "categorias", id)); carregarDadosAdmin(); }
+        }
+        function renderizarTabelaCategorias() {
+            const tbody = document.getElementById('admin-categoria-list');
+            const todas = obterTodasCategoriasUnificadas();
+            document.getElementById('total-categorias').innerText = `${todas.length} categorias`;
+            tbody.innerHTML = '';
+            todas.forEach(c => {
+                let acoes = c.isCustom ? `<button onclick="editarCategoriaCustom('${c.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerCategoriaCustom('${c.idFirestore}')" class="text-red-500 font-bold">Excluir</button>` : `<span class="text-gray-400 text-xs italic">Padrão</span>`;
+                tbody.innerHTML += `<tr class="border-b"><td class="py-3 px-2 text-xl">${c.icone || '✨'}</td><td class="py-3 px-2 font-bold">${c.nome}</td><td class="py-3 px-2 text-right">${acoes}</td></tr>`;
+            });
         }
 
-        window.editarCategoria = function(id) {
-            const cat = listaCategoriasCustom.find(c => c.idFirestore === id);
-            if (!cat) return;
-
-            document.getElementById('cat-id-firestore').value = cat.idFirestore;
-            document.getElementById('cat-nome').value = cat.nome;
-            document.getElementById('cat-icone').value = cat.icone || '';
-            document.getElementById('modal-cat-titulo').innerText = 'Editar Categoria';
-            document.getElementById('modal-categoria').classList.remove('hidden');
+        function renderizarTabelaBanners() {
+            const tbody = document.getElementById('admin-banner-list');
+            tbody.innerHTML = listaBanners.length === 0 ? `<tr><td class="py-4 text-center text-gray-400">Nenhum banner cadastrado.</td></tr>` : '';
+            listaBanners.forEach(b => {
+                tbody.innerHTML += `<tr class="border-b"><td class="py-3 px-2"><strong>${b.titulo || 'Banner'}</strong></td><td class="py-3 px-2 text-right"><button onclick="removerBanner('${b.idFirestore}')" class="text-red-500 font-bold text-xs">Excluir</button></td></tr>`;
+            });
         }
-
-        window.removerCategoria = async function(id) {
-            if (!confirm("Tem certeza que deseja excluir esta categoria customizada?")) return;
-            try {
-                await deleteDoc(doc(db, "categorias", id));
-                carregarDadosAdmin();
-            } catch (e) {
-                console.error("Erro ao remover categoria:", e);
-                alert("Erro ao remover categoria.");
-            }
+        window.abrirNovoBanner = async function() {
+            const titulo = prompt("Título do Banner:");
+            if (!titulo) return;
+            await addDoc(collection(db, "slides"), { titulo, tempo: 5, imagemPc: '', linkTipo: 'produtos' });
+            carregarDadosAdmin();
+        }
+        window.removerBanner = async function(id) {
+            if (confirm("Excluir banner?")) { await deleteDoc(doc(db, "slides", id)); carregarDadosAdmin(); }
         }
     </script>
 </body>
