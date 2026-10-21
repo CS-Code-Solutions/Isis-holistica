@@ -540,6 +540,11 @@
             carrinho = [];
         }
 
+        function normalizarTexto(str) {
+            if (!str) return '';
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        }
+
         async function carregarDadosDoBanco() {
             try {
                 const snapCat = await getDocs(collection(db, "categorias"));
@@ -565,7 +570,6 @@
                 atualizarContadorCarrinho();
             } catch (e) {
                 console.error("Erro ao carregar dados do Firebase:", e);
-                // Garante que mesmo com erro no Firebase as categorias aparecem na loja
                 atualizarMenusCategoriasUI();
             }
         }
@@ -978,14 +982,17 @@
             if (!container) return;
             container.innerHTML = '';
             
-            let filtrados = listaProdutos.filter(p => categoriaFiltroAtiva === 'todos' || p.categoria === categoriaFiltroAtiva);
+            let filtrados = listaProdutos.filter(p => {
+                if (categoriaFiltroAtiva === 'todos') return true;
+                return normalizarTexto(p.categoria) === normalizarTexto(categoriaFiltroAtiva);
+            });
             
             if (termoBuscaAtivo.trim() !== '') {
-                const termo = termoBuscaAtivo.toLowerCase();
+                const termo = normalizarTexto(termoBuscaAtivo);
                 filtrados = filtrados.filter(p => 
-                    p.nome.toLowerCase().includes(termo) || 
-                    (p.descricao || '').toLowerCase().includes(termo) ||
-                    p.categoria.toLowerCase().includes(termo)
+                    normalizarTexto(p.nome).includes(termo) || 
+                    normalizarTexto(p.descricao || '').includes(termo) ||
+                    normalizarTexto(p.categoria).includes(termo)
                 );
             }
 
@@ -1000,7 +1007,7 @@
             document.getElementById('loja-paginacao-info').innerText = `Página ${paginaAtualLoja} de ${totalPaginas} (${filtrados.length} itens)`;
 
             if (itensPagina.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Nenhum produto encontrado.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Nenhum produto encontrado nesta categoria.</div>`;
                 return;
             }
 
@@ -1026,10 +1033,13 @@
         }
 
         window.mudarPaginaLoja = function(direcao) {
-            let filtrados = listaProdutos.filter(p => categoriaFiltroAtiva === 'todos' || p.categoria === categoriaFiltroAtiva);
+            let filtrados = listaProdutos.filter(p => {
+                if (categoriaFiltroAtiva === 'todos') return true;
+                return normalizarTexto(p.categoria) === normalizarTexto(categoriaFiltroAtiva);
+            });
             if (termoBuscaAtivo.trim() !== '') {
-                const termo = termoBuscaAtivo.toLowerCase();
-                filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(termo) || (p.descricao || '').toLowerCase().includes(termo));
+                const termo = normalizarTexto(termoBuscaAtivo);
+                filtrados = filtrados.filter(p => normalizarTexto(p.nome).includes(termo) || normalizarTexto(p.descricao || '').includes(termo));
             }
             const totalPaginas = Math.ceil(filtrados.length / itensPorPaginaLoja) || 1;
 
@@ -1063,7 +1073,7 @@
             obterTodasCategoriasUnificadasLoja().forEach(c => {
                 const el = document.getElementById(`btn-cat-${c.nome.replace(/\s+/g, '-')}`);
                 if (el) {
-                    el.className = cat === c.nome ? "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow" : "px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition";
+                    el.className = normalizarTexto(cat) === normalizarTexto(c.nome) ? "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow" : "px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition";
                 }
             });
 
