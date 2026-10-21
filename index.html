@@ -100,15 +100,23 @@
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
                 <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">Destaques & Rituais</button>
                 
-                <!-- MENU CASCATA (DROPDOWN) DESKTOP DINÂMICO -->
+                <!-- MENU CASCATA (DROPDOWN) DESKTOP -->
                 <div class="relative group">
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] transition flex items-center gap-1 py-2">
                         Loja esotérica ▾
                     </button>
-                    <div id="desktop-menu-categorias" class="absolute top-full left-0 w-60 bg-white border border-gray-100 shadow-xl rounded-2xl py-2 hidden group-hover:block z-50">
+                    <div class="absolute top-full left-0 w-60 bg-white border border-gray-100 shadow-xl rounded-2xl py-2 hidden group-hover:block z-50">
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">✨ Todos os Produtos</button>
                         <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-amber-600 hover:bg-amber-50 transition">🔥 Promoções</button>
-                        <div id="desktop-subcategorias-dinamicas"></div>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🌿 Incensos</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🔮 Pedras e Cristais</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">💎 Semijoias</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🏺 Decoração</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🕯️ Velas</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🗿 Imagens</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Perfume');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🌸 Perfume</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Oleo Essencial');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">💧 Óleo Essencial</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Aromatizador');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">🍃 Aromatizador</button>
                     </div>
                 </div>
 
@@ -138,7 +146,15 @@
                 <div id="mobile-loja-submenu" class="hidden pl-4 space-y-2 pt-2">
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">✨ Todos os Produtos</button>
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="block text-left text-xs font-bold text-amber-600">🔥 Promoções</button>
-                    <div id="mobile-subcategorias-dinamicas" class="space-y-2"></div>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Incensos');" class="block text-left text-xs font-bold text-gray-600">🌿 Incensos</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Pedras');" class="block text-left text-xs font-bold text-gray-600">🔮 Pedras e Cristais</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Semijoias');" class="block text-left text-xs font-bold text-gray-600">💎 Semijoias</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Decoracao');" class="block text-left text-xs font-bold text-gray-600">🏺 Decoração</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Velas');" class="block text-left text-xs font-bold text-gray-600">🕯️ Velas</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Imagens');" class="block text-left text-xs font-bold text-gray-600">🗿 Imagens</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Perfume');" class="block text-left text-xs font-bold text-gray-600">🌸 Perfume</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Oleo Essencial');" class="block text-left text-xs font-bold text-gray-600">💧 Óleo Essencial</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Aromatizador');" class="block text-left text-xs font-bold text-gray-600">🍃 Aromatizador</button>
                 </div>
             </div>
 
@@ -235,6 +251,7 @@
                 </div>
             </div>
 
+            <!-- BOTÃO DO INSTAGRAM -->
             <div class="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] p-1 rounded-3xl shadow-lg">
                 <div class="bg-white rounded-[22px] p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="flex items-center gap-4 text-center sm:text-left">
@@ -252,6 +269,7 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO DE LOCALIZAÇÃO E MAPA -->
             <div class="bg-gray-50 rounded-3xl border border-gray-100 p-6 md:p-8 space-y-6 shadow-sm">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200 pb-6">
                     <div>
@@ -276,6 +294,24 @@
                     </iframe>
                 </div>
             </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-2">
+                    <span class="text-2xl">🍃</span>
+                    <h5 class="font-bold text-gray-900">Curadoria com significado</h5>
+                    <p class="text-xs text-gray-600 leading-relaxed">Elementos naturais, aromas e objetos que acompanham sua jornada.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-2">
+                    <span class="text-2xl">🤍</span>
+                    <h5 class="font-bold text-gray-900">Acolhimento</h5>
+                    <p class="text-xs text-gray-600 leading-relaxed">Um olhar atento para cada pessoa e sua história.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-2">
+                    <span class="text-2xl">💎</span>
+                    <h5 class="font-bold text-gray-900">Sua própria essência</h5>
+                    <p class="text-xs text-gray-600 leading-relaxed">Um convite ao equilíbrio, à presença e ao autoconhecimento.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -287,14 +323,24 @@
             <div class="max-w-md mx-auto my-6">
                 <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
             </div>
-            <div id="botoes-categorias-dinamicos" class="flex flex-wrap justify-center gap-2 mt-4">
+            <div class="flex flex-wrap justify-center gap-2 mt-4">
                 <button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
                 <button onclick="filtrarProdutos('Promoções')" id="btn-cat-Promoções" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔥 Promoções</button>
+                <button onclick="filtrarProdutos('Incensos')" id="btn-cat-Incensos" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌿 Incensos</button>
+                <button onclick="filtrarProdutos('Pedras')" id="btn-cat-Pedras" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔮 Pedras e Cristais</button>
+                <button onclick="filtrarProdutos('Semijoias')" id="btn-cat-Semijoias" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">Semijoias</button>
+                <button onclick="filtrarProdutos('Decoracao')" id="btn-cat-Decoracao" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🏺 Decoração</button>
+                <button onclick="filtrarProdutos('Velas')" id="btn-cat-Velas" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🕯️ Velas</button>
+                <button onclick="filtrarProdutos('Imagens')" id="btn-cat-Imagens" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🗿 Imagens</button>
+                <button onclick="filtrarProdutos('Perfume')" id="btn-cat-Perfume" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🌸 Perfume</button>
+                <button onclick="filtrarProdutos('Oleo Essencial')" id="btn-cat-Oleo-Essencial" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">💧 Óleo Essencial</button>
+                <button onclick="filtrarProdutos('Aromatizador')" id="btn-cat-Aromatizador" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🍃 Aromatizador</button>
             </div>
         </div>
         
         <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
 
+        <!-- PAGINAÇÃO DA LOJA (MODERNA E COMPACTA COM BOTÕES < e >) -->
         <div class="flex justify-center items-center gap-4 mt-12 pt-6 border-t border-gray-200 text-xs font-bold text-gray-700">
             <button onclick="mudarPaginaLoja(-1)" id="btn-loja-ant" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition shadow-sm text-base">‹</button>
             <span id="loja-paginacao-info" class="text-sm font-semibold text-gray-600">Página 1 de 1</span>
@@ -315,17 +361,23 @@
                 <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
                     <span class="text-2xl">🤍</span>
                     <h4 class="text-lg font-bold text-gray-900">Humanoterapia</h4>
-                    <p class="text-sm text-gray-600 leading-relaxed">Um espaço de acolhimento e reconexão pessoal.</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Um espaço de acolhimento e reconexão pessoal, com práticas voltadas ao bem-estar e ao autoconhecimento.
+                    </p>
                 </div>
                 <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
                     <span class="text-2xl">🌿</span>
                     <h4 class="text-lg font-bold text-gray-900">Psicanálise</h4>
-                    <p class="text-sm text-gray-600 leading-relaxed">Escuta e investigação do inconsciente.</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Escuta e investigação do inconsciente para compreender vivências, emoções e sua história.
+                    </p>
                 </div>
                 <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
                     <span class="text-2xl">✨</span>
                     <h4 class="text-lg font-bold text-gray-900">Radiestesia e radiônica</h4>
-                    <p class="text-sm text-gray-600 leading-relaxed">Práticas voltadas à harmonização e equilíbrio.</p>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Práticas integrativas voltadas à harmonização e ao equilíbrio, respeitando sua jornada pessoal.
+                    </p>
                 </div>
             </div>
 
@@ -333,8 +385,9 @@
                 <div class="space-y-1 text-center md:text-left">
                     <span class="text-xs uppercase tracking-widest opacity-90 font-bold">SEU PRÓXIMO PASSO</span>
                     <h4 class="text-2xl font-bold">Reserve um momento de cuidado.</h4>
+                    <p class="text-xs opacity-90">Consulte valores, duração das sessões e horários com nossa equipe.</p>
                 </div>
-                <a href="https://wa.me/555195508826?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20Espaço%20Terapêutico." target="_blank" rel="noreferrer" class="bg-[#25D366] text-white font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-opacity-90 whitespace-nowrap text-sm flex items-center gap-2">
+                <a href="https://wa.me/555195508826?text=Olá,%20querida%20equipe%20da%20Ísis%20Holística!%20Sinto%20o%20chamado%20para%20cuidar%20da%20minha%20energia%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20horários%20e%20valores%20para%20o%20Espaço%20Terapêutico.%20Gratidão!" target="_blank" rel="noreferrer" class="bg-[#25D366] text-white font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-opacity-90 whitespace-nowrap text-sm flex items-center gap-2">
                     Agendar pelo WhatsApp
                 </a>
             </div>
@@ -343,12 +396,17 @@
 
     <!-- MODAL DE DETALHES DO PRODUTO -->
     <div id="modal-produto" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
-            <button onclick="fecharModalProduto()" class="absolute top-3 right-3 z-20 text-gray-500 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 pt-14 md:pt-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="fecharModalProduto()" class="absolute top-3 right-3 z-20 text-gray-500 hover:text-gray-800 font-bold text-lg bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center transition shadow-sm">✕</button>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                 <div class="space-y-4">
-                    <div class="relative h-72 bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center">
+                    <div id="modal-img-container" class="relative h-72 bg-gray-100 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center">
                         <img id="modal-img" src="" alt="Produto" class="w-full h-full object-cover">
+                        <div id="modal-badge-texto" class="absolute hidden bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md max-w-[80%] text-center"></div>
+                    </div>
+                    <div id="modal-variacoes-container" class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase">Escolha a Variação / Detalhe:</label>
+                        <div id="modal-variantes-lista" class="flex flex-wrap gap-2"></div>
                     </div>
                 </div>
                 <div class="space-y-4 flex flex-col justify-between">
@@ -358,36 +416,102 @@
                         <p id="modal-preco" class="text-3xl font-extrabold text-[#C5A880] mt-2"></p>
                         <p id="modal-descricao" class="text-gray-600 text-sm mt-4 leading-relaxed"></p>
                     </div>
-                    <button onclick="adicionarProdutoAoCarrinhoModal()" class="w-full bg-[#0E8685] text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm">Adicionar ao Carrinho</button>
+                    <button onclick="adicionarProdutoAoCarrinhoModal()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm">Adicionar ao Carrinho</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DO CARRINHO -->
+    <!-- MODAL DO CARRINHO DE COMPRAS -->
     <div id="modal-carrinho" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 relative max-h-[90vh] flex flex-col">
-            <button onclick="toggleCartModal()" class="absolute top-3 right-3 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 pt-14 md:pt-8 relative max-h-[90vh] flex flex-col">
+            <button onclick="toggleCartModal()" class="absolute top-3 right-3 z-20 text-gray-500 hover:text-gray-800 font-bold text-lg bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center transition shadow-sm">✕</button>
             <h3 class="text-2xl font-bold text-[#0E8685] mb-4">Seu Carrinho 🛒</h3>
-            <div id="carrinho-itens-lista" class="flex-grow overflow-y-auto space-y-4 divide-y divide-gray-100 max-h-[50vh]"></div>
+            
+            <div id="carrinho-itens-lista" class="flex-grow overflow-y-auto space-y-4 divide-y divide-gray-100 max-h-[50vh] pr-1"></div>
+
             <div class="border-t pt-4 mt-4 space-y-3">
-                <div class="flex justify-between items-center text-lg font-bold">
+                <div class="flex justify-between items-center text-lg font-bold text-gray-900">
                     <span>Total:</span>
                     <span id="carrinho-total" class="text-[#C5A880] text-2xl font-extrabold">R$ 0,00</span>
                 </div>
-                <button onclick="finalizarPedidoWhatsApp()" class="w-full bg-[#25D366] text-white font-bold py-3.5 rounded-xl shadow transition text-sm">Finalizar Pedido via WhatsApp</button>
+                <button onclick="abrirCheckout()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+                    Prosseguir com Pedido
+                </button>
+                <button onclick="mudarAba('view-produtos'); toggleCartModal();" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition text-sm">
+                    Continuar Comprando
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- BOTÃO WHATSAPP FLUTUANTE -->
-    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-105 transition">💬</a>
+    <!-- MODAL DE CHECKOUT -->
+    <div id="modal-checkout" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 pt-14 md:pt-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleCheckoutModal()" class="absolute top-3 right-3 z-20 text-gray-500 hover:text-gray-800 font-bold text-lg bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center transition shadow-sm">✕</button>
+            <h3 class="text-2xl font-bold text-[#0E8685] mb-4">Dados para Entrega 📋</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome Completo</label>
+                    <input type="text" id="chk-nome" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Seu nome completo">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">CPF</label>
+                    <input type="text" id="chk-cpf" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="000.000.000-00">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Telefone de Contato</label>
+                    <input type="text" id="chk-telefone" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="(51) 99999-9999">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Endereço para Entrega</label>
+                    <textarea id="chk-endereco" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]" placeholder="Rua, número, complemento, bairro, cidade e CEP"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Forma de Pagamento Desejada</label>
+                    <select id="chk-pagamento" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] bg-white">
+                        <option value="Pix">Pix</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="A combinar">A combinar</option>
+                    </select>
+                </div>
+                <button onclick="finalizarPedidoWhatsApp()" class="w-full bg-[#25D366] hover:bg-opacity-90 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm flex items-center justify-center gap-2">
+                    Finalizar Pedido via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
 
-    <!-- RODAPÉ -->
+    <!-- MODAL DE SUCESSO -->
+    <div id="modal-sucesso" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 md:p-8 relative text-center space-y-4">
+            <div class="text-5xl mb-2">✨</div>
+            <h3 class="text-2xl font-bold text-[#0E8685]">Pedido Enviado!</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+                Seu pedido será analisado com todo o cuidado e, o mais breve possível, entraremos em contato para compartilhar todas as informações necessárias.
+            </p>
+            <button onclick="concluirPedido()" class="w-full bg-[#0E8685] hover:bg-opacity-90 text-white font-bold py-3 rounded-xl shadow-lg transition text-sm">
+                Concluir via WhatsApp 
+            </button>
+        </div>
+    </div>
+
+    <!-- BOTÃO WHATSAPP FIXO FLUTUANTE -->
+    <a href="https://wa.me/555195508826?text=Olá,%20Ísis%20Holística!%20Sinto-me%20atraído(a)%20pela%20energia%20da%20loja%20e%20gostaria%20de%20tirar%20algumas%20dúvidas%20sobre%20os%20produtos%20e%20rituais.%20Gratidão!" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-105 transition">💬</a>
+
+    <!-- RODAPÉ CENTRALIZADO -->
     <footer class="bg-white border-t border-gray-100 py-10 px-4 mt-auto text-center">
-        <div class="max-w-7xl mx-auto flex flex-col items-center justify-center gap-2">
+        <div class="max-w-7xl mx-auto flex flex-col items-center justify-center gap-4">
+            <div class="flex items-center gap-3">
+                <img src="ico.png" alt="Ísis Holística" class="h-10 w-auto object-contain">
+            </div>
             <span class="text-xs text-gray-500">Produtos com significado. Cuidado com a sua essência.</span>
-            <div class="text-xs text-gray-400">Ísis Holística &copy; 2026 — São Leopoldo - RS</div>
+            <div class="text-xs text-gray-400">
+                Ísis Holística &copy; 2026 — São Leopoldo - RS<br>
+                <span>Powered by <a href="https://www.instagram.com/cs_code_solutions?vrfl=Ym1mNDMzYTYxa3d6" target="_blank" rel="noreferrer" class="text-gray-600 hover:text-[#0E8685] font-bold transition">CS Code Solutions</a></span>
+            </div>
         </div>
     </footer>
 
@@ -408,106 +532,57 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let listaProdutos = [];
-        let listaCategoriasCustom = [];
-        let slides = [];
         let currentSlide = 0;
+        let listaProdutos = [];
+        let slides = [];
         let carouselTimer = null;
         let produtoAtualModal = null;
+        let fotoSelecionadaModalIndex = 0;
+        let mensagemWhatsAppPendente = "";
+
+        // ESTADO DE PAGINAÇÃO DA LOJA (15 ITENS MÁXIMO POR PÁGINA)
         let paginaAtualLoja = 1;
         const itensPorPaginaLoja = 15;
         let categoriaFiltroAtiva = 'todos';
         let termoBuscaAtivo = '';
-        let carrinho = JSON.parse(localStorage.getItem('carrinho_isis')) || [];
-
-        const categoriasBaseFixas = [
-            { nome: 'Incensos', icone: '🌿' },
-            { nome: 'Pedras', icone: '🔮' },
-            { nome: 'Semijoias', icone: '💎' },
-            { nome: 'Decoracao', icone: '🏺' },
-            { nome: 'Velas', icone: '🕯️' },
-            { nome: 'Imagens', icone: '🗿' },
-            { nome: 'Perfume', icone: '🌸' },
-            { nome: 'Oleo Essencial', icone: '💧' },
-            { nome: 'Aromatizador', icone: '🍃' }
-        ];
-
-        function normalizarTexto(str) {
-            if (!str) return '';
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        
+        let carrinho = [];
+        try {
+            carrinho = JSON.parse(localStorage.getItem('carrinho_isis')) || [];
+        } catch (e) {
+            carrinho = [];
         }
 
         async function carregarDadosDoBanco() {
             try {
-                const snapCat = await getDocs(collection(db, "categorias"));
-                listaCategoriasCustom = [];
-                snapCat.forEach(d => listaCategoriasCustom.push({ idFirestore: d.id, ...d.data() }));
-
-                const snapProd = await getDocs(collection(db, "produtos"));
+                const querySnapshotProd = await getDocs(collection(db, "produtos"));
                 listaProdutos = [];
-                snapProd.forEach(d => listaProdutos.push({ idFirestore: d.id, ...d.data() }));
+                querySnapshotProd.forEach((docSnap) => {
+                    listaProdutos.push({ idFirestore: docSnap.id, ...docSnap.data() });
+                });
 
-                const snapSlides = await getDocs(collection(db, "slides"));
+                const querySnapshotSlides = await getDocs(collection(db, "slides"));
                 slides = [];
-                snapSlides.forEach(d => slides.push({ idFirestore: d.id, ...d.data() }));
+                querySnapshotSlides.forEach((docSnap) => {
+                    slides.push({ idFirestore: docSnap.id, ...docSnap.data() });
+                });
 
-                atualizarMenusCategoriasUI();
                 renderizarDestaquesHome();
                 renderizarProdutosLoja();
                 inicializarCarrossel();
                 atualizarContadorCarrinho();
             } catch (e) {
-                console.error("Erro ao carregar do Firebase:", e);
-                atualizarMenusCategoriasUI();
-                renderizarProdutosLoja();
+                console.error("Erro ao carregar dados do Firebase:", e);
             }
         }
 
         carregarDadosDoBanco();
 
-        function obterTodasCategoriasUnificadasLoja() {
-            let mapa = new Map();
-            categoriasBaseFixas.forEach(c => mapa.set(c.nome, c));
-            listaCategoriasCustom.forEach(c => mapa.set(c.nome, { ...c, isCustom: true }));
-            return Array.from(mapa.values());
-        }
-
-        function atualizarMenusCategoriasUI() {
-            const todas = obterTodasCategoriasUnificadasLoja();
-            const desktopSub = document.getElementById('desktop-subcategorias-dinamicas');
-            if (desktopSub) {
-                desktopSub.innerHTML = '';
-                todas.forEach(cat => {
-                    desktopSub.innerHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat.nome}');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">${cat.icone || '✨'} ${cat.nome}</button>`;
-                });
-            }
-
-            const mobileSub = document.getElementById('mobile-subcategorias-dinamicas');
-            if (mobileSub) {
-                mobileSub.innerHTML = '';
-                todas.forEach(cat => {
-                    mobileSub.innerHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat.nome}');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">${cat.icone || '✨'} ${cat.nome}</button>`;
-                });
-            }
-
-            const botoesCatContainer = document.getElementById('botoes-categorias-dinamicos');
-            if (botoesCatContainer) {
-                botoesCatContainer.innerHTML = `
-                    <button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
-                    <button onclick="filtrarProdutos('Promoções')" id="btn-cat-Promoções" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔥 Promoções</button>
-                `;
-                todas.forEach(cat => {
-                    botoesCatContainer.innerHTML += `<button onclick="filtrarProdutos('${cat.nome}')" id="btn-cat-${cat.nome.replace(/\s+/g, '-')}" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">${cat.icone || '✨'} ${cat.nome}</button>`;
-                });
-            }
-        }
-
         window.mudarAba = function(idAba) {
             document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
             const alvo = document.getElementById(idAba);
             if (alvo) alvo.classList.remove('hidden');
-            const mobileMenu = document.getElementById('mobile-menu');
-            if (mobileMenu) mobileMenu.classList.add('hidden');
+            document.getElementById('mobile-menu').classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -532,16 +607,56 @@
             if (carouselTimer) clearTimeout(carouselTimer);
         }
 
-        function inicializarCarrossel() { if (slides.length > 0) atualizarSlideUI(); }
+        function inicializarCarrossel() {
+            if (slides.length > 0) atualizarSlideUI();
+        }
+
+        function programarProximoSlide() {
+            if (carouselTimer) clearTimeout(carouselTimer);
+            if (slides.length <= 1) return;
+
+            const s = slides[currentSlide];
+            const tempoSegundos = Number(s?.tempo) || 5; 
+
+            carouselTimer = setTimeout(() => {
+                window.mudarSlide(1);
+            }, tempoSegundos * 1000);
+        }
 
         function atualizarSlideUI() {
             if (slides.length === 0) return;
             const s = slides[currentSlide];
             if (!s) return;
-            document.getElementById('carousel-title').innerText = s.titulo || '';
-            document.getElementById('carousel-desc').innerText = s.desc || '';
+            
+            const badgeEl = document.getElementById('carousel-badge');
+            if (s.badge && s.badge.trim() !== '') {
+                badgeEl.innerText = s.badge;
+                badgeEl.style.display = 'inline-block';
+            } else {
+                badgeEl.style.display = 'none';
+            }
+
+            const titleEl = document.getElementById('carousel-title');
+            if (s.titulo && s.titulo.trim() !== '') {
+                titleEl.innerText = s.titulo;
+                titleEl.style.display = 'block';
+            } else {
+                titleEl.style.display = 'none';
+            }
+
+            const descEl = document.getElementById('carousel-desc');
+            if (s.desc && s.desc.trim() !== '') {
+                descEl.innerText = s.desc;
+                descEl.style.display = 'block';
+            } else {
+                descEl.style.display = 'none';
+            }
+            
             const imgBg = document.getElementById('carousel-bg');
-            imgBg.src = s.imagemPc || s.imagemMobile || '42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg';
+            const imgAlvo = (window.innerWidth >= 768 ? (s.imagemPc || s.imagemMobile) : (s.imagemMobile || s.imagemPc)) || '42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg';
+            imgBg.src = imgAlvo;
+
+            programarProximoSlide();
         }
 
         window.mudarSlide = function(direcao) {
@@ -552,8 +667,242 @@
 
         window.clicarBannerAtual = function() {
             fecharModalBanner();
-            mudarAba('view-produtos');
-            filtrarProdutos('todos');
+            if (slides.length === 0) return;
+            const s = slides[currentSlide];
+            if (!s) return;
+
+            if (s.linkTipo === 'terapias') {
+                mudarAba('view-terapias');
+            } else if (s.linkTipo === 'promocoes') {
+                mudarAba('view-produtos');
+                filtrarProdutos('Promoções');
+            } else if (s.linkTipo === 'destaques') {
+                mudarAba('view-home');
+            } else if (s.linkTipo === 'categoria' && s.linkAlvo) {
+                mudarAba('view-produtos');
+                filtrarProdutos(s.linkAlvo);
+            } else if (s.linkTipo === 'produto' && s.linkAlvo) {
+                const prod = listaProdutos.find(p => p.nome === s.linkAlvo);
+                if (prod) abrirModalProdutoId(prod.idFirestore);
+                else mudarAba('view-produtos');
+            } else {
+                mudarAba('view-produtos');
+                filtrarProdutos('todos');
+            }
+        }
+
+        window.abrirModalProdutoId = function(idFirestore) {
+            const p = listaProdutos.find(item => item.idFirestore === idFirestore);
+            if (!p) return;
+            produtoAtualModal = p;
+            fotoSelecionadaModalIndex = 0;
+
+            document.getElementById('modal-nome').innerText = p.nome;
+            document.getElementById('modal-preco').innerText = `R$ ${Number(p.preco).toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-categoria').innerText = p.categoria;
+            document.getElementById('modal-descricao').innerText = p.descricao || '';
+
+            atualizarVisualizacaoModalFoto();
+            renderizarBotoesVariacoesModal();
+
+            document.getElementById('modal-produto').classList.remove('hidden');
+        }
+
+        window.fecharModalProduto = function() {
+            document.getElementById('modal-produto').classList.add('hidden');
+        }
+
+        window.selecionarVariacaoModal = function(index) {
+            fotoSelecionadaModalIndex = index;
+            atualizarVisualizacaoModalFoto();
+            renderizarBotoesVariacoesModal();
+        }
+
+        function atualizarVisualizacaoModalFoto() {
+            if (!produtoAtualModal || !produtoAtualModal.imagens || produtoAtualModal.imagens.length === 0) return;
+            const imgData = produtoAtualModal.imagens[fotoSelecionadaModalIndex] || produtoAtualModal.imagens[0];
+            
+            const imgEl = document.getElementById('modal-img');
+            imgEl.src = imgData.url || '';
+
+            const badgeEl = document.getElementById('modal-badge-texto');
+            if (imgData.texto && imgData.texto.trim() !== '') {
+                badgeEl.innerText = imgData.texto;
+                badgeEl.style.display = 'block';
+
+                badgeEl.className = "absolute bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md max-w-[80%] text-center ";
+                if (imgData.posV === 'bottom') badgeEl.className += "bottom-4 ";
+                else badgeEl.className += "top-4 ";
+
+                if (imgData.posH === 'right') badgeEl.className += "right-4";
+                else badgeEl.className += "left-4";
+            } else {
+                badgeEl.style.display = 'none';
+            }
+        }
+
+        function renderizarBotoesVariacoesModal() {
+            const container = document.getElementById('modal-variantes-lista');
+            const wrapper = document.getElementById('modal-variacoes-container');
+            container.innerHTML = '';
+
+            if (!produtoAtualModal.imagens || produtoAtualModal.imagens.length <= 1) {
+                wrapper.classList.add('hidden');
+                return;
+            }
+
+            wrapper.classList.remove('hidden');
+            produtoAtualModal.imagens.forEach((img, idx) => {
+                const nomeVariacao = img.texto || `Opção ${idx + 1}`;
+                const isSelected = idx === fotoSelecionadaModalIndex;
+                
+                container.innerHTML += `
+                    <button onclick="selecionarVariacaoModal(${idx})" class="px-3.5 py-2 rounded-xl text-xs font-bold transition border ${isSelected ? 'bg-[#0E8685] text-white border-[#0E8685] shadow' : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200'}">
+                        ${nomeVariacao}
+                    </button>
+                `;
+            });
+        }
+
+        window.adicionarProdutoAoCarrinhoModal = function() {
+            if (!produtoAtualModal) return;
+
+            const imagemSelecionada = (produtoAtualModal.imagens && produtoAtualModal.imagens[fotoSelecionadaModalIndex]) 
+                ? produtoAtualModal.imagens[fotoSelecionadaModalIndex].url 
+                : ((produtoAtualModal.imagens && produtoAtualModal.imagens.length > 0) ? produtoAtualModal.imagens[0].url : (produtoAtualModal.imagem || ''));
+
+            const variacaoTexto = (produtoAtualModal.imagens && produtoAtualModal.imagens[fotoSelecionadaModalIndex] && produtoAtualModal.imagens[fotoSelecionadaModalIndex].texto) 
+                ? produtoAtualModal.imagens[fotoSelecionadaModalIndex].texto 
+                : 'Padrão';
+
+            const itemCarrinho = {
+                id: produtoAtualModal.idFirestore,
+                nome: produtoAtualModal.nome,
+                preco: Number(produtoAtualModal.preco),
+                variacao: variacaoTexto,
+                imagem: imagemSelecionada
+            };
+
+            carrinho.push(itemCarrinho);
+            localStorage.setItem('carrinho_isis', JSON.stringify(carrinho));
+            atualizarContadorCarrinho();
+
+            fecharModalProduto();
+            toggleCartModal();
+        }
+
+        window.toggleCartModal = function() {
+            const modal = document.getElementById('modal-carrinho');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                renderizarCarrinho();
+            }
+        }
+
+        window.abrirCheckout = function() {
+            if (carrinho.length === 0) {
+                alert("O seu carrinho está vazio!");
+                return;
+            }
+            toggleCartModal();
+            document.getElementById('modal-checkout').classList.remove('hidden');
+        }
+
+        window.toggleCheckoutModal = function() {
+            document.getElementById('modal-checkout').classList.toggle('hidden');
+        }
+
+        function atualizarContadorCarrinho() {
+            const contadorEl = document.getElementById('cart-count');
+            if (contadorEl) {
+                contadorEl.innerText = carrinho.length;
+            }
+        }
+
+        function renderizarCarrinho() {
+            const container = document.getElementById('carrinho-itens-lista');
+            const totalEl = document.getElementById('carrinho-total');
+            container.innerHTML = '';
+
+            if (carrinho.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">O seu carrinho está vazio.</div>`;
+                totalEl.innerText = 'R$ 0,00';
+                return;
+            }
+
+            let total = 0;
+            carrinho.forEach((item, index) => {
+                total += item.preco;
+                container.innerHTML += `
+                    <div class="flex items-center gap-4 py-3 first:pt-0">
+                        <img src="${item.imagem}" alt="${item.nome}" class="w-16 h-16 object-cover rounded-xl border border-gray-100 flex-shrink-0">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-sm text-gray-800 line-clamp-1">${item.nome}</h4>
+                            <p class="text-xs text-[#0E8685] font-semibold mt-0.5">Variação: ${item.variacao}</p>
+                            <p class="text-sm font-extrabold text-[#C5A880] mt-1">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                        <button onclick="removerDoCarrinho(${index})" class="text-gray-400 hover:text-red-500 font-bold p-2 text-sm">🗑️</button>
+                    </div>
+                `;
+            });
+
+            totalEl.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        window.removerDoCarrinho = function(index) {
+            carrinho.splice(index, 1);
+            localStorage.setItem('carrinho_isis', JSON.stringify(carrinho));
+            atualizarContadorCarrinho();
+            renderizarCarrinho();
+        }
+
+        window.finalizarPedidoWhatsApp = function() {
+            const nome = document.getElementById('chk-nome').value.trim();
+            const cpf = document.getElementById('chk-cpf').value.trim();
+            const telefone = document.getElementById('chk-telefone').value.trim();
+            const endereco = document.getElementById('chk-endereco').value.trim();
+            const pagamento = document.getElementById('chk-pagamento').value;
+
+            if (!nome || !cpf || !telefone || !endereco) {
+                alert("Por favor, preencha todos os campos de cadastro e endereço!");
+                return;
+            }
+
+            let mensagem = `*Novo Pedido & Rituais - Ísis Holística*\n\n`;
+            mensagem += `Olá! Gostaria de alinhar a entrega dos meus itens de curadoria esotérica:\n\n`;
+            mensagem += `*Nome:* ${nome}\n`;
+            mensagem += `*CPF:* ${cpf}\n`;
+            mensagem += `*Telefone:* ${telefone}\n`;
+            mensagem += `*Endereço:* ${endereco}\n`;
+            mensagem += `*Forma de Pagamento:* ${pagamento}\n\n`;
+            mensagem += `*Itens Escolhidos:*\n`;
+
+            let total = 0;
+            carrinho.forEach((item, idx) => {
+                mensagem += `${idx + 1}. *${item.nome}* (${item.variacao}) - R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+                total += item.preco;
+            });
+
+            mensagem += `\n*Valor Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\nGratidão e luz! Aguardo instruções para o envio.`;
+
+            mensagemWhatsAppPendente = mensagem;
+
+            document.getElementById('modal-checkout').classList.add('hidden');
+            document.getElementById('modal-sucesso').classList.remove('hidden');
+        }
+
+        window.concluirPedido = function() {
+            if (mensagemWhatsAppPendente) {
+                const url = `https://wa.me/555195508826?text=${encodeURIComponent(mensagemWhatsAppPendente)}`;
+                window.open(url, '_blank');
+                mensagemWhatsAppPendente = "";
+            }
+
+            carrinho = [];
+            localStorage.removeItem('carrinho_isis');
+            atualizarContadorCarrinho();
+            document.getElementById('modal-sucesso').classList.add('hidden');
+            mudarAba('view-home');
         }
 
         function renderizarDestaquesHome() {
@@ -566,7 +915,7 @@
                 return;
             }
             destaques.forEach(p => {
-                const imgCapa = p.imagem || (p.imagens && p.imagens.length > 0 ? p.imagens[0].url : '');
+                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
                 container.innerHTML += `
                     <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
                         <div>
@@ -586,19 +935,21 @@
             });
         }
 
+        /* RENDERIZAÇÃO DA LOJA COM PAGINAÇÃO ELEGANTE (< e >) */
         function renderizarProdutosLoja() {
             const container = document.getElementById('grid-produtos');
             if (!container) return;
             container.innerHTML = '';
             
-            let filtrados = listaProdutos.filter(p => {
-                if (categoriaFiltroAtiva === 'todos') return true;
-                return normalizarTexto(p.categoria) === normalizarTexto(categoriaFiltroAtiva);
-            });
+            let filtrados = listaProdutos.filter(p => categoriaFiltroAtiva === 'todos' || p.categoria === categoriaFiltroAtiva);
             
             if (termoBuscaAtivo.trim() !== '') {
-                const termo = normalizarTexto(termoBuscaAtivo);
-                filtrados = filtrados.filter(p => normalizarTexto(p.nome).includes(termo) || normalizarTexto(p.descricao || '').includes(termo));
+                const termo = termoBuscaAtivo.toLowerCase();
+                filtrados = filtrados.filter(p => 
+                    p.nome.toLowerCase().includes(termo) || 
+                    (p.descricao || '').toLowerCase().includes(termo) ||
+                    p.categoria.toLowerCase().includes(termo)
+                );
             }
 
             const totalPaginas = Math.ceil(filtrados.length / itensPorPaginaLoja) || 1;
@@ -609,16 +960,15 @@
             const fim = inicio + itensPorPaginaLoja;
             const itensPagina = filtrados.slice(inicio, fim);
 
-            const infoPaginacao = document.getElementById('loja-paginacao-info');
-            if (infoPaginacao) infoPaginacao.innerText = `Página ${paginaAtualLoja} de ${totalPaginas} (${filtrados.length} itens)`;
+            document.getElementById('loja-paginacao-info').innerText = `Página ${paginaAtualLoja} de ${totalPaginas} (${filtrados.length} itens)`;
 
             if (itensPagina.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Nenhum produto encontrado nesta categoria.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Nenhum produto encontrado.</div>`;
                 return;
             }
 
             itensPagina.forEach(p => {
-                const imgCapa = p.imagem || (p.imagens && p.imagens.length > 0 ? p.imagens[0].url : '');
+                const imgCapa = (p.imagens && p.imagens.length > 0) ? p.imagens[0].url : (p.imagem || '');
                 container.innerHTML += `
                     <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
                         <div>
@@ -639,7 +989,17 @@
         }
 
         window.mudarPaginaLoja = function(direcao) {
+            let filtrados = listaProdutos.filter(p => categoriaFiltroAtiva === 'todos' || p.categoria === categoriaFiltroAtiva);
+            if (termoBuscaAtivo.trim() !== '') {
+                const termo = termoBuscaAtivo.toLowerCase();
+                filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(termo) || (p.descricao || '').toLowerCase().includes(termo));
+            }
+            const totalPaginas = Math.ceil(filtrados.length / itensPorPaginaLoja) || 1;
+
             paginaAtualLoja += direcao;
+            if (paginaAtualLoja < 1) paginaAtualLoja = 1;
+            if (paginaAtualLoja > totalPaginas) paginaAtualLoja = totalPaginas;
+
             renderizarProdutosLoja();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -654,94 +1014,24 @@
             categoriaFiltroAtiva = cat;
             termoBuscaAtivo = '';
             paginaAtualLoja = 1;
+            
             const inputBusca = document.getElementById('input-busca');
             if (inputBusca) inputBusca.value = '';
+
+            const botoesCat = ['todos', 'Promoções', 'Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens', 'Perfume', 'Oleo-Essencial', 'Aromatizador'];
+            botoesCat.forEach(b => {
+                const btnEl = document.getElementById(`btn-cat-${b}`);
+                if (btnEl) {
+                    if (b === cat || (cat === 'Oleo Essencial' && b === 'Oleo-Essencial')) {
+                        btnEl.className = "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow";
+                    } else {
+                        btnEl.className = "px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition";
+                    }
+                }
+            });
+
             renderizarProdutosLoja();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        window.abrirModalProdutoId = function(id) {
-            const p = listaProdutos.find(item => item.idFirestore === id);
-            if (!p) return;
-            produtoAtualModal = p;
-            document.getElementById('modal-nome').innerText = p.nome;
-            document.getElementById('modal-preco').innerText = `R$ ${Number(p.preco).toFixed(2).replace('.', ',')}`;
-            document.getElementById('modal-categoria').innerText = p.categoria;
-            document.getElementById('modal-descricao').innerText = p.descricao || '';
-            document.getElementById('modal-img').src = p.imagem || (p.imagens?.[0]?.url || '');
-            document.getElementById('modal-produto').classList.remove('hidden');
-        }
-
-        window.fecharModalProduto = function() { document.getElementById('modal-produto').classList.add('hidden'); }
-
-        window.adicionarProdutoAoCarrinhoModal = function() {
-            if (!produtoAtualModal) return;
-            carrinho.push({
-                id: produtoAtualModal.idFirestore,
-                nome: produtoAtualModal.nome,
-                preco: Number(produtoAtualModal.preco),
-                imagem: produtoAtualModal.imagem || (produtoAtualModal.imagens?.[0]?.url || '')
-            });
-            localStorage.setItem('carrinho_isis', JSON.stringify(carrinho));
-            atualizarContadorCarrinho();
-            fecharModalProduto();
-            toggleCartModal();
-        }
-
-        window.toggleCartModal = function() {
-            const modal = document.getElementById('modal-carrinho');
-            modal.classList.toggle('hidden');
-            if (!modal.classList.contains('hidden')) renderizarCarrinho();
-        }
-
-        function atualizarContadorCarrinho() {
-            const count = document.getElementById('cart-count');
-            if (count) count.innerText = carrinho.length;
-        }
-
-        function renderizarCarrinho() {
-            const container = document.getElementById('carrinho-itens-lista');
-            const totalEl = document.getElementById('carrinho-total');
-            container.innerHTML = '';
-            if (carrinho.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-gray-400 text-sm">O seu carrinho está vazio.</div>`;
-                totalEl.innerText = 'R$ 0,00';
-                return;
-            }
-            let total = 0;
-            carrinho.forEach((item, index) => {
-                total += item.preco;
-                container.innerHTML += `
-                    <div class="flex items-center gap-4 py-3">
-                        <img src="${item.imagem}" class="w-14 h-14 object-cover rounded-xl border">
-                        <div class="flex-grow">
-                            <h4 class="font-bold text-sm">${item.nome}</h4>
-                            <p class="text-sm font-extrabold text-[#C5A880]">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
-                        </div>
-                        <button onclick="removerDoCarrinho(${index})" class="text-red-500 font-bold p-2 text-sm">🗑️</button>
-                    </div>
-                `;
-            });
-            totalEl.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        }
-
-        window.removerDoCarrinho = function(index) {
-            carrinho.splice(index, 1);
-            localStorage.setItem('carrinho_isis', JSON.stringify(carrinho));
-            atualizarContadorCarrinho();
-            renderizarCarrinho();
-        }
-
-        window.finalizarPedidoWhatsApp = function() {
-            if (carrinho.length === 0) { alert("Carrinho vazio!"); return; }
-            let msg = `*Novo Pedido - Ísis Holística*\n\n`;
-            let total = 0;
-            carrinho.forEach((item, i) => {
-                msg += `${i + 1}. *${item.nome}* - R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
-                total += item.preco;
-            });
-            msg += `\n*Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\nGratidão! Aguardo instruções.`;
-            window.open(`https://wa.me/555195508826?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
 </body>
