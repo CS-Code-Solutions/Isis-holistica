@@ -9,90 +9,389 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        #hero-banner-bg {
+            position: relative;
+            width: 100%;
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background-color: #0b2e2d;
+            overflow: hidden;
+        }
+
+        .hero-bg-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.2) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        #modal-carousel-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: #0b2e2d;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+
+        .carousel-bg-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 0;
+        }
+
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.65));
+            z-index: 1;
+        }
+
+        .carousel-content {
+            position: absolute;
+            inset-x: 0;
+            bottom: 24px;
+            z-index: 2;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- BARRA DE AVISO SUPERIOR -->
+    <div class="bg-[#0E8685] text-white text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
+        Mais que produtos, energia para o seu dia a dia! Conheça nossa curadoria esotérica e terapias holísticas.
+    </div>
 
     <!-- CABEÇALHO -->
     <header class="bg-white shadow-sm sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center cursor-pointer py-1" onclick="mudarAba('view-home')">
-                <img src="logo4.png" alt="Ísis Holística" class="h-12 md:h-16 w-auto object-contain" onerror="this.src='logo.png'">
+                <img src="logo4.png" alt="Ísis Holística" class="h-12 md:h-16 w-auto object-contain pointer-events-none select-none" draggable="false" oncontextmenu="return false;" onerror="this.src='logo.png'">
             </div>
+            
             <nav class="hidden md:flex space-x-8 text-sm font-semibold items-center text-gray-700">
-                <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685]">Início</button>
-                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685]">Loja Esotérica</button>
-                <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685]">Espaço Terapêutico</button>
-                <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685]">Nossa Essência</button>
+                <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
+                <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">Destaques & Rituais</button>
+                
+                <!-- MENU CASCATA (DROPDOWN) DESKTOP DINÂMICO -->
+                <div class="relative group">
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] transition flex items-center gap-1 py-2">
+                        Loja esotérica ▾
+                    </button>
+                    <div id="desktop-menu-categorias" class="absolute top-full left-0 w-60 bg-white border border-gray-100 shadow-xl rounded-2xl py-2 hidden group-hover:block z-50">
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">✨ Todos os Produtos</button>
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-amber-600 hover:bg-amber-50 transition">🔥 Promoções</button>
+                        <div id="desktop-subcategorias-dinamicas"></div>
+                    </div>
+                </div>
+
+                <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685] transition">Espaço terapêutico</button>
+                <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685] transition">Nossa essência</button>
             </nav>
+
             <div class="flex items-center gap-3">
-                <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 transition">🛒<span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span></button>
+                <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200 transition">
+                    🛒
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+                <button onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg text-gray-700 font-bold">☰</button>
             </div>
+        </div>
+
+        <!-- MENU MOBILE COM CASCATA EXPANSÍVEL -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 shadow-lg">
+            <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
+            <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">Destaques & Rituais</button>
+            
+            <div class="border-y border-gray-100 py-2 space-y-1">
+                <button onclick="toggleMobileLojaSubmenu()" class="flex justify-between items-center w-full py-1 font-semibold text-gray-700 hover:text-[#0E8685]">
+                    <span>Loja Esotérica</span>
+                    <span id="mobile-submenu-arrow">▼</span>
+                </button>
+                <div id="mobile-loja-submenu" class="hidden pl-4 space-y-2 pt-2">
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">✨ Todos os Produtos</button>
+                    <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="block text-left text-xs font-bold text-amber-600">🔥 Promoções</button>
+                    <div id="mobile-subcategorias-dinamicas" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Espaço Terapêutico</button>
+            <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Nossa Essência</button>
         </div>
     </header>
 
-    <!-- HOME -->
+    <!-- BARRA DE VALORES -->
+    <div class="bg-white border-b border-gray-100 py-3 px-4 hidden sm:block">
+        <div class="max-w-7xl mx-auto flex justify-around items-center text-xs text-gray-600 font-medium">
+            <span class="flex items-center gap-1.5">🍃 Curadoria com propósito</span>
+            <span class="flex items-center gap-1.5">💎 Produtos com significado</span>
+            <span class="flex items-center gap-1.5">🤍 Atendimento acolhedor</span>
+            <span class="flex items-center gap-1.5">💬 Compre pelo WhatsApp</span>
+        </div>
+    </div>
+
+    <!-- INÍCIO (PÁGINA PRINCIPAL) -->
     <section id="view-home" class="app-view flex-grow w-full">
-        <div class="bg-[#0b2e2d] text-white py-20 px-6">
-            <div class="max-w-7xl mx-auto space-y-4">
-                <h2 class="text-3xl md:text-5xl font-extrabold">O equilíbrio começa nos pequenos rituais.</h2>
-                <p class="text-sm md:text-base opacity-90">Explore nossa curadoria esotérica com cristais, aromas e decoração.</p>
-                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow text-xs">Explorar Loja ➔</button>
+        <div id="hero-banner-bg">
+            <div class="hero-overlay"></div>
+            <img class="hero-bg-image" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Ísis Holística" onerror="this.style.display='none'">
+            <div class="max-w-7xl mx-auto px-6 w-full hero-content py-20 text-white">
+                <div class="max-w-xl space-y-4">
+                    <span class="bg-[#0E8685] text-white text-xs font-bold uppercase px-3.5 py-1.5 rounded-full tracking-wider shadow inline-block">Seja bem-vindo(a)</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold leading-tight drop-shadow-lg">O equilíbrio começa nos pequenos rituais.</h2>
+                    <p class="text-sm md:text-base opacity-95 leading-relaxed drop-shadow">Explore nossa curadoria esotérica com cristais, aromas, decoração e agende seu momento de cuidado terapêutico.</p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition text-xs">Explorar Loja ➔</button>
+                        <button onclick="abrirModalBanner()" class="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-bold px-6 py-3 rounded-xl border border-white/30 shadow-lg transition text-xs">Ver Destaques</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-4 py-12">
-            <h3 class="text-2xl font-bold text-gray-900 mb-6">Seleção Ísis</h3>
-            <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+
+        <div class="max-w-7xl mx-auto px-4 py-12 w-full">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-8">
+                <div>
+                    <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">ESCOLHIDOS COM CARINHO</span>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">Seleção Ísis</h3>
+                </div>
+                <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="text-sm font-bold text-[#0E8685] hover:underline self-start sm:self-auto whitespace-nowrap">Ver todos os produtos ➔</button>
+            </div>
+            <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+        </div>
+    </section>
+
+    <!-- MODAL DO BANNER / CARROSSEL DE DESTAQUES -->
+    <div id="modal-banner" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-6 relative">
+            <button onclick="fecharModalBanner()" class="absolute top-4 right-4 z-30 text-gray-500 hover:text-gray-800 font-bold bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center transition shadow-sm">✕</button>
+            <div class="mb-4">
+                <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">ESPAÇO DE DESTAQUES</span>
+                <h3 class="text-2xl font-bold text-gray-900">Rituais e Novidades</h3>
+            </div>
+            
+            <div id="modal-carousel-wrapper" onclick="clicarBannerAtual()">
+                <div class="carousel-overlay"></div>
+                <img id="carousel-bg" class="carousel-bg-image" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Banner Fundo" onerror="this.style.display='none'">
+                <div class="max-w-xl mx-auto px-4 carousel-content text-center text-white pb-6">
+                    <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full tracking-wider shadow mb-2 inline-block">LOJA ESOTÉRICA</span>
+                    <h2 id="carousel-title" class="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 leading-tight drop-shadow-md">O equilíbrio começa nos pequenos rituais.</h2>
+                    <p id="carousel-desc" class="text-xs sm:text-sm opacity-95 mb-4 drop-shadow">Encontre produtos com significado para a sua jornada.</p>
+                    <button onclick="event.stopPropagation(); clicarBannerAtual();" class="pointer-events-auto bg-[#0E8685] text-white font-bold px-5 py-2.5 rounded-xl shadow text-xs hover:bg-opacity-90 transition">Acessar Seção ➔</button>
+                </div>
+                <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full z-20">❮</button>
+                <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full z-20">❯</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOSSA ESSÊNCIA -->
+    <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
+        <div class="max-w-5xl mx-auto space-y-12">
+            <div class="space-y-3">
+                <span class="text-[#0E8685] font-bold text-xs uppercase tracking-wider">RAIZES E PROPÓSITO</span>
+                <h3 class="text-3xl md:text-4xl font-bold text-gray-900">Nossa essência</h3>
+                <p class="text-gray-500 text-sm">Mais que uma loja. Um encontro com você.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-8 bg-[#F8F9FA] p-6 md:p-12 rounded-3xl border border-gray-100 shadow-sm">
+                <div class="w-32 md:w-44 flex-shrink-0 flex justify-center">
+                    <img src="ico.png" alt="Ísis Holística" class="w-full h-auto object-contain pointer-events-none select-none drop-shadow-md" draggable="false" oncontextmenu="return false;">
+                </div>
+                <div class="text-center md:text-left space-y-4">
+                    <h4 class="text-2xl font-bold text-gray-900">Ísis Holística</h4>
+                    <p class="text-gray-700 leading-relaxed text-sm">
+                        Nascemos do propósito de conectar você com sua melhor energia, equilíbrio e bem-estar. Em São Leopoldo, RS, reunimos produtos esotéricos e um espaço acolhedor dedicado ao autoconhecimento.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed text-sm">
+                        De cristais, aromas, acessórios e objetos com significado, nossa curadoria convida você a desacelerar e habitar o presente.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] p-1 rounded-3xl shadow-lg">
+                <div class="bg-white rounded-[22px] p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-4 text-center sm:text-left">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#833ab4] via-[#fd1d1d] to-[#fcb045] flex items-center justify-center text-white text-2xl shadow flex-shrink-0 mx-auto sm:mx-0">
+                            📷
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-900">Siga-nos no Instagram</h4>
+                            <p class="text-xs text-gray-600">Acompanhe nossas novidades, rituais e dicas diárias @isiseholistica</p>
+                        </div>
+                    </div>
+                    <a href="https://www.instagram.com/isiseholistica?exln=MW1ieHpxYncxYTQ3dg==" target="_blank" rel="noreferrer" class="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-95 text-white font-bold px-6 py-3 rounded-xl shadow transition text-xs whitespace-nowrap flex items-center gap-2">
+                        Seguir no Instagram
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-3xl border border-gray-100 p-6 md:p-8 space-y-6 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200 pb-6">
+                    <div>
+                        <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">LOCALIZAÇÃO</span>
+                        <h4 class="text-2xl font-bold text-gray-900 mt-1">Venha nos visitar</h4>
+                        <p class="text-sm text-gray-600 mt-1">📍 Av. Feitoria, 2300 - Lj 08 - Pinheiro, São Leopoldo - RS, 93042-252</p>
+                    </div>
+                    <a href="https://maps.google.com/?q=Av.+Feitoria,+2300+-+Lj+08+-+Pinheiro,+São+Leopoldo+-+RS,+93042-252" target="_blank" rel="noreferrer" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-5 py-3 rounded-xl shadow transition text-xs flex items-center gap-2 whitespace-nowrap">
+                        Abrir no Maps
+                    </a>
+                </div>
+
+                <div class="w-full h-80 rounded-2xl overflow-hidden shadow-inner border border-gray-200">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3463.8562375841445!2d-51.144889!3d-29.773123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x951943c2c1a8d053%3A0x8e8334bc62bb920f!2sAv.%20Feitoria%2C%202300%20-%20Pinheiro%2C%20S%C3%A3o%20Leopoldo%20-%20RS%2C%2093042-252!5e0!3m2!1spt-BR!2sbr!4v1710000000000!5m2!1spt-BR!2sbr" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- PRODUTOS -->
-    <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full space-y-6">
-        <div class="text-center">
-            <h3 class="text-2xl font-bold text-[#0E8685]">Loja Esotérica</h3>
-            <div class="max-w-md mx-auto my-4"><input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar produtos..." class="w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:border-[#0E8685]"></div>
-            <div id="botoes-categorias-dinamicos" class="flex flex-wrap justify-center gap-2"></div>
+    <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
+        <div class="text-center mb-8">
+            <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
+            <p class="text-gray-600 mt-2">Explore nossa curadoria de produtos esotéricos e vibracionais.</p>
+            <div class="max-w-md mx-auto my-6">
+                <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
+            </div>
+            <div id="botoes-categorias-dinamicos" class="flex flex-wrap justify-center gap-2 mt-4">
+                <button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
+                <button onclick="filtrarProdutos('Promoções')" id="btn-cat-Promoções" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔥 Promoções</button>
+            </div>
         </div>
-        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+        
+        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+
+        <div class="flex justify-center items-center gap-4 mt-12 pt-6 border-t border-gray-200 text-xs font-bold text-gray-700">
+            <button onclick="mudarPaginaLoja(-1)" id="btn-loja-ant" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition shadow-sm text-base">‹</button>
+            <span id="loja-paginacao-info" class="text-sm font-semibold text-gray-600">Página 1 de 1</span>
+            <button onclick="mudarPaginaLoja(1)" id="btn-loja-prox" class="w-10 h-10 rounded-xl bg-[#0E8685] hover:bg-opacity-90 text-white flex items-center justify-center transition shadow text-base">›</button>
+        </div>
     </section>
 
     <!-- ESPAÇO TERAPÊUTICO -->
-    <section id="view-terapias" class="app-view hidden flex-grow py-16 px-4 bg-white max-w-5xl mx-auto space-y-6">
-        <h3 class="text-3xl font-bold">Espaço Terapêutico</h3>
-        <p class="text-gray-600 text-sm">Práticas integrativas voltadas à harmonização e equilíbrio.</p>
-        <a href="https://wa.me/555195508826?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20as%20terapias." target="_blank" class="inline-block bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl text-sm">Agendar pelo WhatsApp</a>
+    <section id="view-terapias" class="app-view hidden flex-grow py-16 px-4 bg-white">
+        <div class="max-w-5xl mx-auto space-y-12">
+            <div class="space-y-3">
+                <span class="text-[#0E8685] font-bold text-xs uppercase tracking-wider">ATENDIMENTO ESPECIALIZADO</span>
+                <h3 class="text-3xl md:text-4xl font-bold text-gray-900">Espaço terapêutico</h3>
+                <p class="text-gray-500 text-sm">Práticas integrativas voltadas à harmonização e ao equilíbrio.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
+                    <span class="text-2xl">🤍</span>
+                    <h4 class="text-lg font-bold text-gray-900">Humanoterapia</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Um espaço de acolhimento e reconexão pessoal.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
+                    <span class="text-2xl">🌿</span>
+                    <h4 class="text-lg font-bold text-gray-900">Psicanálise</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Escuta e investigação do inconsciente.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100 space-y-3">
+                    <span class="text-2xl">✨</span>
+                    <h4 class="text-lg font-bold text-gray-900">Radiestesia e radiônica</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">Práticas voltadas à harmonização e equilíbrio.</p>
+                </div>
+            </div>
+
+            <div class="bg-[#0E8685] text-white p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+                <div class="space-y-1 text-center md:text-left">
+                    <span class="text-xs uppercase tracking-widest opacity-90 font-bold">SEU PRÓXIMO PASSO</span>
+                    <h4 class="text-2xl font-bold">Reserve um momento de cuidado.</h4>
+                </div>
+                <a href="https://wa.me/555195508826?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20Espaço%20Terapêutico." target="_blank" rel="noreferrer" class="bg-[#25D366] text-white font-bold px-6 py-3.5 rounded-xl shadow transition hover:bg-opacity-90 whitespace-nowrap text-sm flex items-center gap-2">
+                    Agendar pelo WhatsApp
+                </a>
+            </div>
+        </div>
     </section>
 
-    <!-- QUEM SOMOS -->
-    <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white max-w-5xl mx-auto space-y-6">
-        <h3 class="text-3xl font-bold">Nossa Essência</h3>
-        <p class="text-gray-600 text-sm">Nascemos em São Leopoldo - RS, conectando você com sua melhor energia e bem-estar.</p>
-    </section>
-
-    <!-- MODAL PRODUTO -->
+    <!-- MODAL DE DETALHES DO PRODUTO -->
     <div id="modal-produto" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl p-6 max-w-lg w-full relative space-y-4">
-            <button onclick="fecharModalProduto()" class="absolute top-3 right-3 font-bold">✕</button>
-            <img id="modal-img" src="" class="w-full h-60 object-cover rounded-xl">
-            <h3 id="modal-nome" class="text-xl font-bold"></h3>
-            <p id="modal-preco" class="text-2xl font-extrabold text-[#C5A880]"></p>
-            <p id="modal-descricao" class="text-sm text-gray-600"></p>
-            <button onclick="adicionarAoCarrinhoModal()" class="w-full bg-[#0E8685] text-white font-bold py-3 rounded-xl text-sm">Adicionar ao Carrinho</button>
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="fecharModalProduto()" class="absolute top-3 right-3 z-20 text-gray-500 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="space-y-4">
+                    <div class="relative h-72 bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center">
+                        <img id="modal-img" src="" alt="Produto" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="space-y-4 flex flex-col justify-between">
+                    <div>
+                        <span id="modal-categoria" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full uppercase"></span>
+                        <h3 id="modal-nome" class="text-2xl font-bold text-gray-900 mt-2"></h3>
+                        <p id="modal-preco" class="text-3xl font-extrabold text-[#C5A880] mt-2"></p>
+                        <p id="modal-descricao" class="text-gray-600 text-sm mt-4 leading-relaxed"></p>
+                    </div>
+                    <button onclick="adicionarProdutoAoCarrinhoModal()" class="w-full bg-[#0E8685] text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm">Adicionar ao Carrinho</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- MODAL CARRINHO -->
+    <!-- MODAL DO CARRINHO -->
     <div id="modal-carrinho" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl p-6 max-w-md w-full relative space-y-4 flex flex-col max-h-[80vh]">
-            <button onclick="toggleCartModal()" class="absolute top-3 right-3 font-bold">✕</button>
-            <h3 class="text-xl font-bold text-[#0E8685]">Seu Carrinho</h3>
-            <div id="carrinho-itens-lista" class="flex-grow overflow-y-auto space-y-3"></div>
-            <div class="border-t pt-3 flex justify-between font-bold"><span>Total:</span><span id="carrinho-total">R$ 0,00</span></div>
-            <button onclick="finalizarWhatsApp()" class="w-full bg-[#25D366] text-white font-bold py-3 rounded-xl text-sm">Finalizar via WhatsApp</button>
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 relative max-h-[90vh] flex flex-col">
+            <button onclick="toggleCartModal()" class="absolute top-3 right-3 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+            <h3 class="text-2xl font-bold text-[#0E8685] mb-4">Seu Carrinho 🛒</h3>
+            <div id="carrinho-itens-lista" class="flex-grow overflow-y-auto space-y-4 divide-y divide-gray-100 max-h-[50vh]"></div>
+            <div class="border-t pt-4 mt-4 space-y-3">
+                <div class="flex justify-between items-center text-lg font-bold">
+                    <span>Total:</span>
+                    <span id="carrinho-total" class="text-[#C5A880] text-2xl font-extrabold">R$ 0,00</span>
+                </div>
+                <button onclick="finalizarPedidoWhatsApp()" class="w-full bg-[#25D366] text-white font-bold py-3.5 rounded-xl shadow transition text-sm">Finalizar Pedido via WhatsApp</button>
+            </div>
         </div>
     </div>
 
-    <!-- SCRIPT DA LOJA -->
+    <!-- BOTÃO WHATSAPP FLUTUANTE -->
+    <a href="https://wa.me/555195508826" target="_blank" rel="noreferrer" class="fixed bottom-6 right-6 z-40 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-105 transition">💬</a>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-white border-t border-gray-100 py-10 px-4 mt-auto text-center">
+        <div class="max-w-7xl mx-auto flex flex-col items-center justify-center gap-2">
+            <span class="text-xs text-gray-500">Produtos com significado. Cuidado com a sua essência.</span>
+            <div class="text-xs text-gray-400">Ísis Holística &copy; 2026 — São Leopoldo - RS</div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -111,7 +410,14 @@
 
         let listaProdutos = [];
         let listaCategoriasCustom = [];
+        let slides = [];
+        let currentSlide = 0;
+        let carouselTimer = null;
         let produtoAtualModal = null;
+        let paginaAtualLoja = 1;
+        const itensPorPaginaLoja = 15;
+        let categoriaFiltroAtiva = 'todos';
+        let termoBuscaAtivo = '';
         let carrinho = JSON.parse(localStorage.getItem('carrinho_isis')) || [];
 
         const categoriasBaseFixas = [
@@ -126,15 +432,12 @@
             { nome: 'Aromatizador', icone: '🍃' }
         ];
 
-        let categoriaFiltroAtiva = 'todos';
-        let termoBuscaAtivo = '';
-
         function normalizarTexto(str) {
             if (!str) return '';
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
         }
 
-        async function carregarLoja() {
+        async function carregarDadosDoBanco() {
             try {
                 const snapCat = await getDocs(collection(db, "categorias"));
                 listaCategoriasCustom = [];
@@ -144,18 +447,23 @@
                 listaProdutos = [];
                 snapProd.forEach(d => listaProdutos.push({ idFirestore: d.id, ...d.data() }));
 
-                atualizarMenusLoja();
+                const snapSlides = await getDocs(collection(db, "slides"));
+                slides = [];
+                snapSlides.forEach(d => slides.push({ idFirestore: d.id, ...d.data() }));
+
+                atualizarMenusCategoriasUI();
                 renderizarDestaquesHome();
                 renderizarProdutosLoja();
+                inicializarCarrossel();
                 atualizarContadorCarrinho();
             } catch (e) {
-                console.error("Erro ao carregar loja:", e);
-                atualizarMenusLoja();
+                console.error("Erro ao carregar do Firebase:", e);
+                atualizarMenusCategoriasUI();
                 renderizarProdutosLoja();
             }
         }
 
-        carregarLoja();
+        carregarDadosDoBanco();
 
         function obterTodasCategoriasUnificadasLoja() {
             let mapa = new Map();
@@ -164,20 +472,88 @@
             return Array.from(mapa.values());
         }
 
-        function atualizarMenusLoja() {
+        function atualizarMenusCategoriasUI() {
             const todas = obterTodasCategoriasUnificadasLoja();
-            const container = document.getElementById('botoes-categorias-dinamicos');
-            if (!container) return;
-            container.innerHTML = `<button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold shadow">Todos</button><button onclick="filtrarProdutos('Promoções')" id="btn-cat-Promoções" class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-xs font-bold">🔥 Promoções</button>`;
-            todas.forEach(cat => {
-                container.innerHTML += `<button onclick="filtrarProdutos('${cat.nome}')" id="btn-cat-${cat.nome.replace(/\s+/g, '-')}" class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-xs font-bold">${cat.icone || '✨'} ${cat.nome}</button>`;
-            });
+            const desktopSub = document.getElementById('desktop-subcategorias-dinamicas');
+            if (desktopSub) {
+                desktopSub.innerHTML = '';
+                todas.forEach(cat => {
+                    desktopSub.innerHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat.nome}');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">${cat.icone || '✨'} ${cat.nome}</button>`;
+                });
+            }
+
+            const mobileSub = document.getElementById('mobile-subcategorias-dinamicas');
+            if (mobileSub) {
+                mobileSub.innerHTML = '';
+                todas.forEach(cat => {
+                    mobileSub.innerHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat.nome}');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">${cat.icone || '✨'} ${cat.nome}</button>`;
+                });
+            }
+
+            const botoesCatContainer = document.getElementById('botoes-categorias-dinamicos');
+            if (botoesCatContainer) {
+                botoesCatContainer.innerHTML = `
+                    <button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
+                    <button onclick="filtrarProdutos('Promoções')" id="btn-cat-Promoções" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔥 Promoções</button>
+                `;
+                todas.forEach(cat => {
+                    botoesCatContainer.innerHTML += `<button onclick="filtrarProdutos('${cat.nome}')" id="btn-cat-${cat.nome.replace(/\s+/g, '-')}" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">${cat.icone || '✨'} ${cat.nome}</button>`;
+                });
+            }
         }
 
-        window.mudarAba = function(id) {
+        window.mudarAba = function(idAba) {
             document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
+            const alvo = document.getElementById(idAba);
+            if (alvo) alvo.classList.remove('hidden');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu) mobileMenu.classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.toggleMobileMenu = function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        window.toggleMobileLojaSubmenu = function() {
+            const sub = document.getElementById('mobile-loja-submenu');
+            const arrow = document.getElementById('mobile-submenu-arrow');
+            sub.classList.toggle('hidden');
+            arrow.innerText = sub.classList.contains('hidden') ? '▼' : '▲';
+        }
+
+        window.abrirModalBanner = function() {
+            document.getElementById('modal-banner').classList.remove('hidden');
+            if (slides.length > 0) atualizarSlideUI();
+        }
+
+        window.fecharModalBanner = function() {
+            document.getElementById('modal-banner').classList.add('hidden');
+            if (carouselTimer) clearTimeout(carouselTimer);
+        }
+
+        function inicializarCarrossel() { if (slides.length > 0) atualizarSlideUI(); }
+
+        function atualizarSlideUI() {
+            if (slides.length === 0) return;
+            const s = slides[currentSlide];
+            if (!s) return;
+            document.getElementById('carousel-title').innerText = s.titulo || '';
+            document.getElementById('carousel-desc').innerText = s.desc || '';
+            const imgBg = document.getElementById('carousel-bg');
+            imgBg.src = s.imagemPc || s.imagemMobile || '42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg';
+        }
+
+        window.mudarSlide = function(direcao) {
+            if (slides.length === 0) return;
+            currentSlide = (currentSlide + direcao + slides.length) % slides.length;
+            atualizarSlideUI();
+        }
+
+        window.clicarBannerAtual = function() {
+            fecharModalBanner();
+            mudarAba('view-produtos');
+            filtrarProdutos('todos');
         }
 
         function renderizarDestaquesHome() {
@@ -185,9 +561,28 @@
             if (!container) return;
             container.innerHTML = '';
             const destaques = listaProdutos.filter(p => p.destaque);
+            if (destaques.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-gray-400">Nenhum produto em destaque no momento.</div>`;
+                return;
+            }
             destaques.forEach(p => {
-                const img = p.imagem || (p.imagens?.[0]?.url || '');
-                container.innerHTML += `<div onclick="abrirModalProduto('${p.idFirestore}')" class="bg-white rounded-2xl shadow p-4 cursor-pointer"><img src="${img}" class="w-full h-48 object-cover rounded-xl mb-3"><h4 class="font-bold">${p.nome}</h4><p class="text-[#C5A880] font-extrabold mt-1">R$ ${Number(p.preco).toFixed(2)}</p></div>`;
+                const imgCapa = p.imagem || (p.imagens && p.imagens.length > 0 ? p.imagens[0].url : '');
+                container.innerHTML += `
+                    <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                        <div>
+                            <div class="relative h-64 bg-gray-100 overflow-hidden">
+                                <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">Destaque</span>
+                            </div>
+                            <div class="p-6">
+                                <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
+                                <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm">Ver Detalhes & Energia</span></div>
+                    </div>
+                `;
             });
         }
 
@@ -195,40 +590,83 @@
             const container = document.getElementById('grid-produtos');
             if (!container) return;
             container.innerHTML = '';
+            
             let filtrados = listaProdutos.filter(p => {
                 if (categoriaFiltroAtiva === 'todos') return true;
                 return normalizarTexto(p.categoria) === normalizarTexto(categoriaFiltroAtiva);
             });
-            if (termoBuscaAtivo) {
+            
+            if (termoBuscaAtivo.trim() !== '') {
                 const termo = normalizarTexto(termoBuscaAtivo);
-                filtrados = filtrados.filter(p => normalizarTexto(p.nome).includes(termo));
+                filtrados = filtrados.filter(p => normalizarTexto(p.nome).includes(termo) || normalizarTexto(p.descricao || '').includes(termo));
             }
-            if (filtrados.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-400">Nenhum produto encontrado.</div>`;
+
+            const totalPaginas = Math.ceil(filtrados.length / itensPorPaginaLoja) || 1;
+            if (paginaAtualLoja > totalPaginas) paginaAtualLoja = totalPaginas;
+            if (paginaAtualLoja < 1) paginaAtualLoja = 1;
+
+            const inicio = (paginaAtualLoja - 1) * itensPorPaginaLoja;
+            const fim = inicio + itensPorPaginaLoja;
+            const itensPagina = filtrados.slice(inicio, fim);
+
+            const infoPaginacao = document.getElementById('loja-paginacao-info');
+            if (infoPaginacao) infoPaginacao.innerText = `Página ${paginaAtualLoja} de ${totalPaginas} (${filtrados.length} itens)`;
+
+            if (itensPagina.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">Nenhum produto encontrado nesta categoria.</div>`;
                 return;
             }
-            filtrados.forEach(p => {
-                const img = p.imagem || (p.imagens?.[0]?.url || '');
-                container.innerHTML += `<div onclick="abrirModalProduto('${p.idFirestore}')" class="bg-white rounded-2xl shadow p-4 cursor-pointer"><img src="${img}" class="w-full h-48 object-cover rounded-xl mb-3"><span class="text-xs font-bold text-[#0E8685]">${p.categoria}</span><h4 class="font-bold mt-1">${p.nome}</h4><p class="text-[#C5A880] font-extrabold mt-2">R$ ${Number(p.preco).toFixed(2)}</p></div>`;
+
+            itensPagina.forEach(p => {
+                const imgCapa = p.imagem || (p.imagens && p.imagens.length > 0 ? p.imagens[0].url : '');
+                container.innerHTML += `
+                    <div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between border border-gray-100 cursor-pointer group">
+                        <div>
+                            <div class="relative h-64 bg-gray-100 overflow-hidden">
+                                <img src="${imgCapa}" alt="${p.nome}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-[#C5A880] text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">${p.categoria}</span>
+                            </div>
+                            <div class="p-6">
+                                <span class="text-xs font-semibold text-[#0E8685] uppercase tracking-wider">${p.categoria}</span>
+                                <h4 class="font-bold text-lg mt-1.5 text-gray-800 line-clamp-1">${p.nome}</h4>
+                                <p class="text-2xl font-extrabold text-[#C5A880] mt-3">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0"><span class="w-full block text-center bg-[#0E8685] text-white font-semibold py-3 rounded-xl text-sm shadow-sm">Ver Detalhes & Energia</span></div>
+                    </div>
+                `;
             });
         }
 
-        window.filtrarProdutos = function(cat) {
-            categoriaFiltroAtiva = cat;
+        window.mudarPaginaLoja = function(direcao) {
+            paginaAtualLoja += direcao;
             renderizarProdutosLoja();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         window.pesquisarProdutos = function(termo) {
             termoBuscaAtivo = termo;
+            paginaAtualLoja = 1;
             renderizarProdutosLoja();
         }
 
-        window.abrirModalProduto = function(id) {
+        window.filtrarProdutos = function(cat) {
+            categoriaFiltroAtiva = cat;
+            termoBuscaAtivo = '';
+            paginaAtualLoja = 1;
+            const inputBusca = document.getElementById('input-busca');
+            if (inputBusca) inputBusca.value = '';
+            renderizarProdutosLoja();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.abrirModalProdutoId = function(id) {
             const p = listaProdutos.find(item => item.idFirestore === id);
             if (!p) return;
             produtoAtualModal = p;
             document.getElementById('modal-nome').innerText = p.nome;
-            document.getElementById('modal-preco').innerText = `R$ ${Number(p.preco).toFixed(2)}`;
+            document.getElementById('modal-preco').innerText = `R$ ${Number(p.preco).toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-categoria').innerText = p.categoria;
             document.getElementById('modal-descricao').innerText = p.descricao || '';
             document.getElementById('modal-img').src = p.imagem || (p.imagens?.[0]?.url || '');
             document.getElementById('modal-produto').classList.remove('hidden');
@@ -236,9 +674,14 @@
 
         window.fecharModalProduto = function() { document.getElementById('modal-produto').classList.add('hidden'); }
 
-        window.adicionarAoCarrinhoModal = function() {
+        window.adicionarProdutoAoCarrinhoModal = function() {
             if (!produtoAtualModal) return;
-            carrinho.push({ nome: produtoAtualModal.nome, preco: Number(produtoAtualModal.preco), imagem: produtoAtualModal.imagem || '' });
+            carrinho.push({
+                id: produtoAtualModal.idFirestore,
+                nome: produtoAtualModal.nome,
+                preco: Number(produtoAtualModal.preco),
+                imagem: produtoAtualModal.imagem || (produtoAtualModal.imagens?.[0]?.url || '')
+            });
             localStorage.setItem('carrinho_isis', JSON.stringify(carrinho));
             atualizarContadorCarrinho();
             fecharModalProduto();
@@ -251,24 +694,53 @@
             if (!modal.classList.contains('hidden')) renderizarCarrinho();
         }
 
-        function atualizarContadorCarrinho() { document.getElementById('cart-count').innerText = carrinho.length; }
+        function atualizarContadorCarrinho() {
+            const count = document.getElementById('cart-count');
+            if (count) count.innerText = carrinho.length;
+        }
 
         function renderizarCarrinho() {
             const container = document.getElementById('carrinho-itens-lista');
+            const totalEl = document.getElementById('carrinho-total');
             container.innerHTML = '';
+            if (carrinho.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-gray-400 text-sm">O seu carrinho está vazio.</div>`;
+                totalEl.innerText = 'R$ 0,00';
+                return;
+            }
             let total = 0;
-            carrinho.forEach((item, idx) => {
+            carrinho.forEach((item, index) => {
                 total += item.preco;
-                container.innerHTML += `<div class="flex justify-between items-center text-sm border-b pb-2"><span>${item.nome}</span><strong>R$ ${item.preco.toFixed(2)}</strong></div>`;
+                container.innerHTML += `
+                    <div class="flex items-center gap-4 py-3">
+                        <img src="${item.imagem}" class="w-14 h-14 object-cover rounded-xl border">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-sm">${item.nome}</h4>
+                            <p class="text-sm font-extrabold text-[#C5A880]">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                        <button onclick="removerDoCarrinho(${index})" class="text-red-500 font-bold p-2 text-sm">🗑️</button>
+                    </div>
+                `;
             });
-            document.getElementById('carrinho-total').innerText = `R$ ${total.toFixed(2)}`;
+            totalEl.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
 
-        window.finalizarWhatsApp = function() {
-            let msg = "Olá! Gostaria de fazer o pedido:\n";
+        window.removerDoCarrinho = function(index) {
+            carrinho.splice(index, 1);
+            localStorage.setItem('carrinho_isis', JSON.stringify(carrinho));
+            atualizarContadorCarrinho();
+            renderizarCarrinho();
+        }
+
+        window.finalizarPedidoWhatsApp = function() {
+            if (carrinho.length === 0) { alert("Carrinho vazio!"); return; }
+            let msg = `*Novo Pedido - Ísis Holística*\n\n`;
             let total = 0;
-            carrinho.forEach(i => { msg += `- ${i.nome}: R$ ${i.preco.toFixed(2)}\n`; total += i.preco; });
-            msg += `Total: R$ ${total.toFixed(2)}`;
+            carrinho.forEach((item, i) => {
+                msg += `${i + 1}. *${item.nome}* - R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+                total += item.preco;
+            });
+            msg += `\n*Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\nGratidão! Aguardo instruções.`;
             window.open(`https://wa.me/555195508826?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
