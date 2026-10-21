@@ -6,31 +6,12 @@
     <title>Painel Gestor | Ísis Holística</title>
     <link rel="icon" type="image/png" href="ico.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col md:flex-row min-h-screen">
-
-    <!-- MODAL DE RECORTE -->
-    <div id="modal-recorte" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl p-6 max-w-xl w-full space-y-4 border border-teal-100 flex flex-col">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-[#0E8685]">✂️ Ajustar e Recortar Imagem</h3>
-                <button type="button" onclick="fecharModalRecorte()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
-            </div>
-            <div class="max-h-[60vh] overflow-hidden flex items-center justify-center bg-gray-900 rounded-xl">
-                <img id="imagem-para-recortar" src="" alt="Recorte" class="max-w-full block">
-            </div>
-            <div class="flex gap-3 pt-2 border-t">
-                <button type="button" onclick="aplicarRecorte()" class="flex-1 bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition text-sm">Concluir Recorte</button>
-                <button type="button" onclick="fecharModalRecorte()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition text-sm">Cancelar</button>
-            </div>
-        </div>
-    </div>
 
     <!-- TELA DE LOGIN -->
     <div id="login-overlay" class="fixed inset-0 z-50 bg-[#0E8685] flex items-center justify-center p-4">
@@ -66,9 +47,7 @@
                 </div>
                 <nav class="p-4 space-y-2">
                     <button onclick="mudarAbaAdmin('inventario')" id="nav-inventario" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left">📦 Inventário da Loja</button>
-                    <button onclick="mudarAbaAdmin('deposito')" id="nav-deposito" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">🏢 Depósito / Estoque</button>
                     <button onclick="mudarAbaAdmin('categorias')" id="nav-categorias" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">🏷️ Gestão de Categorias</button>
-                    <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">🖼️ Banners</button>
                 </nav>
             </div>
             <div class="p-4 border-t border-teal-700/50 space-y-3">
@@ -118,34 +97,7 @@
                     </div>
                 </div>
 
-                <!-- ABA 2: DEPÓSITO -->
-                <div id="admin-section-deposito" class="space-y-6 hidden">
-                    <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div><h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2><p class="text-gray-500 text-sm">Controle de quantidades e custos.</p></div>
-                        <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow text-xs">+ Novo Item</button>
-                    </div>
-
-                    <div id="form-container-deposito" class="hidden bg-white p-6 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 space-y-4">
-                        <div class="flex justify-between items-center border-b pb-3"><h3 id="form-deposito-title" class="text-lg font-bold text-[#0E8685]">Item no Depósito</h3><button onclick="toggleFormularioDeposito()" class="text-gray-400 font-bold">✕</button></div>
-                        <form id="deposito-form" onsubmit="salvarItemDeposito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input type="hidden" id="dep-id">
-                            <div><label class="block text-xs font-bold uppercase mb-1">Nome</label><input type="text" id="dep-nome" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
-                            <div><label class="block text-xs font-bold uppercase mb-1">Categoria</label><select id="dep-categoria" class="select-categorias-dinamico w-full px-4 py-2 border rounded-xl text-sm bg-white"></select></div>
-                            <div><label class="block text-xs font-bold uppercase mb-1">Custo (R$)</label><input type="number" step="0.01" id="dep-compra" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
-                            <div><label class="block text-xs font-bold uppercase mb-1">Preço Venda (R$)</label><input type="number" step="0.01" id="dep-preco" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
-                            <div><label class="block text-xs font-bold uppercase mb-1">Quantidade</label><input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2 border rounded-xl text-sm"></div>
-                            <div><label class="block text-xs font-bold uppercase mb-1">Foto URL</label><input type="text" id="dep-foto" class="w-full px-4 py-2 border rounded-xl text-sm" placeholder="https://..."></div>
-                            <div class="md:col-span-2 flex gap-3 pt-2"><button type="submit" class="bg-[#0E8685] text-white font-bold px-6 py-2.5 rounded-xl text-sm">Guardar no Depósito</button><button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 font-bold px-5 py-2.5 rounded-xl text-sm">Cancelar</button></div>
-                        </form>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
-                        <div class="flex justify-between items-center"><h3 class="font-bold text-[#0E8685]">Itens no Estoque</h3><span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span></div>
-                        <div id="admin-deposito-list" class="space-y-3"></div>
-                    </div>
-                </div>
-
-                <!-- ABA 3: CATEGORIAS -->
+                <!-- ABA 2: CATEGORIAS -->
                 <div id="admin-section-categorias" class="space-y-6 hidden">
                     <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <div><h2 class="text-xl font-bold text-[#0E8685]">Gestão de Categorias</h2><p class="text-gray-500 text-sm">Crie, edite ou remova categorias customizadas.</p></div>
@@ -168,23 +120,11 @@
                     </div>
                 </div>
 
-                <!-- ABA 4: BANNERS -->
-                <div id="admin-section-banners" class="space-y-6 hidden">
-                    <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div><h2 class="text-xl font-bold text-[#0E8685]">Banners da Home</h2></div>
-                        <button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow text-xs">+ Adicionar Banner</button>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="admin-banner-list" class="divide-y"></tbody></table></div>
-                    </div>
-                </div>
-
             </div>
             <footer class="mt-16 pt-6 border-t text-center text-xs text-gray-400">© 2026 Ísis Holística — Powered by CS Code Solutions</footer>
         </main>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -204,8 +144,6 @@
         const auth = getAuth(app);
 
         let listaProdutos = [];
-        let listaDeposito = [];
-        let listaBanners = [];
         let listaCategoriasCustom = [];
 
         const categoriasBaseFixas = [
@@ -229,8 +167,11 @@
 
         window.fazerLoginAdmin = async function(e) {
             e.preventDefault();
-            try { await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-senha').value); }
-            catch (err) { alert("Erro no login: " + err.message); }
+            try { 
+                await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-senha').value); 
+            } catch (err) { 
+                alert("Erro no login: " + err.message); 
+            }
         }
 
         window.fazerLogout = async function() { await signOut(auth); }
@@ -245,19 +186,9 @@
                 listaProdutos = [];
                 snapProd.forEach(d => listaProdutos.push({ idFirestore: d.id, ...d.data() }));
 
-                const snapDep = await getDocs(collection(db, "deposito"));
-                listaDeposito = [];
-                snapDep.forEach(d => listaDeposito.push({ idFirestore: d.id, ...d.data() }));
-
-                const snapBanners = await getDocs(collection(db, "slides"));
-                listaBanners = [];
-                snapBanners.forEach(d => listaBanners.push({ idFirestore: d.id, ...d.data() }));
-
                 atualizarSelectsCategoriasGeral();
                 renderizarTabelaProdutos();
-                renderizarTabelaDeposito();
                 renderizarTabelaCategorias();
-                renderizarTabelaBanners();
             } catch (e) { console.error("Erro ao carregar admin:", e); }
         }
 
@@ -277,7 +208,7 @@
         }
 
         window.mudarAbaAdmin = function(aba) {
-            ['inventario', 'deposito', 'categorias', 'banners'].forEach(s => {
+            ['inventario', 'categorias'].forEach(s => {
                 document.getElementById(`admin-section-${s}`).classList.add('hidden');
                 document.getElementById(`nav-${s}`).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
             });
@@ -332,49 +263,6 @@
             });
         }
 
-        // DEPÓSITO
-        window.toggleFormularioDeposito = function() { document.getElementById('form-container-deposito').classList.toggle('hidden'); }
-        window.abrirNovoDeposito = function() { document.getElementById('dep-id').value = ''; document.getElementById('deposito-form').reset(); document.getElementById('form-container-deposito').classList.remove('hidden'); }
-        window.salvarItemDeposito = async function(e) {
-            e.preventDefault();
-            const id = document.getElementById('dep-id').value;
-            const data = {
-                nome: document.getElementById('dep-nome').value,
-                categoria: document.getElementById('dep-categoria').value,
-                compra: parseFloat(document.getElementById('dep-compra').value),
-                preco: parseFloat(document.getElementById('dep-preco').value),
-                qtd: parseInt(document.getElementById('dep-qtd').value),
-                imagem: document.getElementById('dep-foto').value
-            };
-            if (id) await updateDoc(doc(db, "deposito", id), data);
-            else await addDoc(collection(db, "deposito"), data);
-            toggleFormularioDeposito();
-            carregarDadosAdmin();
-        }
-        window.editarDeposito = function(id) {
-            const d = listaDeposito.find(item => item.idFirestore === id);
-            if (!d) return;
-            document.getElementById('dep-id').value = d.idFirestore;
-            document.getElementById('dep-nome').value = d.nome;
-            document.getElementById('dep-categoria').value = d.categoria;
-            document.getElementById('dep-compra').value = d.compra || 0;
-            document.getElementById('dep-preco').value = d.preco || 0;
-            document.getElementById('dep-qtd').value = d.qtd || 0;
-            document.getElementById('dep-foto').value = d.imagem || '';
-            document.getElementById('form-container-deposito').classList.remove('hidden');
-        }
-        window.removerDeposito = async function(id) {
-            if (confirm("Remover item?")) { await deleteDoc(doc(db, "deposito", id)); carregarDadosAdmin(); }
-        }
-        function renderizarTabelaDeposito() {
-            const container = document.getElementById('admin-deposito-list');
-            document.getElementById('total-deposito').innerText = `${listaDeposito.length} itens`;
-            container.innerHTML = listaDeposito.length === 0 ? `<div class="text-center py-4 text-gray-400">Nenhum item no depósito.</div>` : '';
-            listaDeposito.forEach(d => {
-                container.innerHTML += `<div class="bg-gray-50 p-3 rounded-xl flex justify-between items-center border"><div><strong>${d.nome}</strong> (${d.categoria}) - Qtd: ${d.qtd}</div><div><button onclick="editarDeposito('${d.idFirestore}')" class="text-teal-600 font-bold mr-2 text-xs">Editar</button><button onclick="removerDeposito('${d.idFirestore}')" class="text-red-500 font-bold text-xs">Excluir</button></div></div>`;
-            });
-        }
-
         // CATEGORIAS
         window.toggleFormularioCategoria = function() { document.getElementById('form-container-categoria').classList.toggle('hidden'); }
         window.abrirNovaCategoria = function() { document.getElementById('cat-id').value = ''; document.getElementById('categoria-form').reset(); document.getElementById('form-container-categoria').classList.remove('hidden'); }
@@ -408,23 +296,6 @@
                 let acoes = c.isCustom ? `<button onclick="editarCategoriaCustom('${c.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerCategoriaCustom('${c.idFirestore}')" class="text-red-500 font-bold">Excluir</button>` : `<span class="text-gray-400 text-xs italic">Padrão</span>`;
                 tbody.innerHTML += `<tr class="border-b"><td class="py-3 px-2 text-xl">${c.icone || '✨'}</td><td class="py-3 px-2 font-bold">${c.nome}</td><td class="py-3 px-2 text-right">${acoes}</td></tr>`;
             });
-        }
-
-        function renderizarTabelaBanners() {
-            const tbody = document.getElementById('admin-banner-list');
-            tbody.innerHTML = listaBanners.length === 0 ? `<tr><td class="py-4 text-center text-gray-400">Nenhum banner cadastrado.</td></tr>` : '';
-            listaBanners.forEach(b => {
-                tbody.innerHTML += `<tr class="border-b"><td class="py-3 px-2"><strong>${b.titulo || 'Banner'}</strong></td><td class="py-3 px-2 text-right"><button onclick="removerBanner('${b.idFirestore}')" class="text-red-500 font-bold text-xs">Excluir</button></td></tr>`;
-            });
-        }
-        window.abrirNovoBanner = async function() {
-            const titulo = prompt("Título do Banner:");
-            if (!titulo) return;
-            await addDoc(collection(db, "slides"), { titulo, tempo: 5, imagemPc: '', linkTipo: 'produtos' });
-            carregarDadosAdmin();
-        }
-        window.removerBanner = async function(id) {
-            if (confirm("Excluir banner?")) { await deleteDoc(doc(db, "slides", id)); carregarDadosAdmin(); }
         }
     </script>
 </body>
