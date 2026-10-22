@@ -74,7 +74,7 @@
                     </div>
 
                     <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
-                        <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">📦 Cadastrar/Editar</h3><button onclick="toggleFormularioProduto()" class="text-gray-400 font-bold text-lg">✕</button></div>
+                        <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">📦 Cadastrar/Editar</h3><button type="button" onclick="toggleFormularioProduto()" class="text-gray-400 font-bold text-lg">✕</button></div>
                         <form id="product-form" onsubmit="salvarProduto(event)" class="space-y-6">
                             <input type="hidden" id="prod-id"><input type="hidden" id="prod-modo-cadastro" value="direto">
                             <div id="bloco-deposito-vinculo" class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-teal-50/40 p-4 rounded-xl border border-teal-100">
@@ -87,7 +87,7 @@
                                 <div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label><input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm"></div>
                             </div>
                             <div class="space-y-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
-                                <div class="flex justify-between items-center"><label class="block text-xs font-bold text-[#0E8685] uppercase">📸 Galeria e Variações</label><button type="button" onclick="adicionarCampoFotoProd()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl">➕ Foto</button></div>
+                                <div class="flex justify-between items-center"><label class="block text-xs font-bold text-[#0E8685] uppercase">📸 Galeria e Variações</label><button type="button" onclick="adicionarCampoFotoProd()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl">➕ Adicionar Imagem</button></div>
                                 <div id="container-fotos-prod-dinamico" class="space-y-4"></div>
                             </div>
                             <div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição</label><textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm"></textarea></div>
@@ -130,7 +130,7 @@
                     </div>
                     
                     <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
-                        <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">🏢 Novo Item no Depósito</h3><button onclick="toggleFormularioDeposito()" class="text-gray-400 font-bold text-lg">✕</button></div>
+                        <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">🏢 Novo Item no Depósito</h3><button type="button" onclick="toggleFormularioDeposito()" class="text-gray-400 font-bold text-lg">✕</button></div>
                         <form id="deposito-form" onsubmit="salvarItemDeposito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <input type="hidden" id="dep-id">
                             <div><label class="block text-xs font-bold uppercase mb-1">Nome</label><input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm"></div>
@@ -138,7 +138,7 @@
                             <div><label class="block text-xs font-bold uppercase mb-1">Compra (R$)</label><input type="number" step="0.01" id="dep-compra" required class="w-full px-4 py-2.5 border rounded-xl text-sm"></div>
                             <div><label class="block text-xs font-bold uppercase mb-1">Venda (R$)</label><input type="number" step="0.01" id="dep-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm"></div>
                             <div><label class="block text-xs font-bold uppercase mb-1">Quantidade</label><input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2.5 border rounded-xl text-sm"></div>
-                            <div class="md:col-span-2 space-y-4 bg-gray-50 p-5 rounded-2xl border"><div class="flex justify-between items-center"><label class="text-xs font-bold text-[#0E8685] uppercase">📸 Galeria</label><button type="button" onclick="adicionarCampoFoto()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl">➕ Foto</button></div><div id="container-fotos-dinamico" class="space-y-4"></div></div>
+                            <div class="md:col-span-2 space-y-4 bg-gray-50 p-5 rounded-2xl border"><div class="flex justify-between items-center"><label class="text-xs font-bold text-[#0E8685] uppercase">📸 Galeria</label><button type="button" onclick="adicionarCampoFoto()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl">➕ Adicionar Imagem</button></div><div id="container-fotos-dinamico" class="space-y-4"></div></div>
                             <div class="md:col-span-2"><label class="block text-xs font-bold uppercase mb-1">Descrição</label><textarea id="dep-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm"></textarea></div>
                             <div class="md:col-span-2 flex items-center gap-3 bg-teal-50/60 p-4 rounded-xl border border-teal-100"><input type="checkbox" id="dep-exibir-vitrine" checked class="w-5 h-5 text-[#0E8685] rounded"><label class="text-sm font-bold text-[#0E8685]">✨ Exibir na Vitrine da Loja</label></div>
                             <div class="md:col-span-2 flex gap-3 pt-4 border-t"><button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl">Guardar no Depósito</button><button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 font-bold px-6 py-3 rounded-xl">Cancelar</button></div>
@@ -162,7 +162,7 @@
                 <div id="admin-section-banners" class="space-y-8 hidden">
                     <div class="flex justify-between items-center bg-white p-6 rounded-2xl border"><h2 class="text-xl font-bold text-[#0E8685]">Banners</h2><button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl text-sm">➕ Adicionar</button></div>
                     <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
-                        <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">🖼️ Novo/Editar Banner</h3><button onclick="toggleFormularioBanner()" class="text-gray-400 font-bold text-lg">✕</button></div>
+                        <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">🖼️ Novo/Editar Banner</h3><button type="button" onclick="toggleFormularioBanner()" class="text-gray-400 font-bold text-lg">✕</button></div>
                         <form id="banner-form" onsubmit="salvarBanner(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <input type="hidden" id="banner-id">
                             <div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Badge</label><input type="text" id="banner-badge" class="w-full px-4 py-2.5 border rounded-xl text-sm"></div>
@@ -227,7 +227,7 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Força persistência local para manter o login ativo no telemóvel
+        // Força persistência local para manter o login ativo
         setPersistence(auth, browserLocalPersistence).catch(() => {});
 
         let categoriasPersonalizadas = [], todasCategorias = [];
@@ -410,21 +410,62 @@
                 } catch (err) {} input.value = '';
             }; reader.readAsArrayBuffer(file);
         }
+        
+        // RECUPERAÇÃO DOS SCRIPTS DE IMAGEM E RECORTE DINÂMICO
         window.carregarImagemOriginal = function(inp, tgtId) { const r=new FileReader(); r.onload=e=>document.getElementById(tgtId).value=e.target.result; r.readAsDataURL(inp.files[0]); inp.value=''; }
-        window.carregarImagemOriginalDinamica = function(inp) { const u = inp.closest('div.group').querySelector('.input-foto-url') || inp.closest('div.group').querySelector('.input-prod-foto-url'); const r=new FileReader(); r.onload=e=>u.value=e.target.result; r.readAsDataURL(inp.files[0]); inp.value=''; }
-        window.abrirRecorteDinamicoBtn = function(btn, ar=1) { targetInputGlobal = btn.closest('div.group').querySelector('.input-foto-url') || btn.closest('div.group').querySelector('.input-prod-foto-url'); abrirModalCropper(targetInputGlobal.value, ar); }
-        function abrirModalCropper(src, ar) { if(!src) return; const i = document.getElementById('imagem-para-recortar'); i.src = src; document.getElementById('modal-recorte').classList.remove('hidden'); if(cropperInstance) cropperInstance.destroy(); cropperInstance = new Cropper(i, {aspectRatio:ar, viewMode:1}); }
+        
+        window.carregarImagemOriginalDinamica = function(inp) { 
+            const u = inp.closest('.group').querySelector('.input-foto-url') || inp.closest('.group').querySelector('.input-prod-foto-url'); 
+            const r = new FileReader(); 
+            r.onload = e => u.value = e.target.result; 
+            r.readAsDataURL(inp.files[0]); 
+            inp.value = ''; 
+        }
+        
+        window.abrirRecorteDinamicoBtn = function(btn, ar=1) { 
+            targetInputGlobal = btn.closest('.group').querySelector('.input-foto-url') || btn.closest('.group').querySelector('.input-prod-foto-url'); 
+            abrirModalCropper(targetInputGlobal.value, ar); 
+        }
+        
+        function abrirModalCropper(src, ar) { 
+            if(!src) return; 
+            const i = document.getElementById('imagem-para-recortar'); 
+            i.src = src; 
+            document.getElementById('modal-recorte').classList.remove('hidden'); 
+            if(cropperInstance) cropperInstance.destroy(); 
+            cropperInstance = new Cropper(i, {aspectRatio:ar, viewMode:1}); 
+        }
+        
         window.fecharModalRecorte = function() { document.getElementById('modal-recorte').classList.add('hidden'); if(cropperInstance) cropperInstance.destroy(); }
         window.aplicarRecorte = function() { if(!cropperInstance||!targetInputGlobal) return; targetInputGlobal.value = cropperInstance.getCroppedCanvas({width:1000,height:1000}).toDataURL('image/jpeg', 0.85); fecharModalRecorte(); }
 
-        // PRODUTOS
+        // PRODUTOS (INVENTÁRIO)
         window.toggleFormularioProduto = () => document.getElementById('form-container-produto').classList.toggle('hidden');
         window.abrirNovoProdutoDireto = () => { document.getElementById('prod-id').value=''; document.getElementById('product-form').reset(); document.getElementById('container-fotos-prod-dinamico').innerHTML=''; adicionarCampoFotoProd(); document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); toggleFormularioProduto(); }
         window.abrirNovoProdutoDeposito = () => { document.getElementById('prod-id').value=''; document.getElementById('product-form').reset(); document.getElementById('bloco-deposito-vinculo').classList.remove('hidden'); toggleFormularioProduto(); atualizarSelectDeposito(); }
-        window.adicionarCampoFotoProd = (u='', t='') => { document.getElementById('container-fotos-prod-dinamico').innerHTML += `<div class="bg-white p-4 rounded-xl border group"><button type="button" onclick="this.parentElement.remove()" class="text-red-500 text-xs font-bold">Remover</button><div class="grid grid-cols-2 gap-2 mt-2"><input type="text" class="input-prod-foto-url border rounded px-2 text-xs" value="${u}" placeholder="URL"><input type="text" class="input-prod-foto-texto border rounded px-2 text-xs" value="${t}" placeholder="Descrição"></div></div>`; }
+        
+        // RECUPERADO COM ARQUIVOS E BOTÃO CORTAR (PRODUTOS)
+        window.adicionarCampoFotoProd = (u='', t='') => { 
+            document.getElementById('container-fotos-prod-dinamico').innerHTML += `
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm group">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-gray-500 uppercase">Detalhes da Imagem</span>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700 text-xs font-bold transition">Remover</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                    <input type="text" class="input-prod-foto-url border border-gray-200 rounded-lg px-3 py-2 text-xs w-full focus:border-[#0E8685] outline-none" value="${u}" placeholder="URL da Imagem (ou carregue abaixo)">
+                    <input type="text" class="input-prod-foto-texto border border-gray-200 rounded-lg px-3 py-2 text-xs w-full focus:border-[#0E8685] outline-none" value="${t}" placeholder="Variação/Descrição (Ex: M, P, Ouro)">
+                </div>
+                <div class="flex flex-col sm:flex-row items-center gap-2 border-t border-gray-100 pt-3 mt-1">
+                    <input type="file" accept="image/*" onchange="carregarImagemOriginalDinamica(this)" class="w-full text-xs text-gray-500 file:cursor-pointer file:mr-4 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100 transition">
+                    <button type="button" onclick="abrirRecorteDinamicoBtn(this)" class="bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap w-full sm:w-auto shadow-sm transition">✂️ Recortar</button>
+                </div>
+            </div>`; 
+        }
+
         window.atualizarSelectDeposito = () => { const f = document.getElementById('prod-filtro-cat').value, s = document.getElementById('prod-deposito-select'); s.innerHTML = ''; listaDeposito.filter(d => d.categoria === f).forEach((i, idx) => s.innerHTML += `<option value="${idx}">${i.nome}</option>`); preencherDoDeposito(); }
         window.preencherDoDeposito = () => { const f = document.getElementById('prod-filtro-cat').value, idx = document.getElementById('prod-deposito-select').value; const i = listaDeposito.filter(d => d.categoria === f)[idx]; if(i) { document.getElementById('prod-nome').value = i.nome; document.getElementById('prod-preco').value = i.preco; document.getElementById('prod-categoria').value = i.categoria; document.getElementById('prod-descricao').value = i.descricao || ''; document.getElementById('container-fotos-prod-dinamico').innerHTML = ''; const imgs = i.imagens?.length ? i.imagens : [{url:i.imagem||'',texto:''}]; imgs.forEach(img => adicionarCampoFotoProd(img.url, img.texto)); } }
-        window.salvarProduto = async (e) => { e.preventDefault(); const id = document.getElementById('prod-id').value; const n=document.getElementById('prod-nome').value, p=parseFloat(document.getElementById('prod-preco').value), c=document.getElementById('prod-categoria').value, d=document.getElementById('prod-descricao').value, dest=document.getElementById('prod-destaque').checked; let imgs=[]; document.querySelectorAll('#container-fotos-prod-dinamico > div').forEach(b => { const u=b.querySelector('.input-prod-foto-url').value, t=b.querySelector('.input-prod-foto-texto').value; if(u) imgs.push({url:u,texto:t}); }); const data = {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:dest}; if(id) await updateDoc(doc(db, "produtos", id), data); else { await addDoc(collection(db, "produtos"), data); await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); } carregarDadosAdmin(); toggleFormularioProduto(); }
+        window.salvarProduto = async (e) => { e.preventDefault(); const id = document.getElementById('prod-id').value; const n=document.getElementById('prod-nome').value, p=parseFloat(document.getElementById('prod-preco').value), c=document.getElementById('prod-categoria').value, d=document.getElementById('prod-descricao').value, dest=document.getElementById('prod-destaque').checked; let imgs=[]; document.querySelectorAll('#container-fotos-prod-dinamico > div.group').forEach(b => { const u=b.querySelector('.input-prod-foto-url').value, t=b.querySelector('.input-prod-foto-texto').value; if(u) imgs.push({url:u,texto:t}); }); const data = {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:dest}; if(id) await updateDoc(doc(db, "produtos", id), data); else { await addDoc(collection(db, "produtos"), data); await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); } carregarDadosAdmin(); toggleFormularioProduto(); }
         window.editarProduto = (id) => { const p=listaProdutos.find(i=>i.idFirestore===id); if(!p)return; document.getElementById('prod-id').value=p.idFirestore; document.getElementById('prod-nome').value=p.nome; document.getElementById('prod-preco').value=p.preco; document.getElementById('prod-categoria').value=p.categoria||''; document.getElementById('prod-descricao').value=p.descricao||''; document.getElementById('prod-destaque').checked=p.destaque||false; document.getElementById('container-fotos-prod-dinamico').innerHTML=''; (p.imagens?.length?p.imagens:[{url:p.imagem||''}]).forEach(img=>adicionarCampoFotoProd(img.url, img.texto)); document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); document.getElementById('form-container-produto').classList.remove('hidden'); }
         window.removerProduto = async (id) => { if(confirm("Excluir?")) { await deleteDoc(doc(db, "produtos", id)); carregarDadosAdmin(); } }
         
@@ -436,7 +477,7 @@
             const inc = (paginaAtualProdutos-1)*itensPorPagina; 
             document.getElementById('paginacao-prod-info').innerText = `Pág ${paginaAtualProdutos}`; 
             tb.innerHTML = ''; 
-            filt.slice(inc, inc+itensPorPagina).forEach(p => tb.innerHTML+=`<tr><td class="py-3 px-3"><img src="${p.imagens?.[0]?.url||p.imagem||''}" class="w-10 h-10 object-cover inline"> ${p.nome}</td><td class="py-3 px-3">${p.categoria}</td><td class="py-3 px-3">R$ ${p.preco}</td><td class="py-3 px-3 text-right"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 mr-2 font-bold">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`); 
+            filt.slice(inc, inc+itensPorPagina).forEach(p => tb.innerHTML+=`<tr><td class="py-3 px-3"><img src="${p.imagens?.[0]?.url||p.imagem||''}" class="w-10 h-10 object-cover inline rounded"> ${p.nome}</td><td class="py-3 px-3">${p.categoria}</td><td class="py-3 px-3">R$ ${p.preco}</td><td class="py-3 px-3 text-right"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 mr-2 font-bold">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`); 
         }
         window.pesquisarAdminProdutos = (termo) => { termoBuscaAdminProd = termo; paginaAtualProdutos = 1; renderizarTabelaProdutos(); }
         window.mudarFiltroCategoriaProdutos = (c) => { categoriaFiltroProdutos = c; paginaAtualProdutos = 1; renderizarTabelaProdutos(); }
@@ -462,8 +503,27 @@
         window.proximaPaginaDeposito = () => { paginaAtualDeposito++; renderizarTabelaDeposito(); }
         window.toggleFormularioDeposito = () => document.getElementById('form-container-deposito').classList.toggle('hidden');
         window.abrirNovoDeposito = () => { document.getElementById('dep-id').value = ''; document.getElementById('deposito-form').reset(); document.getElementById('container-fotos-dinamico').innerHTML = ''; adicionarCampoFoto(); document.getElementById('form-container-deposito').classList.remove('hidden'); }
-        window.adicionarCampoFoto = (u='', t='') => { document.getElementById('container-fotos-dinamico').innerHTML += `<div class="bg-white p-4 rounded-xl border group"><button type="button" onclick="this.parentElement.remove()" class="text-red-500 text-xs font-bold">Remover</button><div class="grid grid-cols-2 gap-2 mt-2"><input type="text" class="input-foto-url border rounded px-2 text-xs" value="${u}" placeholder="URL"><input type="text" class="input-foto-texto border rounded px-2 text-xs" value="${t}" placeholder="Descrição"></div></div>`; }
-        window.salvarItemDeposito = async (e) => { e.preventDefault(); const id = document.getElementById('dep-id').value, n = document.getElementById('dep-nome').value, c = document.getElementById('dep-categoria').value, p = parseFloat(document.getElementById('dep-preco').value), co = parseFloat(document.getElementById('dep-compra').value), q = parseInt(document.getElementById('dep-qtd').value), d = document.getElementById('dep-descricao').value; let imgs = []; document.querySelectorAll('#container-fotos-dinamico > div').forEach(b => { const u = b.querySelector('.input-foto-url').value, t = b.querySelector('.input-foto-texto').value; if(u) imgs.push({url:u, texto:t}); }); const data = {nome:n, categoria:c, preco:p, compra:co, qtd:q, imagens:imgs, descricao:d}; if(id) await updateDoc(doc(db, "deposito", id), data); else await addDoc(collection(db, "deposito"), data); if(document.getElementById('dep-exibir-vitrine').checked && imgs.length > 0) { const prod = listaProdutos.find(pr => pr.nome === n); if(prod) await updateDoc(doc(db, "produtos", prod.idFirestore), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d}); else await addDoc(collection(db, "produtos"), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:false}); } carregarDadosAdmin(); toggleFormularioDeposito(); }
+        
+        // RECUPERADO COM ARQUIVOS E BOTÃO CORTAR (DEPÓSITO)
+        window.adicionarCampoFoto = (u='', t='') => { 
+            document.getElementById('container-fotos-dinamico').innerHTML += `
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm group">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-gray-500 uppercase">Detalhes da Imagem</span>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700 text-xs font-bold transition">Remover</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                    <input type="text" class="input-foto-url border border-gray-200 rounded-lg px-3 py-2 text-xs w-full focus:border-[#0E8685] outline-none" value="${u}" placeholder="URL da Imagem">
+                    <input type="text" class="input-foto-texto border border-gray-200 rounded-lg px-3 py-2 text-xs w-full focus:border-[#0E8685] outline-none" value="${t}" placeholder="Descrição (Opcional)">
+                </div>
+                <div class="flex flex-col sm:flex-row items-center gap-2 border-t border-gray-100 pt-3 mt-1">
+                    <input type="file" accept="image/*" onchange="carregarImagemOriginalDinamica(this)" class="w-full text-xs text-gray-500 file:cursor-pointer file:mr-4 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-teal-50 file:text-[#0E8685] hover:file:bg-teal-100 transition">
+                    <button type="button" onclick="abrirRecorteDinamicoBtn(this)" class="bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap w-full sm:w-auto shadow-sm transition">✂️ Recortar</button>
+                </div>
+            </div>`; 
+        }
+
+        window.salvarItemDeposito = async (e) => { e.preventDefault(); const id = document.getElementById('dep-id').value, n = document.getElementById('dep-nome').value, c = document.getElementById('dep-categoria').value, p = parseFloat(document.getElementById('dep-preco').value), co = parseFloat(document.getElementById('dep-compra').value), q = parseInt(document.getElementById('dep-qtd').value), d = document.getElementById('dep-descricao').value; let imgs = []; document.querySelectorAll('#container-fotos-dinamico > div.group').forEach(b => { const u = b.querySelector('.input-foto-url').value, t = b.querySelector('.input-foto-texto').value; if(u) imgs.push({url:u, texto:t}); }); const data = {nome:n, categoria:c, preco:p, compra:co, qtd:q, imagens:imgs, descricao:d}; if(id) await updateDoc(doc(db, "deposito", id), data); else await addDoc(collection(db, "deposito"), data); if(document.getElementById('dep-exibir-vitrine').checked && imgs.length > 0) { const prod = listaProdutos.find(pr => pr.nome === n); if(prod) await updateDoc(doc(db, "produtos", prod.idFirestore), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d}); else await addDoc(collection(db, "produtos"), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:false}); } carregarDadosAdmin(); toggleFormularioDeposito(); }
         window.editarDeposito = (id) => { const d = listaDeposito.find(i => i.idFirestore === id); if(!d) return; document.getElementById('dep-id').value = d.idFirestore; document.getElementById('dep-nome').value = d.nome; document.getElementById('dep-categoria').value = d.categoria||''; document.getElementById('dep-preco').value = d.preco||0; document.getElementById('dep-compra').value = d.compra||0; document.getElementById('dep-qtd').value = d.qtd||0; document.getElementById('dep-descricao').value = d.descricao||''; document.getElementById('container-fotos-dinamico').innerHTML = ''; const imgs = d.imagens?.length ? d.imagens : [{url:d.imagem||'',texto:''}]; imgs.forEach(img => adicionarCampoFoto(img.url, img.texto)); document.getElementById('form-container-deposito').classList.remove('hidden'); }
         window.removerDeposito = async (id) => { if(confirm("Apagar item?")) { await deleteDoc(doc(db, "deposito", id)); carregarDadosAdmin(); } }
 
