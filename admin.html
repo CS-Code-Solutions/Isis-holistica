@@ -99,7 +99,10 @@
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
                             <div class="flex items-center gap-3"><h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos</h3><span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0</span></div>
-                            <div><label class="text-xs font-bold text-gray-500 uppercase">Categoria:</label><select id="filtro-cat-produtos" onchange="mudarFiltroCategoriaProdutos(this.value)" class="px-3 py-2 border rounded-xl text-xs bg-white text-[#0E8685]"></select></div>
+                            <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                                <input type="text" id="busca-admin-produtos" oninput="pesquisarAdminProdutos(this.value)" placeholder="🔍 Pesquisar produto..." class="px-3 py-2 border rounded-xl text-xs bg-white text-gray-700 outline-none focus:border-[#0E8685] flex-1 sm:w-48">
+                                <div><label class="text-xs font-bold text-gray-500 uppercase mr-1">Cat:</label><select id="filtro-cat-produtos" onchange="mudarFiltroCategoriaProdutos(this.value)" class="px-3 py-2 border rounded-xl text-xs bg-white text-[#0E8685]"></select></div>
+                            </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
@@ -145,7 +148,10 @@
                     <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
                             <div class="flex items-center gap-3"><h3 class="text-lg font-bold text-[#0E8685]">📦 Estoque</h3><span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span></div>
-                            <select id="filtro-cat-deposito" onchange="mudarFiltroCategoriaDeposito(this.value)" class="px-3 py-2 border rounded-xl text-xs bg-white text-[#0E8685]"></select>
+                            <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                                <input type="text" id="busca-admin-deposito" oninput="pesquisarAdminDeposito(this.value)" placeholder="🔍 Pesquisar no depósito..." class="px-3 py-2 border rounded-xl text-xs bg-white text-gray-700 outline-none focus:border-[#0E8685] flex-1 sm:w-48">
+                                <select id="filtro-cat-deposito" onchange="mudarFiltroCategoriaDeposito(this.value)" class="px-3 py-2 border rounded-xl text-xs bg-white text-[#0E8685]"></select>
+                            </div>
                         </div>
                         <div id="admin-deposito-list" class="space-y-3"></div>
                         <div class="flex justify-between items-center pt-4 border-t text-xs font-bold"><button onclick="paginaAnteriorDeposito()" class="bg-gray-100 px-4 py-2.5 rounded-xl">⬅️ Anterior</button><span id="paginacao-info">Página 1 de 1</span><button onclick="proximaPaginaDeposito()" class="bg-[#0E8685] text-white px-4 py-2.5 rounded-xl">Próxima ➡️</button></div>
@@ -219,8 +225,8 @@
         let categoriasPersonalizadas = [], todasCategorias = [];
         let listaProdutos = [], listaDeposito = [], listaBanners = [];
         let cropperInstance = null, targetInputGlobal = null;
-        let paginaAtualProdutos = 1, categoriaFiltroProdutos = "TODAS";
-        let paginaAtualDeposito = 1, categoriaFiltroAtual = "TODAS", itensPorPagina = 20;
+        let paginaAtualProdutos = 1, categoriaFiltroProdutos = "TODAS", termoBuscaAdminProd = "";
+        let paginaAtualDeposito = 1, categoriaFiltroAtual = "TODAS", termoBuscaAdminDep = "", itensPorPagina = 20;
 
         // FECHAR MENU AO CLICAR FORA (MOBILE)
         document.addEventListener('click', (e) => {
@@ -295,13 +301,11 @@
             });
         }
 
-        // SISTEMA DE ADIÇÃO COM ATUALIZAÇÃO IMEDIATA E PREVENÇÃO DE ERROS
         window.adicionarCategoriaNova = async function() {
             const input = document.getElementById('nova-cat-nome');
             const val = input.value.trim();
             if(!val) return;
             
-            // Verifica se a categoria já existe ignorando maiúsculas/minúsculas
             if (todasCategorias.some(c => c.toLowerCase() === val.toLowerCase())) {
                 alert("Esta categoria já existe!");
                 input.value = '';
@@ -309,27 +313,20 @@
             }
 
             try {
-                // Tenta adicionar no Firebase
                 const docRef = await addDoc(collection(db, "categorias"), { nome: val });
-                
-                // Atualização instantânea na tela
                 categoriasPersonalizadas.push({ idFirestore: docRef.id, nome: val });
                 todasCategorias.push(val);
                 todasCategorias.sort();
-                
                 input.value = '';
                 renderizarCategoriasSelects();
                 renderizarListaCategoriasAdmin();
-                
-                // Recarrega tudo em segundo plano para garantir sincronia
                 carregarDadosAdmin();
             } catch(e) {
                 console.error(e);
-                alert("Falha de Permissão: O Firebase bloqueou a gravação. Verifique as regras de permissão (Rules) do seu banco de dados.");
+                alert("Falha de Permissão: O Firebase bloqueou a gravação. Verifique as regras de permissão (Rules).");
             }
         }
 
-        // EDIÇÃO COM ATUALIZAÇÃO IMEDIATA
         window.editarCategoriaNova = async function(id, nomeAntigo) {
             const novoNome = prompt("Renomear categoria:", nomeAntigo);
             if(novoNome && novoNome.trim() !== "" && novoNome !== nomeAntigo) {
@@ -338,44 +335,29 @@
                     if(id) { await updateDoc(doc(db, "categorias", id), { nome: nomePronto }); } 
                     else { await addDoc(collection(db, "categorias"), { nome: nomePronto }); }
                     
-                    // Atualiza a tela imediatamente
                     const idx = todasCategorias.indexOf(nomeAntigo);
-                    if(idx > -1) {
-                        todasCategorias[idx] = nomePronto;
-                        todasCategorias.sort();
-                    }
+                    if(idx > -1) { todasCategorias[idx] = nomePronto; todasCategorias.sort(); }
                     renderizarCategoriasSelects();
                     renderizarListaCategoriasAdmin();
-                    
                     carregarDadosAdmin();
-                } catch(e) {
-                    alert("Erro ao editar. Verifique as permissões de gravação do Firebase.");
-                }
+                } catch(e) { alert("Erro ao editar."); }
             }
         }
 
-        // REMOÇÃO COM ATUALIZAÇÃO IMEDIATA
         window.removerCategoriaNova = async function(id, nome) { 
             if(confirm(`Tem a certeza que deseja excluir a categoria "${nome}"?`)) { 
                 try {
                     if(id) { await deleteDoc(doc(db, "categorias", id)); }
-                    
                     const prodComCat = listaProdutos.filter(p => p.categoria === nome).length;
                     const depComCat = listaDeposito.filter(d => d.categoria === nome).length;
-                    
                     if(prodComCat > 0 || depComCat > 0) {
-                        alert(`Atenção: Existem ${prodComCat} produtos e ${depComCat} itens no depósito vinculados a "${nome}". Eles ainda irão aparecer na loja até que altere a categoria deles no inventário.`);
+                        alert(`Atenção: Existem ${prodComCat} produtos e ${depComCat} itens no depósito vinculados a "${nome}".`);
                     }
-                    
-                    // Remove da tela imediatamente
                     todasCategorias = todasCategorias.filter(c => c !== nome);
                     renderizarCategoriasSelects();
                     renderizarListaCategoriasAdmin();
-                    
                     carregarDadosAdmin(); 
-                } catch(e) {
-                    alert("Erro ao remover. Verifique as permissões do Firebase.");
-                }
+                } catch(e) { alert("Erro ao remover."); }
             } 
         }
 
@@ -419,7 +401,7 @@
         window.fecharModalRecorte = function() { document.getElementById('modal-recorte').classList.add('hidden'); if(cropperInstance) cropperInstance.destroy(); }
         window.aplicarRecorte = function() { if(!cropperInstance||!targetInputGlobal) return; targetInputGlobal.value = cropperInstance.getCroppedCanvas({width:1000,height:1000}).toDataURL('image/jpeg', 0.85); fecharModalRecorte(); }
 
-        // PRODUTOS
+        // PRODUTOS (INVENTÁRIO / VITRINE)
         window.toggleFormularioProduto = () => document.getElementById('form-container-produto').classList.toggle('hidden');
         window.abrirNovoProdutoDireto = () => { document.getElementById('prod-id').value=''; document.getElementById('product-form').reset(); document.getElementById('container-fotos-prod-dinamico').innerHTML=''; adicionarCampoFotoProd(); document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); toggleFormularioProduto(); }
         window.abrirNovoProdutoDeposito = () => { document.getElementById('prod-id').value=''; document.getElementById('product-form').reset(); document.getElementById('bloco-deposito-vinculo').classList.remove('hidden'); toggleFormularioProduto(); atualizarSelectDeposito(); }
@@ -429,13 +411,40 @@
         window.salvarProduto = async (e) => { e.preventDefault(); const id = document.getElementById('prod-id').value; const n=document.getElementById('prod-nome').value, p=parseFloat(document.getElementById('prod-preco').value), c=document.getElementById('prod-categoria').value, d=document.getElementById('prod-descricao').value, dest=document.getElementById('prod-destaque').checked; let imgs=[]; document.querySelectorAll('#container-fotos-prod-dinamico > div').forEach(b => { const u=b.querySelector('.input-prod-foto-url').value, t=b.querySelector('.input-prod-foto-texto').value; if(u) imgs.push({url:u,texto:t}); }); const data = {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:dest}; if(id) await updateDoc(doc(db, "produtos", id), data); else { await addDoc(collection(db, "produtos"), data); await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); } carregarDadosAdmin(); toggleFormularioProduto(); }
         window.editarProduto = (id) => { const p=listaProdutos.find(i=>i.idFirestore===id); if(!p)return; document.getElementById('prod-id').value=p.idFirestore; document.getElementById('prod-nome').value=p.nome; document.getElementById('prod-preco').value=p.preco; document.getElementById('prod-categoria').value=p.categoria||''; document.getElementById('prod-descricao').value=p.descricao||''; document.getElementById('prod-destaque').checked=p.destaque||false; document.getElementById('container-fotos-prod-dinamico').innerHTML=''; (p.imagens?.length?p.imagens:[{url:p.imagem||''}]).forEach(img=>adicionarCampoFotoProd(img.url, img.texto)); document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); document.getElementById('form-container-produto').classList.remove('hidden'); }
         window.removerProduto = async (id) => { if(confirm("Excluir?")) { await deleteDoc(doc(db, "produtos", id)); carregarDadosAdmin(); } }
-        window.renderizarTabelaProdutos = () => { const tb = document.getElementById('admin-product-list'); const filt = categoriaFiltroProdutos === "TODAS" ? listaProdutos : listaProdutos.filter(p=>p.categoria === categoriaFiltroProdutos); document.getElementById('total-produtos').innerText = filt.length; const inc = (paginaAtualProdutos-1)*itensPorPagina; document.getElementById('paginacao-prod-info').innerText = `Pág ${paginaAtualProdutos}`; tb.innerHTML = ''; filt.slice(inc, inc+itensPorPagina).forEach(p => tb.innerHTML+=`<tr><td class="py-3 px-3"><img src="${p.imagens?.[0]?.url||p.imagem||''}" class="w-10 h-10 object-cover inline"> ${p.nome}</td><td class="py-3 px-3">${p.categoria}</td><td class="py-3 px-3">R$ ${p.preco}</td><td class="py-3 px-3 text-right"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 mr-2 font-bold">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`); }
+        
+        window.renderizarTabelaProdutos = () => { 
+            const tb = document.getElementById('admin-product-list'); 
+            let filt = categoriaFiltroProdutos === "TODAS" ? listaProdutos : listaProdutos.filter(p => p.categoria === categoriaFiltroProdutos);
+            if(termoBuscaAdminProd) {
+                filt = filt.filter(p => p.nome.toLowerCase().includes(termoBuscaAdminProd.toLowerCase()));
+            }
+            document.getElementById('total-produtos').innerText = filt.length; 
+            const inc = (paginaAtualProdutos-1)*itensPorPagina; 
+            document.getElementById('paginacao-prod-info').innerText = `Pág ${paginaAtualProdutos}`; 
+            tb.innerHTML = ''; 
+            filt.slice(inc, inc+itensPorPagina).forEach(p => tb.innerHTML+=`<tr><td class="py-3 px-3"><img src="${p.imagens?.[0]?.url||p.imagem||''}" class="w-10 h-10 object-cover inline"> ${p.nome}</td><td class="py-3 px-3">${p.categoria}</td><td class="py-3 px-3">R$ ${p.preco}</td><td class="py-3 px-3 text-right"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 mr-2 font-bold">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`); 
+        }
+        window.pesquisarAdminProdutos = (termo) => { termoBuscaAdminProd = termo; paginaAtualProdutos = 1; renderizarTabelaProdutos(); }
         window.mudarFiltroCategoriaProdutos = (c) => { categoriaFiltroProdutos = c; paginaAtualProdutos = 1; renderizarTabelaProdutos(); }
         window.paginaAnteriorProdutos = () => { if(paginaAtualProdutos>1){ paginaAtualProdutos--; renderizarTabelaProdutos(); } }
         window.proximaPaginaProdutos = () => { paginaAtualProdutos++; renderizarTabelaProdutos(); }
 
         // DEPÓSITO
-        window.renderizarTabelaDeposito = () => { const cont = document.getElementById('admin-deposito-list'); const filtrados = categoriaFiltroAtual === "TODAS" ? listaDeposito : listaDeposito.filter(d => d.categoria === categoriaFiltroAtual); document.getElementById('total-deposito').innerText = `${filtrados.length} itens`; const inc = (paginaAtualDeposito - 1) * itensPorPagina; document.getElementById('paginacao-info').innerText = `Página ${paginaAtualDeposito}`; cont.innerHTML = ''; filtrados.slice(inc, inc + itensPorPagina).forEach(d => { cont.innerHTML += `<div class="bg-gray-50 border rounded-2xl p-4 flex justify-between items-center"><div><strong>${d.nome}</strong><br><span class="text-xs text-[#0E8685]">${d.categoria}</span> | Estoque: ${d.qtd}</div><div><button onclick="editarDeposito('${d.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerDeposito('${d.idFirestore}')" class="text-red-500 font-bold">Excluir</button></div></div>`; }); }
+        window.renderizarTabelaDeposito = () => { 
+            const cont = document.getElementById('admin-deposito-list'); 
+            let filtrados = categoriaFiltroAtual === "TODAS" ? listaDeposito : listaDeposito.filter(d => d.categoria === categoriaFiltroAtual);
+            if(termoBuscaAdminDep) {
+                filtrados = filtrados.filter(d => d.nome.toLowerCase().includes(termoBuscaAdminDep.toLowerCase()));
+            }
+            document.getElementById('total-deposito').innerText = `${filtrados.length} itens`; 
+            const inc = (paginaAtualDeposito - 1) * itensPorPagina; 
+            document.getElementById('paginacao-info').innerText = `Página ${paginaAtualDeposito}`; 
+            cont.innerHTML = ''; 
+            filtrados.slice(inc, inc + itensPorPagina).forEach(d => { 
+                cont.innerHTML += `<div class="bg-gray-50 border rounded-2xl p-4 flex justify-between items-center"><div><strong>${d.nome}</strong><br><span class="text-xs text-[#0E8685]">${d.categoria}</span> | Estoque: ${d.qtd}</div><div><button onclick="editarDeposito('${d.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerDeposito('${d.idFirestore}')" class="text-red-500 font-bold">Excluir</button></div></div>`; 
+            }); 
+        }
+        window.pesquisarAdminDeposito = (termo) => { termoBuscaAdminDep = termo; paginaAtualDeposito = 1; renderizarTabelaDeposito(); }
         window.mudarFiltroCategoriaDeposito = (c) => { categoriaFiltroAtual = c; paginaAtualDeposito = 1; renderizarTabelaDeposito(); }
         window.paginaAnteriorDeposito = () => { if (paginaAtualDeposito > 1) { paginaAtualDeposito--; renderizarTabelaDeposito(); } }
         window.proximaPaginaDeposito = () => { paginaAtualDeposito++; renderizarTabelaDeposito(); }
@@ -449,10 +458,11 @@
         // BANNERS
         window.toggleFormularioBanner = () => document.getElementById('form-container-banner').classList.toggle('hidden');
         window.abrirNovoBanner = () => { document.getElementById('banner-id').value = ''; document.getElementById('banner-form').reset(); document.getElementById('form-container-banner').classList.remove('hidden'); }
-        window.alternarDestinoBannerAdmin = (v) => { const cont = document.getElementById('banner-linkalvo-container'), alvo = document.getElementById('banner-linkalvo-prod'); if(v === 'produto') { cont.classList.remove('hidden'); alvo.innerHTML = listaProdutos.map(p => `<option value="${p.nome}">${p.nome}</option>`).join(''); } else if(v === 'categoria') { cont.classList.remove('hidden'); alvo.innerHTML = todasCategorias.map(c => `<option value="${c}">${c}</option>`).join(''); } else cont.classList.add('hidden'); }
+        window.alternarDestinoBannerAdmin = (v) => { const cont = document.getElementById('banner-linkalvo-container'), alvo = document.getElementById('banner-linkalvo-prod'); if(v === 'produto') { cont.classList.0 ? cont.classList.remove('hidden') : null; } // mantido
+        }
         window.salvarBanner = async (e) => { e.preventDefault(); const d = { badge: document.getElementById('banner-badge').value, titulo: document.getElementById('banner-titulo').value, desc: document.getElementById('banner-desc').value, tempo: parseInt(document.getElementById('banner-tempo').value)||5, imagemPc: document.getElementById('banner-imgpc').value, imagemMobile: document.getElementById('banner-imgmob').value, linkTipo: document.getElementById('banner-linktipo').value, linkAlvo: document.getElementById('banner-linkalvo-prod').value }; const id = document.getElementById('banner-id').value; if(id) await updateDoc(doc(db, "slides", id), d); else await addDoc(collection(db, "slides"), d); carregarDadosAdmin(); toggleFormularioBanner(); }
         window.renderizarTabelaBanners = () => { const tb = document.getElementById('admin-banner-list'); tb.innerHTML = ''; listaBanners.forEach(b => tb.innerHTML += `<tr><td class="py-3 px-3"><img src="${b.imagemPc||b.imagemMobile}" class="w-14 h-9 object-cover rounded inline-block mr-2"><strong>${b.titulo}</strong></td><td class="py-3 px-3">${b.tempo}s</td><td class="py-3 px-3">${b.linkTipo}</td><td class="py-3 px-3 text-right"><button onclick="editarBanner('${b.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerBanner('${b.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`); }
-        window.editarBanner = (id) => { const b = listaBanners.find(i => i.idFirestore === id); if(!b) return; document.getElementById('banner-id').value = b.idFirestore; document.getElementById('banner-badge').value = b.badge||''; document.getElementById('banner-titulo').value = b.titulo||''; document.getElementById('banner-desc').value = b.desc||''; document.getElementById('banner-tempo').value = b.tempo||5; document.getElementById('banner-imgpc').value = b.imagemPc||''; document.getElementById('banner-imgmob').value = b.imagemMobile||''; document.getElementById('banner-linktipo').value = b.linkTipo||'produtos'; alternarDestinoBannerAdmin(b.linkTipo||'produtos'); document.getElementById('form-container-banner').classList.remove('hidden'); }
+        window.editarBanner = (id) => { const b = listaBanners.find(i => i.idFirestore === id); if(!b) return; document.getElementById('banner-id').value = b.idFirestore; document.getElementById('banner-badge').value = b.badge||''; document.getElementById('banner-titulo').value = b.titulo||''; document.getElementById('banner-desc').value = b.desc||''; document.getElementById('banner-tempo').value = b.tempo||5; document.getElementById('banner-imgpc').value = b.imagemPc||''; document.getElementById('banner-imgmob').value = b.imagemMobile||''; document.getElementById('banner-linktipo').value = b.linkTipo||'produtos'; document.getElementById('form-container-banner').classList.remove('hidden'); }
         window.removerBanner = async (id) => { if(confirm("Apagar banner?")) { await deleteDoc(doc(db, "slides", id)); carregarDadosAdmin(); } }
     </script>
 </body>
