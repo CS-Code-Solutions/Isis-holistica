@@ -6,13 +6,18 @@
     <title>Painel Administrativo | Ísis Holística</title>
     <link rel="icon" type="image/png" href="ico.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cropper.js CSS para a tela de recorte -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <!-- SheetJS para leitura de planilhas Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .admin-logo-bg {
             background-color: #0b2e2d;
+            background-image: url('42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg');
+            background-size: cover;
+            background-position: center;
         }
     </style>
 </head>
@@ -22,14 +27,15 @@
     <div id="modal-recorte" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl shadow-2xl p-6 max-w-xl w-full space-y-4 border border-teal-100 flex flex-col">
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-bold text-[#0E8685]">✂️ Ajustar e Recortar Imagem</h3>
+                <h3 class="text-lg font-bold text-[#0E8685]">✂️ Ajustar e Recortar Imagem (Opcional)</h3>
                 <button type="button" onclick="fecharModalRecorte()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
             </div>
             <div class="max-h-[60vh] overflow-hidden flex items-center justify-center bg-gray-900 rounded-xl">
                 <img id="imagem-para-recortar" src="" alt="Recorte" class="max-w-full block">
             </div>
+            <p class="text-xs text-gray-500 text-center">Arraste a caixa de seleção para enquadrar a imagem se necessário.</p>
             <div class="flex gap-3 pt-2 border-t">
-                <button type="button" onclick="aplicarRecorte()" class="flex-1 bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition text-sm">Concluir Recorte</button>
+                <button type="button" onclick="aplicarRecorte()" class="flex-1 bg-[#0E8685] text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition shadow text-sm">Concluir Recorte</button>
                 <button type="button" onclick="fecharModalRecorte()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition text-sm">Cancelar</button>
             </div>
         </div>
@@ -39,128 +45,443 @@
     <div id="login-overlay" class="fixed inset-0 z-50 admin-logo-bg flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full space-y-6 border border-teal-100 relative z-10">
             <div class="text-center space-y-2">
-                <h2 class="text-2xl font-extrabold text-[#0E8685]">Painel Ísis Holística</h2>
-                <p class="text-xs text-gray-500">Insira as credenciais de administrador</p>
+                <img src="logo.png" alt="Ísis Holística" class="mx-auto h-20 w-auto object-contain mb-1" onerror="this.style.display='none'">
+                <h2 class="text-2xl font-extrabold text-[#0E8685]">Acesso a Ísis Holística</h2>
+                <p class="text-xs text-gray-500">Insira as suas credenciais de administrador</p>
             </div>
             <form onsubmit="fazerLoginAdmin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">E-mail</label>
-                    <input type="email" id="login-email" required class="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">E-mail de Gestor</label>
+                    <input type="email" id="login-email" required class="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="admin@isisholistica.com">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Palavra-passe</label>
-                    <input type="password" id="login-senha" required class="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                    <input type="password" id="login-senha" required class="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]" placeholder="••••••••">
                 </div>
-                <button type="submit" class="w-full bg-[#0E8685] text-white font-bold py-3.5 rounded-xl hover:bg-opacity-90 transition text-sm">Entrar no Painel</button>
+                <button type="submit" class="w-full bg-[#0E8685] text-white font-bold py-3.5 rounded-xl hover:bg-opacity-90 transition shadow-lg text-sm">Entrar no Painel</button>
             </form>
+            <div class="text-center text-[10px] text-gray-400">
+                Powered by <a href="https://www.instagram.com/cscode.solutions" target="_blank" style="color: #f28c28; text-decoration: none; font-weight: bold;">CS Code Solutions</a>
+            </div>
         </div>
     </div>
 
-    <!-- PAINEL PRINCIPAL -->
+    <!-- PAINEL ADMINISTRATIVO -->
     <div id="admin-main-wrapper" class="contents hidden">
-        <aside class="w-full md:w-64 bg-[#0E8685] text-white flex flex-col justify-between shadow-xl z-20 md:min-h-screen">
+        <!-- CABEÇALHO MOBILE -->
+        <header class="bg-[#0E8685] text-white shadow-md md:hidden flex justify-between items-center px-4 py-3 sticky top-0 z-30">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">⚙</span>
+                <h1 class="font-bold text-sm">Painel Gestor | Ísis Holística</h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="bg-white text-[#0E8685] text-xs font-bold px-3 py-1.5 rounded-lg shadow">Ver Loja ➔</a>
+                <button onclick="toggleAdminMobileMenu()" class="bg-teal-700 p-2 rounded-lg text-white font-bold text-base">☰</button>
+            </div>
+        </header>
+
+        <!-- MENU LATERAL -->
+        <aside id="admin-sidebar" class="hidden md:flex w-full md:w-64 bg-[#0E8685] text-white flex-col justify-between shadow-xl z-20 md:min-h-screen absolute md:relative top-[57px] md:top-0 left-0">
             <div>
                 <div class="p-6 border-b border-teal-700/50 hidden md:flex items-center gap-3">
-                    <span class="text-2xl">⚙️</span>
+                    <span class="text-3xl">⚙️</span>
                     <div>
                         <h1 class="font-bold text-base leading-tight">Painel Gestor</h1>
                         <span class="text-xs text-teal-200">Ísis Holística</span>
                     </div>
                 </div>
-                <nav class="p-4 space-y-2">
-                    <button onclick="mudarAbaAdmin('inventario')" id="nav-inventario" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left">📦 Inventário da Loja</button>
-                    <button onclick="mudarAbaAdmin('deposito')" id="nav-deposito" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">🏢 Depósito / Estoque</button>
-                    <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">🖼️ Banners</button>
+                <nav class="p-4 space-y-2 bg-[#0E8685]">
+                    <button onclick="mudarAbaAdmin('inventario')" id="nav-inventario" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left">
+                        <span>📦</span> Inventário da Loja
+                    </button>
+                    <button onclick="mudarAbaAdmin('deposito')" id="nav-deposito" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
+                        <span>🏢</span> Depósito / Estoque Geral
+                    </button>
+                    <button onclick="mudarAbaAdmin('banners')" id="nav-banners" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left">
+                        <span>🖼️</span> Banners do Carrossel
+                    </button>
                 </nav>
             </div>
-            <div class="p-4 border-t border-teal-700/50 space-y-3">
-                <a href="index.html" target="_blank" class="w-full flex items-center justify-center gap-2 bg-white text-[#0E8685] font-bold py-3 px-4 rounded-xl text-xs shadow hover:bg-teal-50 transition">Ver Loja ao Vivo ➔</a>
-                <button onclick="fazerLogout()" class="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition">Terminar Sessão</button>
+            <div class="p-4 border-t border-teal-700/50 bg-[#0E8685] space-y-3">
+                <a href="index.html" class="w-full flex items-center justify-center gap-2 bg-white text-[#0E8685] font-bold py-3 px-4 rounded-xl text-xs shadow hover:bg-teal-50 transition">
+                    <span>Ver Loja ao Vivo</span> ➔
+                </a>
+                <button onclick="fazerLogout()" class="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition shadow">
+                    <span>🚪 Terminar Sessão</span>
+                </button>
+                <div class="text-center text-[10px] text-teal-200">
+                    Powered by <a href="https://www.instagram.com/cscode.solutions" target="_blank" style="color: #f28c28; text-decoration: none; font-weight: bold;">CS Code Solutions</a>
+                </div>
             </div>
         </aside>
 
+        <!-- CONTEÚDO PRINCIPAL -->
         <main class="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col justify-between min-h-screen">
             <div class="space-y-8">
                 
-                <!-- ABA 1: INVENTÁRIO -->
-                <div id="admin-section-inventario" class="space-y-6">
+                <!-- SEÇÃO 1: INVENTÁRIO (VITRINE) -->
+                <div id="admin-section-inventario" class="space-y-8">
                     <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
                         <div>
                             <h2 class="text-xl font-bold text-[#0E8685]">Inventário de Produtos Ativos (Loja)</h2>
-                            <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual.</p>
+                            <p class="text-gray-500 text-sm">Gerencie os itens exibidos na vitrine virtual da loja.</p>
                         </div>
-                        <button onclick="abrirNovoProdutoDireto()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow hover:bg-opacity-90 transition text-xs">+ Adicionar Produto</button>
+                        <div class="flex flex-wrap gap-3 items-center">
+                            <button onclick="removerProdutosSemFoto()" class="bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 font-bold px-4 py-3 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                                <span>🧹</span> <span>Remover Sem Foto da Vitrine</span>
+                            </button>
+                            <button onclick="abrirNovoProdutoDeposito()" class="bg-gray-100 text-[#0E8685] font-bold px-4 py-3 rounded-xl shadow-sm hover:bg-gray-200 transition flex items-center gap-2 text-xs border border-teal-100">
+                                <span>📦</span> <span>Vincular do Depósito</span>
+                            </button>
+                            <button onclick="abrirNovoProdutoDireto()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-xs">
+                                <span>➕</span> <span>Adicionar Produto Direto</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <div id="form-container-produto" class="hidden bg-white p-6 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 space-y-4">
-                        <div class="flex justify-between items-center border-b pb-3">
-                            <h3 id="form-produto-title" class="text-lg font-bold text-[#0E8685]">Cadastrar/Editar Produto</h3>
-                            <button onclick="toggleFormularioProduto()" class="text-gray-400 font-bold">✕</button>
+                    <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 id="form-produto-title" class="text-xl font-bold text-[#0E8685]">📦 Cadastrar/Editar Produto na Loja</h3>
+                            <button onclick="toggleFormularioProduto()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                         </div>
-                        <form id="product-form" onsubmit="salvarProduto(event)" class="space-y-4">
+                        <form id="product-form" onsubmit="salvarProduto(event)" class="space-y-6">
                             <input type="hidden" id="prod-id">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div><label class="block text-xs font-bold uppercase mb-1">Nome</label><input type="text" id="prod-nome" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                            <input type="hidden" id="prod-modo-cadastro" value="direto">
+                            
+                            <div id="bloco-deposito-vinculo" class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-teal-50/40 p-4 rounded-xl border border-teal-100">
                                 <div>
-                                    <label class="block text-xs font-bold uppercase mb-1">Categoria</label>
-                                    <select id="prod-categoria" class="w-full px-4 py-2 border rounded-xl text-sm bg-white">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">1. Filtrar por Categoria</label>
+                                    <select id="prod-filtro-cat" onchange="atualizarSelectDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white">
                                         <option value="Incensos">Incensos</option>
-                                        <option value="Pedras">Pedras</option>
+                                        <option value="Pedras">Pedras e Cristais</option>
                                         <option value="Semijoias">Semijoias</option>
-                                        <option value="Decoracao">Decoracao</option>
+                                        <option value="Decoracao">Decoração</option>
                                         <option value="Velas">Velas</option>
                                         <option value="Imagens">Imagens</option>
                                         <option value="Perfume">Perfume</option>
-                                        <option value="Oleo Essencial">Oleo Essencial</option>
+                                        <option value="Oleo Essencial">Óleo Essencial</option>
                                         <option value="Aromatizador">Aromatizador</option>
                                     </select>
                                 </div>
-                                <div><label class="block text-xs font-bold uppercase mb-1">Preço (R$)</label><input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2 border rounded-xl text-sm"></div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">2. Selecionar Produto do Estoque (Depósito)</label>
+                                    <select id="prod-deposito-select" onchange="preencherDoDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white"></select>
+                                </div>
                             </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Produto</label>
+                                    <input type="text" id="prod-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
+                                    <select id="prod-categoria" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685] bg-white">
+                                        <option value="Incensos">Incensos</option>
+                                        <option value="Pedras">Pedras e Cristais</option>
+                                        <option value="Semijoias">Semijoias</option>
+                                        <option value="Decoracao">Decoração</option>
+                                        <option value="Velas">Velas</option>
+                                        <option value="Imagens">Imagens</option>
+                                        <option value="Perfume">Perfume</option>
+                                        <option value="Oleo Essencial">Óleo Essencial</option>
+                                        <option value="Aromatizador">Aromatizador</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço (R$)</label>
+                                    <input type="number" step="0.01" id="prod-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                                </div>
+                            </div>
+
+                            <div class="space-y-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <label class="block text-xs font-bold text-[#0E8685] uppercase">📸 Galeria de Fotos e Variações</label>
+                                    <button type="button" onclick="adicionarCampoFotoProd()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-opacity-90 transition">➕ Adicionar Foto</button>
+                                </div>
+                                <div id="container-fotos-prod-dinamico" class="space-y-4"></div>
+                            </div>
+
                             <div>
-                                <label class="block text-xs font-bold uppercase mb-1">URL da Foto</label>
-                                <input type="text" id="prod-foto" required class="w-full px-4 py-2 border rounded-xl text-sm" placeholder="https://...">
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição do Produto</label>
+                                <textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
                             </div>
-                            <div><label class="block text-xs font-bold uppercase mb-1">Descrição</label><textarea id="prod-descricao" rows="2" class="w-full px-4 py-2 border rounded-xl text-sm"></textarea></div>
-                            <div class="flex items-center gap-2"><input type="checkbox" id="prod-destaque" class="w-4 h-4"><label for="prod-destaque" class="text-sm font-semibold">Deixar em Destaque na Home</label></div>
-                            <div class="flex gap-3 pt-2"><button type="submit" class="bg-[#0E8685] text-white font-bold px-6 py-2.5 rounded-xl text-sm">Guardar Produto</button><button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 font-bold px-5 py-2.5 rounded-xl text-sm">Cancelar</button></div>
+
+                            <div class="flex items-center gap-2 pt-2">
+                                <input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded focus:ring-[#0E8685]">
+                                <label for="prod-destaque" class="text-sm font-semibold text-gray-700">Deixar em destaque na Página Inicial da loja</label>
+                            </div>
+
+                            <div class="flex gap-3 pt-4 border-t">
+                                <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Produto</button>
+                                <button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                            </div>
                         </form>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
-                        <div class="flex justify-between items-center"><h3 class="font-bold text-[#0E8685]">Produtos na Vitrine</h3><span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span></div>
-                        <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="admin-product-list" class="divide-y"></tbody></table></div>
+                    <!-- LISTAGEM DE PRODUTOS DA VITRINE -->
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-lg font-bold text-[#0E8685]">📋 Produtos na Vitrine</h3>
+                                <span id="total-produtos" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 produtos</span>
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <label class="text-xs font-bold text-gray-500 uppercase whitespace-nowrap">Categoria:</label>
+                                <select id="filtro-cat-produtos" onchange="mudarFiltroCategoriaProdutos(this.value)" class="w-full sm:w-auto px-3 py-2 border rounded-xl text-xs bg-white font-semibold text-[#0E8685] focus:outline-none focus:border-[#0E8685]">
+                                    <option value="TODAS">Todas</option>
+                                    <option value="Incensos">Incensos</option>
+                                    <option value="Pedras">Pedras</option>
+                                    <option value="Semijoias">Semijoias</option>
+                                    <option value="Decoracao">Decoração</option>
+                                    <option value="Velas">Velas</option>
+                                    <option value="Imagens">Imagens</option>
+                                    <option value="Perfume">Perfume</option>
+                                    <option value="Oleo Essencial">Óleo Essencial</option>
+                                    <option value="Aromatizador">Aromatizador</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                        <th class="py-3 px-3">Produto</th>
+                                        <th class="py-3 px-3">Categoria</th>
+                                        <th class="py-3 px-3">Preço</th>
+                                        <th class="py-3 px-3 text-center">Destaque Home</th>
+                                        <th class="py-3 px-3 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-product-list" class="text-sm divide-y"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- CONTROLES DE PAGINAÇÃO DA VITRINE -->
+                        <div class="flex justify-between items-center pt-4 border-t text-xs font-bold text-gray-600">
+                            <button onclick="paginaAnteriorProdutos()" id="btn-prod-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl transition">⬅️ Anterior</button>
+                            <span id="paginacao-prod-info" class="text-center">Página 1 de 1</span>
+                            <button onclick="proximaPaginaProdutos()" id="btn-prod-prox" class="bg-[#0E8685] hover:bg-opacity-90 text-white px-4 py-2.5 rounded-xl transition">Próxima ➡️</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- ABA 2: DEPÓSITO -->
-                <div id="admin-section-deposito" class="space-y-6 hidden">
-                    <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div><h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2><p class="text-gray-500 text-sm">Controle de quantidades e custos.</p></div>
-                        <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow text-xs">+ Novo Item</button>
+                <!-- SEÇÃO 2: DEPÓSITO -->
+                <div id="admin-section-deposito" class="space-y-8 hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-[#0E8685]">Depósito / Estoque Geral</h2>
+                            <p class="text-gray-500 text-sm">Controle de quantidades e dados de importação.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3 items-center">
+                            <button onclick="limparDuplicadosMantendoImagens()" class="bg-orange-50 hover:bg-orange-100 text-orange-600 border border-orange-200 font-bold px-4 py-3 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                                <span>🧹</span> <span>Limpar Duplicados</span>
+                            </button>
+                            <label id="label-btn-upload" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl shadow transition flex items-center gap-2 text-sm cursor-pointer">
+                                <span id="icone-upload">📁</span> <span id="texto-btn-upload">Importar Planilha</span>
+                                <input type="file" id="input-excel-upload" accept=".xlsx, .xls, .csv" onchange="importarPlanilhaExcel(this)" class="hidden">
+                            </label>
+                            <button onclick="abrirNovoDeposito()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                                <span>➕</span> <span>Novo Item</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
-                        <div class="flex justify-between items-center"><h3 class="font-bold text-[#0E8685]">Itens no Estoque</h3><span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span></div>
+
+                    <!-- FORMULÁRIO DE DEPÓSITO -->
+                    <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 id="form-deposito-title" class="text-xl font-bold text-[#0E8685]">🏢 Novo Item no Depósito</h3>
+                            <button onclick="toggleFormularioDeposito()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                        </div>
+                        <form id="deposito-form" onsubmit="salvarItemDeposito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <input type="hidden" id="dep-id">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Item</label>
+                                <input type="text" id="dep-nome" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Categoria</label>
+                                <select id="dep-categoria" onchange="atualizarSubCamposDeposito()" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                                    <option value="Incensos">Incensos</option>
+                                    <option value="Pedras">Pedras e Cristais</option>
+                                    <option value="Semijoias">Semijoias</option>
+                                    <option value="Decoracao">Decoração</option>
+                                    <option value="Velas">Velas</option>
+                                    <option value="Imagens">Imagens</option>
+                                    <option value="Perfume">Perfume</option>
+                                    <option value="Oleo Essencial">Óleo Essencial</option>
+                                    <option value="Aromatizador">Aromatizador</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Valor de Compra (R$)</label>
+                                <input type="number" step="0.01" id="dep-compra" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Preço de Venda (R$)</label>
+                                <input type="number" step="0.01" id="dep-preco" required class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantidade em Estoque</label>
+                                <input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            </div>
+                            <div id="sub-campos-container" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 bg-teal-50/50 p-4 rounded-xl border border-teal-100"></div>
+
+                            <div class="md:col-span-2 space-y-4 bg-gray-50 p-5 rounded-2xl border border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <label class="block text-xs font-bold text-[#0E8685] uppercase">📸 Galeria de Fotos</label>
+                                    <button type="button" onclick="adicionarCampoFoto()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-opacity-90 transition">➕ Adicionar Foto</button>
+                                </div>
+                                <div id="container-fotos-dinamico" class="space-y-4"></div>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição</label>
+                                <textarea id="dep-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
+                            </div>
+
+                            <div class="md:col-span-2 flex items-center gap-3 bg-teal-50/60 p-4 rounded-xl border border-teal-100">
+                                <input type="checkbox" id="dep-exibir-vitrine" checked class="w-5 h-5 text-[#0E8685] rounded focus:ring-[#0E8685]">
+                                <label for="dep-exibir-vitrine" class="text-sm font-bold text-[#0E8685] cursor-pointer">✨ Exibir imediatamente na Vitrine da Loja</label>
+                            </div>
+
+                            <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+                                <button type="submit" id="btn-salvar-dep" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar no Depósito</button>
+                                <button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- LISTAGEM DE DEPÓSITO -->
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b pb-4">
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-lg font-bold text-[#0E8685]">📦 Itens no Depósito</h3>
+                                <span id="total-deposito" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full">0 itens</span>
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <label class="text-xs font-bold text-gray-500 uppercase whitespace-nowrap">Categoria:</label>
+                                <select id="filtro-cat-deposito" onchange="mudarFiltroCategoriaDeposito(this.value)" class="w-full sm:w-auto px-3 py-2 border rounded-xl text-xs bg-white font-semibold text-[#0E8685] focus:outline-none focus:border-[#0E8685]">
+                                    <option value="TODAS">Todas</option>
+                                    <option value="Incensos">Incensos</option>
+                                    <option value="Pedras">Pedras</option>
+                                    <option value="Semijoias">Semijoias</option>
+                                    <option value="Decoracao">Decoração</option>
+                                    <option value="Velas">Velas</option>
+                                    <option value="Imagens">Imagens</option>
+                                    <option value="Perfume">Perfume</option>
+                                    <option value="Oleo Essencial">Óleo Essencial</option>
+                                    <option value="Aromatizador">Aromatizador</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div id="admin-deposito-list" class="space-y-3"></div>
+
+                        <div class="flex justify-between items-center pt-4 border-t text-xs font-bold text-gray-600">
+                            <button onclick="paginaAnteriorDeposito()" id="btn-pag-ant" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl transition">⬅️ Anterior</button>
+                            <span id="paginacao-info" class="text-center">Página 1 de 1</span>
+                            <button onclick="proximaPaginaDeposito()" id="btn-pag-prox" class="bg-[#0E8685] hover:bg-opacity-90 text-white px-4 py-2.5 rounded-xl transition">Próxima ➡️</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- ABA 3: BANNERS -->
-                <div id="admin-section-banners" class="space-y-6 hidden">
-                    <div class="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div><h2 class="text-xl font-bold text-[#0E8685]">Banners da Home</h2></div>
-                        <button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-5 py-3 rounded-xl shadow text-xs">+ Adicionar Banner</button>
+                <!-- SEÇÃO 3: BANNERS -->
+                <div id="admin-section-banners" class="space-y-8 hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-[#0E8685]">Banners da Página Inicial</h2>
+                        </div>
+                        <button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-opacity-90 transition flex items-center gap-2 text-sm">
+                            <span>➕</span> <span>Adicionar Banner</span>
+                        </button>
                     </div>
+
+                    <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 id="form-banner-title" class="text-xl font-bold text-[#0E8685]">🖼️ Novo/Editar Banner</h3>
+                            <button onclick="toggleFormularioBanner()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                        </div>
+
+                        <form id="banner-form" onsubmit="salvarBanner(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <input type="hidden" id="banner-id">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Badge (Opcional)</label>
+                                <input type="text" id="banner-badge" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título</label>
+                                <input type="text" id="banner-titulo" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tempo (Segundos)</label>
+                                <input type="number" id="banner-tempo" value="5" min="2" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição</label>
+                                <textarea id="banner-desc" rows="2" class="w-full px-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-[#0E8685]"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">🖥️ Imagem PC</label>
+                                <input type="text" id="banner-imgpc" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                                <input type="file" accept="image/*" onchange="carregarImagemOriginal(this, 'banner-imgpc')" class="w-full text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-[#0E8685] uppercase mb-1">📱 Imagem Mobile</label>
+                                <input type="text" id="banner-imgmob" class="w-full px-4 py-2.5 border rounded-xl text-sm mb-2 focus:outline-none focus:border-[#0E8685]">
+                                <input type="file" accept="image/*" onchange="carregarImagemOriginal(this, 'banner-imgmob')" class="w-full text-xs">
+                            </div>
+                            <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Destino ao Clicar</label>
+                                    <select id="banner-linktipo" onchange="alternarDestinoBannerAdmin(this.value)" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white">
+                                        <option value="produtos">Loja Geral</option>
+                                        <option value="promocoes">Promoções</option>
+                                        <option value="destaques">Destaques</option>
+                                        <option value="categoria">Categoria Específica</option>
+                                        <option value="produto">Produto Específico</option>
+                                        <option value="terapias">Espaço Terapêutico</option>
+                                    </select>
+                                </div>
+                                <div id="banner-linkalvo-container" class="hidden">
+                                    <label id="banner-linkalvo-label" class="block text-xs font-bold text-gray-700 uppercase mb-1">Selecione o Alvo</label>
+                                    <select id="banner-linkalvo-prod" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-white"></select>
+                                </div>
+                            </div>
+                            <div class="md:col-span-2 flex gap-3 pt-4 border-t">
+                                <button type="submit" id="btn-salvar-banner" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl hover:bg-opacity-90 transition shadow">Guardar Banner</button>
+                                <button type="button" onclick="toggleFormularioBanner()" class="bg-gray-100 text-gray-700 font-bold px-6 py-3 rounded-xl hover:bg-gray-200 transition">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="admin-banner-list" class="divide-y"></tbody></table></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b text-xs font-bold text-gray-400 uppercase">
+                                        <th class="py-3 px-3">Banner / Imagem</th>
+                                        <th class="py-3 px-3">Badge & Tempo</th>
+                                        <th class="py-3 px-3">Destino do Clique</th>
+                                        <th class="py-3 px-3 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-banner-list" class="text-sm divide-y"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-
             </div>
-            <footer class="mt-16 pt-6 border-t text-center text-xs text-gray-400">© 2026 Ísis Holística — Powered by CS Code Solutions</footer>
+
+            <footer class="mt-16 pt-6 border-t border-gray-200 text-center text-xs text-gray-500">
+                <span>© 2026 Ísis Holística. Powered by CS Code Solutions</span>
+            </footer>
         </main>
     </div>
 
+    <!-- Cropper.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -182,21 +503,45 @@
         let listaProdutos = [];
         let listaDeposito = [];
         let listaBanners = [];
+        let cropperInstance = null;
+        let targetInputGlobal = null;
+
+        let paginaAtualProdutos = 1;
+        let categoriaFiltroProdutos = "TODAS";
+
+        let paginaAtualDeposito = 1;
+        const itensPorPagina = 20;
+        let categoriaFiltroAtual = "TODAS";
 
         onAuthStateChanged(auth, (user) => {
             const overlay = document.getElementById('login-overlay');
             const mainWrapper = document.getElementById('admin-main-wrapper');
-            if (user) { overlay.classList.add('hidden'); mainWrapper.classList.remove('hidden'); carregarDadosAdmin(); }
-            else { mainWrapper.classList.add('hidden'); overlay.classList.remove('hidden'); }
+            
+            if (user) {
+                overlay.classList.add('hidden');
+                mainWrapper.classList.remove('hidden');
+                carregarDadosAdmin();
+            } else {
+                mainWrapper.classList.add('hidden');
+                overlay.classList.remove('hidden');
+            }
         });
 
         window.fazerLoginAdmin = async function(e) {
             e.preventDefault();
-            try { await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-senha').value); }
-            catch (err) { alert("Erro no login: " + err.message); }
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, senha);
+            } catch (err) {
+                console.error("Erro no login:", err);
+                alert("Erro no login (" + err.code + "): " + err.message);
+            }
         }
 
-        window.fazerLogout = async function() { await signOut(auth); }
+        window.fazerLogout = async function() {
+            try { await signOut(auth); } catch (err) { console.error("Erro ao sair:", err); }
+        }
 
         async function carregarDadosAdmin() {
             try {
@@ -215,90 +560,427 @@
                 renderizarTabelaProdutos();
                 renderizarTabelaDeposito();
                 renderizarTabelaBanners();
-            } catch (e) { console.error("Erro ao carregar admin:", e); }
+                atualizarSelectDeposito();
+            } catch (e) {
+                console.error("Erro ao carregar dados do Firebase:", e);
+            }
+        }
+
+        window.removerProdutosSemFoto = async function() {
+            if (!confirm("Remover da vitrine produtos sem foto?")) return;
+            try {
+                let removidos = 0;
+                for (const p of listaProdutos) {
+                    const temFoto = (p.imagens && p.imagens.length > 0 && p.imagens[0].url) || p.imagem;
+                    if (!temFoto) {
+                        await deleteDoc(doc(db, "produtos", p.idFirestore));
+                        removidos++;
+                    }
+                }
+                await carregarDadosAdmin();
+                alert(`Concluído! ${removidos} removidos.`);
+            } catch (err) { alert("Erro ao limpar produtos."); }
+        };
+
+        window.limparDuplicadosMantendoImagens = async function() {
+            if (!confirm("Deseja remover duplicados no depósito?")) return;
+            try {
+                let vistos = {};
+                let removidosCount = 0;
+                let itensOrdenados = [...listaDeposito].sort((a, b) => {
+                    let temImgA = (a.imagens && a.imagens.length > 0 && a.imagens[0].url) ? 1 : 0;
+                    let temImgB = (b.imagens && b.imagens.length > 0 && b.imagens[0].url) ? 1 : 0;
+                    return temImgB - temImgA;
+                });
+                for (const item of itensOrdenados) {
+                    let nomeNormalizado = item.nome.trim().toLowerCase();
+                    if (!vistos[nomeNormalizado]) vistos[nomeNormalizado] = true;
+                    else { await deleteDoc(doc(db, "deposito", item.idFirestore)); removidosCount++; }
+                }
+                await carregarDadosAdmin();
+                alert(`Limpeza concluída! ${removidosCount} removidas.`);
+            } catch (err) { alert("Erro ao limpar duplicados."); }
+        };
+
+        window.importarPlanilhaExcel = function(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    for (let i = 5; i < rows.length; i++) {
+                        const row = rows[i];
+                        if (!row || row.length === 0) continue;
+                        let nomeProduto = '';
+                        if (row[1]) nomeProduto = String(row[1]).trim();
+                        if (!nomeProduto || nomeProduto.toLowerCase() === 'produto') continue;
+                        let qtdEstoque = parseInt(row[4]) || 0;
+                        let precoCompra = parseFloat(row[5]) || 0;
+                        let precoVenda = parseFloat(row[6]) || 0;
+                        
+                        const itemExistente = listaDeposito.find(d => d.nome.trim().toLowerCase() === nomeProduto.toLowerCase());
+                        if (itemExistente) {
+                            await updateDoc(doc(db, "deposito", itemExistente.idFirestore), { qtd: qtdEstoque, compra: precoCompra, preco: precoVenda > 0 ? precoVenda : itemExistente.preco });
+                        } else {
+                            await addDoc(collection(db, "deposito"), { nome: nomeProduto, categoria: 'Incensos', preco: precoVenda, compra: precoCompra, qtd: qtdEstoque, imagens: [] });
+                        }
+                    }
+                    await carregarDadosAdmin();
+                    alert(`Sincronização concluída!`);
+                } catch (err) { alert("Erro ao ler Excel."); }
+                input.value = '';
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        window.carregarImagemOriginal = function(input, targetId) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) { document.getElementById(targetId).value = e.target.result; };
+            reader.readAsDataURL(file);
+            input.value = '';
+        }
+
+        window.carregarImagemOriginalDinamica = function(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const bloco = input.closest('div.group');
+            const inputUrl = bloco.querySelector('.input-foto-url') || bloco.querySelector('.input-prod-foto-url');
+            const reader = new FileReader();
+            reader.onload = function(e) { inputUrl.value = e.target.result; };
+            reader.readAsDataURL(file);
+            input.value = '';
+        }
+
+        window.abrirRecorteDinamicoBtn = function(btn, aspectRatio = 1/1) {
+            const bloco = btn.closest('div.group');
+            targetInputGlobal = bloco.querySelector('.input-foto-url') || bloco.querySelector('.input-prod-foto-url');
+            abrirModalCropper(targetInputGlobal.value, aspectRatio);
+        }
+
+        function abrirModalCropper(imageSrc, aspectRatio) {
+            if (!imageSrc) { alert("Selecione uma imagem primeiro!"); return; }
+            const imgElement = document.getElementById('imagem-para-recortar');
+            imgElement.src = imageSrc;
+            document.getElementById('modal-recorte').classList.remove('hidden');
+            if (cropperInstance) cropperInstance.destroy();
+            cropperInstance = new Cropper(imgElement, { aspectRatio: aspectRatio, viewMode: 1 });
+        }
+
+        window.fecharModalRecorte = function() {
+            document.getElementById('modal-recorte').classList.add('hidden');
+            if (cropperInstance) cropperInstance.destroy();
+        }
+
+        window.aplicarRecorte = function() {
+            if (!cropperInstance || !targetInputGlobal) return;
+            targetInputGlobal.value = cropperInstance.getCroppedCanvas({ width: 1000, height: 1000 }).toDataURL('image/jpeg', 0.85);
+            fecharModalRecorte();
         }
 
         window.mudarAbaAdmin = function(aba) {
-            ['inventario', 'deposito', 'banners'].forEach(s => {
-                document.getElementById(`admin-section-${s}`).classList.add('hidden');
-                document.getElementById(`nav-${s}`).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
-            });
+            document.getElementById('admin-section-inventario').classList.add('hidden');
+            document.getElementById('admin-section-deposito').classList.add('hidden');
+            document.getElementById('admin-section-banners').classList.add('hidden');
+
+            document.getElementById('nav-inventario').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+            document.getElementById('nav-deposito').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+            document.getElementById('nav-banners').className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-teal-100 hover:bg-white/10 transition text-left";
+
             document.getElementById(`admin-section-${aba}`).classList.remove('hidden');
             document.getElementById(`nav-${aba}`).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm bg-white/10 text-white transition text-left";
+            
+            if (window.innerWidth < 768) document.getElementById('admin-sidebar').classList.add('hidden');
         }
 
-        window.toggleFormularioProduto = function() { document.getElementById('form-container-produto').classList.toggle('hidden'); }
-        window.abrirNovoProdutoDireto = function() {
-            document.getElementById('prod-id').value = '';
-            document.getElementById('product-form').reset();
-            document.getElementById('form-container-produto').classList.remove('hidden');
+        window.toggleAdminMobileMenu = function() { document.getElementById('admin-sidebar').classList.toggle('hidden'); }
+        window.toggleFormularioBanner = function() { document.getElementById('form-container-banner').classList.toggle('hidden'); }
+
+        window.abrirNovoBanner = function() {
+            document.getElementById('banner-id').value = '';
+            document.getElementById('banner-form').reset();
+            document.getElementById('form-container-banner').classList.remove('hidden');
         }
-        window.salvarProduto = async function(e) {
+
+        window.alternarDestinoBannerAdmin = function(val) {
+            const container = document.getElementById('banner-linkalvo-container');
+            const selectAlvo = document.getElementById('banner-linkalvo-prod');
+            if (val === 'produto') {
+                container.classList.remove('hidden');
+                selectAlvo.innerHTML = listaProdutos.map(p => `<option value="${p.nome}">${p.nome}</option>`).join('');
+            } else if (val === 'categoria') {
+                container.classList.remove('hidden');
+                selectAlvo.innerHTML = `<option value="Incensos">Incensos</option><option value="Pedras">Pedras e Cristais</option><option value="Semijoias">Semijoias</option><option value="Decoracao">Decoração</option><option value="Velas">Velas</option><option value="Imagens">Imagens</option><option value="Perfume">Perfume</option><option value="Oleo Essencial">Óleo Essencial</option><option value="Aromatizador">Aromatizador</option>`;
+            } else container.classList.add('hidden');
+        }
+
+        window.salvarBanner = async function(e) {
             e.preventDefault();
-            const id = document.getElementById('prod-id').value;
             const data = {
-                nome: document.getElementById('prod-nome').value,
-                categoria: document.getElementById('prod-categoria').value,
-                preco: parseFloat(document.getElementById('prod-preco').value),
-                imagem: document.getElementById('prod-foto').value,
-                descricao: document.getElementById('prod-descricao').value,
-                destaque: document.getElementById('prod-destaque').checked
+                badge: document.getElementById('banner-badge').value,
+                titulo: document.getElementById('banner-titulo').value,
+                desc: document.getElementById('banner-desc').value,
+                tempo: parseInt(document.getElementById('banner-tempo').value) || 5,
+                imagemPc: document.getElementById('banner-imgpc').value,
+                imagemMobile: document.getElementById('banner-imgmob').value,
+                linkTipo: document.getElementById('banner-linktipo').value,
+                linkAlvo: document.getElementById('banner-linkalvo-prod').value
             };
-            if (id) await updateDoc(doc(db, "produtos", id), data);
-            else await addDoc(collection(db, "produtos"), data);
-            toggleFormularioProduto();
-            carregarDadosAdmin();
-        }
-        window.editarProduto = function(id) {
-            const p = listaProdutos.find(item => item.idFirestore === id);
-            if (!p) return;
-            document.getElementById('prod-id').value = p.idFirestore;
-            document.getElementById('prod-nome').value = p.nome;
-            document.getElementById('prod-categoria').value = p.categoria;
-            document.getElementById('prod-preco').value = p.preco;
-            document.getElementById('prod-foto').value = p.imagem || (p.imagens?.[0]?.url || '');
-            document.getElementById('prod-descricao').value = p.descricao || '';
-            document.getElementById('prod-destaque').checked = p.destaque || false;
-            document.getElementById('form-container-produto').classList.remove('hidden');
-        }
-        window.removerProduto = async function(id) {
-            if (confirm("Remover produto?")) { await deleteDoc(doc(db, "produtos", id)); carregarDadosAdmin(); }
-        }
-        function renderizarTabelaProdutos() {
-            const tbody = document.getElementById('admin-product-list');
-            document.getElementById('total-produtos').innerText = `${listaProdutos.length} produtos`;
-            tbody.innerHTML = listaProdutos.length === 0 ? `<tr><td colspan="5" class="py-4 text-center text-gray-400">Nenhum produto cadastrado.</td></tr>` : '';
-            listaProdutos.forEach(p => {
-                const img = p.imagem || (p.imagens?.[0]?.url || '');
-                tbody.innerHTML += `<tr class="border-b"><td class="py-3 px-2"><img src="${img}" class="w-10 h-10 object-cover rounded"></td><td class="py-3 px-2 font-bold">${p.nome}</td><td class="py-3 px-2">${p.categoria}</td><td class="py-3 px-2">R$ ${Number(p.preco).toFixed(2)}</td><td class="py-3 px-2 text-right"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`;
-            });
-        }
-
-        window.abrirNovoDeposito = function() { alert("Use o botão de inventário ou importação."); }
-        function renderizarTabelaDeposito() {
-            const container = document.getElementById('admin-deposito-list');
-            document.getElementById('total-deposito').innerText = `${listaDeposito.length} itens`;
-            container.innerHTML = listaDeposito.length === 0 ? `<div class="text-center py-4 text-gray-400">Nenhum item no depósito.</div>` : '';
-            listaDeposito.forEach(d => {
-                container.innerHTML += `<div class="bg-gray-50 p-3 rounded-xl flex justify-between items-center border"><div><strong>${d.nome}</strong> (${d.categoria}) - Qtd: ${d.qtd}</div></div>`;
-            });
+            const idDoc = document.getElementById('banner-id').value;
+            if (idDoc) await updateDoc(doc(db, "slides", idDoc), data);
+            else await addDoc(collection(db, "slides"), data);
+            await carregarDadosAdmin();
+            toggleFormularioBanner();
         }
 
         function renderizarTabelaBanners() {
             const tbody = document.getElementById('admin-banner-list');
-            tbody.innerHTML = listaBanners.length === 0 ? `<tr><td class="py-4 text-center text-gray-400">Nenhum banner cadastrado.</td></tr>` : '';
+            tbody.innerHTML = '';
             listaBanners.forEach(b => {
-                tbody.innerHTML += `<tr class="border-b"><td class="py-3 px-2"><strong>${b.titulo || 'Banner'}</strong></td><td class="py-3 px-2 text-right"><button onclick="removerBanner('${b.idFirestore}')" class="text-red-500 font-bold text-xs">Excluir</button></td></tr>`;
+                tbody.innerHTML += `<tr><td class="py-3 px-3"><img src="${b.imagemPc || b.imagemMobile}" class="w-14 h-9 object-cover rounded"><strong>${b.titulo}</strong></td><td class="py-3 px-3">${b.tempo}s</td><td class="py-3 px-3">${b.linkTipo}</td><td class="py-3 px-3 text-right"><button onclick="editarBanner('${b.idFirestore}')" class="text-teal-600 mr-2">Editar</button><button onclick="removerBanner('${b.idFirestore}')" class="text-red-500">Excluir</button></td></tr>`;
             });
         }
-        window.abrirNovoBanner = async function() {
-            const titulo = prompt("Título do Banner:");
-            if (!titulo) return;
-            await addDoc(collection(db, "slides"), { titulo, tempo: 5, imagemPc: '', linkTipo: 'produtos' });
-            carregarDadosAdmin();
+
+        window.editarBanner = function(id) {
+            const b = listaBanners.find(item => item.idFirestore === id);
+            if (!b) return;
+            document.getElementById('banner-id').value = b.idFirestore;
+            document.getElementById('banner-badge').value = b.badge || '';
+            document.getElementById('banner-titulo').value = b.titulo || '';
+            document.getElementById('banner-desc').value = b.desc || '';
+            document.getElementById('banner-tempo').value = b.tempo || 5;
+            document.getElementById('banner-imgpc').value = b.imagemPc || '';
+            document.getElementById('banner-imgmob').value = b.imagemMobile || '';
+            document.getElementById('banner-linktipo').value = b.linkTipo || 'produtos';
+            alternarDestinoBannerAdmin(b.linkTipo || 'produtos');
+            document.getElementById('form-container-banner').classList.remove('hidden');
         }
+
         window.removerBanner = async function(id) {
-            if (confirm("Excluir banner?")) { await deleteDoc(doc(db, "slides", id)); carregarDadosAdmin(); }
+            if (confirm("Apagar banner?")) { await deleteDoc(doc(db, "slides", id)); carregarDadosAdmin(); }
+        }
+
+        window.toggleFormularioDeposito = function() { document.getElementById('form-container-deposito').classList.toggle('hidden'); }
+        
+        window.abrirNovoDeposito = function() { 
+            document.getElementById('dep-id').value = ''; 
+            document.getElementById('deposito-form').reset(); 
+            document.getElementById('container-fotos-dinamico').innerHTML = ''; 
+            adicionarCampoFoto(); 
+            atualizarSubCamposDeposito(); 
+            document.getElementById('form-container-deposito').classList.remove('hidden');
+        }
+        
+        window.adicionarCampoFoto = function(url = '', texto = '') {
+            const container = document.getElementById('container-fotos-dinamico');
+            const div = document.createElement('div');
+            div.className = "bg-white p-4 rounded-xl border group";
+            div.innerHTML = `<button type="button" onclick="this.parentElement.remove()" class="text-red-500 font-bold text-xs">Remover</button><div class="grid grid-cols-2 gap-2 mt-2"><input type="text" class="input-foto-url border rounded px-2" value="${url}" placeholder="URL"><input type="text" class="input-foto-texto border rounded px-2" value="${texto}" placeholder="Descrição"><input type="file" accept="image/*" onchange="carregarImagemOriginalDinamica(this)" class="text-[10px]"><button type="button" onclick="abrirRecorteDinamicoBtn(this)" class="bg-teal-50 text-[#0E8685] text-[10px] px-2 rounded">Recortar</button></div>`;
+            container.appendChild(div);
+        }
+
+        window.adicionarCampoFotoProd = function(url = '', texto = '') {
+            const container = document.getElementById('container-fotos-prod-dinamico');
+            const div = document.createElement('div');
+            div.className = "bg-white p-4 rounded-xl border group";
+            div.innerHTML = `<button type="button" onclick="this.parentElement.remove()" class="text-red-500 font-bold text-xs">Remover</button><div class="grid grid-cols-2 gap-2 mt-2"><input type="text" class="input-prod-foto-url border rounded px-2" value="${url}" placeholder="URL"><input type="text" class="input-prod-foto-texto border rounded px-2" value="${texto}" placeholder="Descrição"><input type="file" accept="image/*" onchange="carregarImagemOriginalDinamica(this)" class="text-[10px]"><button type="button" onclick="abrirRecorteDinamicoBtn(this)" class="bg-teal-50 text-[#0E8685] text-[10px] px-2 rounded">Recortar</button></div>`;
+            container.appendChild(div);
+        }
+
+        window.atualizarSubCamposDeposito = function() {
+            const cat = document.getElementById('dep-categoria').value;
+            const container = document.getElementById('sub-campos-container');
+            container.innerHTML = '';
+        }
+
+        window.salvarItemDeposito = async function(e) {
+            e.preventDefault();
+            const idDoc = document.getElementById('dep-id').value;
+            const nome = document.getElementById('dep-nome').value;
+            const categoria = document.getElementById('dep-categoria').value;
+            const preco = parseFloat(document.getElementById('dep-preco').value) || 0;
+            const compra = parseFloat(document.getElementById('dep-compra').value) || 0;
+            const qtd = parseInt(document.getElementById('dep-qtd').value) || 0;
+            const descricao = document.getElementById('dep-descricao').value;
+
+            let imagens = [];
+            document.querySelectorAll('#container-fotos-dinamico > div').forEach(bloco => {
+                const url = bloco.querySelector('.input-foto-url').value;
+                const texto = bloco.querySelector('.input-foto-texto').value;
+                if (url) imagens.push({ url, texto });
+            });
+
+            const data = { nome, categoria, preco, compra, qtd, imagens, descricao };
+            if (idDoc) await updateDoc(doc(db, "deposito", idDoc), data);
+            else await addDoc(collection(db, "deposito"), data);
+
+            if (document.getElementById('dep-exibir-vitrine').checked && imagens.length > 0) {
+                const prod = listaProdutos.find(p => p.nome === nome);
+                if (prod) await updateDoc(doc(db, "produtos", prod.idFirestore), { nome, preco, categoria, imagens, descricao });
+                else await addDoc(collection(db, "produtos"), { nome, preco, categoria, imagens, descricao, destaque: false });
+            }
+
+            carregarDadosAdmin();
+            toggleFormularioDeposito();
+        }
+
+        window.mudarFiltroCategoriaDeposito = function(cat) { categoriaFiltroAtual = cat; paginaAtualDeposito = 1; renderizarTabelaDeposito(); }
+        window.paginaAnteriorDeposito = function() { if (paginaAtualDeposito > 1) { paginaAtualDeposito--; renderizarTabelaDeposito(); } }
+        window.proximaPaginaDeposito = function() { paginaAtualDeposito++; renderizarTabelaDeposito(); }
+
+        window.mudarFiltroCategoriaProdutos = function(cat) { categoriaFiltroProdutos = cat; paginaAtualProdutos = 1; renderizarTabelaProdutos(); }
+        window.paginaAnteriorProdutos = function() { if (paginaAtualProdutos > 1) { paginaAtualProdutos--; renderizarTabelaProdutos(); } }
+        window.proximaPaginaProdutos = function() { paginaAtualProdutos++; renderizarTabelaProdutos(); }
+
+        window.renderizarTabelaProdutos = function() {
+            const tbody = document.getElementById('admin-product-list');
+            const produtosComFoto = listaProdutos.filter(p => (p.imagens && p.imagens[0]?.url) || p.imagem);
+            const filtrados = categoriaFiltroProdutos === "TODAS" ? produtosComFoto : produtosComFoto.filter(p => p.categoria === categoriaFiltroProdutos);
+            document.getElementById('total-produtos').innerText = `${filtrados.length} produtos`;
+
+            const inicio = (paginaAtualProdutos - 1) * itensPorPagina;
+            const itensPagina = filtrados.slice(inicio, inicio + itensPorPagina);
+            document.getElementById('paginacao-prod-info').innerText = `Página ${paginaAtualProdutos}`;
+
+            tbody.innerHTML = '';
+            itensPagina.forEach(p => {
+                const img = (p.imagens && p.imagens[0]?.url) || p.imagem || '';
+                tbody.innerHTML += `<tr><td class="py-3 px-3"><img src="${img}" class="w-10 h-10 object-cover rounded"> ${p.nome}</td><td class="py-3 px-3">${p.categoria}</td><td class="py-3 px-3">R$ ${Number(p.preco).toFixed(2)}</td><td class="py-3 px-3 text-center">${p.destaque ? 'Sim' : 'Não'}</td><td class="py-3 px-3 text-right"><button onclick="editarProduto('${p.idFirestore}')" class="text-teal-600 mr-2 font-bold">Editar</button><button onclick="removerProduto('${p.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`;
+            });
+        }
+
+        window.renderizarTabelaDeposito = function() {
+            const containerList = document.getElementById('admin-deposito-list');
+            const filtrados = categoriaFiltroAtual === "TODAS" ? listaDeposito : listaDeposito.filter(d => d.categoria === categoriaFiltroAtual);
+            document.getElementById('total-deposito').innerText = `${filtrados.length} itens`;
+
+            const inicio = (paginaAtualDeposito - 1) * itensPorPagina;
+            const itensPagina = filtrados.slice(inicio, inicio + itensPorPagina);
+            document.getElementById('paginacao-info').innerText = `Página ${paginaAtualDeposito}`;
+
+            containerList.innerHTML = '';
+            itensPagina.forEach(d => {
+                const img = (d.imagens && d.imagens[0]?.url) || d.imagem || '';
+                containerList.innerHTML += `<div class="bg-gray-50 border rounded-2xl p-4 flex justify-between items-center"><div><strong>${d.nome}</strong><br><span class="text-xs text-[#0E8685]">${d.categoria}</span> | Estoque: ${d.qtd}</div><div><button onclick="editarDeposito('${d.idFirestore}')" class="text-teal-600 mr-2 font-bold">Editar</button><button onclick="removerDeposito('${d.idFirestore}')" class="text-red-500 font-bold">Excluir</button></div></div>`;
+            });
+        }
+
+        window.editarDeposito = function(id) {
+            const d = listaDeposito.find(i => i.idFirestore === id);
+            if (!d) return;
+            document.getElementById('dep-id').value = d.idFirestore;
+            document.getElementById('dep-nome').value = d.nome;
+            document.getElementById('dep-categoria').value = d.categoria;
+            document.getElementById('dep-preco').value = d.preco || 0;
+            document.getElementById('dep-compra').value = d.compra || 0;
+            document.getElementById('dep-qtd').value = d.qtd || 0;
+            document.getElementById('dep-descricao').value = d.descricao || '';
+            const containerFotos = document.getElementById('container-fotos-dinamico');
+            containerFotos.innerHTML = '';
+            const listaImgs = d.imagens?.length ? d.imagens : [{ url: d.imagem || '', texto: '' }];
+            listaImgs.forEach(img => adicionarCampoFoto(img.url, img.texto));
+            document.getElementById('form-container-deposito').classList.remove('hidden');
+        }
+
+        window.removerDeposito = async function(id) {
+            if (confirm("Apagar item?")) { await deleteDoc(doc(db, "deposito", id)); carregarDadosAdmin(); }
+        }
+
+        window.toggleFormularioProduto = function() { document.getElementById('form-container-produto').classList.toggle('hidden'); }
+        window.abrirNovoProdutoDeposito = function() {
+            document.getElementById('prod-id').value = '';
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-modo-cadastro').value = 'deposito';
+            document.getElementById('bloco-deposito-vinculo').classList.remove('hidden');
+            document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
+            atualizarSelectDeposito();
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+
+        window.abrirNovoProdutoDireto = function() {
+            document.getElementById('prod-id').value = '';
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-modo-cadastro').value = 'direto';
+            document.getElementById('bloco-deposito-vinculo').classList.add('hidden');
+            document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
+            adicionarCampoFotoProd();
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+
+        window.atualizarSelectDeposito = function() {
+            const filtroCat = document.getElementById('prod-filtro-cat').value;
+            const selectDep = document.getElementById('prod-deposito-select');
+            selectDep.innerHTML = '';
+            const filtrados = listaDeposito.filter(d => d.categoria === filtroCat);
+            filtrados.forEach((item, idx) => { selectDep.innerHTML += `<option value="${idx}">${item.nome}</option>`; });
+            preencherDoDeposito();
+        }
+
+        window.preencherDoDeposito = function() {
+            const filtroCat = document.getElementById('prod-filtro-cat').value;
+            const idx = document.getElementById('prod-deposito-select').value;
+            const item = listaDeposito.filter(d => d.categoria === filtroCat)[idx];
+            if (item) {
+                document.getElementById('prod-nome').value = item.nome;
+                document.getElementById('prod-preco').value = item.preco;
+                document.getElementById('prod-categoria').value = item.categoria;
+                document.getElementById('prod-descricao').value = item.descricao || '';
+                document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
+                const listaImgs = item.imagens?.length ? item.imagens : [{ url: item.imagem || '', texto: '' }];
+                listaImgs.forEach(img => adicionarCampoFotoProd(img.url, img.texto));
+            }
+        }
+
+        window.salvarProduto = async function(e) {
+            e.preventDefault();
+            const idDoc = document.getElementById('prod-id').value;
+            const nome = document.getElementById('prod-nome').value;
+            const preco = parseFloat(document.getElementById('prod-preco').value);
+            const categoria = document.getElementById('prod-categoria').value;
+            const descricao = document.getElementById('prod-descricao').value;
+            const destaque = document.getElementById('prod-destaque').checked;
+
+            let imagens = [];
+            document.querySelectorAll('#container-fotos-prod-dinamico > div').forEach(bloco => {
+                const url = bloco.querySelector('.input-prod-foto-url').value;
+                const texto = bloco.querySelector('.input-prod-foto-texto').value;
+                if (url) imagens.push({ url, texto });
+            });
+
+            const data = { nome, preco, categoria, imagens, descricao, destaque };
+            if (idDoc) await updateDoc(doc(db, "produtos", idDoc), data);
+            else {
+                await addDoc(collection(db, "produtos"), data);
+                await addDoc(collection(db, "deposito"), { nome, categoria, preco, compra: preco * 0.7, qtd: 10, imagens, descricao });
+            }
+            carregarDadosAdmin();
+            toggleFormularioProduto();
+        }
+
+        window.editarProduto = function(id) {
+            const p = listaProdutos.find(item => item.idFirestore === id);
+            if (!p) return;
+            document.getElementById('prod-id').value = p.idFirestore;
+            document.getElementById('prod-modo-cadastro').value = 'direto';
+            document.getElementById('bloco-deposito-vinculo').classList.add('hidden');
+            document.getElementById('prod-nome').value = p.nome;
+            document.getElementById('prod-preco').value = p.preco;
+            document.getElementById('prod-categoria').value = p.categoria;
+            document.getElementById('prod-descricao').value = p.descricao || '';
+            document.getElementById('prod-destaque').checked = p.destaque || false;
+            document.getElementById('container-fotos-prod-dinamico').innerHTML = '';
+            const listaImgs = p.imagens?.length ? p.imagens : [{ url: p.imagem || '', texto: '' }];
+            listaImgs.forEach(img => adicionarCampoFotoProd(img.url, img.texto));
+            document.getElementById('form-container-produto').classList.remove('hidden');
+        }
+
+        window.removerProduto = async function(id) {
+            if (confirm("Remover da vitrine?")) { await deleteDoc(doc(db, "produtos", id)); carregarDadosAdmin(); }
         }
     </script>
 </body>
