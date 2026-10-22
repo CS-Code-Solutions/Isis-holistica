@@ -185,7 +185,10 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h2 class="text-xl font-bold text-[#0E8685] mb-2">Gestor de Categorias</h2>
                         <p class="text-gray-500 text-sm mb-6">Controle as categorias que aparecem nos menus. As categorias agora possuem botões de <strong>Editar</strong> e <strong>Excluir</strong>.</p>
-                        <div class="flex flex-col sm:flex-row gap-3 mb-6"><input type="text" id="nova-cat-nome" placeholder="Ex: Chás" class="flex-1 px-4 py-3 border rounded-xl text-sm"><button onclick="adicionarCategoriaNova()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl w-full sm:w-auto">Adicionar</button></div>
+                        <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                            <input type="text" id="nova-cat-nome" placeholder="Ex: Chás" class="flex-1 px-4 py-3 border rounded-xl text-sm shadow-sm focus:border-[#0E8685] outline-none">
+                            <button onclick="adicionarCategoriaNova()" class="bg-[#0E8685] hover:bg-teal-700 transition text-white font-bold px-6 py-3 rounded-xl w-full sm:w-auto shadow-md">Adicionar</button>
+                        </div>
                         <ul id="lista-todas-categorias" class="divide-y text-sm"></ul>
                     </div>
                 </div>
@@ -283,8 +286,8 @@
             todasCategorias.forEach(c => {
                 const isSaved = categoriasPersonalizadas.find(cp => cp.nome === c);
                 const idDoc = isSaved ? isSaved.idFirestore : '';
-                const btnEditar = `<button onclick="editarCategoriaNova('${idDoc}', '${c}')" class="text-teal-600 font-bold text-xs mr-3">Editar</button>`;
-                const btnExcluir = `<button onclick="removerCategoriaNova('${idDoc}', '${c}')" class="text-red-500 font-bold text-xs">Excluir</button>`;
+                const btnEditar = `<button onclick="editarCategoriaNova('${idDoc}', '${c}')" class="text-teal-600 hover:text-teal-800 font-bold text-xs mr-3">Editar</button>`;
+                const btnExcluir = `<button onclick="removerCategoriaNova('${idDoc}', '${c}')" class="text-red-500 hover:text-red-700 font-bold text-xs">Excluir</button>`;
                 ul.innerHTML += `<li class="py-3 flex justify-between items-center bg-gray-50 px-4 rounded mb-2 border text-gray-800">
                     <span class="font-semibold">${c}</span>
                     <div>${btnEditar}${btnExcluir}</div>
@@ -292,34 +295,87 @@
             });
         }
 
+        // SISTEMA DE ADIÇÃO COM ATUALIZAÇÃO IMEDIATA E PREVENÇÃO DE ERROS
         window.adicionarCategoriaNova = async function() {
-            const val = document.getElementById('nova-cat-nome').value.trim();
-            if(!val || todasCategorias.includes(val)) return;
-            await addDoc(collection(db, "categorias"), { nome: val });
-            document.getElementById('nova-cat-nome').value = ''; carregarDadosAdmin();
-        }
+            const input = document.getElementById('nova-cat-nome');
+            const val = input.value.trim();
+            if(!val) return;
+            
+            // Verifica se a categoria já existe ignorando maiúsculas/minúsculas
+            if (todasCategorias.some(c => c.toLowerCase() === val.toLowerCase())) {
+                alert("Esta categoria já existe!");
+                input.value = '';
+                return;
+            }
 
-        window.editarCategoriaNova = async function(id, nomeAntigo) {
-            const novoNome = prompt("Renomear categoria:", nomeAntigo);
-            if(novoNome && novoNome.trim() !== "" && novoNome !== nomeAntigo) {
-                if(id) { await updateDoc(doc(db, "categorias", id), { nome: novoNome.trim() }); } 
-                else { await addDoc(collection(db, "categorias"), { nome: novoNome.trim() }); }
+            try {
+                // Tenta adicionar no Firebase
+                const docRef = await addDoc(collection(db, "categorias"), { nome: val });
+                
+                // Atualização instantânea na tela
+                categoriasPersonalizadas.push({ idFirestore: docRef.id, nome: val });
+                todasCategorias.push(val);
+                todasCategorias.sort();
+                
+                input.value = '';
+                renderizarCategoriasSelects();
+                renderizarListaCategoriasAdmin();
+                
+                // Recarrega tudo em segundo plano para garantir sincronia
                 carregarDadosAdmin();
+            } catch(e) {
+                console.error(e);
+                alert("Falha de Permissão: O Firebase bloqueou a gravação. Verifique as regras de permissão (Rules) do seu banco de dados.");
             }
         }
 
+        // EDIÇÃO COM ATUALIZAÇÃO IMEDIATA
+        window.editarCategoriaNova = async function(id, nomeAntigo) {
+            const novoNome = prompt("Renomear categoria:", nomeAntigo);
+            if(novoNome && novoNome.trim() !== "" && novoNome !== nomeAntigo) {
+                try {
+                    const nomePronto = novoNome.trim();
+                    if(id) { await updateDoc(doc(db, "categorias", id), { nome: nomePronto }); } 
+                    else { await addDoc(collection(db, "categorias"), { nome: nomePronto }); }
+                    
+                    // Atualiza a tela imediatamente
+                    const idx = todasCategorias.indexOf(nomeAntigo);
+                    if(idx > -1) {
+                        todasCategorias[idx] = nomePronto;
+                        todasCategorias.sort();
+                    }
+                    renderizarCategoriasSelects();
+                    renderizarListaCategoriasAdmin();
+                    
+                    carregarDadosAdmin();
+                } catch(e) {
+                    alert("Erro ao editar. Verifique as permissões de gravação do Firebase.");
+                }
+            }
+        }
+
+        // REMOÇÃO COM ATUALIZAÇÃO IMEDIATA
         window.removerCategoriaNova = async function(id, nome) { 
             if(confirm(`Tem a certeza que deseja excluir a categoria "${nome}"?`)) { 
-                if(id) { await deleteDoc(doc(db, "categorias", id)); }
-                
-                const prodComCat = listaProdutos.filter(p => p.categoria === nome).length;
-                const depComCat = listaDeposito.filter(d => d.categoria === nome).length;
-                
-                if(prodComCat > 0 || depComCat > 0) {
-                    alert(`Atenção: Existem ${prodComCat} produtos e ${depComCat} itens no depósito com a categoria "${nome}". Para que ela suma completamente do sistema, edite esses produtos e mude a categoria deles.`);
+                try {
+                    if(id) { await deleteDoc(doc(db, "categorias", id)); }
+                    
+                    const prodComCat = listaProdutos.filter(p => p.categoria === nome).length;
+                    const depComCat = listaDeposito.filter(d => d.categoria === nome).length;
+                    
+                    if(prodComCat > 0 || depComCat > 0) {
+                        alert(`Atenção: Existem ${prodComCat} produtos e ${depComCat} itens no depósito vinculados a "${nome}". Eles ainda irão aparecer na loja até que altere a categoria deles no inventário.`);
+                    }
+                    
+                    // Remove da tela imediatamente
+                    todasCategorias = todasCategorias.filter(c => c !== nome);
+                    renderizarCategoriasSelects();
+                    renderizarListaCategoriasAdmin();
+                    
+                    carregarDadosAdmin(); 
+                } catch(e) {
+                    alert("Erro ao remover. Verifique as permissões do Firebase.");
                 }
-                
-                carregarDadosAdmin(); 
             } 
         }
 
