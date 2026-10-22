@@ -7,7 +7,17 @@
     <link rel="icon" type="image/png" href="ico.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        #hero-banner-bg { position: relative; width: 100%; min-height: 520px; display: flex; align-items: center; justify-content: flex-start; background-color: #0b2e2d; overflow: hidden; }
+        .hero-bg-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.2) 100%); z-index: 1; }
+        .hero-content { position: relative; z-index: 2; }
+        #modal-carousel-wrapper { position: relative; width: 100%; min-height: 420px; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: #0b2e2d; border-radius: 1.5rem; overflow: hidden; }
+        .carousel-bg-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0; }
+        .carousel-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.65)); z-index: 1; }
+        .carousel-content { position: absolute; inset-x: 0; bottom: 24px; z-index: 2; pointer-events: none; }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
@@ -16,34 +26,126 @@
             <div class="flex items-center cursor-pointer" onclick="mudarAba('view-home')"><img src="logo4.png" class="h-12 md:h-16 w-auto" onerror="this.src='logo.png'"></div>
             <nav class="hidden md:flex space-x-8 text-sm font-semibold items-center">
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685]">Início</button>
+                <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">Destaques & Rituais</button>
                 <div class="relative group">
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] py-2">Loja esotérica ▾</button>
                     <div id="desktop-submenu-categorias" class="absolute top-full left-0 w-60 bg-white shadow-xl rounded-2xl py-2 hidden group-hover:block z-50"></div>
                 </div>
+                <button onclick="mudarAba('view-terapias')" class="hover:text-[#0E8685]">Espaço terapêutico</button>
+                <button onclick="mudarAba('view-quem-somos')" class="hover:text-[#0E8685]">Nossa essência</button>
             </nav>
             <div class="flex items-center gap-3">
                 <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200">🛒<span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span></button>
+                <button onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg font-bold">☰</button>
             </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 shadow-lg">
+            <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold">Início</button>
+            <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">Destaques & Rituais</button>
+            <div class="border-y border-gray-100 py-2 space-y-1">
+                <button onclick="toggleMobileLojaSubmenu()" class="flex justify-between items-center w-full py-1 font-semibold"><span>Loja Esotérica</span><span id="mobile-submenu-arrow">▼</span></button>
+                <div id="mobile-loja-submenu" class="hidden pl-4 space-y-2 pt-2"></div>
+            </div>
+            <button onclick="mudarAba('view-terapias')" class="block w-full text-left py-2 font-semibold">Espaço Terapêutico</button>
+            <button onclick="mudarAba('view-quem-somos')" class="block w-full text-left py-2 font-semibold">Nossa Essência</button>
         </div>
     </header>
 
+    <!-- HOME -->
     <section id="view-home" class="app-view flex-grow w-full">
-        <div class="bg-[#0b2e2d] text-white py-20 px-6 text-center"><h2 class="text-3xl md:text-5xl font-extrabold mb-4">O equilíbrio começa nos pequenos rituais.</h2><button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] px-6 py-3 rounded-xl font-bold text-xs">Explorar Loja</button></div>
-        <div class="max-w-7xl mx-auto px-4 py-12 w-full"><h3 class="text-2xl font-bold text-gray-900 mb-6">Seleção Ísis</h3><div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div></div>
-    </section>
-
-    <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
-        <div class="text-center mb-8"><h3 class="text-2xl font-bold text-[#0E8685]">Loja Esotérica</h3>
-            <div class="flex flex-wrap justify-center gap-2 mt-6" id="botoes-filtro-categorias"></div>
+        <div id="hero-banner-bg">
+            <div class="hero-overlay"></div>
+            <img class="hero-bg-image" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Ísis Holística" onerror="this.style.display='none'">
+            <div class="max-w-7xl mx-auto px-6 w-full hero-content py-20 text-white">
+                <div class="max-w-xl space-y-4">
+                    <h2 class="text-3xl md:text-5xl font-extrabold leading-tight drop-shadow-lg">O equilíbrio começa nos pequenos rituais.</h2>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="bg-[#0E8685] hover:bg-opacity-90 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition text-xs">Explorar Loja ➔</button>
+                        <button onclick="abrirModalBanner()" class="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-bold px-6 py-3 rounded-xl border border-white/30 shadow-lg transition text-xs">Ver Destaques</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+        <div class="max-w-7xl mx-auto px-4 py-12 w-full">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">Seleção Ísis</h3>
+            <div id="home-destaques-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+        </div>
     </section>
 
-    <!-- MODAIS E FIREBASE -->
+    <!-- PRODUTOS -->
+    <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
+        <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-[#0E8685]">Loja Esotérica</h3>
+            <div class="max-w-md mx-auto my-6"><input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685]"></div>
+            <div class="flex flex-wrap justify-center gap-2 mt-4" id="botoes-filtro-categorias"></div>
+        </div>
+        
+        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
+
+        <div class="flex justify-center items-center gap-4 mt-12 pt-6 border-t border-gray-200 text-xs font-bold text-gray-700">
+            <button onclick="mudarPaginaLoja(-1)" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition shadow-sm text-base">‹</button>
+            <span id="loja-paginacao-info" class="text-sm font-semibold text-gray-600">Página 1 de 1</span>
+            <button onclick="mudarPaginaLoja(1)" class="w-10 h-10 rounded-xl bg-[#0E8685] text-white flex items-center justify-center transition shadow text-base">›</button>
+        </div>
+    </section>
+
+    <!-- QUEM SOMOS & TERAPIAS -->
+    <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white"><div class="max-w-5xl mx-auto"><h3 class="text-3xl font-bold text-gray-900 mb-6">Nossa essência</h3><p class="text-gray-700">Nascemos em São Leopoldo - RS, conectando você com sua melhor energia e bem-estar.</p></div></section>
+    <section id="view-terapias" class="app-view hidden flex-grow py-16 px-4 bg-white"><div class="max-w-5xl mx-auto"><h3 class="text-3xl font-bold text-gray-900 mb-6">Espaço terapêutico</h3><a href="https://wa.me/555195508826?text=Olá!" target="_blank" class="bg-[#25D366] text-white font-bold px-6 py-3 rounded-xl">Agendar pelo WhatsApp</a></div></section>
+
+    <!-- MODAL BANNER -->
+    <div id="modal-banner" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-6 relative">
+            <button onclick="fecharModalBanner()" class="absolute top-4 right-4 z-30 text-gray-500 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center transition">✕</button>
+            <div id="modal-carousel-wrapper" onclick="clicarBannerAtual()" class="mt-8">
+                <div class="carousel-overlay"></div><img id="carousel-bg" class="carousel-bg-image" src="" onerror="this.style.display='none'">
+                <div class="max-w-xl mx-auto px-4 carousel-content text-center text-white pb-6">
+                    <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold px-3 py-1 rounded-full shadow mb-2">LOJA</span>
+                    <h2 id="carousel-title" class="text-xl sm:text-2xl font-extrabold mb-2 drop-shadow-md">Banner</h2>
+                    <p id="carousel-desc" class="text-xs opacity-95 mb-4 drop-shadow">Descrição.</p>
+                    <button onclick="event.stopPropagation(); clicarBannerAtual();" class="bg-[#0E8685] text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow pointer-events-auto">Acessar Seção ➔</button>
+                </div>
+                <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full z-20">❮</button>
+                <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full z-20">❯</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PRODUTO & CARRINHO -->
+    <div id="modal-produto" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 pt-14 md:pt-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="fecharModalProduto()" class="absolute top-3 right-3 z-20 text-gray-500 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="space-y-4">
+                    <div class="relative h-72 bg-gray-100 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center"><img id="modal-img" src="" class="w-full h-full object-cover"></div>
+                    <div id="modal-variantes-lista" class="flex flex-wrap gap-2"></div>
+                </div>
+                <div class="space-y-4 flex flex-col justify-between">
+                    <div><span id="modal-categoria" class="bg-teal-50 text-[#0E8685] text-xs font-bold px-3 py-1 rounded-full uppercase"></span><h3 id="modal-nome" class="text-2xl font-bold text-gray-900 mt-2"></h3><p id="modal-preco" class="text-3xl font-extrabold text-[#C5A880] mt-2"></p><p id="modal-descricao" class="text-gray-600 text-sm mt-4"></p></div>
+                    <button onclick="adicionarProdutoAoCarrinhoModal()" class="w-full bg-[#0E8685] text-white font-bold py-3.5 rounded-xl shadow-lg text-sm">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-carrinho" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 pt-14 md:pt-8 relative max-h-[90vh] flex flex-col">
+            <button onclick="toggleCartModal()" class="absolute top-3 right-3 z-20 text-gray-500 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center">✕</button>
+            <h3 class="text-2xl font-bold text-[#0E8685] mb-4">Seu Carrinho 🛒</h3>
+            <div id="carrinho-itens-lista" class="flex-grow overflow-y-auto space-y-4 divide-y divide-gray-100 pr-1"></div>
+            <div class="border-t pt-4 mt-4 space-y-3">
+                <div class="flex justify-between items-center text-lg font-bold text-gray-900"><span>Total:</span><span id="carrinho-total" class="text-[#C5A880] text-2xl font-extrabold">R$ 0,00</span></div>
+                <button onclick="finalizarWhatsAppSimples()" class="w-full bg-[#25D366] text-white font-bold py-3.5 rounded-xl shadow-lg text-sm">Finalizar Pedido (WhatsApp)</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // CHAVES DO CLIENTE MANTIDAS
         const firebaseConfig = {
             apiKey: "AIzaSyACzkdrx9HUfrOzE-emtGCx4SXLX9w7F4w",
             authDomain: "isis-holistica.firebaseapp.com",
@@ -55,67 +157,121 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let listaProdutos = [], todasCategorias = ['Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens', 'Perfume', 'Oleo Essencial', 'Aromatizador'];
-        let categoriaFiltroAtiva = 'todos';
+        let listaProdutos = [], todasCategorias = [], slides = [], carouselTimer = null, currentSlide = 0;
+        let produtoAtualModal = null, fotoSelecionadaModalIndex = 0;
+        let paginaAtualLoja = 1; const itensPorPaginaLoja = 15;
+        let categoriaFiltroAtiva = 'todos', termoBuscaAtivo = '';
+        let carrinho = JSON.parse(localStorage.getItem('carrinho_isis')) || [];
 
         async function carregarLoja() {
             try {
-                // LÊ PRODUTOS (GARANTIDO)
                 const snapProd = await getDocs(collection(db, "produtos"));
                 snapProd.forEach(d => listaProdutos.push({ idFirestore: d.id, ...d.data() }));
 
-                // LÊ CATEGORIAS ISOLADAMENTE (SE FALHAR, O RESTO FUNCIONA)
-                try {
-                    const snapCat = await getDocs(collection(db, "categorias"));
-                    snapCat.forEach(d => { if(!todasCategorias.includes(d.data().nome)) todasCategorias.push(d.data().nome); });
-                } catch(e) { console.warn("Coleção 'categorias' bloqueada. Usando as categorias extraídas dos produtos."); }
+                try { const snapSlides = await getDocs(collection(db, "slides")); snapSlides.forEach(d => slides.push({ idFirestore: d.id, ...d.data() })); } catch(e){}
 
-                // EXTRAI CATEGORIAS DIRETAMENTE DOS PRODUTOS SE O FIREBASE BLOQUEAR
-                listaProdutos.forEach(p => { if(p.categoria && !todasCategorias.includes(p.categoria)) todasCategorias.push(p.categoria); });
-                todasCategorias.sort();
+                // EXTRAIR CATEGORIAS DIRETAMENTE DOS PRODUTOS
+                let extraidas = new Set(['Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens', 'Perfume', 'Oleo Essencial', 'Aromatizador']);
+                listaProdutos.forEach(p => { if(p.categoria) extraidas.add(p.categoria); });
+                try { const snapCat = await getDocs(collection(db, "categorias")); snapCat.forEach(d => extraidas.add(d.data().nome)); } catch(e){}
+                todasCategorias = Array.from(extraidas).sort();
 
-                renderizarBotoes();
-                renderizarProdutosLoja();
-                renderizarDestaquesHome();
-            } catch (e) { console.error("Erro fatal ao ler produtos:", e); }
+                renderizarBotoes(); renderizarProdutosLoja(); renderizarDestaquesHome();
+                if(slides.length > 0) atualizarSlideUI();
+                atualizarContadorCarrinho();
+            } catch (e) { console.error("Erro fatal ao conectar:", e); }
         }
         carregarLoja();
 
         function renderizarBotoes() {
-            let deskHTML = `<button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left px-4 py-2 hover:bg-teal-50">Todos</button>`;
+            let deskHTML = `<button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block w-full text-left px-4 py-2 hover:bg-teal-50">✨ Todos os Produtos</button>`;
+            let mobHTML = `<button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">✨ Todos os Produtos</button>`;
             let btnHTML = `<button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold">Todos</button>`;
 
             todasCategorias.forEach(cat => {
+                const idCat = cat.replace(/\s+/g, '-');
                 deskHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat}');" class="block w-full text-left px-4 py-2 hover:bg-teal-50">${cat}</button>`;
-                btnHTML += `<button onclick="filtrarProdutos('${cat}')" id="btn-cat-${cat.replace(/\s+/g,'-')}" class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-xs font-bold hover:bg-gray-300">${cat}</button>`;
+                mobHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat}');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">${cat}</button>`;
+                btnHTML += `<button onclick="filtrarProdutos('${cat}')" id="btn-cat-${idCat}" class="px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-xs font-bold hover:bg-gray-300">${cat}</button>`;
             });
             document.getElementById('desktop-submenu-categorias').innerHTML = deskHTML;
+            document.getElementById('mobile-loja-submenu').innerHTML = mobHTML;
             document.getElementById('botoes-filtro-categorias').innerHTML = btnHTML;
         }
 
         window.filtrarProdutos = (cat) => {
-            categoriaFiltroAtiva = cat;
+            categoriaFiltroAtiva = cat; termoBuscaAtivo = ''; paginaAtualLoja = 1;
+            const input = document.getElementById('input-busca'); if(input) input.value = '';
             document.querySelectorAll('#botoes-filtro-categorias button').forEach(b => b.className = "px-4 py-2 rounded-full bg-gray-200 text-gray-700 text-xs font-bold");
-            const b = document.getElementById(`btn-cat-${cat === 'todos' ? 'todos' : cat.replace(/\s+/g,'-')}`);
-            if(b) b.className = "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold";
-            renderizarProdutosLoja();
+            const btn = document.getElementById(`btn-cat-${cat === 'todos' ? 'todos' : cat.replace(/\s+/g,'-')}`);
+            if(btn) btn.className = "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold";
+            renderizarProdutosLoja(); window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function renderizarProdutosLoja() {
             const cont = document.getElementById('grid-produtos'); cont.innerHTML = '';
-            const filt = categoriaFiltroAtiva === 'todos' ? listaProdutos : listaProdutos.filter(p => p.categoria === categoriaFiltroAtiva);
-            filt.forEach(p => {
+            let filt = categoriaFiltroAtiva === 'todos' ? listaProdutos : listaProdutos.filter(p => p.categoria === categoriaFiltroAtiva);
+            if(termoBuscaAtivo) filt = filt.filter(p => p.nome.toLowerCase().includes(termoBuscaAtivo.toLowerCase()));
+            const totalPag = Math.ceil(filt.length / itensPorPaginaLoja) || 1;
+            if(paginaAtualLoja > totalPag) paginaAtualLoja = totalPag; if(paginaAtualLoja < 1) paginaAtualLoja = 1;
+            document.getElementById('loja-paginacao-info').innerText = `Página ${paginaAtualLoja} de ${totalPag} (${filt.length} itens)`;
+            filt.slice((paginaAtualLoja - 1) * itensPorPaginaLoja, paginaAtualLoja * itensPorPaginaLoja).forEach(p => {
                 const img = p.imagens?.[0]?.url || p.imagem || '';
-                cont.innerHTML += `<div class="bg-white rounded-2xl shadow p-4"><img src="${img}" class="w-full h-48 object-cover rounded-xl mb-3"><span class="text-xs text-[#0E8685] font-bold">${p.categoria}</span><h4 class="font-bold text-lg">${p.nome}</h4><p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${p.preco}</p></div>`;
+                cont.innerHTML += `<div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow p-4 cursor-pointer hover:shadow-xl transition"><img src="${img}" class="w-full h-48 object-cover rounded-xl mb-3"><span class="text-xs text-[#0E8685] font-bold">${p.categoria}</span><h4 class="font-bold text-lg line-clamp-1">${p.nome}</h4><p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</p></div>`;
             });
         }
+        window.pesquisarProdutos = (t) => { termoBuscaAtivo = t; paginaAtualLoja = 1; renderizarProdutosLoja(); }
+        window.mudarPaginaLoja = (d) => { paginaAtualLoja += d; renderizarProdutosLoja(); window.scrollTo({top:0, behavior:'smooth'}); }
         function renderizarDestaquesHome() {
             const cont = document.getElementById('home-destaques-grid'); cont.innerHTML = '';
-            listaProdutos.filter(p=>p.destaque).forEach(p => {
-                cont.innerHTML += `<div class="bg-white rounded-2xl shadow p-4"><img src="${p.imagens?.[0]?.url||p.imagem||''}" class="w-full h-48 object-cover rounded-xl mb-3"><span class="text-xs text-[#0E8685] font-bold">${p.categoria}</span><h4 class="font-bold text-lg">${p.nome}</h4><p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${p.preco}</p></div>`;
-            });
+            listaProdutos.filter(p=>p.destaque).forEach(p => { cont.innerHTML += `<div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow p-4 cursor-pointer hover:shadow-xl transition"><img src="${p.imagens?.[0]?.url||p.imagem||''}" class="w-full h-48 object-cover rounded-xl mb-3"><span class="text-xs text-[#0E8685] font-bold">${p.categoria}</span><h4 class="font-bold text-lg">${p.nome}</h4><p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</p></div>`; });
         }
-        window.mudarAba = (id) => { document.querySelectorAll('.app-view').forEach(v=>v.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); window.scrollTo({top:0}); }
+
+        window.mudarAba = (id) => { document.querySelectorAll('.app-view').forEach(v=>v.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); document.getElementById('mobile-menu').classList.add('hidden'); window.scrollTo({top:0}); }
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        window.toggleMobileLojaSubmenu = () => { const s = document.getElementById('mobile-loja-submenu'); s.classList.toggle('hidden'); document.getElementById('mobile-submenu-arrow').innerText = s.classList.contains('hidden') ? '▼' : '▲'; }
+        
+        window.abrirModalBanner = () => { document.getElementById('modal-banner').classList.remove('hidden'); if(slides.length>0) atualizarSlideUI(); }
+        window.fecharModalBanner = () => { document.getElementById('modal-banner').classList.add('hidden'); if(carouselTimer) clearTimeout(carouselTimer); }
+        function programarProximoSlide() { if(carouselTimer) clearTimeout(carouselTimer); if(slides.length<=1) return; carouselTimer = setTimeout(()=>window.mudarSlide(1), (slides[currentSlide].tempo||5)*1000); }
+        function atualizarSlideUI() { if(slides.length===0)return; const s = slides[currentSlide]; document.getElementById('carousel-bg').src = (window.innerWidth >= 768 ? (s.imagemPc||s.imagemMobile) : (s.imagemMobile||s.imagemPc)); document.getElementById('carousel-title').innerText = s.titulo; document.getElementById('carousel-desc').innerText = s.desc; document.getElementById('carousel-badge').innerText = s.badge||'LOJA'; document.getElementById('carousel-badge').style.display = s.badge ? 'inline-block' : 'none'; programarProximoSlide(); }
+        window.mudarSlide = (d) => { currentSlide = (currentSlide + d + slides.length) % slides.length; atualizarSlideUI(); }
+        window.clicarBannerAtual = () => { fecharModalBanner(); const s = slides[currentSlide]; if(!s) return; if(s.linkTipo==='terapias') mudarAba('view-terapias'); else if(s.linkTipo==='promocoes') { mudarAba('view-produtos'); filtrarProdutos('Promoções'); } else if(s.linkTipo==='destaques') mudarAba('view-home'); else if(s.linkTipo==='categoria') { mudarAba('view-produtos'); filtrarProdutos(s.linkAlvo); } else { mudarAba('view-produtos'); filtrarProdutos('todos'); } }
+
+        window.abrirModalProdutoId = (id) => {
+            const p = listaProdutos.find(i => i.idFirestore === id); if(!p) return; produtoAtualModal = p; fotoSelecionadaModalIndex = 0;
+            document.getElementById('modal-nome').innerText = p.nome; document.getElementById('modal-preco').innerText = `R$ ${Number(p.preco).toFixed(2).replace('.',',')}`; document.getElementById('modal-categoria').innerText = p.categoria; document.getElementById('modal-descricao').innerText = p.descricao||'';
+            document.getElementById('modal-variantes-lista').innerHTML = '';
+            if(p.imagens && p.imagens.length > 1) { p.imagens.forEach((img, idx) => { document.getElementById('modal-variantes-lista').innerHTML += `<button onclick="selecionarVariacaoModal(${idx})" class="px-3.5 py-2 rounded-xl text-xs font-bold transition border ${idx === fotoSelecionadaModalIndex ? 'bg-[#0E8685] text-white' : 'bg-gray-100 text-gray-700'}">${img.texto || `Opção ${idx+1}`}</button>`; }); }
+            atualizarVisualizacaoModalFoto(); document.getElementById('modal-produto').classList.remove('hidden');
+        }
+        window.fecharModalProduto = () => document.getElementById('modal-produto').classList.add('hidden');
+        window.selecionarVariacaoModal = (idx) => { fotoSelecionadaModalIndex = idx; abrirModalProdutoId(produtoAtualModal.idFirestore); }
+        function atualizarVisualizacaoModalFoto() { if(!produtoAtualModal?.imagens) return; document.getElementById('modal-img').src = produtoAtualModal.imagens[fotoSelecionadaModalIndex]?.url || produtoAtualModal.imagem || ''; }
+        
+        window.adicionarProdutoAoCarrinhoModal = () => {
+            if(!produtoAtualModal) return; const img = produtoAtualModal.imagens?.[fotoSelecionadaModalIndex]?.url || produtoAtualModal.imagem || ''; const varTxt = produtoAtualModal.imagens?.[fotoSelecionadaModalIndex]?.texto || 'Padrão';
+            carrinho.push({ id: produtoAtualModal.idFirestore, nome: produtoAtualModal.nome, preco: Number(produtoAtualModal.preco), variacao: varTxt, imagem: img });
+            localStorage.setItem('carrinho_isis', JSON.stringify(carrinho)); atualizarContadorCarrinho(); fecharModalProduto(); toggleCartModal();
+        }
+        window.toggleCartModal = () => { const m = document.getElementById('modal-carrinho'); m.classList.toggle('hidden'); if(!m.classList.contains('hidden')) renderizarCarrinho(); }
+        function atualizarContadorCarrinho() { document.getElementById('cart-count').innerText = carrinho.length; }
+        function renderizarCarrinho() {
+            const c = document.getElementById('carrinho-itens-lista'); const tEl = document.getElementById('carrinho-total'); c.innerHTML = '';
+            if(carrinho.length===0) { c.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">Carrinho vazio.</div>`; tEl.innerText='R$ 0,00'; return; }
+            let total = 0; carrinho.forEach((i, idx) => { total+=i.preco; c.innerHTML+=`<div class="flex items-center gap-4 py-3"><img src="${i.imagem}" class="w-16 h-16 object-cover rounded-xl"><div class="flex-grow"><h4 class="font-bold text-sm line-clamp-1">${i.nome}</h4><p class="text-xs text-[#0E8685]">Var: ${i.variacao}</p><p class="text-sm font-extrabold text-[#C5A880]">R$ ${i.preco.toFixed(2).replace('.',',')}</p></div><button onclick="removerDoCarrinho(${idx})" class="text-red-500 font-bold p-2">✕</button></div>`; });
+            tEl.innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
+        }
+        window.removerDoCarrinho = (i) => { carrinho.splice(i,1); localStorage.setItem('carrinho_isis', JSON.stringify(carrinho)); atualizarContadorCarrinho(); renderizarCarrinho(); }
+        
+        window.finalizarWhatsAppSimples = () => {
+            if(carrinho.length === 0) return alert("Seu carrinho está vazio!");
+            let msg = `*Novo Pedido - Ísis Holística*\n\nOlá! Gostaria de fazer o pedido dos seguintes itens:\n\n`; let total = 0;
+            carrinho.forEach((item, idx) => { msg += `${idx + 1}. *${item.nome}* (${item.variacao}) - R$ ${item.preco.toFixed(2).replace('.', ',')}\n`; total += item.preco; });
+            msg += `\n*Valor Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\nAguardo retorno para finalizar!`;
+            window.open(`https://wa.me/555195508826?text=${encodeURIComponent(msg)}`, '_blank');
+            carrinho = []; localStorage.removeItem('carrinho_isis'); atualizarContadorCarrinho(); document.getElementById('modal-carrinho').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
