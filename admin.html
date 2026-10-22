@@ -208,7 +208,12 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Limpeza automática de URLs corrompidas com ? ou parâmetros residuais
+        if (window.location.search || window.location.hash) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyACzkdrx9HUfrOzE-emtGCx4SXLX9w7F4w",
@@ -222,13 +227,15 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
+        // Força persistência local para manter o login ativo no telemóvel
+        setPersistence(auth, browserLocalPersistence).catch(() => {});
+
         let categoriasPersonalizadas = [], todasCategorias = [];
         let listaProdutos = [], listaDeposito = [], listaBanners = [];
         let cropperInstance = null, targetInputGlobal = null;
         let paginaAtualProdutos = 1, categoriaFiltroProdutos = "TODAS", termoBuscaAdminProd = "";
         let paginaAtualDeposito = 1, categoriaFiltroAtual = "TODAS", termoBuscaAdminDep = "", itensPorPagina = 20;
 
-        // FECHAR MENU AO CLICAR FORA (MOBILE)
         document.addEventListener('click', (e) => {
             const sidebar = document.getElementById('admin-sidebar');
             const btnMenu = document.getElementById('btn-toggle-menu');
@@ -240,10 +247,25 @@
         });
 
         onAuthStateChanged(auth, (user) => {
-            if (user) { document.getElementById('login-overlay').classList.add('hidden'); document.getElementById('admin-main-wrapper').classList.remove('hidden'); carregarDadosAdmin(); } 
-            else { document.getElementById('admin-main-wrapper').classList.add('hidden'); document.getElementById('login-overlay').classList.remove('hidden'); }
+            if (user) { 
+                document.getElementById('login-overlay').classList.add('hidden'); 
+                document.getElementById('admin-main-wrapper').classList.remove('hidden'); 
+                carregarDadosAdmin(); 
+            } else { 
+                document.getElementById('admin-main-wrapper').classList.add('hidden'); 
+                document.getElementById('login-overlay').classList.remove('hidden'); 
+            }
         });
-        window.fazerLoginAdmin = async (e) => { e.preventDefault(); try { await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-senha').value); } catch(err) { alert("Erro de login!"); } };
+
+        window.fazerLoginAdmin = async (e) => { 
+            e.preventDefault(); 
+            try { 
+                await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-senha').value); 
+            } catch(err) { 
+                alert("Erro ao entrar. Verifique o e-mail e a palavra-passe."); 
+            } 
+        };
+
         window.fazerLogout = async () => await signOut(auth);
 
         window.carregarDadosAdmin = async function() {
@@ -269,7 +291,7 @@
                 renderizarTabelaProdutos();
                 renderizarTabelaDeposito();
                 renderizarTabelaBanners(); 
-            } catch (e) { console.error("Erro fatal:", e); alert("Erro ao conectar com Firebase."); }
+            } catch (e) { console.error("Erro fatal:", e); }
         }
 
         function renderizarCategoriasSelects() {
@@ -322,8 +344,7 @@
                 renderizarListaCategoriasAdmin();
                 carregarDadosAdmin();
             } catch(e) {
-                console.error(e);
-                alert("Falha de Permissão: O Firebase bloqueou a gravação. Verifique as regras de permissão (Rules).");
+                alert("Falha ao gravar no Firebase. Verifique as regras de segurança.");
             }
         }
 
@@ -348,11 +369,6 @@
             if(confirm(`Tem a certeza que deseja excluir a categoria "${nome}"?`)) { 
                 try {
                     if(id) { await deleteDoc(doc(db, "categorias", id)); }
-                    const prodComCat = listaProdutos.filter(p => p.categoria === nome).length;
-                    const depComCat = listaDeposito.filter(d => d.categoria === nome).length;
-                    if(prodComCat > 0 || depComCat > 0) {
-                        alert(`Atenção: Existem ${prodComCat} produtos e ${depComCat} itens no depósito vinculados a "${nome}".`);
-                    }
                     todasCategorias = todasCategorias.filter(c => c !== nome);
                     renderizarCategoriasSelects();
                     renderizarListaCategoriasAdmin();
@@ -368,7 +384,7 @@
         }
         window.toggleAdminMobileMenu = () => document.getElementById('admin-sidebar').classList.toggle('hidden');
 
-        // UTILS: EXCEL, CROPPER
+        // UTILS
         window.limparDuplicados = async function() {
             if(!confirm("Remover duplicados no depósito?")) return;
             try {
@@ -401,7 +417,7 @@
         window.fecharModalRecorte = function() { document.getElementById('modal-recorte').classList.add('hidden'); if(cropperInstance) cropperInstance.destroy(); }
         window.aplicarRecorte = function() { if(!cropperInstance||!targetInputGlobal) return; targetInputGlobal.value = cropperInstance.getCroppedCanvas({width:1000,height:1000}).toDataURL('image/jpeg', 0.85); fecharModalRecorte(); }
 
-        // PRODUTOS (INVENTÁRIO / VITRINE)
+        // PRODUTOS
         window.toggleFormularioProduto = () => document.getElementById('form-container-produto').classList.toggle('hidden');
         window.abrirNovoProdutoDireto = () => { document.getElementById('prod-id').value=''; document.getElementById('product-form').reset(); document.getElementById('container-fotos-prod-dinamico').innerHTML=''; adicionarCampoFotoProd(); document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); toggleFormularioProduto(); }
         window.abrirNovoProdutoDeposito = () => { document.getElementById('prod-id').value=''; document.getElementById('product-form').reset(); document.getElementById('bloco-deposito-vinculo').classList.remove('hidden'); toggleFormularioProduto(); atualizarSelectDeposito(); }
@@ -415,9 +431,7 @@
         window.renderizarTabelaProdutos = () => { 
             const tb = document.getElementById('admin-product-list'); 
             let filt = categoriaFiltroProdutos === "TODAS" ? listaProdutos : listaProdutos.filter(p => p.categoria === categoriaFiltroProdutos);
-            if(termoBuscaAdminProd) {
-                filt = filt.filter(p => p.nome.toLowerCase().includes(termoBuscaAdminProd.toLowerCase()));
-            }
+            if(termoBuscaAdminProd) { filt = filt.filter(p => p.nome.toLowerCase().includes(termoBuscaAdminProd.toLowerCase())); }
             document.getElementById('total-produtos').innerText = filt.length; 
             const inc = (paginaAtualProdutos-1)*itensPorPagina; 
             document.getElementById('paginacao-prod-info').innerText = `Pág ${paginaAtualProdutos}`; 
@@ -433,9 +447,7 @@
         window.renderizarTabelaDeposito = () => { 
             const cont = document.getElementById('admin-deposito-list'); 
             let filtrados = categoriaFiltroAtual === "TODAS" ? listaDeposito : listaDeposito.filter(d => d.categoria === categoriaFiltroAtual);
-            if(termoBuscaAdminDep) {
-                filtrados = filtrados.filter(d => d.nome.toLowerCase().includes(termoBuscaAdminDep.toLowerCase()));
-            }
+            if(termoBuscaAdminDep) { filtrados = filtrados.filter(d => d.nome.toLowerCase().includes(termoBuscaAdminDep.toLowerCase())); }
             document.getElementById('total-deposito').innerText = `${filtrados.length} itens`; 
             const inc = (paginaAtualDeposito - 1) * itensPorPagina; 
             document.getElementById('paginacao-info').innerText = `Página ${paginaAtualDeposito}`; 
@@ -458,8 +470,7 @@
         // BANNERS
         window.toggleFormularioBanner = () => document.getElementById('form-container-banner').classList.toggle('hidden');
         window.abrirNovoBanner = () => { document.getElementById('banner-id').value = ''; document.getElementById('banner-form').reset(); document.getElementById('form-container-banner').classList.remove('hidden'); }
-        window.alternarDestinoBannerAdmin = (v) => { const cont = document.getElementById('banner-linkalvo-container'), alvo = document.getElementById('banner-linkalvo-prod'); if(v === 'produto') { cont.classList.0 ? cont.classList.remove('hidden') : null; } // mantido
-        }
+        window.alternarDestinoBannerAdmin = (v) => {}
         window.salvarBanner = async (e) => { e.preventDefault(); const d = { badge: document.getElementById('banner-badge').value, titulo: document.getElementById('banner-titulo').value, desc: document.getElementById('banner-desc').value, tempo: parseInt(document.getElementById('banner-tempo').value)||5, imagemPc: document.getElementById('banner-imgpc').value, imagemMobile: document.getElementById('banner-imgmob').value, linkTipo: document.getElementById('banner-linktipo').value, linkAlvo: document.getElementById('banner-linkalvo-prod').value }; const id = document.getElementById('banner-id').value; if(id) await updateDoc(doc(db, "slides", id), d); else await addDoc(collection(db, "slides"), d); carregarDadosAdmin(); toggleFormularioBanner(); }
         window.renderizarTabelaBanners = () => { const tb = document.getElementById('admin-banner-list'); tb.innerHTML = ''; listaBanners.forEach(b => tb.innerHTML += `<tr><td class="py-3 px-3"><img src="${b.imagemPc||b.imagemMobile}" class="w-14 h-9 object-cover rounded inline-block mr-2"><strong>${b.titulo}</strong></td><td class="py-3 px-3">${b.tempo}s</td><td class="py-3 px-3">${b.linkTipo}</td><td class="py-3 px-3 text-right"><button onclick="editarBanner('${b.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerBanner('${b.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`); }
         window.editarBanner = (id) => { const b = listaBanners.find(i => i.idFirestore === id); if(!b) return; document.getElementById('banner-id').value = b.idFirestore; document.getElementById('banner-badge').value = b.badge||''; document.getElementById('banner-titulo').value = b.titulo||''; document.getElementById('banner-desc').value = b.desc||''; document.getElementById('banner-tempo').value = b.tempo||5; document.getElementById('banner-imgpc').value = b.imagemPc||''; document.getElementById('banner-imgmob').value = b.imagemMobile||''; document.getElementById('banner-linktipo').value = b.linkTipo||'produtos'; document.getElementById('form-container-banner').classList.remove('hidden'); }
