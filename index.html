@@ -36,7 +36,6 @@
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
                 <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">Destaques & Rituais</button>
                 
-                <!-- MENU CASCATA (DROPDOWN) DESKTOP DINÂMICO -->
                 <div class="relative group">
                     <button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="hover:text-[#0E8685] transition flex items-center gap-1 py-2">
                         Loja esotérica ▾
@@ -58,7 +57,6 @@
             </div>
         </div>
 
-        <!-- MENU MOBILE COM CASCATA EXPANSÍVEL DINÂMICA -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 shadow-lg">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
             <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">Destaques & Rituais</button>
@@ -84,9 +82,8 @@
         </div>
     </div>
 
-    <!-- HOME / DESTAQUES / QUEM SOMOS / TERAPIAS -->
+    <!-- HOME -->
     <section id="view-home" class="app-view flex-grow w-full">
-        <!-- O bloco Hero Banner e Destaques continua exatamente igual para manter 100% da integridade -->
         <div id="hero-banner-bg">
             <div class="hero-overlay"></div>
             <img class="hero-bg-image" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Ísis Holística" onerror="this.style.display='none'">
@@ -114,31 +111,26 @@
         </div>
     </section>
 
-    <!-- (Modais de Banner, Quem Somos e Terapias omitidos para encurtar no preview visual, mas eles ficam idênticos. O código continuará funcionando, apenas vou replicar a seção PRODUTOS e JS) -->
-    <!-- Como não posso omitir se pedem código completo, vamos incluir as seções idênticas! -->
-    
-    <div id="modal-banner" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-6 relative">
-            <button onclick="fecharModalBanner()" class="absolute top-4 right-4 z-30 text-gray-500 hover:text-gray-800 font-bold bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center transition">✕</button>
-            <div class="mb-4">
-                <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">ESPAÇO DE DESTAQUES</span>
-                <h3 class="text-2xl font-bold text-gray-900">Rituais e Novidades</h3>
+    <!-- PRODUTOS -->
+    <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
+        <div class="text-center mb-8">
+            <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
+            <div class="max-w-md mx-auto my-6">
+                <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
             </div>
-            <div id="modal-carousel-wrapper" onclick="clicarBannerAtual()">
-                <div class="carousel-overlay"></div>
-                <img id="carousel-bg" class="carousel-bg-image" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Banner Fundo" onerror="this.style.display='none'">
-                <div class="max-w-xl mx-auto px-4 carousel-content text-center text-white pb-6">
-                    <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow mb-2 inline-block">LOJA</span>
-                    <h2 id="carousel-title" class="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 drop-shadow-md">O equilíbrio começa nos pequenos rituais.</h2>
-                    <p id="carousel-desc" class="text-xs sm:text-sm opacity-95 mb-4 drop-shadow">Encontre produtos com significado para a sua jornada.</p>
-                    <button onclick="event.stopPropagation(); clicarBannerAtual();" class="pointer-events-auto bg-[#0E8685] text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow hover:bg-opacity-90 transition">Acessar Seção ➔</button>
-                </div>
-                <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full z-20">❮</button>
-                <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full z-20">❯</button>
-            </div>
+            <div class="flex flex-wrap justify-center gap-2 mt-4" id="botoes-filtro-categorias"></div>
         </div>
-    </div>
+        
+        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
 
+        <div class="flex justify-center items-center gap-4 mt-12 pt-6 border-t border-gray-200 text-xs font-bold text-gray-700">
+            <button onclick="mudarPaginaLoja(-1)" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition shadow-sm text-base">‹</button>
+            <span id="loja-paginacao-info" class="text-sm font-semibold text-gray-600">Página 1 de 1</span>
+            <button onclick="mudarPaginaLoja(1)" class="w-10 h-10 rounded-xl bg-[#0E8685] text-white flex items-center justify-center transition shadow text-base">›</button>
+        </div>
+    </section>
+
+    <!-- QUEM SOMOS -->
     <section id="view-quem-somos" class="app-view hidden flex-grow py-16 px-4 bg-white">
         <div class="max-w-5xl mx-auto space-y-12">
             <div class="space-y-3">
@@ -152,29 +144,6 @@
                     <p class="text-gray-700 leading-relaxed text-sm">Nascemos do propósito de conectar você com sua melhor energia, equilíbrio e bem-estar. Em São Leopoldo, RS, reunimos produtos esotéricos e um espaço acolhedor dedicado ao autoconhecimento.</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- PRODUTOS -->
-    <section id="view-produtos" class="app-view hidden flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
-        <div class="text-center mb-8">
-            <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
-            <div class="max-w-md mx-auto my-6">
-                <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
-            </div>
-            
-            <!-- BOTÕES DE FILTRO DINÂMICOS -->
-            <div class="flex flex-wrap justify-center gap-2 mt-4" id="botoes-filtro-categorias">
-                <!-- Botões gerados via JS -->
-            </div>
-        </div>
-        
-        <div id="grid-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"></div>
-
-        <div class="flex justify-center items-center gap-4 mt-12 pt-6 border-t border-gray-200 text-xs font-bold text-gray-700">
-            <button onclick="mudarPaginaLoja(-1)" id="btn-loja-ant" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition shadow-sm text-base">‹</button>
-            <span id="loja-paginacao-info" class="text-sm font-semibold text-gray-600">Página 1 de 1</span>
-            <button onclick="mudarPaginaLoja(1)" id="btn-loja-prox" class="w-10 h-10 rounded-xl bg-[#0E8685] text-white flex items-center justify-center transition shadow text-base">›</button>
         </div>
     </section>
 
@@ -192,7 +161,30 @@
         </div>
     </section>
 
-    <!-- MODAIS E CHECKOUT (Mantidos Exatamente Iguais) -->
+    <!-- MODAL BANNER -->
+    <div id="modal-banner" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full p-6 relative">
+            <button onclick="fecharModalBanner()" class="absolute top-4 right-4 z-30 text-gray-500 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center transition">✕</button>
+            <div class="mb-4">
+                <span class="text-xs font-bold text-[#0E8685] uppercase tracking-wider">ESPAÇO DE DESTAQUES</span>
+                <h3 class="text-2xl font-bold text-gray-900">Rituais e Novidades</h3>
+            </div>
+            <div id="modal-carousel-wrapper" onclick="clicarBannerAtual()">
+                <div class="carousel-overlay"></div>
+                <img id="carousel-bg" class="carousel-bg-image" src="42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg" alt="Banner Fundo" onerror="this.style.display='none'">
+                <div class="max-w-xl mx-auto px-4 carousel-content text-center text-white pb-6">
+                    <span id="carousel-badge" class="bg-[#C5A880] text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow mb-2 inline-block">LOJA</span>
+                    <h2 id="carousel-title" class="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 drop-shadow-md">O equilíbrio começa nos pequenos rituais.</h2>
+                    <p id="carousel-desc" class="text-xs sm:text-sm opacity-95 mb-4 drop-shadow">Encontre produtos com significado para a sua jornada.</p>
+                    <button onclick="event.stopPropagation(); clicarBannerAtual();" class="pointer-events-auto bg-[#0E8685] text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow hover:bg-opacity-90 transition">Acessar Seção ➔</button>
+                </div>
+                <button onclick="event.stopPropagation(); mudarSlide(-1);" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full z-20">❮</button>
+                <button onclick="event.stopPropagation(); mudarSlide(1);" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full z-20">❯</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PRODUTO -->
     <div id="modal-produto" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 md:p-8 pt-14 md:pt-8 relative max-h-[90vh] overflow-y-auto">
             <button onclick="fecharModalProduto()" class="absolute top-3 right-3 z-20 text-gray-500 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center transition">✕</button>
@@ -217,6 +209,7 @@
         </div>
     </div>
 
+    <!-- MODAL CARRINHO -->
     <div id="modal-carrinho" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 md:p-8 pt-14 md:pt-8 relative max-h-[90vh] flex flex-col">
             <button onclick="toggleCartModal()" class="absolute top-3 right-3 z-20 text-gray-500 font-bold bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center transition">✕</button>
@@ -224,25 +217,27 @@
             <div id="carrinho-itens-lista" class="flex-grow overflow-y-auto space-y-4 divide-y divide-gray-100 max-h-[50vh] pr-1"></div>
             <div class="border-t pt-4 mt-4 space-y-3">
                 <div class="flex justify-between items-center text-lg font-bold text-gray-900"><span>Total:</span><span id="carrinho-total" class="text-[#C5A880] text-2xl font-extrabold">R$ 0,00</span></div>
-                <button onclick="abrirCheckout()" class="w-full bg-[#0E8685] text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm">Prosseguir com Pedido</button>
+                <button onclick="finalizarWhatsAppSimples()" class="w-full bg-[#25D366] text-white font-bold py-3.5 rounded-xl shadow-lg transition text-sm">Finalizar Pedido (WhatsApp)</button>
             </div>
         </div>
     </div>
 
-    <!-- Firebase Script & Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // CONFIGURAÇÃO COMPLETA - NÃO REMOVER NENHUMA LINHA!
         const firebaseConfig = {
             apiKey: "AIzaSyACzkdrx9HUfrOzE-emtGCx4SXLX9w7F4w",
             authDomain: "isis-holistica.firebaseapp.com",
-            projectId: "isis-holistica"
+            projectId: "isis-holistica",
+            storageBucket: "isis-holistica.firebasestorage.app",
+            messagingSenderId: "18451242035",
+            appId: "1:18451242035:web:2bc1df8c53716bdbd6a1746"
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // CONFIGURAÇÕES BASE
         const categoriasPadrao = ['Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens', 'Perfume', 'Oleo Essencial', 'Aromatizador'];
         let categoriasPersonalizadas = [];
         let todasCategorias = [...categoriasPadrao];
@@ -255,13 +250,11 @@
 
         async function carregarDadosDoBanco() {
             try {
-                // Carrega Categorias Dinâmicas
                 const snapCat = await getDocs(collection(db, "categorias"));
                 snapCat.forEach(d => categoriasPersonalizadas.push(d.data().nome));
                 todasCategorias = [...categoriasPadrao, ...categoriasPersonalizadas];
                 renderizarMenusCategorias();
 
-                // Carrega Produtos e Banners
                 const snapProd = await getDocs(collection(db, "produtos"));
                 snapProd.forEach(d => listaProdutos.push({ idFirestore: d.id, ...d.data() }));
 
@@ -274,24 +267,19 @@
                 atualizarContadorCarrinho();
             } catch (e) { console.error("Erro Firebase:", e); }
         }
-
         carregarDadosDoBanco();
 
-        // GESTOR DE CATEGORIAS NA LOJA - INJETA OS BOTÕES DINAMICAMENTE
         function renderizarMenusCategorias() {
             let deskHTML = `<button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">✨ Todos os Produtos</button>
                             <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-amber-600 hover:bg-amber-50 transition">🔥 Promoções</button>`;
-            
             let mobHTML = `<button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">✨ Todos os Produtos</button>
                            <button onclick="mudarAba('view-produtos'); filtrarProdutos('Promoções');" class="block text-left text-xs font-bold text-amber-600">🔥 Promoções</button>`;
-            
             let btnHTML = `<button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>
                            <button onclick="filtrarProdutos('Promoções')" id="btn-cat-Promoções" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">🔥 Promoções</button>`;
 
             todasCategorias.forEach(cat => {
                 const label = cat === 'Pedras' ? 'Pedras e Cristais' : cat;
                 const idCat = cat.replace(/\s+/g, '-');
-                
                 deskHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat}');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">▪ ${label}</button>`;
                 mobHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat}');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">${label}</button>`;
                 btnHTML += `<button onclick="filtrarProdutos('${cat}')" id="btn-cat-${idCat}" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">${label}</button>`;
@@ -305,25 +293,14 @@
         window.filtrarProdutos = function(cat) {
             categoriaFiltroAtiva = cat; termoBuscaAtivo = ''; paginaAtualLoja = 1;
             const input = document.getElementById('input-busca'); if(input) input.value = '';
-
-            // Reset cores botoes
-            document.querySelectorAll('#botoes-filtro-categorias button').forEach(b => {
-                b.className = "px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition";
-            });
-            // Ativa o correto
-            const btn = document.getElementById(`btn-cat-${cat === 'todos' ? 'todos' : cat.replace(/\s+/g, '-')}`);
+            document.querySelectorAll('#botoes-filtro-categorias button').forEach(b => { b.className = "px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition"; });
+            const btnId = cat === 'todos' ? 'todos' : cat.replace(/\s+/g, '-');
+            const btn = document.getElementById(`btn-cat-${btnId}`);
             if(btn) btn.className = "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow";
-            
             renderizarProdutosLoja(); window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ================= Restante da Lógica (Manteve-se igual para assegurar estabilidade) =================
-        window.mudarAba = function(id) {
-            document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById('mobile-menu').classList.add('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.mudarAba = function(id) { document.querySelectorAll('.app-view').forEach(v => v.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); document.getElementById('mobile-menu').classList.add('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
         window.toggleMobileMenu = function() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
         window.toggleMobileLojaSubmenu = function() { const s = document.getElementById('mobile-loja-submenu'); s.classList.toggle('hidden'); document.getElementById('mobile-submenu-arrow').innerText = s.classList.contains('hidden') ? '▼' : '▲'; }
         
@@ -346,11 +323,9 @@
             const cont = document.getElementById('grid-produtos'); cont.innerHTML = '';
             let filtrados = listaProdutos.filter(p => categoriaFiltroAtiva === 'todos' || p.categoria === categoriaFiltroAtiva);
             if(termoBuscaAtivo) filtrados = filtrados.filter(p => p.nome.toLowerCase().includes(termoBuscaAtivo.toLowerCase()));
-            
             const totalPag = Math.ceil(filtrados.length / itensPorPaginaLoja) || 1;
             if(paginaAtualLoja > totalPag) paginaAtualLoja = totalPag; if(paginaAtualLoja < 1) paginaAtualLoja = 1;
             document.getElementById('loja-paginacao-info').innerText = `Página ${paginaAtualLoja} de ${totalPag} (${filtrados.length} itens)`;
-
             const itens = filtrados.slice((paginaAtualLoja - 1) * itensPorPaginaLoja, paginaAtualLoja * itensPorPaginaLoja);
             itens.forEach(p => {
                 const img = p.imagens?.[0]?.url || p.imagem || '';
@@ -363,9 +338,16 @@
         window.abrirModalProdutoId = function(id) {
             const p = listaProdutos.find(i => i.idFirestore === id); if(!p) return; produtoAtualModal = p; fotoSelecionadaModalIndex = 0;
             document.getElementById('modal-nome').innerText = p.nome; document.getElementById('modal-preco').innerText = `R$ ${Number(p.preco).toFixed(2).replace('.',',')}`; document.getElementById('modal-categoria').innerText = p.categoria; document.getElementById('modal-descricao').innerText = p.descricao||'';
+            document.getElementById('modal-variantes-lista').innerHTML = '';
+            if(p.imagens && p.imagens.length > 1) {
+                p.imagens.forEach((img, idx) => {
+                    document.getElementById('modal-variantes-lista').innerHTML += `<button onclick="selecionarVariacaoModal(${idx})" class="px-3.5 py-2 rounded-xl text-xs font-bold transition border ${idx === fotoSelecionadaModalIndex ? 'bg-[#0E8685] text-white' : 'bg-gray-100 text-gray-700'}">${img.texto || `Opção ${idx+1}`}</button>`;
+                });
+            }
             atualizarVisualizacaoModalFoto(); document.getElementById('modal-produto').classList.remove('hidden');
         }
         window.fecharModalProduto = function() { document.getElementById('modal-produto').classList.add('hidden'); }
+        window.selecionarVariacaoModal = function(idx) { fotoSelecionadaModalIndex = idx; abrirModalProdutoId(produtoAtualModal.idFirestore); }
         function atualizarVisualizacaoModalFoto() { if(!produtoAtualModal?.imagens) return; document.getElementById('modal-img').src = produtoAtualModal.imagens[fotoSelecionadaModalIndex]?.url || produtoAtualModal.imagem || ''; }
         
         window.adicionarProdutoAoCarrinhoModal = function() {
@@ -384,7 +366,16 @@
             tEl.innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
         }
         window.removerDoCarrinho = function(i) { carrinho.splice(i,1); localStorage.setItem('carrinho_isis', JSON.stringify(carrinho)); atualizarContadorCarrinho(); renderizarCarrinho(); }
-        window.abrirCheckout = function() { if(carrinho.length===0) { alert("Carrinho vazio!"); return; } alert("Implemente os campos de finalizar via WhatsApp da mesma forma que estava no código original."); }
+        
+        window.finalizarWhatsAppSimples = function() {
+            if(carrinho.length === 0) return alert("Seu carrinho está vazio!");
+            let msg = `*Novo Pedido - Ísis Holística*\n\nOlá! Gostaria de fazer o pedido dos seguintes itens:\n\n`;
+            let total = 0;
+            carrinho.forEach((item, idx) => { msg += `${idx + 1}. *${item.nome}* (${item.variacao}) - R$ ${item.preco.toFixed(2).replace('.', ',')}\n`; total += item.preco; });
+            msg += `\n*Valor Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\nAguardo retorno para finalizar!`;
+            window.open(`https://wa.me/555195508826?text=${encodeURIComponent(msg)}`, '_blank');
+            carrinho = []; localStorage.removeItem('carrinho_isis'); atualizarContadorCarrinho(); document.getElementById('modal-carrinho').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
