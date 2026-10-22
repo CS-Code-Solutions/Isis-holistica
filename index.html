@@ -36,11 +36,11 @@
             </nav>
             <div class="flex items-center gap-3">
                 <button onclick="toggleCartModal()" class="relative bg-gray-100 p-2.5 rounded-full hover:bg-gray-200">🛒<span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A880] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span></button>
-                <button onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg font-bold">☰</button>
+                <button id="btn-menu-loja" onclick="toggleMobileMenu()" class="md:hidden bg-gray-100 p-2.5 rounded-lg font-bold">☰</button>
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 shadow-lg">
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 shadow-lg absolute w-full z-50">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold">Início</button>
             <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">Destaques & Rituais</button>
             <div class="border-y border-gray-100 py-2 space-y-1">
@@ -163,6 +163,17 @@
         let categoriaFiltroAtiva = 'todos', termoBuscaAtivo = '';
         let carrinho = JSON.parse(localStorage.getItem('carrinho_isis')) || [];
 
+        // FECHAR MENU AO CLICAR FORA (MOBILE)
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('mobile-menu');
+            const btnMenu = document.getElementById('btn-menu-loja');
+            if (menu && !menu.classList.contains('hidden')) {
+                if (!menu.contains(e.target) && !btnMenu.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            }
+        });
+
         async function carregarLoja() {
             try {
                 const snapProd = await getDocs(collection(db, "produtos"));
@@ -170,8 +181,7 @@
 
                 try { const snapSlides = await getDocs(collection(db, "slides")); snapSlides.forEach(d => slides.push({ idFirestore: d.id, ...d.data() })); } catch(e){}
 
-                // EXTRAIR CATEGORIAS DIRETAMENTE DOS PRODUTOS
-                let extraidas = new Set(['Incensos', 'Pedras', 'Semijoias', 'Decoracao', 'Velas', 'Imagens', 'Perfume', 'Oleo Essencial', 'Aromatizador']);
+                let extraidas = new Set();
                 listaProdutos.forEach(p => { if(p.categoria) extraidas.add(p.categoria); });
                 try { const snapCat = await getDocs(collection(db, "categorias")); snapCat.forEach(d => extraidas.add(d.data().nome)); } catch(e){}
                 todasCategorias = Array.from(extraidas).sort();
@@ -206,6 +216,9 @@
             const btn = document.getElementById(`btn-cat-${cat === 'todos' ? 'todos' : cat.replace(/\s+/g,'-')}`);
             if(btn) btn.className = "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold";
             renderizarProdutosLoja(); window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Fecha o menu mobile após selecionar categoria
+            document.getElementById('mobile-menu').classList.add('hidden');
         }
 
         function renderizarProdutosLoja() {
@@ -227,11 +240,16 @@
             listaProdutos.filter(p=>p.destaque).forEach(p => { cont.innerHTML += `<div onclick='abrirModalProdutoId("${p.idFirestore}")' class="bg-white rounded-2xl shadow p-4 cursor-pointer hover:shadow-xl transition"><img src="${p.imagens?.[0]?.url||p.imagem||''}" class="w-full h-48 object-cover rounded-xl mb-3"><span class="text-xs text-[#0E8685] font-bold">${p.categoria}</span><h4 class="font-bold text-lg">${p.nome}</h4><p class="text-xl font-extrabold text-[#C5A880] mt-2">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</p></div>`; });
         }
 
-        window.mudarAba = (id) => { document.querySelectorAll('.app-view').forEach(v=>v.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); document.getElementById('mobile-menu').classList.add('hidden'); window.scrollTo({top:0}); }
+        window.mudarAba = (id) => { 
+            document.querySelectorAll('.app-view').forEach(v=>v.classList.add('hidden')); 
+            document.getElementById(id).classList.remove('hidden'); 
+            document.getElementById('mobile-menu').classList.add('hidden'); // Fecha menu
+            window.scrollTo({top:0}); 
+        }
         window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('hidden');
         window.toggleMobileLojaSubmenu = () => { const s = document.getElementById('mobile-loja-submenu'); s.classList.toggle('hidden'); document.getElementById('mobile-submenu-arrow').innerText = s.classList.contains('hidden') ? '▼' : '▲'; }
         
-        window.abrirModalBanner = () => { document.getElementById('modal-banner').classList.remove('hidden'); if(slides.length>0) atualizarSlideUI(); }
+        window.abrirModalBanner = () => { document.getElementById('modal-banner').classList.remove('hidden'); if(slides.length>0) atualizarSlideUI(); document.getElementById('mobile-menu').classList.add('hidden'); }
         window.fecharModalBanner = () => { document.getElementById('modal-banner').classList.add('hidden'); if(carouselTimer) clearTimeout(carouselTimer); }
         function programarProximoSlide() { if(carouselTimer) clearTimeout(carouselTimer); if(slides.length<=1) return; carouselTimer = setTimeout(()=>window.mudarSlide(1), (slides[currentSlide].tempo||5)*1000); }
         function atualizarSlideUI() { if(slides.length===0)return; const s = slides[currentSlide]; document.getElementById('carousel-bg').src = (window.innerWidth >= 768 ? (s.imagemPc||s.imagemMobile) : (s.imagemMobile||s.imagemPc)); document.getElementById('carousel-title').innerText = s.titulo; document.getElementById('carousel-desc').innerText = s.desc; document.getElementById('carousel-badge').innerText = s.badge||'LOJA'; document.getElementById('carousel-badge').style.display = s.badge ? 'inline-block' : 'none'; programarProximoSlide(); }
