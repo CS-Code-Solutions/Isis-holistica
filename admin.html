@@ -509,7 +509,6 @@
                 
                 const dataProd = {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:dest}; 
 
-                // PASSO 1: SALVA SEMPRE NO DEPÓSITO
                 const exists = listaDeposito.find(dep => dep.nome.trim().toLowerCase() === n.trim().toLowerCase());
                 if (!exists) { 
                     await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); 
@@ -517,7 +516,6 @@
                     await updateDoc(doc(db, "deposito", exists.idFirestore), { imagens: imgs, descricao: d, preco: p, categoria: c }); 
                 }
                 
-                // PASSO 2: CONTROLA A VITRINE
                 if (id) {
                     if (!exibirVitrine) {
                         await deleteDoc(doc(db, "produtos", id));
@@ -597,7 +595,7 @@
         window.abrirNovoDeposito = () => { 
             document.getElementById('dep-id').value = ''; 
             document.getElementById('deposito-form').reset(); 
-            document.getElementById('dep-exibir-vitrine').checked = true; // Por padrão exibe na vitrine ao criar novo
+            document.getElementById('dep-exibir-vitrine').checked = false; // Novo item no depósito começa desmarcado da vitrine por defeito
             document.getElementById('container-fotos-dinamico').innerHTML = ''; 
             adicionarCampoFoto(); 
             document.getElementById('form-container-deposito').classList.remove('hidden'); 
@@ -645,14 +643,12 @@
                 
                 const data = {nome:n, categoria:c, preco:p, compra:co, qtd:q, imagens:imgs, descricao:d}; 
                 
-                // SALVA NO DEPÓSITO
                 if(id) await updateDoc(doc(db, "deposito", id), data); 
                 else await addDoc(collection(db, "deposito"), data); 
                 
                 const exibirVitrine = document.getElementById('dep-exibir-vitrine').checked;
                 const prodNaLoja = listaProdutos.find(pr => pr.nome.trim().toLowerCase() === n.trim().toLowerCase());
 
-                // SE A CHAVE ESTÁ ATIVA, CRIA OU ATUALIZA NA VITRINE
                 if (exibirVitrine && imgs.length > 0) { 
                     if(prodNaLoja) {
                         await updateDoc(doc(db, "produtos", prodNaLoja.idFirestore), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d}); 
@@ -660,7 +656,6 @@
                         await addDoc(collection(db, "produtos"), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:false}); 
                     }
                 } 
-                // SE A CHAVE FOI DESMARCADA E ELE ESTÁ NA VITRINE, REMOVE DA VITRINE!
                 else if (!exibirVitrine && prodNaLoja) {
                     await deleteDoc(doc(db, "produtos", prodNaLoja.idFirestore));
                 }
@@ -688,7 +683,7 @@
             const imgs = d.imagens?.length ? d.imagens : [{url:d.imagem||'',texto:''}]; 
             imgs.forEach(img => adicionarCampoFoto(img.url, img.texto)); 
             
-            // VERIFICA SE EXISTE NA VITRINE PARA MARCAR/DESMARCAR O CHECKBOX CORRETAMENTE
+            // VERIFICA SE JÁ ESTÁ NA VITRINE: Se estiver, marca a caixa. Se não estiver, deixa DESMARCADA!
             const prodExistente = listaProdutos.find(pr => pr.nome.trim().toLowerCase() === d.nome.trim().toLowerCase());
             document.getElementById('dep-exibir-vitrine').checked = !!prodExistente;
 
