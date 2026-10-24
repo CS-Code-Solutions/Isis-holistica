@@ -91,7 +91,13 @@
                                 <div id="container-fotos-prod-dinamico" class="space-y-4"></div>
                             </div>
                             <div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição</label><textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm"></textarea></div>
-                            <div class="flex items-center gap-2 pt-2"><input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded"><label class="text-sm font-semibold text-gray-700">Destaque na Página Inicial</label></div>
+                            
+                            <!-- CHAVE SELETORA E DESTAQUE -->
+                            <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center gap-2"><input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded"><label class="text-sm font-semibold text-gray-700">Destaque na Página Inicial</label></div>
+                                <div class="flex items-center gap-2 bg-teal-50 px-4 py-2 rounded-xl border border-teal-100 w-full sm:w-auto"><input type="checkbox" id="prod-exibir-vitrine" checked class="w-5 h-5 text-[#0E8685] rounded"><label class="text-sm font-bold text-[#0E8685]">✨ Exibir na Vitrine</label></div>
+                            </div>
+
                             <div class="flex gap-3 pt-4 border-t"><button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl shadow">Guardar</button><button type="button" onclick="toggleFormularioProduto()" class="bg-gray-100 font-bold px-6 py-3 rounded-xl">Cancelar</button></div>
                         </form>
                     </div>
@@ -441,10 +447,26 @@
 
         // PRODUTOS (INVENTÁRIO)
         window.toggleFormularioProduto = () => document.getElementById('form-container-produto').classList.toggle('hidden');
-        window.abrirNovoProdutoDireto = () => { document.getElementById('prod-id').value=''; document.getElementById('product-form').reset(); document.getElementById('container-fotos-prod-dinamico').innerHTML=''; adicionarCampoFotoProd(); document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); toggleFormularioProduto(); }
-        window.abrirNovoProdutoDeposito = () => { document.getElementById('prod-id').value=''; document.getElementById('product-form').reset(); document.getElementById('bloco-deposito-vinculo').classList.remove('hidden'); toggleFormularioProduto(); atualizarSelectDeposito(); }
         
-        // RECUPERADO COM ARQUIVOS E BOTÃO CORTAR (PRODUTOS)
+        window.abrirNovoProdutoDireto = () => { 
+            document.getElementById('prod-id').value = ''; 
+            document.getElementById('product-form').reset(); 
+            document.getElementById('prod-exibir-vitrine').checked = true;
+            document.getElementById('container-fotos-prod-dinamico').innerHTML = ''; 
+            adicionarCampoFotoProd(); 
+            document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); 
+            toggleFormularioProduto(); 
+        }
+        
+        window.abrirNovoProdutoDeposito = () => { 
+            document.getElementById('prod-id').value = ''; 
+            document.getElementById('product-form').reset(); 
+            document.getElementById('prod-exibir-vitrine').checked = true;
+            document.getElementById('bloco-deposito-vinculo').classList.remove('hidden'); 
+            toggleFormularioProduto(); 
+            atualizarSelectDeposito(); 
+        }
+        
         window.adicionarCampoFotoProd = (u='', t='') => { 
             document.getElementById('container-fotos-prod-dinamico').innerHTML += `
             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm group">
@@ -465,9 +487,67 @@
 
         window.atualizarSelectDeposito = () => { const f = document.getElementById('prod-filtro-cat').value, s = document.getElementById('prod-deposito-select'); s.innerHTML = ''; listaDeposito.filter(d => d.categoria === f).forEach((i, idx) => s.innerHTML += `<option value="${idx}">${i.nome}</option>`); preencherDoDeposito(); }
         window.preencherDoDeposito = () => { const f = document.getElementById('prod-filtro-cat').value, idx = document.getElementById('prod-deposito-select').value; const i = listaDeposito.filter(d => d.categoria === f)[idx]; if(i) { document.getElementById('prod-nome').value = i.nome; document.getElementById('prod-preco').value = i.preco; document.getElementById('prod-categoria').value = i.categoria; document.getElementById('prod-descricao').value = i.descricao || ''; document.getElementById('container-fotos-prod-dinamico').innerHTML = ''; const imgs = i.imagens?.length ? i.imagens : [{url:i.imagem||'',texto:''}]; imgs.forEach(img => adicionarCampoFotoProd(img.url, img.texto)); } }
-        window.salvarProduto = async (e) => { e.preventDefault(); const id = document.getElementById('prod-id').value; const n=document.getElementById('prod-nome').value, p=parseFloat(document.getElementById('prod-preco').value), c=document.getElementById('prod-categoria').value, d=document.getElementById('prod-descricao').value, dest=document.getElementById('prod-destaque').checked; let imgs=[]; document.querySelectorAll('#container-fotos-prod-dinamico > div.group').forEach(b => { const u=b.querySelector('.input-prod-foto-url').value, t=b.querySelector('.input-prod-foto-texto').value; if(u) imgs.push({url:u,texto:t}); }); const data = {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:dest}; if(id) await updateDoc(doc(db, "produtos", id), data); else { await addDoc(collection(db, "produtos"), data); await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); } carregarDadosAdmin(); toggleFormularioProduto(); }
-        window.editarProduto = (id) => { const p=listaProdutos.find(i=>i.idFirestore===id); if(!p)return; document.getElementById('prod-id').value=p.idFirestore; document.getElementById('prod-nome').value=p.nome; document.getElementById('prod-preco').value=p.preco; document.getElementById('prod-categoria').value=p.categoria||''; document.getElementById('prod-descricao').value=p.descricao||''; document.getElementById('prod-destaque').checked=p.destaque||false; document.getElementById('container-fotos-prod-dinamico').innerHTML=''; (p.imagens?.length?p.imagens:[{url:p.imagem||''}]).forEach(img=>adicionarCampoFotoProd(img.url, img.texto)); document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); document.getElementById('form-container-produto').classList.remove('hidden'); }
-        window.removerProduto = async (id) => { if(confirm("Excluir?")) { await deleteDoc(doc(db, "produtos", id)); carregarDadosAdmin(); } }
+        
+        window.salvarProduto = async (e) => { 
+            e.preventDefault(); 
+            const id = document.getElementById('prod-id').value; 
+            const n = document.getElementById('prod-nome').value;
+            const p = parseFloat(document.getElementById('prod-preco').value);
+            const c = document.getElementById('prod-categoria').value;
+            const d = document.getElementById('prod-descricao').value;
+            const dest = document.getElementById('prod-destaque').checked;
+            const exibirVitrine = document.getElementById('prod-exibir-vitrine').checked; 
+
+            let imgs=[]; 
+            document.querySelectorAll('#container-fotos-prod-dinamico > div.group').forEach(b => { 
+                const u = b.querySelector('.input-prod-foto-url').value;
+                const t = b.querySelector('.input-prod-foto-texto').value; 
+                if(u) imgs.push({url:u,texto:t}); 
+            }); 
+            
+            const dataProd = {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:dest}; 
+            
+            if (id) {
+                // Se já existe na vitrine e o usuário DESMARCOU a caixa: apaga da vitrine (mas segue salvo no depósito)
+                if (!exibirVitrine) {
+                    await deleteDoc(doc(db, "produtos", id));
+                    alert("Produto removido da vitrine com sucesso! Ele permanece salvo no Depósito Geral.");
+                } else {
+                    await updateDoc(doc(db, "produtos", id), dataProd);
+                }
+            } else { 
+                // Produto Novo Sendo Adicionado (Direto ou Vincular)
+                if(exibirVitrine) { await addDoc(collection(db, "produtos"), dataProd); }
+                
+                // Evitar duplicidade caso seja "Vincular do Depósito", verificamos pelo nome
+                const exists = listaDeposito.find(dep => dep.nome.trim().toLowerCase() === n.trim().toLowerCase());
+                if (!exists) { 
+                    await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); 
+                } else { 
+                    // Apenas atualiza se os dados mudarem
+                    await updateDoc(doc(db, "deposito", exists.idFirestore), { imagens: imgs, descricao: d, preco: p }); 
+                }
+            } 
+            carregarDadosAdmin(); 
+            toggleFormularioProduto(); 
+        }
+
+        window.editarProduto = (id) => { 
+            const p = listaProdutos.find(i=>i.idFirestore===id); if(!p)return; 
+            document.getElementById('prod-id').value = p.idFirestore; 
+            document.getElementById('prod-nome').value = p.nome; 
+            document.getElementById('prod-preco').value = p.preco; 
+            document.getElementById('prod-categoria').value = p.categoria||''; 
+            document.getElementById('prod-descricao').value = p.descricao||''; 
+            document.getElementById('prod-destaque').checked = p.destaque||false; 
+            document.getElementById('prod-exibir-vitrine').checked = true; // Sempre na vitrine por defeito quando o abre daqui
+            document.getElementById('container-fotos-prod-dinamico').innerHTML=''; 
+            (p.imagens?.length?p.imagens:[{url:p.imagem||''}]).forEach(img=>adicionarCampoFotoProd(img.url, img.texto)); 
+            document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); 
+            document.getElementById('form-container-produto').classList.remove('hidden'); 
+        }
+
+        window.removerProduto = async (id) => { if(confirm("Excluir definitivamente?")) { await deleteDoc(doc(db, "produtos", id)); carregarDadosAdmin(); } }
         
         window.renderizarTabelaProdutos = () => { 
             const tb = document.getElementById('admin-product-list'); 
@@ -504,7 +584,6 @@
         window.toggleFormularioDeposito = () => document.getElementById('form-container-deposito').classList.toggle('hidden');
         window.abrirNovoDeposito = () => { document.getElementById('dep-id').value = ''; document.getElementById('deposito-form').reset(); document.getElementById('container-fotos-dinamico').innerHTML = ''; adicionarCampoFoto(); document.getElementById('form-container-deposito').classList.remove('hidden'); }
         
-        // RECUPERADO COM ARQUIVOS E BOTÃO CORTAR (DEPÓSITO)
         window.adicionarCampoFoto = (u='', t='') => { 
             document.getElementById('container-fotos-dinamico').innerHTML += `
             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm group">
