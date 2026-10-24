@@ -12,6 +12,7 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .admin-logo-bg { background-color: #0b2e2d; background-image: url('42a30c25-4971-4e10-bb09-3021d82ce6ef.jpeg'); background-size: cover; background-position: center; }
+        html { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col md:flex-row min-h-screen">
@@ -73,7 +74,7 @@
                         </div>
                     </div>
 
-                    <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                    <div id="form-container-produto" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 scroll-mt-6">
                         <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">📦 Cadastrar/Editar</h3><button type="button" onclick="toggleFormularioProduto()" class="text-gray-400 font-bold text-lg">✕</button></div>
                         <form id="product-form" onsubmit="salvarProduto(event)" class="space-y-6">
                             <input type="hidden" id="prod-id"><input type="hidden" id="prod-modo-cadastro" value="direto">
@@ -135,7 +136,7 @@
                         </div>
                     </div>
                     
-                    <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                    <div id="form-container-deposito" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 scroll-mt-6">
                         <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">🏢 Novo Item no Depósito</h3><button type="button" onclick="toggleFormularioDeposito()" class="text-gray-400 font-bold text-lg">✕</button></div>
                         <form id="deposito-form" onsubmit="salvarItemDeposito(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <input type="hidden" id="dep-id">
@@ -167,7 +168,7 @@
                 <!-- ABA: BANNERS -->
                 <div id="admin-section-banners" class="space-y-8 hidden">
                     <div class="flex justify-between items-center bg-white p-6 rounded-2xl border"><h2 class="text-xl font-bold text-[#0E8685]">Banners</h2><button onclick="abrirNovoBanner()" class="bg-[#0E8685] text-white font-bold px-6 py-3 rounded-xl text-sm">➕ Adicionar</button></div>
-                    <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20">
+                    <div id="form-container-banner" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-[#0E8685]/20 scroll-mt-6">
                         <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-xl font-bold text-[#0E8685]">🖼️ Novo/Editar Banner</h3><button type="button" onclick="toggleFormularioBanner()" class="text-gray-400 font-bold text-lg">✕</button></div>
                         <form id="banner-form" onsubmit="salvarBanner(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <input type="hidden" id="banner-id">
@@ -456,6 +457,7 @@
             adicionarCampoFotoProd(); 
             document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); 
             toggleFormularioProduto(); 
+            document.getElementById('form-container-produto').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
         window.abrirNovoProdutoDeposito = () => { 
@@ -465,6 +467,7 @@
             document.getElementById('bloco-deposito-vinculo').classList.remove('hidden'); 
             toggleFormularioProduto(); 
             atualizarSelectDeposito(); 
+            document.getElementById('form-container-produto').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
         window.adicionarCampoFotoProd = (u='', t='') => { 
@@ -545,6 +548,7 @@
             (p.imagens?.length?p.imagens:[{url:p.imagem||''}]).forEach(img=>adicionarCampoFotoProd(img.url, img.texto)); 
             document.getElementById('bloco-deposito-vinculo').classList.add('hidden'); 
             document.getElementById('form-container-produto').classList.remove('hidden'); 
+            document.getElementById('form-container-produto').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         window.removerProduto = async (id) => { if(confirm("Excluir definitivamente?")) { await deleteDoc(doc(db, "produtos", id)); carregarDadosAdmin(); } }
@@ -582,7 +586,14 @@
         window.paginaAnteriorDeposito = () => { if (paginaAtualDeposito > 1) { paginaAtualDeposito--; renderizarTabelaDeposito(); } }
         window.proximaPaginaDeposito = () => { paginaAtualDeposito++; renderizarTabelaDeposito(); }
         window.toggleFormularioDeposito = () => document.getElementById('form-container-deposito').classList.toggle('hidden');
-        window.abrirNovoDeposito = () => { document.getElementById('dep-id').value = ''; document.getElementById('deposito-form').reset(); document.getElementById('container-fotos-dinamico').innerHTML = ''; adicionarCampoFoto(); document.getElementById('form-container-deposito').classList.remove('hidden'); }
+        window.abrirNovoDeposito = () => { 
+            document.getElementById('dep-id').value = ''; 
+            document.getElementById('deposito-form').reset(); 
+            document.getElementById('container-fotos-dinamico').innerHTML = ''; 
+            adicionarCampoFoto(); 
+            document.getElementById('form-container-deposito').classList.remove('hidden'); 
+            document.getElementById('form-container-deposito').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         
         window.adicionarCampoFoto = (u='', t='') => { 
             document.getElementById('container-fotos-dinamico').innerHTML += `
@@ -603,16 +614,47 @@
         }
 
         window.salvarItemDeposito = async (e) => { e.preventDefault(); const id = document.getElementById('dep-id').value, n = document.getElementById('dep-nome').value, c = document.getElementById('dep-categoria').value, p = parseFloat(document.getElementById('dep-preco').value), co = parseFloat(document.getElementById('dep-compra').value), q = parseInt(document.getElementById('dep-qtd').value), d = document.getElementById('dep-descricao').value; let imgs = []; document.querySelectorAll('#container-fotos-dinamico > div.group').forEach(b => { const u = b.querySelector('.input-foto-url').value, t = b.querySelector('.input-foto-texto').value; if(u) imgs.push({url:u, texto:t}); }); const data = {nome:n, categoria:c, preco:p, compra:co, qtd:q, imagens:imgs, descricao:d}; if(id) await updateDoc(doc(db, "deposito", id), data); else await addDoc(collection(db, "deposito"), data); if(document.getElementById('dep-exibir-vitrine').checked && imgs.length > 0) { const prod = listaProdutos.find(pr => pr.nome === n); if(prod) await updateDoc(doc(db, "produtos", prod.idFirestore), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d}); else await addDoc(collection(db, "produtos"), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:false}); } carregarDadosAdmin(); toggleFormularioDeposito(); }
-        window.editarDeposito = (id) => { const d = listaDeposito.find(i => i.idFirestore === id); if(!d) return; document.getElementById('dep-id').value = d.idFirestore; document.getElementById('dep-nome').value = d.nome; document.getElementById('dep-categoria').value = d.categoria||''; document.getElementById('dep-preco').value = d.preco||0; document.getElementById('dep-compra').value = d.compra||0; document.getElementById('dep-qtd').value = d.qtd||0; document.getElementById('dep-descricao').value = d.descricao||''; document.getElementById('container-fotos-dinamico').innerHTML = ''; const imgs = d.imagens?.length ? d.imagens : [{url:d.imagem||'',texto:''}]; imgs.forEach(img => adicionarCampoFoto(img.url, img.texto)); document.getElementById('form-container-deposito').classList.remove('hidden'); }
+        window.editarDeposito = (id) => { 
+            const d = listaDeposito.find(i => i.idFirestore === id); if(!d) return; 
+            document.getElementById('dep-id').value = d.idFirestore; 
+            document.getElementById('dep-nome').value = d.nome; 
+            document.getElementById('dep-categoria').value = d.categoria||''; 
+            document.getElementById('dep-preco').value = d.preco||0; 
+            document.getElementById('dep-compra').value = d.compra||0; 
+            document.getElementById('dep-qtd').value = d.qtd||0; 
+            document.getElementById('dep-descricao').value = d.descricao||''; 
+            document.getElementById('container-fotos-dinamico').innerHTML = ''; 
+            const imgs = d.imagens?.length ? d.imagens : [{url:d.imagem||'',texto:''}]; 
+            imgs.forEach(img => adicionarCampoFoto(img.url, img.texto)); 
+            document.getElementById('form-container-deposito').classList.remove('hidden'); 
+            document.getElementById('form-container-deposito').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         window.removerDeposito = async (id) => { if(confirm("Apagar item?")) { await deleteDoc(doc(db, "deposito", id)); carregarDadosAdmin(); } }
 
         // BANNERS
         window.toggleFormularioBanner = () => document.getElementById('form-container-banner').classList.toggle('hidden');
-        window.abrirNovoBanner = () => { document.getElementById('banner-id').value = ''; document.getElementById('banner-form').reset(); document.getElementById('form-container-banner').classList.remove('hidden'); }
+        window.abrirNovoBanner = () => { 
+            document.getElementById('banner-id').value = ''; 
+            document.getElementById('banner-form').reset(); 
+            document.getElementById('form-container-banner').classList.remove('hidden'); 
+            document.getElementById('form-container-banner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         window.alternarDestinoBannerAdmin = (v) => {}
         window.salvarBanner = async (e) => { e.preventDefault(); const d = { badge: document.getElementById('banner-badge').value, titulo: document.getElementById('banner-titulo').value, desc: document.getElementById('banner-desc').value, tempo: parseInt(document.getElementById('banner-tempo').value)||5, imagemPc: document.getElementById('banner-imgpc').value, imagemMobile: document.getElementById('banner-imgmob').value, linkTipo: document.getElementById('banner-linktipo').value, linkAlvo: document.getElementById('banner-linkalvo-prod').value }; const id = document.getElementById('banner-id').value; if(id) await updateDoc(doc(db, "slides", id), d); else await addDoc(collection(db, "slides"), d); carregarDadosAdmin(); toggleFormularioBanner(); }
         window.renderizarTabelaBanners = () => { const tb = document.getElementById('admin-banner-list'); tb.innerHTML = ''; listaBanners.forEach(b => tb.innerHTML += `<tr><td class="py-3 px-3"><img src="${b.imagemPc||b.imagemMobile}" class="w-14 h-9 object-cover rounded inline-block mr-2"><strong>${b.titulo}</strong></td><td class="py-3 px-3">${b.tempo}s</td><td class="py-3 px-3">${b.linkTipo}</td><td class="py-3 px-3 text-right"><button onclick="editarBanner('${b.idFirestore}')" class="text-teal-600 font-bold mr-2">Editar</button><button onclick="removerBanner('${b.idFirestore}')" class="text-red-500 font-bold">Excluir</button></td></tr>`); }
-        window.editarBanner = (id) => { const b = listaBanners.find(i => i.idFirestore === id); if(!b) return; document.getElementById('banner-id').value = b.idFirestore; document.getElementById('banner-badge').value = b.badge||''; document.getElementById('banner-titulo').value = b.titulo||''; document.getElementById('banner-desc').value = b.desc||''; document.getElementById('banner-tempo').value = b.tempo||5; document.getElementById('banner-imgpc').value = b.imagemPc||''; document.getElementById('banner-imgmob').value = b.imagemMobile||''; document.getElementById('banner-linktipo').value = b.linkTipo||'produtos'; document.getElementById('form-container-banner').classList.remove('hidden'); }
+        window.editarBanner = (id) => { 
+            const b = listaBanners.find(i => i.idFirestore === id); if(!b) return; 
+            document.getElementById('banner-id').value = b.idFirestore; 
+            document.getElementById('banner-badge').value = b.badge||''; 
+            document.getElementById('banner-titulo').value = b.titulo||''; 
+            document.getElementById('banner-desc').value = b.desc||''; 
+            document.getElementById('banner-tempo').value = b.tempo||5; 
+            document.getElementById('banner-imgpc').value = b.imagemPc||''; 
+            document.getElementById('banner-imgmob').value = b.imagemMobile||''; 
+            document.getElementById('banner-linktipo').value = b.linkTipo||'produtos'; 
+            document.getElementById('form-container-banner').classList.remove('hidden'); 
+            document.getElementById('form-container-banner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         window.removerBanner = async (id) => { if(confirm("Apagar banner?")) { await deleteDoc(doc(db, "slides", id)); carregarDadosAdmin(); } }
     </script>
 </body>
