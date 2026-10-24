@@ -509,23 +509,27 @@
                 }); 
                 
                 const dataProd = {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:dest}; 
+
+                // PASSO 1: SALVA SEMPRE NO DEPÓSITO (Isso garante que o produto não desaparece)
+                const exists = listaDeposito.find(dep => dep.nome.trim().toLowerCase() === n.trim().toLowerCase());
+                if (!exists) { 
+                    await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); 
+                } else { 
+                    await updateDoc(doc(db, "deposito", exists.idFirestore), { imagens: imgs, descricao: d, preco: p, categoria: c }); 
+                }
                 
+                // PASSO 2: CONTROLA A VITRINE
                 if (id) {
                     if (!exibirVitrine) {
                         await deleteDoc(doc(db, "produtos", id));
-                        alert("Produto removido da vitrine! (Foi mantido no Depósito)");
+                        alert("Produto removido da vitrine! (Foi mantido em segurança no Depósito)");
                     } else {
                         await updateDoc(doc(db, "produtos", id), dataProd);
                     }
                 } else { 
                     if(exibirVitrine) { await addDoc(collection(db, "produtos"), dataProd); }
-                    const exists = listaDeposito.find(dep => dep.nome.trim().toLowerCase() === n.trim().toLowerCase());
-                    if (!exists) { 
-                        await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); 
-                    } else { 
-                        await updateDoc(doc(db, "deposito", exists.idFirestore), { imagens: imgs, descricao: d, preco: p }); 
-                    }
                 } 
+                
                 await carregarDadosAdmin(); 
                 toggleFormularioProduto(); 
             } finally {
