@@ -93,7 +93,6 @@
                             </div>
                             <div><label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição</label><textarea id="prod-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm"></textarea></div>
                             
-                            <!-- CHAVE SELETORA E DESTAQUE -->
                             <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-gray-100">
                                 <div class="flex items-center gap-2"><input type="checkbox" id="prod-destaque" class="w-5 h-5 text-[#0E8685] rounded"><label class="text-sm font-semibold text-gray-700">Destaque na Página Inicial</label></div>
                                 <div class="flex items-center gap-2 bg-teal-50 px-4 py-2 rounded-xl border border-teal-100 w-full sm:w-auto"><input type="checkbox" id="prod-exibir-vitrine" checked class="w-5 h-5 text-[#0E8685] rounded"><label class="text-sm font-bold text-[#0E8685]">✨ Exibir na Vitrine</label></div>
@@ -150,7 +149,7 @@
                             <div><label class="block text-xs font-bold uppercase mb-1">Quantidade</label><input type="number" id="dep-qtd" required min="0" class="w-full px-4 py-2.5 border rounded-xl text-sm"></div>
                             <div class="md:col-span-2 space-y-4 bg-gray-50 p-5 rounded-2xl border"><div class="flex justify-between items-center"><label class="text-xs font-bold text-[#0E8685] uppercase">📸 Galeria</label><button type="button" onclick="adicionarCampoFoto()" class="bg-[#0E8685] text-white text-xs font-bold px-3 py-2 rounded-xl">➕ Adicionar Imagem</button></div><div id="container-fotos-dinamico" class="space-y-4"></div></div>
                             <div class="md:col-span-2"><label class="block text-xs font-bold uppercase mb-1">Descrição</label><textarea id="dep-descricao" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm"></textarea></div>
-                            <div class="md:col-span-2 flex items-center gap-3 bg-teal-50/60 p-4 rounded-xl border border-teal-100"><input type="checkbox" id="dep-exibir-vitrine" checked class="w-5 h-5 text-[#0E8685] rounded"><label class="text-sm font-bold text-[#0E8685]">✨ Exibir na Vitrine da Loja</label></div>
+                            <div class="md:col-span-2 flex items-center gap-3 bg-teal-50/60 p-4 rounded-xl border border-teal-100"><input type="checkbox" id="dep-exibir-vitrine" class="w-5 h-5 text-[#0E8685] rounded"><label class="text-sm font-bold text-[#0E8685]">✨ Exibir na Vitrine da Loja</label></div>
                             <div class="md:col-span-2 flex gap-3 pt-4 border-t">
                                 <button type="submit" class="bg-[#0E8685] text-white font-bold px-8 py-3 rounded-xl shadow disabled:opacity-50">Guardar no Depósito</button>
                                 <button type="button" onclick="toggleFormularioDeposito()" class="bg-gray-100 font-bold px-6 py-3 rounded-xl">Cancelar</button>
@@ -510,7 +509,7 @@
                 
                 const dataProd = {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:dest}; 
 
-                // PASSO 1: SALVA SEMPRE NO DEPÓSITO (Isso garante que o produto não desaparece)
+                // PASSO 1: SALVA SEMPRE NO DEPÓSITO
                 const exists = listaDeposito.find(dep => dep.nome.trim().toLowerCase() === n.trim().toLowerCase());
                 if (!exists) { 
                     await addDoc(collection(db, "deposito"), {nome:n, categoria:c, preco:p, compra:p*0.7, qtd:10, imagens:imgs, descricao:d}); 
@@ -522,7 +521,6 @@
                 if (id) {
                     if (!exibirVitrine) {
                         await deleteDoc(doc(db, "produtos", id));
-                        alert("Produto removido da vitrine! (Foi mantido em segurança no Depósito)");
                     } else {
                         await updateDoc(doc(db, "produtos", id), dataProd);
                     }
@@ -532,6 +530,8 @@
                 
                 await carregarDadosAdmin(); 
                 toggleFormularioProduto(); 
+            } catch(erro) {
+                alert("Erro ao guardar o produto: " + erro.message);
             } finally {
                 btn.innerText = btnTextoOriginal; btn.disabled = false;
             }
@@ -593,9 +593,11 @@
         window.paginaAnteriorDeposito = () => { if (paginaAtualDeposito > 1) { paginaAtualDeposito--; renderizarTabelaDeposito(); } }
         window.proximaPaginaDeposito = () => { paginaAtualDeposito++; renderizarTabelaDeposito(); }
         window.toggleFormularioDeposito = () => document.getElementById('form-container-deposito').classList.toggle('hidden');
+        
         window.abrirNovoDeposito = () => { 
             document.getElementById('dep-id').value = ''; 
             document.getElementById('deposito-form').reset(); 
+            document.getElementById('dep-exibir-vitrine').checked = true; // Por padrão exibe na vitrine ao criar novo
             document.getElementById('container-fotos-dinamico').innerHTML = ''; 
             adicionarCampoFoto(); 
             document.getElementById('form-container-deposito').classList.remove('hidden'); 
@@ -642,16 +644,31 @@
                 }); 
                 
                 const data = {nome:n, categoria:c, preco:p, compra:co, qtd:q, imagens:imgs, descricao:d}; 
+                
+                // SALVA NO DEPÓSITO
                 if(id) await updateDoc(doc(db, "deposito", id), data); 
                 else await addDoc(collection(db, "deposito"), data); 
                 
-                if(document.getElementById('dep-exibir-vitrine').checked && imgs.length > 0) { 
-                    const prod = listaProdutos.find(pr => pr.nome === n); 
-                    if(prod) await updateDoc(doc(db, "produtos", prod.idFirestore), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d}); 
-                    else await addDoc(collection(db, "produtos"), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:false}); 
+                const exibirVitrine = document.getElementById('dep-exibir-vitrine').checked;
+                const prodNaLoja = listaProdutos.find(pr => pr.nome.trim().toLowerCase() === n.trim().toLowerCase());
+
+                // SE A CHAVE ESTÁ ATIVA, CRIA OU ATUALIZA NA VITRINE
+                if (exibirVitrine && imgs.length > 0) { 
+                    if(prodNaLoja) {
+                        await updateDoc(doc(db, "produtos", prodNaLoja.idFirestore), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d}); 
+                    } else {
+                        await addDoc(collection(db, "produtos"), {nome:n, preco:p, categoria:c, imagens:imgs, descricao:d, destaque:false}); 
+                    }
                 } 
+                // SE A CHAVE FOI DESMARCADA E ELE ESTÁ NA VITRINE, REMOVE DA VITRINE!
+                else if (!exibirVitrine && prodNaLoja) {
+                    await deleteDoc(doc(db, "produtos", prodNaLoja.idFirestore));
+                }
+                
                 await carregarDadosAdmin(); 
                 toggleFormularioDeposito();
+            } catch(erro) {
+                alert("Erro ao guardar item no depósito: " + erro.message);
             } finally {
                 btn.innerText = btnTextoOriginal; btn.disabled = false;
             }
@@ -667,8 +684,14 @@
             document.getElementById('dep-qtd').value = d.qtd||0; 
             document.getElementById('dep-descricao').value = d.descricao||''; 
             document.getElementById('container-fotos-dinamico').innerHTML = ''; 
+            
             const imgs = d.imagens?.length ? d.imagens : [{url:d.imagem||'',texto:''}]; 
             imgs.forEach(img => adicionarCampoFoto(img.url, img.texto)); 
+            
+            // VERIFICA SE EXISTE NA VITRINE PARA MARCAR/DESMARCAR O CHECKBOX CORRETAMENTE
+            const prodExistente = listaProdutos.find(pr => pr.nome.trim().toLowerCase() === d.nome.trim().toLowerCase());
+            document.getElementById('dep-exibir-vitrine').checked = !!prodExistente;
+
             document.getElementById('form-container-deposito').classList.remove('hidden'); 
             document.getElementById('form-container-deposito').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
