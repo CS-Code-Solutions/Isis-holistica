@@ -117,7 +117,7 @@
             
             <nav class="hidden md:flex space-x-8 text-sm font-semibold items-center text-gray-700">
                 <button onclick="mudarAba('view-home')" class="hover:text-[#0E8685] transition">Início</button>
-                <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">Destaques & Rituais</button>
+                <button onclick="abrirModalBanner()" class="text-[#0E8685] hover:underline font-bold transition">Destaques</button>
                 
                 <!-- MENU CASCATA (DROPDOWN) DESKTOP DINÂMICO -->
                 <div class="relative group">
@@ -143,7 +143,7 @@
         <!-- MENU MOBILE COM CASCATA EXPANSÍVEL DINÂMICA -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-2 shadow-lg absolute w-full z-50">
             <button onclick="mudarAba('view-home')" class="block w-full text-left py-2 font-semibold text-gray-700 hover:text-[#0E8685]">Início</button>
-            <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">Destaques & Rituais</button>
+            <button onclick="abrirModalBanner()" class="block w-full text-left py-2 font-bold text-[#0E8685]">Destaques</button>
             
             <div class="border-y border-gray-100 py-2 space-y-1">
                 <button onclick="toggleMobileLojaSubmenu()" class="flex justify-between items-center w-full py-1 font-semibold text-gray-700 hover:text-[#0E8685]">
@@ -947,7 +947,7 @@
                 return;
             }
 
-            let mensagem = `*Novo Pedido & Rituais - Ísis Holística*\n\n`;
+            let mensagem = `*Novo Pedido - Ísis Holística*\n\n`;
             mensagem += `Olá! Gostaria de alinhar a entrega dos meus itens de curadoria esotérica:\n\n`;
             mensagem += `*Nome:* ${nome}\n`;
             mensagem += `*CPF:* ${cpf}\n`;
