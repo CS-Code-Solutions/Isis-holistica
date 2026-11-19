@@ -346,11 +346,17 @@
             <div class="text-center mb-8">
                 <h3 class="text-2xl md:text-3xl font-bold text-[#0E8685]">Loja Esotérica</h3>
                 <p class="text-gray-600 mt-2">Explore nossa curadoria de produtos esotéricos e vibracionais.</p>
-                <div class="max-w-md mx-auto my-6">
+                <div class="max-w-md mx-auto my-6 space-y-3">
                     <input type="text" id="input-busca" oninput="pesquisarProdutos(this.value)" placeholder="🔍 Pesquisar por nome ou propriedade..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-sm focus:outline-none focus:border-[#0E8685] shadow-sm">
+                    
+                    <!-- Select dinâmico de categorias -->
+                    <div class="relative">
+                        <select id="select-filtro-categorias" aria-label="Filtrar por categoria" onchange="filtrarProdutos(this.value)" class="w-full appearance-none bg-white px-4 py-3 pr-10 rounded-2xl border border-gray-200 text-sm font-semibold text-gray-700 focus:outline-none focus:border-[#0E8685] shadow-sm cursor-pointer">
+                            <option value="todos">✨ Todas as Categorias</option>
+                        </select>
+                        <span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-xs text-[#0E8685]">▼</span>
+                    </div>
                 </div>
-                <!-- Botões de categorias dinâmicos gerados via JavaScript -->
-                <div class="flex flex-wrap justify-center gap-2 mt-4" id="botoes-filtro-categorias"></div>
             </div>
             
             <!-- GRID DE PRODUTOS COM SKELETONS -->
@@ -643,13 +649,12 @@
         function renderizarMenuCategoriasDinamico() {
             let deskHTML = `<button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">✨ Todos os Produtos</button>`;
             let mobHTML = `<button onclick="mudarAba('view-produtos'); filtrarProdutos('todos');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">✨ Todos os Produtos</button>`;
-            let btnHTML = `<button onclick="filtrarProdutos('todos')" id="btn-cat-todos" class="px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow">Todos</button>`;
+            let selectHTML = `<option value="todos">✨ Todas as Categorias</option>`;
 
             todasCategorias.forEach(cat => {
-                const idCat = cat.replace(/\s+/g, '-');
                 deskHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat}');" class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-teal-50 hover:text-[#0E8685] transition">${cat}</button>`;
                 mobHTML += `<button onclick="mudarAba('view-produtos'); filtrarProdutos('${cat}');" class="block text-left text-xs font-bold text-gray-600 hover:text-[#0E8685]">${cat}</button>`;
-                btnHTML += `<button onclick="filtrarProdutos('${cat}')" id="btn-cat-${idCat}" class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition">${cat}</button>`;
+                selectHTML += `<option value="${cat}">${cat}</option>`;
             });
 
             const deskSub = document.getElementById('desktop-submenu-categorias');
@@ -658,8 +663,11 @@
             const mobSub = document.getElementById('mobile-loja-submenu');
             if (mobSub) mobSub.innerHTML = mobHTML;
 
-            const botoesFiltro = document.getElementById('botoes-filtro-categorias');
-            if (botoesFiltro) botoesFiltro.innerHTML = btnHTML;
+            const selectFiltro = document.getElementById('select-filtro-categorias');
+            if (selectFiltro) {
+                selectFiltro.innerHTML = selectHTML;
+                selectFiltro.value = categoriaFiltroAtiva;
+            }
         }
 
         window.mudarAba = function(idAba) {
@@ -1101,19 +1109,11 @@
             const inputBusca = document.getElementById('input-busca');
             if (inputBusca) inputBusca.value = '';
 
-            // Atualiza o estilo visual dos botões de categoria
-            const btnTodos = document.getElementById('btn-cat-todos');
-            if (btnTodos) {
-                btnTodos.className = (cat === 'todos') ? "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow" : "px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition";
+            // Sincroniza o select de categorias
+            const selectFiltro = document.getElementById('select-filtro-categorias');
+            if (selectFiltro) {
+                selectFiltro.value = cat;
             }
-
-            todasCategorias.forEach(c => {
-                const idC = c.replace(/\s+/g, '-');
-                const btnC = document.getElementById(`btn-cat-${idC}`);
-                if (btnC) {
-                    btnC.className = (c === cat) ? "px-4 py-2 rounded-full bg-[#0E8685] text-white text-xs font-bold transition shadow" : "px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold transition";
-                }
-            });
 
             renderizarProdutosLoja();
             window.scrollTo({ top: 0, behavior: 'smooth' });
