@@ -15,4 +15,4 @@
 - Imagens e Esculturas (Católica, Zen e Axé)
 
 ## Informações de Desenvolvimento
-- Desenvolvido por CS Code Solutions (https://www.instagram.com/cscode.solutions)
+- Desenvolvido por CS Code Solutions (https://cs-code-solutions.github.io/CS-Code-Solutions/)
